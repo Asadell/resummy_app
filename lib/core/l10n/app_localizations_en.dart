@@ -309,6 +309,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get targetRoleHint => 'e.g., Software Engineer, Product Manager';
 
   @override
+  String get typeToSeeSuggestions => '💡 Type to see suggestions';
+
+  @override
   String get whatsYourCareerGoal => 'What\'s your career goal?';
 
   @override

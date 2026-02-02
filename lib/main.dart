@@ -3,17 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/app/app.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
+import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize providers
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
   final themeProvider = ThemeProvider();
   final localeProvider = LocaleProvider();
+  final authProvider = AuthProvider();
   
   await Future.wait([
     themeProvider.init(),
     localeProvider.init(),
+    authProvider.init(),
   ]);
   
   runApp(
@@ -21,6 +29,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
+        ChangeNotifierProvider.value(value: authProvider),
       ],
       child: ResummyApp(),
     ),
