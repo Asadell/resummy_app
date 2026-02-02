@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class OnboardingStep3Screen extends StatefulWidget {
@@ -21,11 +23,12 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Step 3/4'),
+        title: Text(l10n.stepProgress(3, 4)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const OnboardingStep2Route()),
         ),
       ),
@@ -36,15 +39,15 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'What\'s your target role?',
+              l10n.whatsYourTargetRole,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 32),
             TextField(
               controller: _roleController,
-              decoration: const InputDecoration(
-                labelText: 'Target Role',
-                hintText: 'e.g., Software Engineer, Product Manager',
+              decoration: InputDecoration(
+                labelText: l10n.targetRole,
+                hintText: l10n.targetRoleHint,
               ),
             ),
             const Spacer(),
@@ -52,7 +55,7 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
               onPressed: () {
                 context.router.push(const OnboardingStep4Route());
               },
-              child: const Text('Next'),
+              child: Text(l10n.next),
             ),
           ],
         ),

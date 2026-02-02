@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class OnboardingStep1Screen extends StatefulWidget {
@@ -21,9 +22,10 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Step 1/4'),
+        title: Text(l10n.stepProgress(1, 4)),
       ),
       body: SafeArea(
         child: Padding(
@@ -32,15 +34,15 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'What\'s your full name?',
+              l10n.whatsYourFullName,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 32),
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Full Name',
-                hintText: 'Enter your full name',
+              decoration: InputDecoration(
+                labelText: l10n.fullName,
+                hintText: l10n.enterYourFullName,
               ),
             ),
             const Spacer(),
@@ -48,7 +50,7 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
               onPressed: () {
                 context.router.push(const OnboardingStep2Route());
               },
-              child: const Text('Next'),
+              child: Text(l10n.next),
             ),
           ],
         ),

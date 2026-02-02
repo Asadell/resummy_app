@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class MainScreen extends StatelessWidget {
@@ -8,6 +10,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AutoTabsScaffold(
       routes: const [
         HomeRoute(),
@@ -35,37 +38,37 @@ class MainScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _NavBarItem(
-                    icon: Icons.home_outlined,
-                    activeIcon: Icons.home,
-                    label: 'Home',
+                    icon: Iconsax.home,
+                    activeIcon: Iconsax.home_2,
+                    label: l10n.home,
                     isActive: tabsRouter.activeIndex == 0,
                     onTap: () => tabsRouter.setActiveIndex(0),
                   ),
                   _NavBarItem(
-                    icon: Icons.description_outlined,
-                    activeIcon: Icons.description,
-                    label: 'CV Tools',
+                    icon: Iconsax.document_text,
+                    activeIcon: Iconsax.document_text_1,
+                    label: l10n.cvTools,
                     isActive: tabsRouter.activeIndex == 1,
                     onTap: () => tabsRouter.setActiveIndex(1),
                   ),
                   _NavBarItem(
-                    icon: Icons.mic_none,
-                    activeIcon: Icons.mic,
-                    label: 'Interview',
+                    icon: Iconsax.microphone,
+                    activeIcon: Iconsax.microphone_2,
+                    label: l10n.interview,
                     isActive: tabsRouter.activeIndex == 2,
                     onTap: () => tabsRouter.setActiveIndex(2),
                   ),
                   _NavBarItem(
-                    icon: Icons.history,
-                    activeIcon: Icons.history,
-                    label: 'History',
+                    icon: Iconsax.clock,
+                    activeIcon: Iconsax.clock,
+                    label: l10n.history,
                     isActive: tabsRouter.activeIndex == 3,
                     onTap: () => tabsRouter.setActiveIndex(3),
                   ),
                   _NavBarItem(
-                    icon: Icons.person_outline,
-                    activeIcon: Icons.person,
-                    label: 'Profile',
+                    icon: Iconsax.profile_circle,
+                    activeIcon: Iconsax.user,
+                    label: l10n.profile,
                     isActive: tabsRouter.activeIndex == 4,
                     onTap: () => tabsRouter.setActiveIndex(4),
                   ),

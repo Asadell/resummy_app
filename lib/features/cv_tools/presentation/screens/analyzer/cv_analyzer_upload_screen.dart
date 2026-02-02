@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvAnalyzerUploadScreen extends StatelessWidget {
@@ -8,11 +10,12 @@ class CvAnalyzerUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Upload CV'),
+        title: Text(l10n.uploadCv),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const CvToolsHubRoute()),
         ),
       ),
@@ -24,21 +27,21 @@ class CvAnalyzerUploadScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Icon(
-                Icons.cloud_upload_outlined,
+                Iconsax.document_upload,
                 size: 80,
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 24),
               Text(
-                'Upload CV Anda',
+                l10n.uploadYourCv,
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
               ElevatedButton.icon(
                 onPressed: () => context.router.push(const CvAnalyzerInputRoute()),
-                icon: const Icon(Icons.upload_file),
-                label: const Text('Upload CV Baru'),
+                icon: const Icon(Iconsax.document_upload),
+                label: Text(l10n.uploadNewCv),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
@@ -46,8 +49,8 @@ class CvAnalyzerUploadScreen extends StatelessWidget {
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 onPressed: () => context.router.push(const CvAnalyzerInputRoute()),
-                icon: const Icon(Icons.folder),
-                label: const Text('Gunakan CV dari Builder'),
+                icon: const Icon(Iconsax.folder),
+                label: Text(l10n.useCvFromBuilder),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),

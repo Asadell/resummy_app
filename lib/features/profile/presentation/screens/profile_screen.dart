@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 
@@ -13,10 +15,11 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -34,18 +37,18 @@ class ProfileScreen extends StatelessWidget {
                         radius: 40,
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         child: Icon(
-                          Icons.person,
+                          Iconsax.user,
                           size: 48,
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'User Name',
+                        l10n.userName,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
-                        'user@example.com',
+                        l10n.userEmail,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -56,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
               
               // Settings Section
               Text(
-                'Settings',
+                l10n.settings,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
@@ -64,12 +67,12 @@ class ProfileScreen extends StatelessWidget {
               // Theme Toggle
               Card(
                 child: SwitchListTile(
-                  title: const Text('Dark Mode'),
+                  title: Text(l10n.darkMode),
                   subtitle: Text(
-                    themeProvider.isDarkMode ? 'Dark theme enabled' : 'Light theme enabled'
+                    themeProvider.isDarkMode ? l10n.darkThemeEnabled : l10n.lightThemeEnabled
                   ),
                   secondary: Icon(
-                    themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    themeProvider.isDarkMode ? Iconsax.moon : Iconsax.sun_1,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   value: themeProvider.isDarkMode,
@@ -81,12 +84,12 @@ class ProfileScreen extends StatelessWidget {
               // Language Toggle  
               Card(
                 child: SwitchListTile(
-                  title: const Text('Language'),
+                  title: Text(l10n.language),
                   subtitle: Text(
-                    localeProvider.isIndonesian ? 'Bahasa Indonesia' : 'English'
+                    localeProvider.isIndonesian ? l10n.bahasaIndonesia : l10n.english
                   ),
                   secondary: Icon(
-                    Icons.language,
+                    Iconsax.global,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   value: localeProvider.isIndonesian,
@@ -101,25 +104,25 @@ class ProfileScreen extends StatelessWidget {
                   foregroundColor: Theme.of(context).colorScheme.error,
                   padding: const EdgeInsets.all(16),
                 ),
-                icon: const Icon(Icons.logout),
-                label: const Text('Logout'),
+                icon: const Icon(Iconsax.logout),
+                label: Text(l10n.logout),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Logout'),
-                      content: const Text('Are you sure you want to logout?'),
+                      title: Text(l10n.logout),
+                      content: Text(l10n.confirmLogout),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
+                          child: Text(l10n.cancel),
                         ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
                             context.router.push(const AuthRoute());
                           },
-                          child: const Text('Logout'),
+                          child: Text(l10n.logout),
                         ),
                       ],
                     ),

@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvToolsHubScreen extends StatelessWidget {
@@ -8,9 +10,10 @@ class CvToolsHubScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CV Tools'),
+        title: Text(l10n.cvTools),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -20,9 +23,9 @@ class CvToolsHubScreen extends StatelessWidget {
             children: [
               // CV Analyzer
               _FeatureCard(
-                icon: Icons.analytics,
-                title: 'CV Analyzer',
-                description: 'Get AI-powered feedback on your CV',
+                icon: Iconsax.chart_2,
+                title: l10n.cvAnalyzer,
+                description: l10n.cvAnalyzerDesc,
                 color: Theme.of(context).colorScheme.secondary,
                 onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
               ),
@@ -30,9 +33,9 @@ class CvToolsHubScreen extends StatelessWidget {
               
               // CV Builder
               _FeatureCard(
-                icon: Icons.edit_document,
-                title: 'CV Builder',
-                description: 'Build your CV step by step with AI assistance',
+                icon: Iconsax.document_text,
+                title: l10n.cvBuilder,
+                description: l10n.cvBuilderDesc,
                 color: Theme.of(context).colorScheme.primary,
                 onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
               ),
@@ -40,9 +43,9 @@ class CvToolsHubScreen extends StatelessWidget {
               
               // CV Translator
               _FeatureCard(
-                icon: Icons.translate,
-                title: 'CV Translator',
-                description: 'Translate your CV to multiple languages',
+                icon: Iconsax.translate,
+                title: l10n.cvTranslator,
+                description: l10n.cvTranslatorDesc,
                 color: Colors.orange,
                 onTap: () => context.router.push(const CvTranslatorUploadRoute()),
               ),
@@ -50,9 +53,9 @@ class CvToolsHubScreen extends StatelessWidget {
               
               // CV History
               _FeatureCard(
-                icon: Icons.history,
-                title: 'CV History',
-                description: 'View and manage all your CVs',
+                icon: Iconsax.clock,
+                title: l10n.cvHistory,
+                description: l10n.cvHistoryDesc,
                 color: Theme.of(context).colorScheme.tertiary,
                 onTap: () => context.router.push(const CvHistoryRoute()),
               ),
@@ -115,7 +118,7 @@ class _FeatureCard extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.arrow_forward_ios,
+                Iconsax.arrow_right_3,
                 size: 16,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),

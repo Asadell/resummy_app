@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderWelcomeScreen extends StatelessWidget {
@@ -8,11 +10,12 @@ class CvBuilderWelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CV Builder'),
+        title: Text(l10n.cvBuilder),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const CvToolsHubRoute()),
         ),
       ),
@@ -24,19 +27,19 @@ class CvBuilderWelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Icon(
-                Icons.description,
+                Iconsax.document_text,
                 size: 80,
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 24),
               Text(
-                'Buat CV Profesional',
+                l10n.cvBuilderWelcomeTitle,
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Text(
-                'Kami akan memandu Anda langkah demi langkah untuk membuat CV yang menarik',
+                l10n.cvBuilderWelcomeDesc,
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
@@ -46,7 +49,7 @@ class CvBuilderWelcomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                 ),
                 onPressed: () => context.router.push(const CvBuilderStep1Route()),
-                child: const Text('Mulai Membuat CV'),
+                child: Text(l10n.startCreatingCv),
               ),
             ],
           ),

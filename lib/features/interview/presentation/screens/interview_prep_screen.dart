@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewPrepScreen extends StatelessWidget {
@@ -8,9 +10,10 @@ class InterviewPrepScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Interview Prep'),
+        title: Text(l10n.interviewPrep),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -25,19 +28,19 @@ class InterviewPrepScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Icon(
-                        Icons.mic,
+                        Iconsax.microphone,
                         size: 64,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Latihan Interview AI',
+                        l10n.aiInterviewPractice,
                         style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Praktikkan interview dengan AI dan dapatkan feedback profesional',
+                        l10n.practiceInterviewWithAi,
                         style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -50,8 +53,8 @@ class InterviewPrepScreen extends StatelessWidget {
               // Start button
               ElevatedButton.icon(
                 onPressed: () => context.router.push(const InterviewSetupStep1Route()),
-                icon: const Icon(Icons.play_arrow),
-                label: const Text('Mulai Interview Baru'),
+                icon: const Icon(Iconsax.play),
+                label: Text(l10n.startNewInterview),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
@@ -61,8 +64,8 @@ class InterviewPrepScreen extends StatelessWidget {
               // History button
               OutlinedButton.icon(
                 onPressed: () => context.router.navigate(const HistoryRoute()),
-                icon: const Icon(Icons.history),
-                label: const Text('Lihat Riwayat Interview'),
+                icon: const Icon(Iconsax.clock),
+                label: Text(l10n.viewInterviewHistory),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),

@@ -29,5 +29,142 @@
   "continueText": "Continue",
   "selectLanguage": "Select Language",
   "english": "English",
-  "indonesian": "Indonesian"
+  "indonesian": "Indonesian",
+  
+  "welcomeToResummy": "Welcome to Resummy",
+  "buildPerfectResumeWithAi": "Build your perfect resume with AI",
+  "googleSignInComingSoon": "Google Sign-In coming soon!",
+  "goToLanguageSelection": "Go to Language Selection",
+
+  "welcomeBack": "Welcome Back!",
+  "letsBuildYourPerfectCareer": "Let's build your perfect career",
+  "quickActions": "Quick Actions",
+  "buildCv": "Build CV",
+  "analyzeCv": "Analyze CV",
+  "interviewPrep": "Interview Prep",
+  "translateCv": "Translate CV",
+  "recentActivity": "Recent Activity",
+  "viewAll": "View All",
+  "cvAnalysisCompleted": "CV Analysis Completed",
+  "score": "Score: {score}/100",
+  "@score": {
+    "placeholders": {
+      "score": {"type": "int"}
+    }
+  },
+  "hoursAgo": "{count} hours ago",
+  "@hoursAgo": {
+     "placeholders": {
+       "count": {"type": "int"}
+    }
+  },
+  "daysAgo": "{count} day ago",
+  "@daysAgo": {
+     "placeholders": {
+       "count": {"type": "int"}
+    }
+  },
+  "interviewPractice": "Interview Practice",
+  "softwareEngineer": "Software Engineer",
+  "notificationsComingSoon": "Notifications coming soon!",
+
+  "cvAnalyzer": "CV Analyzer",
+  "cvAnalyzerDesc": "Get AI-powered feedback on your CV",
+  "cvBuilder": "CV Builder",
+  "cvBuilderDesc": "Build your CV step by step with AI assistance",
+  "cvTranslator": "CV Translator",
+  "cvTranslatorDesc": "Translate your CV to multiple languages",
+  "cvHistory": "CV History",
+  "cvHistoryDesc": "View and manage all your CVs",
+
+  "personalInfo": "Personal Info",
+  "education": "Education",
+  "experience": "Experience",
+  "certification": "Certification",
+  "skills": "Skills",
+  "summary": "Summary",
+  "additionalInfo": "Additional Info",
+  "screenUnderConstruction": "This screen is under construction",
+
+  "analysisDetail": "Analysis Detail",
+  "detailedAnalysis": "Detailed Analysis",
+  "analyzingCv": "Analyzing CV...",
+
+  "aiInterviewPractice": "AI Interview Practice",
+  "practiceInterviewWithAi": "Practice interview with AI and get professional feedback",
+  "startNewInterview": "Start New Interview",
+  "viewInterviewHistory": "View Interview History",
+  "setupInterviewStep": "Setup Interview - Step {step}",
+  "@setupInterviewStep": {
+    "placeholders": {
+      "step": {"type": "int"}
+    }
+  },
+  "selectCv": "Select CV",
+
+  "cvSoftwareEngineer": "CV Software Engineer",
+  "analyzedOnDate": "Analyzed on {date} • Score: {score}",
+  "@analyzedOnDate": {
+    "placeholders": {
+      "date": {"type": "String"},
+      "score": {"type": "int"}
+    }
+  },
+  "interviewPracticeFrontend": "Interview Practice: Frontend Dev",
+  "completedOnDate": "Completed on {date}",
+  "@completedOnDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "moreHistoryWillAppear": "More history will appear here",
+
+  "userName": "User Name",
+  "userEmail": "user@example.com",
+  "settings": "Settings",
+  "darkMode": "Dark Mode",
+  "darkThemeEnabled": "Dark theme enabled",
+  "lightThemeEnabled": "Light theme enabled",
+  "language": "Language",
+  "bahasaIndonesia": "Bahasa Indonesia",
+  "confirmLogout": "Are you sure you want to logout?",
+
+  "stepProgress": "Step {current}/{total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "whatsYourFullName": "What's your full name?",
+  "fullName": "Full Name",
+  "enterYourFullName": "Enter your full name",
+
+  "whatsYourCurrentStatus": "What's your current status?",
+  "freshGraduate": "Fresh Graduate",
+  "currentlyWorking": "Currently Working",
+  "lookingForJob": "Looking for Job",
+  "freelancer": "Freelancer",
+  
+  "whatsYourTargetRole": "What's your target role?",
+  "targetRole": "Target Role",
+  "targetRoleHint": "e.g., Software Engineer, Product Manager",
+  
+  "whatsYourCareerGoal": "What's your career goal?",
+  "careerGoal": "Career Goal",
+  "careerGoalHint": "Describe your career aspirations...",
+  
+  "confirmation": "Confirmation",
+  "yourProfileIsReady": "Your profile is ready!",
+  "status": "Status",
+  "goal": "Goal",
+  "startUsingApp": "Start Using App",
+
+  "cvBuilderWelcomeTitle": "Create Professional CV",
+  "cvBuilderWelcomeDesc": "We will guide you step by step to create an attractive CV",
+  "startCreatingCv": "Start Creating CV",
+  "uploadCv": "Upload CV",
+  "uploadYourCv": "Upload Your CV",
+  "uploadNewCv": "Upload New CV",
+  "useCvFromBuilder": "Use CV from Builder"
 }

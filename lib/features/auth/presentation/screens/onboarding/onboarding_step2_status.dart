@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class OnboardingStep2Screen extends StatefulWidget {
@@ -15,11 +17,12 @@ class _OnboardingStep2ScreenState extends State<OnboardingStep2Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Step 2/4'),
+        title: Text(l10n.stepProgress(2, 4)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const OnboardingStep1Route()),
         ),
       ),
@@ -30,20 +33,20 @@ class _OnboardingStep2ScreenState extends State<OnboardingStep2Screen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'What\'s your current status?',
+              l10n.whatsYourCurrentStatus,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 32),
-            _buildStatusOption('Fresh Graduate', 'fresh_grad'),
-            _buildStatusOption('Currently Working', 'working'),
-            _buildStatusOption('Looking for Job', 'job_seeking'),
-            _buildStatusOption('Freelancer', 'freelancer'),
+            _buildStatusOption(l10n.freshGraduate, 'fresh_grad'),
+            _buildStatusOption(l10n.currentlyWorking, 'working'),
+            _buildStatusOption(l10n.lookingForJob, 'job_seeking'),
+            _buildStatusOption(l10n.freelancer, 'freelancer'),
             const Spacer(),
             ElevatedButton(
               onPressed: () {
                 context.router.push(const OnboardingStep3Route());
               },
-              child: const Text('Next'),
+              child: Text(l10n.next),
             ),
           ],
         ),

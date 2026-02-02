@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class OnboardingConfirmationScreen extends StatelessWidget {
@@ -8,11 +10,12 @@ class OnboardingConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Confirmation'),
+        title: Text(l10n.confirmation),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const OnboardingStep4Route()),
         ),
       ),
@@ -23,13 +26,13 @@ class OnboardingConfirmationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Icon(
-              Icons.check_circle,
+              Iconsax.tick_circle,
               size: 80,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 24),
             Text(
-              'Your profile is ready!',
+              l10n.yourProfileIsReady,
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
@@ -40,13 +43,13 @@ class OnboardingConfirmationScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildInfoRow(context, 'Name', 'John Doe'),
+                    _buildInfoRow(context, l10n.fullName, 'John Doe'),
                     const Divider(),
-                    _buildInfoRow(context, 'Status', 'Fresh Graduate'),
+                    _buildInfoRow(context, l10n.status, 'Fresh Graduate'),
                     const Divider(),
-                    _buildInfoRow(context, 'Target Role', 'Software Engineer'),
+                    _buildInfoRow(context, l10n.targetRole, 'Software Engineer'),
                     const Divider(),
-                    _buildInfoRow(context, 'Goal', 'Build amazing apps'),
+                    _buildInfoRow(context, l10n.goal, 'Build amazing apps'),
                   ],
                 ),
               ),
@@ -56,7 +59,7 @@ class OnboardingConfirmationScreen extends StatelessWidget {
               onPressed: () {
                 context.router.push(const MainRoute());
               },
-              child: const Text('Start Using App'),
+              child: Text(l10n.getStarted),
             ),
           ],
         ),
