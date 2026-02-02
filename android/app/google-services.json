@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "570883569559",
+    "project_id": "resummy-app",
+    "storage_bucket": "resummy-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570883569559:android:8d65af0d78fce3ffd9f6d2",
+        "android_client_info": {
+          "package_name": "com.example.resummy_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7aTMNOpQvsm60dJWtpyCM5zQrNIOnmSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570883569559:android:7c1753d47b22be5ed9f6d2",
+        "android_client_info": {
+          "package_name": "com.resummy.resummy_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7aTMNOpQvsm60dJWtpyCM5zQrNIOnmSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
