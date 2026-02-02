@@ -668,6 +668,12 @@ abstract class AppLocalizations {
   /// **'e.g., Software Engineer, Product Manager'**
   String get targetRoleHint;
 
+  /// No description provided for @typeToSeeSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Type to see suggestions'**
+  String get typeToSeeSuggestions;
+
   /// No description provided for @whatsYourCareerGoal.
   ///
   /// In en, this message translates to:

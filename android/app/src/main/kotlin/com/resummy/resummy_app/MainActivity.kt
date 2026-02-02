@@ -1,4 +1,4 @@
-package com.example.resummy_app
+package com.resummy.resummy_app
 
 import io.flutter.embedding.android.FlutterActivity
 

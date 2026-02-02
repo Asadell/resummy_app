@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/core/providers/locale_provider.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -14,14 +17,38 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToAuth();
+    _navigateNext();
   }
 
-  Future<void> _navigateToAuth() async {
+  Future<void> _navigateNext() async {
     await Future.delayed(const Duration(seconds: 2));
-    if (mounted) {
-      context.router.replace(const AuthRoute());
+    if (!mounted) return;
+
+    final router = context.router;
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    // Check if language has been selected (first-time only)
+    if (!localeProvider.hasSelectedLanguage) {
+      router.replace(const LanguageSelectionRoute());
+      return;
     }
+
+    // Check if user is logged in
+    if (!authProvider.isLoggedIn) {
+      router.replace(const AuthRoute());
+      return;
+    }
+
+    // Check if onboarding is done
+    final onboardingDone = await authProvider.isOnboardingDone();
+    if (!onboardingDone) {
+      router.replace(const OnboardingStep1Route());
+      return;
+    }
+
+    // All good, go to main app
+    router.replace(const MainRoute());
   }
 
   @override
@@ -29,24 +56,34 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.description,
-              size: 80,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Resummy App',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const SizedBox(height: 16),
-            const CircularProgressIndicator(),
-          ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // App Logo
+              Image.asset(
+                'assets/icon/icon.png',
+                width: 120,
+                height: 120,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Resummy',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Build Your Career',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 48),
+              const CircularProgressIndicator(),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

@@ -322,34 +322,132 @@ dart run build_runner build --delete-conflicting-outputs
 
 - Flutter SDK `>=3.0.0`
 - Dart `>=3.0.0`
-- Firebase project (for authentication)
+- Node.js (untuk Firebase CLI)
 
 ### Installation
 
-1. **Clone repository**
 ```bash
+# 1. Clone repository
 git clone https://github.com/yourusername/resummy_app.git
 cd resummy_app
-```
 
-2. **Install dependencies**
-```bash
+# 2. Install dependencies
 flutter pub get
-```
 
-3. **Generate files**
-```bash
-# Generate routes
+# 3. Generate files
 dart run build_runner build --delete-conflicting-outputs
-
-# Generate localizations (if needed)
 flutter gen-l10n
+
+# 4. Setup Firebase (lihat section berikutnya)
 ```
 
-4. **Run the app**
+---
+
+## 🔥 Firebase Setup (Untuk Tim)
+
+> **PENTING:** Setiap developer harus setup Firebase-nya sendiri karena SHA-1 fingerprint berbeda per device.
+
+### Step 1: Install Firebase CLI
+
+```bash
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login ke Firebase (gunakan akun yang sudah di-invite ke project)
+firebase login
+
+# Install FlutterFire CLI
+dart pub global activate flutterfire_cli
+
+# Jika flutterfire command not found:
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+```
+
+### Step 2: Configure FlutterFire
+
+```bash
+# Di root folder project
+flutterfire configure
+
+# Pilih project: resummy-app-xxxxx
+# Pilih platforms: android, web
+```
+
+Ini akan generate/update `lib/firebase_options.dart`.
+
+### Step 3: Setup SHA-1 (Android)
+
+**Kenapa perlu?** Google Sign-In butuh SHA-1 fingerprint untuk security.
+
+```bash
+# Cara 1: Via Gradle
+cd android
+./gradlew signingReport
+
+# Copy SHA-1 dari output "Variant: debug"
+# Contoh: A1:B2:C3:D4:E5:F6:...
+
+# Cara 2: Via keytool
+keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+```
+
+**Tambahkan SHA-1 ke Firebase Console:**
+
+1. Buka [Firebase Console](https://console.firebase.google.com/) → Project Settings (⚙️)
+2. Scroll ke "Your apps" → Pilih Android app
+3. Click **"Add fingerprint"** → Paste SHA-1 → Save
+4. **Download `google-services.json`** → Taruh di `android/app/`
+
+### Step 4: Verify Setup
+
 ```bash
 flutter run
 ```
+
+Jika berhasil, app akan jalan tanpa error Firebase!
+
+---
+
+## 🛡️ Firestore Security Rules
+
+Rules saat ini (development mode):
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users: hanya bisa akses data sendiri
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // CVs: hanya pemilik yang bisa akses
+    match /cvs/{cvId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Interviews: hanya pemilik yang bisa akses
+    match /interviews/{interviewId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
+```
+
+> ⚠️ **Production:** Rules ini perlu di-hardening sebelum release!
+
+---
+
+## 🐛 Common Firebase Issues
+
+| Issue | Solution |
+|-------|----------|
+| `flutterfire: command not found` | `export PATH="$PATH":"$HOME/.pub-cache/bin"` |
+| Google Sign-In error | Pastikan SHA-1 sudah ditambahkan di Firebase Console |
+| `google-services.json` not found | Download dari Firebase Console → taruh di `android/app/` |
+| Permission denied Firestore | Cek user sudah login & rules benar |
+
+---
 
 ### Build for Production
 

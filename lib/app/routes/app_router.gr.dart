@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i50;
+import 'package:flutter/material.dart' as _i51;
 import 'package:resummy_app/app/screens/main_screen.dart' as _i42;
 import 'package:resummy_app/features/auth/presentation/screens/auth_screen.dart'
     as _i1;
@@ -786,18 +787,67 @@ class MainRoute extends _i50.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i43.OnboardingConfirmationScreen]
-class OnboardingConfirmationRoute extends _i50.PageRouteInfo<void> {
-  const OnboardingConfirmationRoute({List<_i50.PageRouteInfo>? children})
-    : super(OnboardingConfirmationRoute.name, initialChildren: children);
+class OnboardingConfirmationRoute
+    extends _i50.PageRouteInfo<OnboardingConfirmationRouteArgs> {
+  OnboardingConfirmationRoute({
+    _i51.Key? key,
+    required String fullName,
+    String? workStatus,
+    String? targetRole,
+    String? careerGoal,
+    List<_i50.PageRouteInfo>? children,
+  }) : super(
+         OnboardingConfirmationRoute.name,
+         args: OnboardingConfirmationRouteArgs(
+           key: key,
+           fullName: fullName,
+           workStatus: workStatus,
+           targetRole: targetRole,
+           careerGoal: careerGoal,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'OnboardingConfirmationRoute';
 
   static _i50.PageInfo page = _i50.PageInfo(
     name,
     builder: (data) {
-      return const _i43.OnboardingConfirmationScreen();
+      final args = data.argsAs<OnboardingConfirmationRouteArgs>();
+      return _i43.OnboardingConfirmationScreen(
+        key: args.key,
+        fullName: args.fullName,
+        workStatus: args.workStatus,
+        targetRole: args.targetRole,
+        careerGoal: args.careerGoal,
+      );
     },
   );
+}
+
+class OnboardingConfirmationRouteArgs {
+  const OnboardingConfirmationRouteArgs({
+    this.key,
+    required this.fullName,
+    this.workStatus,
+    this.targetRole,
+    this.careerGoal,
+  });
+
+  final _i51.Key? key;
+
+  final String fullName;
+
+  final String? workStatus;
+
+  final String? targetRole;
+
+  final String? careerGoal;
+
+  @override
+  String toString() {
+    return 'OnboardingConfirmationRouteArgs{key: $key, fullName: $fullName, workStatus: $workStatus, targetRole: $targetRole, careerGoal: $careerGoal}';
+  }
 }
 
 /// generated route for
@@ -818,50 +868,152 @@ class OnboardingStep1Route extends _i50.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i45.OnboardingStep2Screen]
-class OnboardingStep2Route extends _i50.PageRouteInfo<void> {
-  const OnboardingStep2Route({List<_i50.PageRouteInfo>? children})
-    : super(OnboardingStep2Route.name, initialChildren: children);
+class OnboardingStep2Route
+    extends _i50.PageRouteInfo<OnboardingStep2RouteArgs> {
+  OnboardingStep2Route({
+    _i51.Key? key,
+    required String fullName,
+    List<_i50.PageRouteInfo>? children,
+  }) : super(
+         OnboardingStep2Route.name,
+         args: OnboardingStep2RouteArgs(key: key, fullName: fullName),
+         initialChildren: children,
+       );
 
   static const String name = 'OnboardingStep2Route';
 
   static _i50.PageInfo page = _i50.PageInfo(
     name,
     builder: (data) {
-      return const _i45.OnboardingStep2Screen();
+      final args = data.argsAs<OnboardingStep2RouteArgs>();
+      return _i45.OnboardingStep2Screen(key: args.key, fullName: args.fullName);
     },
   );
 }
 
+class OnboardingStep2RouteArgs {
+  const OnboardingStep2RouteArgs({this.key, required this.fullName});
+
+  final _i51.Key? key;
+
+  final String fullName;
+
+  @override
+  String toString() {
+    return 'OnboardingStep2RouteArgs{key: $key, fullName: $fullName}';
+  }
+}
+
 /// generated route for
 /// [_i46.OnboardingStep3Screen]
-class OnboardingStep3Route extends _i50.PageRouteInfo<void> {
-  const OnboardingStep3Route({List<_i50.PageRouteInfo>? children})
-    : super(OnboardingStep3Route.name, initialChildren: children);
+class OnboardingStep3Route
+    extends _i50.PageRouteInfo<OnboardingStep3RouteArgs> {
+  OnboardingStep3Route({
+    _i51.Key? key,
+    required String fullName,
+    String? workStatus,
+    List<_i50.PageRouteInfo>? children,
+  }) : super(
+         OnboardingStep3Route.name,
+         args: OnboardingStep3RouteArgs(
+           key: key,
+           fullName: fullName,
+           workStatus: workStatus,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'OnboardingStep3Route';
 
   static _i50.PageInfo page = _i50.PageInfo(
     name,
     builder: (data) {
-      return const _i46.OnboardingStep3Screen();
+      final args = data.argsAs<OnboardingStep3RouteArgs>();
+      return _i46.OnboardingStep3Screen(
+        key: args.key,
+        fullName: args.fullName,
+        workStatus: args.workStatus,
+      );
     },
   );
 }
 
+class OnboardingStep3RouteArgs {
+  const OnboardingStep3RouteArgs({
+    this.key,
+    required this.fullName,
+    this.workStatus,
+  });
+
+  final _i51.Key? key;
+
+  final String fullName;
+
+  final String? workStatus;
+
+  @override
+  String toString() {
+    return 'OnboardingStep3RouteArgs{key: $key, fullName: $fullName, workStatus: $workStatus}';
+  }
+}
+
 /// generated route for
 /// [_i47.OnboardingStep4Screen]
-class OnboardingStep4Route extends _i50.PageRouteInfo<void> {
-  const OnboardingStep4Route({List<_i50.PageRouteInfo>? children})
-    : super(OnboardingStep4Route.name, initialChildren: children);
+class OnboardingStep4Route
+    extends _i50.PageRouteInfo<OnboardingStep4RouteArgs> {
+  OnboardingStep4Route({
+    _i51.Key? key,
+    required String fullName,
+    String? workStatus,
+    String? targetRole,
+    List<_i50.PageRouteInfo>? children,
+  }) : super(
+         OnboardingStep4Route.name,
+         args: OnboardingStep4RouteArgs(
+           key: key,
+           fullName: fullName,
+           workStatus: workStatus,
+           targetRole: targetRole,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'OnboardingStep4Route';
 
   static _i50.PageInfo page = _i50.PageInfo(
     name,
     builder: (data) {
-      return const _i47.OnboardingStep4Screen();
+      final args = data.argsAs<OnboardingStep4RouteArgs>();
+      return _i47.OnboardingStep4Screen(
+        key: args.key,
+        fullName: args.fullName,
+        workStatus: args.workStatus,
+        targetRole: args.targetRole,
+      );
     },
   );
+}
+
+class OnboardingStep4RouteArgs {
+  const OnboardingStep4RouteArgs({
+    this.key,
+    required this.fullName,
+    this.workStatus,
+    this.targetRole,
+  });
+
+  final _i51.Key? key;
+
+  final String fullName;
+
+  final String? workStatus;
+
+  final String? targetRole;
+
+  @override
+  String toString() {
+    return 'OnboardingStep4RouteArgs{key: $key, fullName: $fullName, workStatus: $workStatus, targetRole: $targetRole}';
+  }
 }
 
 /// generated route for
