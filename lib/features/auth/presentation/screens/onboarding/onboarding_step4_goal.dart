@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class OnboardingStep4Screen extends StatefulWidget {
@@ -21,11 +23,12 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Step 4/4'),
+        title: Text(l10n.stepProgress(4, 4)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const OnboardingStep3Route()),
         ),
       ),
@@ -36,16 +39,16 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'What\'s your career goal?',
+              l10n.whatsYourCareerGoal,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 32),
             TextField(
               controller: _goalController,
               maxLines: 5,
-              decoration: const InputDecoration(
-                labelText: 'Career Goal',
-                hintText: 'Describe your career aspirations...',
+              decoration: InputDecoration(
+                labelText: l10n.careerGoal,
+                hintText: l10n.careerGoalHint,
                 alignLabelWithHint: true,
               ),
             ),
@@ -54,7 +57,7 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
               onPressed: () {
                 context.router.push(const OnboardingConfirmationRoute());
               },
-              child: const Text('Finish'),
+              child: Text(l10n.finish),
             ),
           ],
         ),

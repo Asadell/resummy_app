@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -8,15 +10,17 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text(l10n.home),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
+            icon: const Icon(Iconsax.notification),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Notifications coming soon!')),
+                SnackBar(content: Text(l10n.notificationsComingSoon)),
               );
             },
           ),
@@ -36,12 +40,12 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome Back!',
+                        l10n.welcomeBack,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Let\'s build your perfect career',
+                        l10n.letsBuildYourPerfectCareer,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -52,7 +56,7 @@ class HomeScreen extends StatelessWidget {
               
               // Quick Actions
               Text(
-                'Quick Actions',
+                l10n.quickActions,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
@@ -60,8 +64,8 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.description,
-                      title: 'Build CV',
+                      icon: Iconsax.document_text,
+                      title: l10n.buildCv,
                       color: Theme.of(context).colorScheme.primary,
                       onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
                     ),
@@ -69,8 +73,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.analytics,
-                      title: 'Analyze CV',
+                      icon: Iconsax.chart_2,
+                      title: l10n.analyzeCv,
                       color: Theme.of(context).colorScheme.secondary,
                       onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
                     ),
@@ -82,8 +86,8 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.mic,
-                      title: 'Interview Prep',
+                      icon: Iconsax.microphone,
+                      title: l10n.interviewPrep,
                       color: Theme.of(context).colorScheme.tertiary,
                       onTap: () => context.router.push(const InterviewSetupStep1Route()),
                     ),
@@ -91,8 +95,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.translate,
-                      title: 'Translate CV',
+                      icon: Iconsax.translate,
+                      title: l10n.translateCv,
                       color: Colors.orange,
                       onTap: () => context.router.push(const CvTranslatorUploadRoute()),
                     ),
@@ -106,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Recent Activity',
+                    l10n.recentActivity,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   TextButton(
@@ -114,24 +118,24 @@ class HomeScreen extends StatelessWidget {
                       // Navigate to History tab (index 3)
                       context.router.navigate(const HistoryRoute());
                     },
-                    child: const Text('View All'),
+                    child: Text(l10n.viewAll),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               _ActivityCard(
-                icon: Icons.check_circle,
-                title: 'CV Analysis Completed',
-                subtitle: 'Score: 85/100',
-                time: '2 hours ago',
+                icon: Iconsax.tick_circle,
+                title: l10n.cvAnalysisCompleted,
+                subtitle: l10n.score(85),
+                time: l10n.hoursAgo(2),
                 onTap: () => context.router.push(const CvAnalyzerResultRoute()),
               ),
               const SizedBox(height: 8),
               _ActivityCard(
-                icon: Icons.mic,
-                title: 'Interview Practice',
-                subtitle: 'Software Engineer',
-                time: '1 day ago',
+                icon: Iconsax.microphone,
+                title: l10n.interviewPractice,
+                subtitle: l10n.softwareEngineer,
+                time: l10n.daysAgo(1),
                 onTap: () => context.router.push(const InterviewFeedbackOverviewRoute()),
               ),
             ],

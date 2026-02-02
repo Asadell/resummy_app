@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderStep5Screen extends StatelessWidget {
@@ -8,11 +10,12 @@ class CvBuilderStep5Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Skills'),
+        title: Text(l10n.skills),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const CvBuilderStep4Route()),
         ),
       ),
@@ -22,18 +25,18 @@ class CvBuilderStep5Screen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.construction,
+              Iconsax.setting_3,
               size: 64,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 24),
             Text(
-              'Skills',
+              l10n.skills,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 16),
             Text(
-              'This screen is under construction',
+              l10n.screenUnderConstruction,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Spacer(),
@@ -45,10 +48,10 @@ class CvBuilderStep5Screen extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () => context.router.push(const CvBuilderStep6Route()),
-                child: const Text('Lanjut →'),
+                child: Text('${l10n.next} →'),
               ),
             ),
-        ],
+          ],
         ),
       ),
       ),

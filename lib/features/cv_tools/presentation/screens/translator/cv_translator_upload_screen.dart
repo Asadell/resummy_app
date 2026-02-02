@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/app/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvTranslatorUploadScreen extends StatelessWidget {
@@ -8,11 +10,12 @@ class CvTranslatorUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CV Translator'),
+        title: Text(l10n.cvTranslator),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const CvToolsHubRoute()),
         ),
       ),
@@ -22,18 +25,18 @@ class CvTranslatorUploadScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.construction,
+              Iconsax.setting_3,
               size: 64,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 24),
             Text(
-              'Upload CV',
+              l10n.uploadCv,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 16),
             Text(
-              'This screen is under construction',
+              l10n.screenUnderConstruction,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Spacer(),
@@ -45,7 +48,7 @@ class CvTranslatorUploadScreen extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () => context.router.push(const CvTranslatorLanguageRoute()),
-                child: const Text('Upload CV'),
+                child: Text(l10n.uploadCv),
               ),
             ),
         ],
