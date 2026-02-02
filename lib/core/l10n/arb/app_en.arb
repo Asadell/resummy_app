@@ -1,0 +1,33 @@
+{
+  "@@locale": "en",
+  "appTitle": "Resummy App",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "welcomeMessage": "Welcome to Resummy App",
+  "@welcomeMessage": {
+    "description": "Welcome message on splash screen"
+  },
+  "login": "Login",
+  "loginWithGoogle": "Continue with Google",
+  "logout": "Logout",
+  "home": "Home",
+  "cvTools": "CV Tools",
+  "interview": "Interview",
+  "history": "History",
+  "profile": "Profile",
+  "next": "Next",
+  "back": "Back",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "done": "Done",
+  "skip": "Skip",
+  "finish": "Finish",
+  "getStarted": "Get Started",
+  "continueText": "Continue",
+  "selectLanguage": "Select Language",
+  "english": "English",
+  "indonesian": "Indonesian"
+}
