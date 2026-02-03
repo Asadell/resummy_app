@@ -746,11 +746,11 @@ abstract class AppLocalizations {
   /// **'Upload CV'**
   String get uploadCv;
 
-  /// No description provided for @uploadYourCv.
+  /// No description provided for @chooseCvSource.
   ///
   /// In en, this message translates to:
-  /// **'Upload Your CV'**
-  String get uploadYourCv;
+  /// **'Choose your CV source'**
+  String get chooseCvSource;
 
   /// No description provided for @uploadNewCv.
   ///
@@ -758,11 +758,41 @@ abstract class AppLocalizations {
   /// **'Upload New CV'**
   String get uploadNewCv;
 
-  /// No description provided for @useCvFromBuilder.
+  /// No description provided for @uploadCvFileHint.
   ///
   /// In en, this message translates to:
-  /// **'Use CV from Builder'**
-  String get useCvFromBuilder;
+  /// **'Upload PDF/DOC file (Max 5MB)'**
+  String get uploadCvFileHint;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get or;
+
+  /// No description provided for @useExistingCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Existing CV'**
+  String get useExistingCv;
+
+  /// No description provided for @savedCvs.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved CVs'**
+  String get savedCvs;
+
+  /// No description provided for @cvNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'CV {number}'**
+  String cvNumber(int number);
+
+  /// No description provided for @createdOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on {date}'**
+  String createdOnDate(String date);
 }
 
 class _AppLocalizationsDelegate

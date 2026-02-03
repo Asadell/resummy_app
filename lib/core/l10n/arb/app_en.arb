@@ -165,7 +165,23 @@
   "cvBuilderWelcomeDesc": "We will guide you step by step to create an attractive CV",
   "startCreatingCv": "Start Creating CV",
   "uploadCv": "Upload CV",
-  "uploadYourCv": "Upload Your CV",
+  
+  "chooseCvSource": "Choose your CV source",
   "uploadNewCv": "Upload New CV",
-  "useCvFromBuilder": "Use CV from Builder"
+  "uploadCvFileHint": "Upload PDF/DOC file (Max 5MB)",
+  "or": "or",
+  "useExistingCv": "Use Existing CV",
+  "savedCvs": "Saved CVs",
+  "cvNumber": "CV {number}",
+  "@cvNumber": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
+  "createdOnDate": "Created on {date}",
+  "@createdOnDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  }
 }

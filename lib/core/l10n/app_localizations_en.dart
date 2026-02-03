@@ -349,11 +349,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadCv => 'Upload CV';
 
   @override
-  String get uploadYourCv => 'Upload Your CV';
+  String get chooseCvSource => 'Choose your CV source';
 
   @override
   String get uploadNewCv => 'Upload New CV';
 
   @override
-  String get useCvFromBuilder => 'Use CV from Builder';
+  String get uploadCvFileHint => 'Upload PDF/DOC file (Max 5MB)';
+
+  @override
+  String get or => 'or';
+
+  @override
+  String get useExistingCv => 'Use Existing CV';
+
+  @override
+  String get savedCvs => 'Saved CVs';
+
+  @override
+  String cvNumber(int number) {
+    return 'CV $number';
+  }
+
+  @override
+  String createdOnDate(String date) {
+    return 'Created on $date';
+  }
 }

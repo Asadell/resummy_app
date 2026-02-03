@@ -122,7 +122,13 @@
   "cvBuilderWelcomeDesc": "Kami akan memandu Anda langkah demi langkah untuk membuat CV yang menarik",
   "startCreatingCv": "Mulai Membuat CV",
   "uploadCv": "Unggah CV",
-  "uploadYourCv": "Unggah CV Anda",
-  "uploadNewCv": "Unggah CV Baru",
-  "useCvFromBuilder": "Gunakan CV dari Builder"
+  
+  "chooseCvSource": "Pilih sumber CV Anda",
+  "uploadNewCv": "Upload CV Baru",
+  "uploadCvFileHint": "Upload file PDF/DOC (Max 5MB)",
+  "or": "atau",
+  "useExistingCv": "Gunakan CV yang telah dibuat",
+  "savedCvs": "CV yang Tersimpan",
+  "cvNumber": "CV {number}",
+  "createdOnDate": "Dibuat pada {date}"
 }

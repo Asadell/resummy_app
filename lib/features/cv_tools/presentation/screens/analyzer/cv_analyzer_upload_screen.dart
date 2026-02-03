@@ -11,9 +11,11 @@ class CvAnalyzerUploadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.uploadCv),
+        title: Text(l10n.cvAnalyzer),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const CvToolsHubRoute()),
@@ -26,37 +28,133 @@ class CvAnalyzerUploadScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(
-                Iconsax.document_upload,
-                size: 80,
-                color: Theme.of(context).colorScheme.primary,
+              Text(
+                l10n.chooseCvSource,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 32),
+              OutlinedButton(
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 32,
+                    horizontal: 16,
+                  ),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Icon(Iconsax.document_upload, size: 48),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.uploadNewCv,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.uploadCvFileHint,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
-              Text(
-                l10n.uploadYourCv,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      l10n.or,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 48),
-              ElevatedButton.icon(
-                onPressed: () => context.router.push(const CvAnalyzerInputRoute()),
-                icon: const Icon(Iconsax.document_upload),
-                label: Text(l10n.uploadNewCv),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: () => context.router.push(const CvAnalyzerInputRoute()),
-                icon: const Icon(Iconsax.folder),
-                label: Text(l10n.useCvFromBuilder),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => _showCvListBottomSheet(context),
+                child: Text(l10n.useExistingCv),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showCvListBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) => Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                AppLocalizations.of(context)!.savedCvs,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: 5, // Placeholder count
+                itemBuilder: (context, index) {
+                  final l10n = AppLocalizations.of(context)!;
+                  final now = DateTime.now();
+                  final dateStr = '${now.day}/${now.month}/${now.year}';
+                  
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: ListTile(
+                      leading: const Icon(Iconsax.document_text),
+                      title: Text(l10n.cvNumber(index + 1)),
+                      subtitle: Text(l10n.createdOnDate(dateStr)),
+                      trailing: const Icon(Iconsax.arrow_right_3),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
