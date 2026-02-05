@@ -355,7 +355,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get uploadNewCv => 'Upload CV Baru';
 
   @override
-  String get uploadCvFileHint => 'Upload file PDF/DOC (Max 5MB)';
+  String get uploadCvFileHint => 'Upload file PDF (Max 5MB)';
 
   @override
   String get or => 'atau';
@@ -375,4 +375,16 @@ class AppLocalizationsId extends AppLocalizations {
   String createdOnDate(String date) {
     return 'Dibuat pada $date';
   }
+
+  @override
+  String get appliedPosition => 'Posisi yang Dilamar';
+
+  @override
+  String get optional => 'Opsional';
+
+  @override
+  String get startAnalysis => 'Mulai Analisis';
+
+  @override
+  String get noFileSelected => 'Tidak ada file terpilih';
 }

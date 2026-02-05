@@ -761,7 +761,7 @@ abstract class AppLocalizations {
   /// No description provided for @uploadCvFileHint.
   ///
   /// In en, this message translates to:
-  /// **'Upload PDF/DOC file (Max 5MB)'**
+  /// **'Upload PDF file (Max 5MB)'**
   String get uploadCvFileHint;
 
   /// No description provided for @or.
@@ -793,6 +793,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Created on {date}'**
   String createdOnDate(String date);
+
+  /// No description provided for @appliedPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied Position'**
+  String get appliedPosition;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @startAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Analysis'**
+  String get startAnalysis;
+
+  /// No description provided for @noFileSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get noFileSelected;
 }
 
 class _AppLocalizationsDelegate
