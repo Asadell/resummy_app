@@ -34,7 +34,9 @@ void main() async {
         ChangeNotifierProvider.value(value: localeProvider),
         ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider(
-          create: (_) => CvAnalyzerProvider(UserProfileRepository()),
+          create: (_) => CvAnalyzerProvider(
+            userProfileRepository: UserProfileRepository(),
+          ),
         ),
       ],
       child: ResummyApp(),

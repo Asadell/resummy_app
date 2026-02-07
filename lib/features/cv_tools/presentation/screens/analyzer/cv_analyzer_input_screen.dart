@@ -21,7 +21,14 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserJobPosition();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = context.read<AuthProvider>().user?.uid;
+
+      if (userId != null) {
+        context.read<CvAnalyzerProvider>().loadInitialData(userId);
+      }
+    });
   }
 
   @override
@@ -30,21 +37,15 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
     super.dispose();
   }
 
-  Future<void> _loadUserJobPosition() async {
-    final authProvider = context.read<AuthProvider>();
-    final cvAnalyzerProvider = context.read<CvAnalyzerProvider>();
-
-    final userId = authProvider.user!.uid;
-    final jobPosition = await cvAnalyzerProvider.getUserJobPosition(userId);
-
-    if (mounted) {
-      _positionController.text = jobPosition;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final cvAnalyzerProvider = context.watch<CvAnalyzerProvider>();
+
+    if (_positionController.text.isEmpty &&
+        cvAnalyzerProvider.jobPosition.isNotEmpty) {
+      _positionController.text = cvAnalyzerProvider.jobPosition;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -73,6 +74,8 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
                 decoration: InputDecoration(
                   hintText: l10n.optional,
                 ),
+                onChanged: (val) =>
+                    context.read<CvAnalyzerProvider>().setJobPosition(val),
               ),
               const Spacer(),
               ElevatedButton(

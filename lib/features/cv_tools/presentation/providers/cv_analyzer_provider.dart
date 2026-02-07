@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
-  final UserProfileRepository userProfileRepository;
+  final UserProfileRepository _userProfileRepository;
 
-  CvAnalyzerProvider(this.userProfileRepository);
+  CvAnalyzerProvider({required UserProfileRepository userProfileRepository})
+      : _userProfileRepository = userProfileRepository;
 
   PlatformFile? _selectedFile;
-  String? _jobPosition;
+  String _jobPosition = '';
+  bool _isLoading = false;
+  bool _isDataLoaded = false;
 
   PlatformFile? get selectedFile => _selectedFile;
-  String? get jobPosition => _jobPosition;
+  String get jobPosition => _jobPosition;
+  bool get isLoading => _isLoading;
 
   FileInfo? get selectedFileInfo {
     if (_selectedFile == null) return null;
@@ -24,15 +28,27 @@ class CvAnalyzerProvider extends ChangeNotifier {
     );
   }
 
-  Future<String> getUserJobPosition(String userId) async {
-    _jobPosition =
-        (await userProfileRepository.getUserProfile(userId))?.targetRole ?? '';
+  Future<void> loadInitialData(String userId) async {
+    if (_isDataLoaded) return;
 
-    return _jobPosition ?? '';
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final result = await _userProfileRepository.getUserProfile(userId);
+
+      _isDataLoaded = true;
+      _jobPosition = result?.targetRole ?? '';
+    } catch (e) {
+      debugPrint('Error loading initial data: $e');
+    }
+
+    _isLoading = false;
+    notifyListeners();
   }
 
-  void setJobPosition(String position) {
-    _jobPosition = position;
+  void setJobPosition(String newJobPosition) {
+    _jobPosition = newJobPosition;
     notifyListeners();
   }
 
