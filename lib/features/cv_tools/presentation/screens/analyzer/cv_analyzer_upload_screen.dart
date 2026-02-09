@@ -26,8 +26,23 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
       if (!context.mounted) return;
 
       if (result != null && result.files.isNotEmpty) {
-        context.read<CvAnalyzerProvider>().setSelectedFile(result.files.first);
-        _nextStep(context);
+        final cvAnalyzerProvider = context.read<CvAnalyzerProvider>();
+
+        cvAnalyzerProvider.setSelectedFile(result.files.first);
+        await cvAnalyzerProvider.readPdfText();
+
+        if (!context.mounted) return;
+
+        if (cvAnalyzerProvider.verifyCvFile()) {
+          _nextStep(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'The selected file does not appear to be a valid CV. Please upload a proper CV document.'),
+            ),
+          );
+        }
       }
     } catch (e) {
       debugPrint('File pick error: $e');
@@ -50,6 +65,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isLoading = context.watch<CvAnalyzerProvider>().isLoading;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,76 +79,100 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
+          child:
+              isLoading ? _renderLoading(context) : _renderInput(l10n, context),
+        ),
+      ),
+    );
+  }
+
+  Column _renderInput(AppLocalizations l10n, BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.chooseCvSource,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        const SizedBox(height: 32),
+        OutlinedButton(
+          onPressed: () => _pickCvFile(context),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(
+              vertical: 56,
+              horizontal: 16,
+            ),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.outline,
+              width: 1,
+            ),
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Icon(Iconsax.document_upload, size: 48),
+              const SizedBox(height: 16),
               Text(
-                l10n.chooseCvSource,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
+                l10n.uploadNewCv,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(height: 32),
-              OutlinedButton(
-                onPressed: () => _pickCvFile(context),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 56,
-                    horizontal: 16,
-                  ),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    const Icon(Iconsax.document_upload, size: 48),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.uploadNewCv,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.uploadCvFileHint,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                spacing: 8,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      l10n.or,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => _showCvListBottomSheet(context),
-                child: Text(l10n.useExistingCv),
+              const SizedBox(height: 8),
+              Text(
+                l10n.uploadCvFileHint,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
         ),
+        const SizedBox(height: 24),
+        Row(
+          spacing: 8,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                l10n.or,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: () => _showCvListBottomSheet(context),
+          child: Text(l10n.useExistingCv),
+        ),
+      ],
+    );
+  }
+
+  Center _renderLoading(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(
+            constraints: BoxConstraints(
+              minWidth: 48,
+              minHeight: 48,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text('Memproses CV Anda, mohon tunggu...'),
+        ],
       ),
     );
   }

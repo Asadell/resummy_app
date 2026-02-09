@@ -74,16 +74,18 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
                 decoration: InputDecoration(
                   hintText: l10n.optional,
                 ),
-                onChanged: (val) =>
-                    context.read<CvAnalyzerProvider>().setJobPosition(val),
               ),
               const Spacer(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
-                onPressed: () =>
-                    context.router.push(const CvAnalyzerLoadingRoute()),
+                onPressed: () {
+                  context
+                      .read<CvAnalyzerProvider>()
+                      .setJobPosition(_positionController.text);
+                  context.router.push(const CvAnalyzerLoadingRoute());
+                },
                 child: Text(l10n.startAnalysis),
               ),
             ],
