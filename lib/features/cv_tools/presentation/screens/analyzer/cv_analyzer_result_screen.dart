@@ -26,198 +26,211 @@ class CvAnalyzerResultScreen extends StatelessWidget {
     final result = context.watch<CvAnalyzerProvider>().analysisResult;
     final overallScore = result?.overallScore ?? 0;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.analysisResult),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.router.maybePop();
-            context.read<CvAnalyzerProvider>().clearAnalysisResult();
-          },
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          context.read<CvAnalyzerProvider>().clearAnalysisResult();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.analysisResult),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.router.maybePop();
+              context.read<CvAnalyzerProvider>().clearAnalysisResult();
+            },
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<CvAnalyzerProvider>().clearState();
-                  context.router.popUntilRoot();
-                },
-                child: Text(l10n.backToHome),
-              ),
-            ),
-            const SizedBox(width: 16),
-            OutlinedButton(
-              onPressed: () {},
-              child: Icon(
-                Iconsax.share,
-                size: 24,
-              ),
-            )
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Row(
             children: [
-              // score card
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.yourCvScore,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        '$overallScore/100',
-                        style:
-                            Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  color: _getScoreColor(context, overallScore),
-                                  fontSize: 40,
-                                ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        result?.grade ?? '',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: _getScoreColor(context, overallScore),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<CvAnalyzerProvider>().clearState();
+                    context.router.popUntilRoot();
+                  },
+                  child: Text(l10n.backToHome),
                 ),
               ),
-              const SizedBox(height: 16),
-              // metrics detail card
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.detailScore,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      _renderMetricItem(
-                        context,
-                        l10n,
-                        l10n.keywordMatch,
-                        result?.metrics.keywordMatch ?? 0,
-                      ),
-                      const SizedBox(height: 12),
-                      _renderMetricItem(
-                        context,
-                        l10n,
-                        l10n.quantifiableAchievements,
-                        result?.metrics.quantifiableAchievements ?? 0,
-                      ),
-                      const SizedBox(height: 12),
-                      _renderMetricItem(
-                        context,
-                        l10n,
-                        l10n.structureCompleteness,
-                        result?.metrics.structureCompleteness ?? 0,
-                      ),
-                      const SizedBox(height: 12),
-                      _renderMetricItem(
-                        context,
-                        l10n,
-                        l10n.languageProfessionalism,
-                        result?.metrics.languageProfessionalism ?? 0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Missing Keywords
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.missingKeywords,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      Wrap(
-                        spacing: 8,
-                        children: result?.missingKeywords
-                                .map((keyword) => Chip(
-                                      padding: const EdgeInsets.all(4),
-                                      label: Text(
-                                        keyword,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .error,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                      ),
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .errorContainer,
-                                      side: BorderSide.none,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ))
-                                .toList() ??
-                            [],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              // suggestion bullet points
-              Text(
-                l10n.improvementSuggestions,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
-              ...?result?.weakBulletPoints.map(
-                (bp) => _renderWeakPointsCard(bp, context),
-              ),
-              // summary feedback
-              const SizedBox(height: 24),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.summaryFeedback,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        result?.summaryFeedback ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
+              const SizedBox(width: 16),
+              OutlinedButton(
+                onPressed: () {},
+                child: Icon(
+                  Iconsax.share,
+                  size: 24,
                 ),
               )
             ],
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // score card
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.yourCvScore,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          '$overallScore/100',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge
+                              ?.copyWith(
+                                color: _getScoreColor(context, overallScore),
+                                fontSize: 40,
+                              ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          result?.grade ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                  color: _getScoreColor(context, overallScore),
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // metrics detail card
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          l10n.detailScore,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        _renderMetricItem(
+                          context,
+                          l10n,
+                          l10n.keywordMatch,
+                          result?.metrics.keywordMatch ?? 0,
+                        ),
+                        const SizedBox(height: 12),
+                        _renderMetricItem(
+                          context,
+                          l10n,
+                          l10n.quantifiableAchievements,
+                          result?.metrics.quantifiableAchievements ?? 0,
+                        ),
+                        const SizedBox(height: 12),
+                        _renderMetricItem(
+                          context,
+                          l10n,
+                          l10n.structureCompleteness,
+                          result?.metrics.structureCompleteness ?? 0,
+                        ),
+                        const SizedBox(height: 12),
+                        _renderMetricItem(
+                          context,
+                          l10n,
+                          l10n.languageProfessionalism,
+                          result?.metrics.languageProfessionalism ?? 0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Missing Keywords
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          l10n.missingKeywords,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          spacing: 8,
+                          children: result?.missingKeywords
+                                  .map((keyword) => Chip(
+                                        padding: const EdgeInsets.all(4),
+                                        label: Text(
+                                          keyword,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                        ),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .errorContainer,
+                                        side: BorderSide.none,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                      ))
+                                  .toList() ??
+                              [],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                // suggestion bullet points
+                Text(
+                  l10n.improvementSuggestions,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 16),
+                ...?result?.weakBulletPoints.map(
+                  (bp) => _renderWeakPointsCard(bp, context),
+                ),
+                // summary feedback
+                const SizedBox(height: 24),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          l10n.summaryFeedback,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          result?.summaryFeedback ?? '',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -327,7 +340,8 @@ class CvAnalyzerResultScreen extends StatelessWidget {
     );
   }
 
-  Column _renderMetricItem(BuildContext context, AppLocalizations l10n, String title, int score) {
+  Column _renderMetricItem(
+      BuildContext context, AppLocalizations l10n, String title, int score) {
     final color = _getScoreColor(context, score);
 
     return Column(

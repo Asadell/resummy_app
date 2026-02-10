@@ -50,22 +50,30 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
     final l10n = AppLocalizations.of(context)!;
     final cvAnalyzerProviderWatch = context.watch<CvAnalyzerProvider>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.cvAnalyzer),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () {
-            context.read<CvAnalyzerProvider>().clearPdfText();
-            context.router.maybePop();
-          },
+    return PopScope(
+      canPop: !cvAnalyzerProviderWatch.isLoading,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          context.read<CvAnalyzerProvider>().clearPdfText();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.cvAnalyzer),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Iconsax.arrow_left),
+            onPressed: () {
+              context.read<CvAnalyzerProvider>().clearPdfText();
+              context.router.maybePop();
+            },
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: cvAnalyzerProviderWatch.isLoading
-            ? LoadingIndicator(message: l10n.analyzingCvPleaseWait)
-            : _renderInput(context, l10n),
+        body: SafeArea(
+          child: cvAnalyzerProviderWatch.isLoading
+              ? LoadingIndicator(message: l10n.analyzingCvPleaseWait)
+              : _renderInput(context, l10n),
+        ),
       ),
     );
   }

@@ -26,7 +26,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(cvAnalyzerProvider.errorMessage)),
         );
-      } else {
+      } else if (cvAnalyzerProvider.selectedFile != null) {
         context.router.push(const CvAnalyzerInputRoute());
       }
     }
@@ -36,26 +36,34 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.cvAnalyzer),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () {
-            context.read<CvAnalyzerProvider>().clearState();
-            context.router.maybePop();
-          },
+    return PopScope(
+      canPop: !context.watch<CvAnalyzerProvider>().isLoading,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          context.read<CvAnalyzerProvider>().clearState();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.cvAnalyzer),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Iconsax.arrow_left),
+            onPressed: () {
+              context.read<CvAnalyzerProvider>().clearState();
+              context.router.maybePop();
+            },
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: context.watch<CvAnalyzerProvider>().isLoading
-              ? LoadingIndicator(
-                  message: l10n.processingCv,
-                )
-              : _renderInput(l10n, context),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: context.watch<CvAnalyzerProvider>().isLoading
+                ? LoadingIndicator(
+                    message: l10n.processingCv,
+                  )
+                : _renderInput(l10n, context),
+          ),
         ),
       ),
     );
