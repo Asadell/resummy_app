@@ -119,5 +119,18 @@
   "appliedPosition": "Posisi yang Dilamar",
   "optional": "Opsional",
   "startAnalysis": "Mulai Analisis",
-  "noFileSelected": "Tidak ada file terpilih"
+  "noFileSelected": "Tidak ada file terpilih",
+  "analyzingCvPleaseWait": "Menganalisis CV, mohon tunggu...",
+  "processingCv": "Memproses CV Anda, mohon tunggu...",
+  "analysisResult": "Hasil Analisis",
+  "yourCvScore": "Skor CV Anda",
+  "detailScore": "Detail Skor",
+  "keywordMatch": "Kecocokan Kata Kunci",
+  "quantifiableAchievements": "Pencapaian Terukur",
+  "structureCompleteness": "Kelengkapan Struktur",
+  "languageProfessionalism": "Profesionalisme Bahasa",
+  "missingKeywords": "Kata Kunci yang Hilang",
+  "improvementSuggestions": "Saran Perbaikan",
+  "summaryFeedback": "Ringkasan Umpan Balik",
+  "backToHome": "Kembali ke Beranda"
 }

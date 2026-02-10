@@ -194,5 +194,18 @@
   "appliedPosition": "Applied Position",
   "optional": "Optional",
   "startAnalysis": "Start Analysis",
-  "noFileSelected": "No file selected"
+  "noFileSelected": "No file selected",
+  "analyzingCvPleaseWait": "Analyzing CV, please wait...",
+  "processingCv": "Processing your CV, please wait...",
+  "analysisResult": "Analysis Result",
+  "yourCvScore": "Your CV Score",
+  "detailScore": "Score Details",
+  "keywordMatch": "Keyword Match",
+  "quantifiableAchievements": "Quantifiable Achievements",
+  "structureCompleteness": "Structure Completeness",
+  "languageProfessionalism": "Language Professionalism",
+  "missingKeywords": "Missing Keywords",
+  "improvementSuggestions": "Improvement Suggestions",
+  "summaryFeedback": "Summary Feedback",
+  "backToHome": "Back to Home"
 }

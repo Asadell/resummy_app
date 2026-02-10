@@ -53,7 +53,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
           padding: const EdgeInsets.all(24.0),
           child: context.watch<CvAnalyzerProvider>().isLoading
               ? LoadingIndicator(
-                  message: 'Memproses CV Anda, mohon tunggu...',
+                  message: l10n.processingCv,
                 )
               : _renderInput(l10n, context),
         ),

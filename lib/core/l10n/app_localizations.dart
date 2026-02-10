@@ -817,6 +817,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No file selected'**
   String get noFileSelected;
+
+  /// No description provided for @analyzingCvPleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing CV, please wait...'**
+  String get analyzingCvPleaseWait;
+
+  /// No description provided for @processingCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing your CV, please wait...'**
+  String get processingCv;
+
+  /// No description provided for @analysisResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis Result'**
+  String get analysisResult;
+
+  /// No description provided for @yourCvScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CV Score'**
+  String get yourCvScore;
+
+  /// No description provided for @detailScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score Details'**
+  String get detailScore;
+
+  /// No description provided for @keywordMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyword Match'**
+  String get keywordMatch;
+
+  /// No description provided for @quantifiableAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantifiable Achievements'**
+  String get quantifiableAchievements;
+
+  /// No description provided for @structureCompleteness.
+  ///
+  /// In en, this message translates to:
+  /// **'Structure Completeness'**
+  String get structureCompleteness;
+
+  /// No description provided for @languageProfessionalism.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Professionalism'**
+  String get languageProfessionalism;
+
+  /// No description provided for @missingKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing Keywords'**
+  String get missingKeywords;
+
+  /// No description provided for @improvementSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvement Suggestions'**
+  String get improvementSuggestions;
+
+  /// No description provided for @summaryFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary Feedback'**
+  String get summaryFeedback;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
 }
 
 class _AppLocalizationsDelegate

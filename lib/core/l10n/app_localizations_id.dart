@@ -387,4 +387,43 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get noFileSelected => 'Tidak ada file terpilih';
+
+  @override
+  String get analyzingCvPleaseWait => 'Menganalisis CV, mohon tunggu...';
+
+  @override
+  String get processingCv => 'Memproses CV Anda, mohon tunggu...';
+
+  @override
+  String get analysisResult => 'Hasil Analisis';
+
+  @override
+  String get yourCvScore => 'Skor CV Anda';
+
+  @override
+  String get detailScore => 'Detail Skor';
+
+  @override
+  String get keywordMatch => 'Kecocokan Kata Kunci';
+
+  @override
+  String get quantifiableAchievements => 'Pencapaian Terukur';
+
+  @override
+  String get structureCompleteness => 'Kelengkapan Struktur';
+
+  @override
+  String get languageProfessionalism => 'Profesionalisme Bahasa';
+
+  @override
+  String get missingKeywords => 'Kata Kunci yang Hilang';
+
+  @override
+  String get improvementSuggestions => 'Saran Perbaikan';
+
+  @override
+  String get summaryFeedback => 'Ringkasan Umpan Balik';
+
+  @override
+  String get backToHome => 'Kembali ke Beranda';
 }

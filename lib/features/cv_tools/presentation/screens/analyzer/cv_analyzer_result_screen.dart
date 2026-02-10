@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis_entity.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 
@@ -21,12 +22,13 @@ class CvAnalyzerResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final result = context.watch<CvAnalyzerProvider>().analysisResult;
     final overallScore = result?.overallScore ?? 0;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hasil Analisis'),
+        title: Text(l10n.analysisResult),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -45,7 +47,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
                   context.read<CvAnalyzerProvider>().clearState();
                   context.router.popUntilRoot();
                 },
-                child: const Text('Kembali ke Beranda'),
+                child: Text(l10n.backToHome),
               ),
             ),
             const SizedBox(width: 16),
@@ -72,7 +74,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Skor CV Anda',
+                        l10n.yourCvScore,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
@@ -104,31 +106,35 @@ class CvAnalyzerResultScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Detail skor',
+                        l10n.detailScore,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
                       _renderMetricItem(
                         context,
-                        'Keyword Match',
+                        l10n,
+                        l10n.keywordMatch,
                         result?.metrics.keywordMatch ?? 0,
                       ),
                       const SizedBox(height: 12),
                       _renderMetricItem(
                         context,
-                        'Quantifiable Achievements',
+                        l10n,
+                        l10n.quantifiableAchievements,
                         result?.metrics.quantifiableAchievements ?? 0,
                       ),
                       const SizedBox(height: 12),
                       _renderMetricItem(
                         context,
-                        'Structure Completeness',
+                        l10n,
+                        l10n.structureCompleteness,
                         result?.metrics.structureCompleteness ?? 0,
                       ),
                       const SizedBox(height: 12),
                       _renderMetricItem(
                         context,
-                        'Language Professionalism',
+                        l10n,
+                        l10n.languageProfessionalism,
                         result?.metrics.languageProfessionalism ?? 0,
                       ),
                     ],
@@ -144,7 +150,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Kata Kunci yang Hilang',
+                        l10n.missingKeywords,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
@@ -183,7 +189,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
               const SizedBox(height: 32),
               // suggestion bullet points
               Text(
-                'Saran Perbaikan',
+                l10n.improvementSuggestions,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
@@ -199,7 +205,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Ringkasan Umpan Balik',
+                        l10n.summaryFeedback,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
@@ -321,7 +327,7 @@ class CvAnalyzerResultScreen extends StatelessWidget {
     );
   }
 
-  Column _renderMetricItem(BuildContext context, String title, int score) {
+  Column _renderMetricItem(BuildContext context, AppLocalizations l10n, String title, int score) {
     final color = _getScoreColor(context, score);
 
     return Column(

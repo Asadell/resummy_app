@@ -64,7 +64,7 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
       ),
       body: SafeArea(
         child: cvAnalyzerProviderWatch.isLoading
-            ? LoadingIndicator(message: 'Analyzing CV, please wait...')
+            ? LoadingIndicator(message: l10n.analyzingCvPleaseWait)
             : _renderInput(context, l10n),
       ),
     );
