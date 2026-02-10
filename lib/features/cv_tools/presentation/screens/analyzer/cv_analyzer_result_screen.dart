@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis_entity.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 
@@ -30,7 +29,34 @@ class CvAnalyzerResultScreen extends StatelessWidget {
         title: const Text('Hasil Analisis'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.router.push(const CvToolsHubRoute()),
+          onPressed: () {
+            context.router.maybePop();
+            context.read<CvAnalyzerProvider>().clearAnalysisResult();
+          },
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<CvAnalyzerProvider>().clearState();
+                  context.router.popUntilRoot();
+                },
+                child: const Text('Kembali ke Beranda'),
+              ),
+            ),
+            const SizedBox(width: 16),
+            OutlinedButton(
+              onPressed: () {},
+              child: Icon(
+                Iconsax.share,
+                size: 24,
+              ),
+            )
+          ],
         ),
       ),
       body: SafeArea(

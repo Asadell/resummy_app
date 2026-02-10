@@ -6,6 +6,7 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/auth_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/shared/widgets/loading_indicator.dart';
 
 @RoutePage()
 class CvAnalyzerInputScreen extends StatefulWidget {
@@ -22,11 +23,17 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final userId = context.read<AuthProvider>().user?.uid;
+      final cvAnalyzerProviderRead = context.read<CvAnalyzerProvider>();
 
       if (userId != null) {
-        context.read<CvAnalyzerProvider>().loadInitialData(userId);
+        await cvAnalyzerProviderRead.loadInitialData(userId);
+
+        if (_positionController.text.isEmpty &&
+            cvAnalyzerProviderRead.jobPosition.isNotEmpty) {
+          _positionController.text = cvAnalyzerProviderRead.jobPosition;
+        }
       }
     });
   }
@@ -40,12 +47,7 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final cvAnalyzerProvider = context.watch<CvAnalyzerProvider>();
-
-    if (_positionController.text.isEmpty &&
-        cvAnalyzerProvider.jobPosition.isNotEmpty) {
-      _positionController.text = cvAnalyzerProvider.jobPosition;
-    }
+    final cvAnalyzerProviderWatch = context.watch<CvAnalyzerProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -53,44 +55,66 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.router.push(const CvAnalyzerUploadRoute()),
+          onPressed: () {
+            context.read<CvAnalyzerProvider>().clearPdfText();
+            context.router.maybePop();
+          },
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _renderFileCard(context),
-              const SizedBox(height: 24),
-              Text(
-                l10n.appliedPosition,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _positionController,
-                decoration: InputDecoration(
-                  hintText: l10n.optional,
-                ),
-              ),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-                onPressed: () {
-                  context
-                      .read<CvAnalyzerProvider>()
-                      .setJobPosition(_positionController.text);
-                  context.router.push(const CvAnalyzerLoadingRoute());
-                },
-                child: Text(l10n.startAnalysis),
-              ),
-            ],
+        child: cvAnalyzerProviderWatch.isLoading
+            ? LoadingIndicator(message: 'Analyzing CV, please wait...')
+            : _renderInput(context, l10n),
+      ),
+    );
+  }
+
+  Padding _renderInput(BuildContext context, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _renderFileCard(context),
+          const SizedBox(height: 24),
+          Text(
+            l10n.appliedPosition,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-        ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _positionController,
+            decoration: InputDecoration(
+              hintText: l10n.optional,
+            ),
+          ),
+          const Spacer(),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(16),
+            ),
+            onPressed: () async {
+              final cvAnalyzerProviderRead = context.read<CvAnalyzerProvider>();
+              cvAnalyzerProviderRead.setJobPosition(_positionController.text);
+
+              await cvAnalyzerProviderRead.analyzeCv();
+
+              if (context.mounted) {
+                if (cvAnalyzerProviderRead.errorMessage.isNotEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(cvAnalyzerProviderRead.errorMessage)),
+                  );
+
+                  return;
+                }
+
+                context.router.push(const CvAnalyzerResultRoute());
+              }
+            },
+            child: Text(l10n.startAnalysis),
+          ),
+        ],
       ),
     );
   }

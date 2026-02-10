@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/shared/widgets/loading_indicator.dart';
 
 @RoutePage()
 class CvAnalyzerUploadScreen extends StatefulWidget {
@@ -17,55 +17,24 @@ class CvAnalyzerUploadScreen extends StatefulWidget {
 
 class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
   void _pickCvFile(BuildContext context) async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'],
-      );
+    final cvAnalyzerProvider = context.read<CvAnalyzerProvider>();
 
-      if (!context.mounted) return;
+    await cvAnalyzerProvider.selectFileAndVerify();
 
-      if (result != null && result.files.isNotEmpty) {
-        final cvAnalyzerProvider = context.read<CvAnalyzerProvider>();
-
-        cvAnalyzerProvider.setSelectedFile(result.files.first);
-        await cvAnalyzerProvider.readPdfText();
-
-        if (!context.mounted) return;
-
-        if (cvAnalyzerProvider.verifyCvFile()) {
-          _nextStep(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  'The selected file does not appear to be a valid CV. Please upload a proper CV document.'),
-            ),
-          );
-        }
+    if (context.mounted) {
+      if (cvAnalyzerProvider.errorMessage.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(cvAnalyzerProvider.errorMessage)),
+        );
+      } else {
+        context.router.push(const CvAnalyzerInputRoute());
       }
-    } catch (e) {
-      debugPrint('File pick error: $e');
-
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
     }
-  }
-
-  void _nextStep(BuildContext context) {
-    context.router.push(const CvAnalyzerInputRoute());
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isLoading = context.watch<CvAnalyzerProvider>().isLoading;
 
     return Scaffold(
       appBar: AppBar(
@@ -73,14 +42,20 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.router.push(const CvToolsHubRoute()),
+          onPressed: () {
+            context.read<CvAnalyzerProvider>().clearState();
+            context.router.maybePop();
+          },
         ),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child:
-              isLoading ? _renderLoading(context) : _renderInput(l10n, context),
+          child: context.watch<CvAnalyzerProvider>().isLoading
+              ? LoadingIndicator(
+                  message: 'Memproses CV Anda, mohon tunggu...',
+                )
+              : _renderInput(l10n, context),
         ),
       ),
     );
@@ -155,25 +130,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen> {
           child: Text(l10n.useExistingCv),
         ),
       ],
-    );
-  }
-
-  Center _renderLoading(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(
-            constraints: BoxConstraints(
-              minWidth: 48,
-              minHeight: 48,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text('Memproses CV Anda, mohon tunggu...'),
-        ],
-      ),
     );
   }
 
