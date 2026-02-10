@@ -6,6 +6,9 @@ import 'package:resummy_app/core/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
+import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_analysis_remote_data_source.dart';
+import 'package:resummy_app/features/cv_tools/data/repositories/cv_repository_impl.dart';
+import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 
 import 'firebase_options.dart';
@@ -36,6 +39,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => CvAnalyzerProvider(
             userProfileRepository: UserProfileRepository(),
+            analyzeCvUseCase: AnalyzeCvUseCase(
+              CvRepositoryImpl(CvAnalysisRemoteDataSourceImpl()),
+            ),
           ),
         ),
       ],

@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/shared/widgets/loading_indicator.dart';
@@ -97,7 +98,8 @@ class _CvAnalyzerInputScreenState extends State<CvAnalyzerInputScreen> {
               final cvAnalyzerProviderRead = context.read<CvAnalyzerProvider>();
               cvAnalyzerProviderRead.setJobPosition(_positionController.text);
 
-              await cvAnalyzerProviderRead.analyzeCv();
+              await cvAnalyzerProviderRead.analyzeCv(
+                  context.read<LocaleProvider>().locale.languageCode);
 
               if (context.mounted) {
                 if (cvAnalyzerProviderRead.errorMessage.isNotEmpty) {

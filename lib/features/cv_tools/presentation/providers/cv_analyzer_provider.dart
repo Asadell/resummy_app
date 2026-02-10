@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:resummy_app/core/resources/data_state.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis_entity.dart';
@@ -7,9 +8,13 @@ import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase
 
 class CvAnalyzerProvider extends ChangeNotifier {
   final UserProfileRepository _userProfileRepository;
+  final AnalyzeCvUseCase _analyzeCvUseCase;
 
-  CvAnalyzerProvider({required UserProfileRepository userProfileRepository})
-      : _userProfileRepository = userProfileRepository;
+  CvAnalyzerProvider({
+    required UserProfileRepository userProfileRepository,
+    required AnalyzeCvUseCase analyzeCvUseCase,
+  })  : _userProfileRepository = userProfileRepository,
+        _analyzeCvUseCase = analyzeCvUseCase;
 
   PlatformFile? _selectedFile;
   CvAnalysisEntity? _cvAnalysisResult;
@@ -120,20 +125,25 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> analyzeCv() async {
+  Future<void> analyzeCv(String language) async {
     if (_extractedText.isEmpty) return;
 
     _isLoading = true;
     _errorMessage = '';
     notifyListeners();
 
-    try {
-      _cvAnalysisResult =
-          await AnalyzeCvUseCase().call(_jobPosition, _extractedText);
-    } catch (e) {
-      debugPrint('Error during CV analysis: $e');
-      _errorMessage =
-          'An error occurred while analyzing the CV. Please try again.';
+    final result = await _analyzeCvUseCase.call(
+      params: AnalyzeCvParams(
+        cvText: _extractedText,
+        role: _jobPosition,
+        language: language,
+      ),
+    );
+
+    if (result is DataSuccess) {
+      _cvAnalysisResult = result.data;
+    } else if (result is DataFailed) {
+      _errorMessage = result.error?.message ?? '';
     }
 
     _isLoading = false;
