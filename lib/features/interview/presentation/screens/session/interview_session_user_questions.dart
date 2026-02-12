@@ -39,6 +39,7 @@ class _InterviewSessionUserQuestionsScreenState extends State<InterviewSessionUs
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
         title: const Text('Your Questions'),
         leading: IconButton(

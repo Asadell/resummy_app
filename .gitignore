@@ -47,3 +47,5 @@ app.*.map.json
 # etc
 .env
 **/app_constants.g.dart
+uy.md
+.last_build_id

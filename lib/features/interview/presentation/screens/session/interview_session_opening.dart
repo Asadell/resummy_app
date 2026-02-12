@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_colors.dart';
 
 @RoutePage()
 class InterviewSessionOpeningScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class InterviewSessionOpeningScreen extends StatefulWidget {
 }
 
 class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningScreen> {
+  bool _showTranscript = true;
 
   Future<void> _showExitDialog() async {
     final shouldExit = await showDialog<bool>(
@@ -30,7 +32,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
         ],
       ),
     ) ?? false;
-    
+
     if (shouldExit && mounted) {
       context.router.push(const InterviewPrepRoute());
     }
@@ -39,38 +41,223 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
-        title: const Text('Interview Session'),
         leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => _showExitDialog(),
+          icon: const Icon(Icons.close, color: AppColors.error),
+          onPressed: _showExitDialog,
         ),
+        title: const Text('🎤 Interview Started'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Row(
+                children: [
+                  const Icon(Icons.timer, size: 16, color: AppColors.primary),
+                  const SizedBox(width: 4),
+                  Text(
+                    '00:15',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              const Icon(Icons.mic, size: 80, color: Colors.blue),
-              const SizedBox(height: 24),
-              Text(
-                'Ready for your interview?',
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
+        child: Column(
+          children: [
+            // Toggle Control
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardTheme.color,
+                border: Border.all(color: Theme.of(context).dividerTheme.color!),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
+              child: Row(
+                children: [
+                  Text(
+                    'Toggle Teks:',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const Spacer(),
+                  _buildToggleButton(true, 'ON 🟢'),
+                  const SizedBox(width: 8),
+                  _buildToggleButton(false, 'OFF ⚪'),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // AI Avatar
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, AppColors.primaryLight],
+                          ),
+                          border: Border.all(color: Colors.white, width: 4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.3),
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // AI Message Card
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardTheme.color,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Text('👤', style: TextStyle(fontSize: 16)),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'AI Interviewer:',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Selamat pagi! Saya Maya, HRD dari PT Tech Startup Indonesia. Terima kasih sudah meluangkan waktu untuk interview hari ini.',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Transcript Status
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('💡', style: TextStyle(fontSize: 16)),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Toggle teks untuk show/hide transcript',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.gray600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                onPressed: () => context.router.push(const InterviewSessionQuestionRoute()),
-                child: const Text('Tap untuk Menjawab'),
               ),
-            ],
+            ),
+
+            // Action Button
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.4),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.mic,
+                      color: Colors.white,
+                      size: 48,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Tap untuk Menjawab',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => context.router.push(const InterviewSessionQuestionRoute()),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    child: const Text('Mulai Interview'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToggleButton(bool isOn, String label) {
+    final isActive = _showTranscript == isOn;
+    return InkWell(
+      onTap: () => setState(() => _showTranscript = isOn),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.white : Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
