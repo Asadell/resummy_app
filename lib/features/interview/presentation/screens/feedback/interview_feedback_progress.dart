@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
-import 'dart:math' as math;
 
 @RoutePage()
 class InterviewFeedbackProgressScreen extends StatelessWidget {
@@ -11,8 +11,9 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_2),
@@ -22,7 +23,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
           children: [
             Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            const Text('Progress Kamu'),
+            Text(l10n.yourProgress),
           ],
         ),
         actions: [
@@ -44,7 +45,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                   Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 32),
                   const SizedBox(width: 12),
                   Text(
-                    'Progress Kamu',
+                    l10n.yourProgress,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -53,7 +54,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Tracking 5 sesi terakhir',
+                l10n.trackingLast5Sessions,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -72,7 +73,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Riwayat Skor Interview',
+                      l10n.scoreHistory,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -103,19 +104,19 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Perbandingan Metrik',
+                      l10n.metricComparison,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildMetricRow(context, 'Skor Keseluruhan', '+0.5', true, false),
+                    _buildMetricRow(context, l10n.overallScore, '+0.5', true, false),
                     const Divider(height: 24),
-                    _buildMetricRow(context, 'Struktur STAR', '+1.0', true, true),
+                    _buildMetricRow(context, l10n.starStructure, '+1.0', true, true),
                     const Divider(height: 24),
-                    _buildMetricRow(context, 'Kelancaran', '-0.5', false, false),
+                    _buildMetricRow(context, l10n.fluency, '-0.5', false, false),
                     const Divider(height: 24),
-                    _buildMetricRow(context, 'Filler Words %', '+2.1%', false, true),
+                    _buildMetricRow(context, '${l10n.fillerWordsLabel} %', '+2.1%', false, true),
                   ],
                 ),
               ),
@@ -140,7 +141,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                     Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.primary, size: 32),
                     const SizedBox(height: 12),
                     Text(
-                      'Fokus Minggu Ini: Kurangi Filler!',
+                      l10n.focusThisWeekFiller,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppColors.primary700,
                         fontWeight: FontWeight.bold,
@@ -157,10 +158,10 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {},
-                      child: const Text('Lihat Tips Latihan →'),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(44),
                       ),
+                      child: Text('${l10n.viewPracticeTips} →'),
                     ),
                   ],
                 ),
@@ -183,7 +184,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                         Icon(Iconsax.award, color: Theme.of(context).colorScheme.secondary, size: 24),
                         const SizedBox(width: 12),
                         Text(
-                          'Milestone Tercapai',
+                          l10n.milestonesReached,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -199,10 +200,10 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.5,
                       children: [
-                        _buildBadge(context, Iconsax.award, '5 Interview\nSelesai', true, Theme.of(context).colorScheme.secondaryContainer),
-                        _buildBadge(context, Iconsax.ranking, 'Skor 7.5+\nPertama Kali', true, const Color(0xFFFEF3C7)),
-                        _buildBadge(context, Iconsax.lock, 'Skor 8.0+', false, Theme.of(context).colorScheme.surfaceVariant),
-                        _buildBadge(context, Iconsax.lock, '10 Interview\nSelesai', false, Theme.of(context).colorScheme.surfaceVariant),
+                        _buildBadge(context, Iconsax.award, l10n.fiveInterviewsCompleted, true, Theme.of(context).colorScheme.secondaryContainer),
+                        _buildBadge(context, Iconsax.ranking, l10n.score75FirstTime, true, const Color(0xFFFEF3C7)),
+                        _buildBadge(context, Iconsax.lock, l10n.score80, false, Theme.of(context).colorScheme.surfaceContainerHighest),
+                        _buildBadge(context, Iconsax.lock, l10n.tenInterviewsCompleted, false, Theme.of(context).colorScheme.surfaceContainerHighest),
                       ],
                     ),
                   ],
@@ -222,7 +223,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bandingkan Sesi',
+                      l10n.compareSessions,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -232,7 +233,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            value: 'Sesi #4',
+                            initialValue: l10n.session(4),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -242,7 +243,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                                 vertical: 12,
                               ),
                             ),
-                            items: ['Sesi #1', 'Sesi #2', 'Sesi #3', 'Sesi #4']
+                            items: [l10n.session(1), l10n.session(2), l10n.session(3), l10n.session(4)]
                                 .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                                 .toList(),
                             onChanged: (_) {},
@@ -250,11 +251,11 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text('vs', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5))),
+                          child: Text(l10n.vs, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5))),
                         ),
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            value: 'Sesi #5',
+                            initialValue: l10n.session(5),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -264,7 +265,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                                 vertical: 12,
                               ),
                             ),
-                            items: ['Sesi #5']
+                            items: [l10n.session(5)]
                                 .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                                 .toList(),
                             onChanged: (_) {},
@@ -275,10 +276,10 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     OutlinedButton(
                       onPressed: () {},
-                      child: const Text('Bandingkan →'),
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(40),
                       ),
+                      child: Text('${l10n.compare} →'),
                     ),
                   ],
                 ),
@@ -295,7 +296,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -305,7 +306,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () {},
             icon: const Icon(Iconsax.chart_1),
-            label: const Text('Export Progress Report'),
+            label: Text(l10n.exportReport),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(52),
             ),
@@ -363,14 +364,14 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
         children: [
           unlocked 
             ? Icon(icon, size: 32, color: Theme.of(context).colorScheme.primary)
-            : Icon(Iconsax.lock, size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.3)),
+            : Icon(Iconsax.lock, size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.3)),
           const SizedBox(height: 8),
           Text(
             title,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: unlocked ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: unlocked ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
             textAlign: TextAlign.center,
           ),

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -10,8 +11,9 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_2),
@@ -21,7 +23,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
           children: [
             Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            const Text('Rekomendasi'),
+            Text(l10n.recommendations),
           ],
         ),
         actions: [
@@ -43,7 +45,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                   Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 32),
                   const SizedBox(width: 12),
                   Text(
-                    'Rekomendasi',
+                    l10n.recommendations,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -52,7 +54,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Berdasarkan performa interview Anda',
+                l10n.basedOnPerformance,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -76,7 +78,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     Icon(Iconsax.weight, color: Theme.of(context).colorScheme.secondary, size: 32),
                     const SizedBox(height: 12),
                     Text(
-                      'Kekuatan Kamu',
+                      l10n.yourStrengths,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.w600,
@@ -110,7 +112,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.error, size: 32),
                     const SizedBox(height: 12),
                     Text(
-                      'Area untuk Ditingkatkan',
+                      l10n.areasForImprovement,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.w600,
@@ -143,7 +145,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                         Icon(Iconsax.book, color: Theme.of(context).colorScheme.primary, size: 24),
                         const SizedBox(width: 12),
                         Text(
-                          'Latihan Terpilih',
+                          l10n.selectedPracticeLabel,
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -154,22 +156,22 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     _buildPracticeItem(
                       context,
                       1,
-                      'Ulangi Q1 fokus hilangkan filler',
-                      'Latihan Q1 →',
+                      l10n.practiceQ1Filler,
+                      l10n.practiceQ1Button,
                     ),
                     const SizedBox(height: 12),
                     _buildPracticeItem(
                       context,
                       2,
-                      'Latihan Q5 dengan STAR lebih baik',
-                      'Latihan Q5 →',
+                      l10n.practiceQ5Star,
+                      l10n.practiceQ5Button,
                     ),
                     const SizedBox(height: 12),
                     _buildPracticeItem(
                       context,
                       3,
-                      'Siapkan 3 cerita Result yang kuat',
-                      'Pelajari Tips →',
+                      l10n.practiceStrongResults,
+                      l10n.practiceTipsButton,
                     ),
                   ],
                 ),
@@ -193,9 +195,9 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                   children: [
                     Icon(Iconsax.tick_circle, size: 40, color: Theme.of(context).colorScheme.onSecondary),
                     const SizedBox(height: 12),
-                    const Text(
-                      'Siap untuk Interview?',
-                      style: TextStyle(
+                    Text(
+                      l10n.readyForInterview,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -203,19 +205,19 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Berdasarkan skor 7.5/10, kamu SIAP:',
+                      l10n.readinessScoreMessage,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         height: 1.5,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildReadinessItem('✓ Posisi Junior-Mid level'),
+                    _buildReadinessItem(l10n.readinessJuniorMid),
                     const SizedBox(height: 10),
-                    _buildReadinessItem('✓ Lingkungan startup (fast-paced)'),
+                    _buildReadinessItem(l10n.readinessStartupEnv),
                     const SizedBox(height: 10),
-                    _buildReadinessItem('⚠️ Senior roles - tambah metrik & dampak', opacity: 0.8),
+                    _buildReadinessItem(l10n.readinessSeniorRoles, opacity: 0.8),
                   ],
                 ),
               ),
@@ -231,7 +233,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -244,7 +246,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Iconsax.refresh),
-                label: const Text('Latihan Lagi'),
+                label: Text(l10n.practiceAgain),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                 ),
@@ -253,7 +255,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.email),
-                label: const Text('📧 Email Laporan'),
+                label: Text(l10n.emailReport),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
                 ),
@@ -262,7 +264,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: () => context.router.push(const InterviewPrepRoute()),
                 icon: const Icon(Icons.home),
-                label: const Text('🏠 Dashboard'),
+                label: Text(l10n.dashboard),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.gray600,
                   side: const BorderSide(color: AppColors.gray300),
@@ -353,7 +355,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(opacity),
+              color: Colors.white.withValues(alpha: opacity),
             ),
           ),
         ),

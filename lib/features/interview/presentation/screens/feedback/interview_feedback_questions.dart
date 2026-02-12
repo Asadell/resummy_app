@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -80,12 +81,13 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('📋 Laporan Lengkap'),
+        title: Text('📋 ${l10n.fullReport}'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
         ),
       ),
@@ -99,15 +101,21 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '📋 Laporan Interview Lengkap',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Iconsax.clipboard_text, color: Theme.of(context).textTheme.headlineMedium?.color),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.fullReportTitle,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '5 Pertanyaan | Skor Total: 7.5',
+                    '5 ${l10n.questions} | ${l10n.overallScore}: 7.5',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -154,7 +162,7 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
                             Row(
                               children: [
                                 Icon(
-                                  isExpanded ? Icons.expand_less : Icons.expand_more,
+                                  isExpanded ? Iconsax.arrow_up_2 : Iconsax.arrow_down_2,
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   size: 20,
                                 ),
@@ -247,7 +255,7 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () => context.router.push(const InterviewFeedbackDetailRoute()),
-                                  child: const Text('Lihat Detail →'),
+                                  child: Text('${l10n.viewDetail} →'),
                                 ),
                               ),
                             ] else ...[
@@ -278,7 +286,7 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -287,8 +295,8 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
         child: SafeArea(
           child: ElevatedButton.icon(
             onPressed: () {},
-            icon: const Icon(Icons.download),
-            label: const Text('Download Laporan PDF'),
+            icon: const Icon(Iconsax.document_download),
+             label: Text(l10n.downloadPdf),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(52),
             ),

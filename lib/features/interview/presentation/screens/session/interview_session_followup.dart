@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewSessionFollowupScreen extends StatefulWidget {
@@ -17,19 +17,20 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
   bool _showFullAnswer = false;
 
   Future<void> _showExitDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Keluar Interview?'),
-        content: const Text('Progress akan hilang jika keluar sekarang.'),
+        title: Text(l10n.exitInterviewTitle),
+        content: Text(l10n.exitInterviewContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Lanjut Interview'),
+            child: Text(l10n.continueInterview),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Ya, Keluar'),
+            child: Text(l10n.exitYes),
           ),
         ],
       ),
@@ -42,14 +43,15 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Iconsax.close_circle, color: Theme.of(context).colorScheme.error),
           onPressed: _showExitDialog,
         ),
-        title: const Text('Question 1 (Follow-up)'),
+        title: Text('Question 1 (Follow-up)'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -84,16 +86,16 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
               ),
               child: Row(
                 children: [
-                  Text(
-                    'Toggle Teks:',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    Text(
+                      l10n.toggleText,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const Spacer(),
-                  _buildToggleButton(true, 'ON 🟢'),
+                  _buildToggleButton(true, l10n.on),
                   const SizedBox(width: 8),
-                  _buildToggleButton(false, 'OFF ⚪'),
+                  _buildToggleButton(false, l10n.off),
                 ],
               ),
             ),
@@ -120,7 +122,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                               Icon(Iconsax.document_text, color: Theme.of(context).colorScheme.primary, size: 16),
                               const SizedBox(width: 8),
                               Text(
-                                'Jawaban Anda:',
+                                l10n.prevAnswerLabel,
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.w600,
@@ -141,7 +143,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                           InkWell(
                             onTap: () => setState(() => _showFullAnswer = !_showFullAnswer),
                             child: Text(
-                              _showFullAnswer ? 'Sembunyikan ▲' : 'Lihat full answer ▼',
+                              _showFullAnswer ? l10n.hideFullAnswer : l10n.showFullAnswer,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w500,
@@ -178,9 +180,9 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                               children: [
                                 Icon(Iconsax.refresh, color: Theme.of(context).colorScheme.secondary, size: 14),
                                 const SizedBox(width: 6),
-                                Text(
-                                  'Follow-up Question',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  Text(
+                                    l10n.followupQuestion,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.secondary,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -193,9 +195,9 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                             children: [
                               Icon(Iconsax.profile_circle, color: Theme.of(context).colorScheme.primary, size: 18),
                               const SizedBox(width: 8),
-                              Text(
-                                'AI Interviewer:',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                Text(
+                                  l10n.aiInterviewer,
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -226,8 +228,8 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                           Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 18),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              'AI meminta detail lebih lanjut. Fokus pada tantangan spesifik dan decision-making process Anda.',
+                             child: Text(
+                              l10n.followupHint,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.onSecondaryContainer,
                               ),
@@ -251,7 +253,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
                                 blurRadius: 20,
                                 spreadRadius: 5,
                               ),
@@ -264,9 +266,9 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                           ),
                           ),
                           const SizedBox(height: 12),
-                          Text(
-                            'Tap untuk Menjawab',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            Text(
+                              l10n.tapToAnswer,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
@@ -287,7 +289,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                         ),
                       ),
                       child: Text(
-                        'Follow-up questions membantu AI memahami depth dan critical thinking Anda',
+                        l10n.depthThinkingHint,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
@@ -306,7 +308,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                 color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
                     blurRadius: 10,
                     offset: const Offset(0, -2),
                   ),
@@ -319,7 +321,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                       child: OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(Icons.pause),
-                        label: const Text('Pause'),
+                        label: Text(l10n.pause),
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(48),
                         ),
@@ -331,7 +333,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
                       child: ElevatedButton.icon(
                         onPressed: () => context.router.push(const InterviewSessionUserQuestionsRoute()),
                         icon: const Icon(Icons.check),
-                        label: const Text('Selesai Jawab'),
+                        label: Text(l10n.finishAnswering),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(48),
                         ),
@@ -354,7 +356,7 @@ class _InterviewSessionFollowupScreenState extends State<InterviewSessionFollowu
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceVariant,
+          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(

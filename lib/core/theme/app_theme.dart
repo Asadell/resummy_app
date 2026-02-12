@@ -32,8 +32,9 @@ class AppTheme {
         surface: AppColors.surfaceLight,
         onSurface: AppColors.textPrimaryLight,
         
-        surfaceContainerHighest: AppColors.gray100,
         onSurfaceVariant: AppColors.textSecondaryLight,
+        
+        surfaceContainerHighest: AppColors.gray100,
         
         outline: AppColors.gray300,
         outlineVariant: AppColors.gray200,
@@ -287,8 +288,9 @@ class AppTheme {
         surface: AppColors.surfaceDark,
         onSurface: AppColors.textPrimaryDark,
         
-        surfaceContainerHighest: AppColors.gray800,
         onSurfaceVariant: AppColors.textSecondaryDark,
+        
+        surfaceContainerHighest: AppColors.gray800,
         
         outline: AppColors.gray600,
         outlineVariant: AppColors.gray700,

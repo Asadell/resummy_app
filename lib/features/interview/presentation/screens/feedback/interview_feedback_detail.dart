@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
-import 'dart:math' as math;
 
 @RoutePage()
 class InterviewFeedbackDetailScreen extends StatefulWidget {
@@ -17,10 +18,11 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text('Pertanyaan $_currentQuestion dari 5'),
+        title: Text('${l10n.question} $_currentQuestion dari 5'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const InterviewFeedbackQuestionsRoute()),
@@ -51,7 +53,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'Question $_currentQuestion/5',
+                        '${l10n.question} $_currentQuestion/5',
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: 12,
@@ -60,16 +62,30 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Text(
-                      '💬 Ceritakan pengalaman Anda saat memimpin sebuah project yang challenging dan bagaimana Anda mengatasinya.',
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Row(
+                      children: [
+                        Icon(Iconsax.message_text, size: 20, color: Theme.of(context).textTheme.titleMedium?.color),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.sampleQuestion1,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      '⏱ Jawaban Anda: 2m 15s',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.timer_1, size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${l10n.prevAnswerLabel} 2m 15s',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -91,11 +107,17 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '📊 Analisis Struktur STAR',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Icon(Iconsax.chart_2, color: Theme.of(context).textTheme.titleLarge?.color),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.starAnalysis,
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           '8.5/10',
@@ -111,11 +133,12 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     // Situation - Excellent
                     _buildStarComponent(
                       context,
-                      '✅ Situation - Excellent',
+                      'Situation - Excellent',
                       AppColors.secondary,
                       const Color(0xFFF0FDF4),
                       'Saya bekerja di project mobile app dengan deadline yang sangat ketat. Tim kami hanya 3 orang dan harus deliver frontend dan backend dalam 6 minggu.',
                       null,
+                      Iconsax.tick_circle,
                     ),
 
                     const SizedBox(height: 16),
@@ -123,11 +146,12 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     // Task - Baik
                     _buildStarComponent(
                       context,
-                      '✅ Task - Baik',
+                      'Task - Baik',
                       AppColors.primary,
                       AppColors.primary100,
                       'Saya harus deliver backend API dan coordinate dengan frontend developer sambil ensure quality tetap terjaga.',
                       null,
+                      Iconsax.tick_circle,
                     ),
 
                     const SizedBox(height: 16),
@@ -135,11 +159,12 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     // Action - Excellent
                     _buildStarComponent(
                       context,
-                      '✅ Action - Excellent',
+                      'Action - Excellent',
                       AppColors.secondary,
                       const Color(0xFFF0FDF4),
                       'Saya reorganisasi sprint planning, implement daily standups yang lebih fokus, dan create shared documentation untuk reduce miscommunication.',
                       null,
+                      Iconsax.tick_circle,
                     ),
 
                     const SizedBox(height: 16),
@@ -147,11 +172,12 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     // Result - Lemah
                     _buildStarComponent(
                       context,
-                      '⚠️ Result - Lemah (Perlu ditingkatkan)',
+                      'Result - Lemah (Perlu ditingkatkan)',
                       AppColors.warning,
                       const Color(0xFFFEF3C7),
                       'Kami selesaikan project tepat waktu.',
-                      '💡 Saran: Tambahkan hasil spesifik dengan metrik: "Kami launching 2 minggu lebih cepat, kurangi bug 40%, klien perpanjang kontrak untuk Phase 2."',
+                      'Saran: Tambahkan hasil spesifik dengan metrik: "Kami launching 2 minggu lebih cepat, kurangi bug 40%, klien perpanjang kontrak untuk Phase 2."',
+                      Iconsax.warning_2,
                     ),
                   ],
                 ),
@@ -173,11 +199,17 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '🎤 Analisis Kelancaran',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Icon(Iconsax.microphone_2, color: Theme.of(context).textTheme.titleLarge?.color),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.fluencyAnalysis,
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           '6.0/10',
@@ -192,21 +224,21 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
 
                     // Speed Metrics
                     Text(
-                      'Kecepatan Bicara',
+                      l10n.speakingPace,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Kata per menit: 145 WPM ✓ Baik',
+                      l10n.wordsPerMinute('145'),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Suku kata/menit: 218 SPM',
+                      l10n.syllablesPerMinute('218'),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -216,7 +248,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
 
                     // Speaking Pace Chart
                     Text(
-                      'Kecepatan Bicara Seiring Waktu:',
+                      l10n.speakingPaceChart,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -234,13 +266,27 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     const SizedBox(height: 20),
 
                     // Filler Words
-                    Text(
-                      'Filler Words (⚠️ Terlalu banyak!)',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppColors.warning,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                        Row(
+                          children: [
+                            Text(
+                              l10n.fillerWordsLabel,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: AppColors.warning,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(Iconsax.warning_2, color: AppColors.warning, size: 20),
+                            const SizedBox(width: 4),
+                            Text(
+                              '(${l10n.tooManyFillers})',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: AppColors.warning,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                     const SizedBox(height: 12),
                     _buildFillerWordBar('um/uh', 12, 5.3),
                     const SizedBox(height: 8),
@@ -251,7 +297,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     _buildFillerWordBar('ya', 5, 2.2),
                     const SizedBox(height: 12),
                     Text(
-                      'Total filler → 13.6% (Target: <5%) ❌',
+                      l10n.totalFillerLabel('13.6'),
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: AppColors.error,
                         fontWeight: FontWeight.bold,
@@ -262,7 +308,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
 
                     // Pause Analysis
                     Text(
-                      'Jeda & Keraguan',
+                      l10n.pauseAnalysis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -286,7 +332,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -326,11 +372,17 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '✨ Ucapan Anda vs Ucapan Ditingkatkan',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.magic_star, color: Theme.of(context).textTheme.titleLarge?.color),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.improvedSpeechTitle,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 16),
@@ -347,9 +399,9 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                'Ucapan Asli Anda',
-                                style: TextStyle(
+                              Text(
+                                l10n.originalSpeechLabel,
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF991B1B),
@@ -436,9 +488,11 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                '✨ Ucapan Ditingkatkan',
-                                style: TextStyle(
+                              const Icon(Iconsax.magic_star, color: Color(0xFF065F46), size: 16),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.improvedSpeechLabel,
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF065F46),
@@ -467,8 +521,8 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                           const SizedBox(height: 12),
                           ElevatedButton.icon(
                             onPressed: () {},
-                            icon: const Text('🔊', style: TextStyle(fontSize: 18)),
-                            label: const Text('Dengar Versi Ditingkatkan'),
+                            icon: const Icon(Iconsax.volume_high, size: 18),
+                            label: Text(l10n.listenImprovedVersion),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size.fromHeight(40),
                             ),
@@ -490,7 +544,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '💡 Tips Pro:',
+                            l10n.proTips,
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: AppColors.primary700,
                               fontWeight: FontWeight.w600,
@@ -525,11 +579,17 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '📝 Analisis Kualitas Konten',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Icon(Iconsax.document_text, color: Theme.of(context).textTheme.titleLarge?.color),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Analisis Kualitas Konten',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           '7.5/10',
@@ -566,11 +626,17 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '😊 Percaya Diri & Kehadiran',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Icon(Iconsax.emoji_happy, color: Theme.of(context).textTheme.titleLarge?.color),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Percaya Diri & Kehadiran',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           '7.0/10',
@@ -602,7 +668,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -618,14 +684,14 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                           setState(() => _currentQuestion--);
                         }
                       : null,
-                  child: const Text('⏮ Sebelumnya'),
+                   child: Text('⏮ ${l10n.previous}'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: const Text('Latihan Lagi'),
+                   child: Text(l10n.practiceAgain),
                 ),
               ),
               const SizedBox(width: 12),
@@ -636,7 +702,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                           setState(() => _currentQuestion++);
                         }
                       : null,
-                  child: const Text('Selanjutnya ⏭'),
+                   child: Text('${l10n.next} ⏭'),
                 ),
               ),
             ],
@@ -653,6 +719,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
     Color bgColor,
     String quote,
     String? suggestion,
+    IconData icon,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -666,17 +733,33 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: borderColor == AppColors.secondary
-                  ? const Color(0xFF065F46)
-                  : borderColor == AppColors.primary
-                      ? const Color(0xFF0369A1)
-                      : const Color(0xFF78350F),
-            ),
+          Row(
+            children: [
+              Icon(
+                icon,
+                size: 18,
+                color: borderColor == AppColors.secondary
+                    ? const Color(0xFF065F46)
+                    : borderColor == AppColors.primary
+                        ? const Color(0xFF0369A1)
+                        : const Color(0xFF78350F),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: borderColor == AppColors.secondary
+                        ? const Color(0xFF065F46)
+                        : borderColor == AppColors.primary
+                            ? const Color(0xFF0369A1)
+                            : const Color(0xFF78350F),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           Container(
@@ -714,14 +797,14 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('💡', style: TextStyle(fontSize: 24)),
+                  Icon(Iconsax.lamp_on, size: 24, color: borderColor),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Saran:',
+                          '${AppLocalizations.of(context)!.suggestion}:',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -775,7 +858,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
           child: LinearProgressIndicator(
             value: percentage / 100,
             minHeight: 6,
-            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
             valueColor: const AlwaysStoppedAnimation<Color>(AppColors.warning),
           ),
         ),

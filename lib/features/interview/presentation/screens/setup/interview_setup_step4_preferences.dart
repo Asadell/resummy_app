@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewSetupStep4Screen extends StatelessWidget {
@@ -10,10 +10,11 @@ class InterviewSetupStep4Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Konfirmasi'),
+        title: Text(l10n.confirmation),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const InterviewSetupStep4Route()),
@@ -23,7 +24,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                'Step 5/5',
+                l10n.stepProgress(5, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -49,7 +50,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check,
                     color: Colors.white,
                     size: 40,
@@ -61,7 +62,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
 
               // Title
               Text(
-                'Setup Complete',
+                l10n.setupComplete,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -69,7 +70,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Siap untuk memulai interview',
+                l10n.readyToStartInterview,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -86,7 +87,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -96,23 +97,23 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Interview Summary:',
+                      l10n.interviewSummary,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.document_1, 'CV:', 'CV_Software_Engineer.pdf'),
+                    _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel, 'CV_Software_Engineer.pdf'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.direct_up, 'Role:', 'Software Engineer'),
+                    _buildSummaryRow(context, Iconsax.direct_up, l10n.roleLabel, 'Software Engineer'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.building_3, 'Company:', 'PT Tech Startup'),
+                    _buildSummaryRow(context, Iconsax.building_3, l10n.companyLabel, 'PT Tech Startup'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.global, 'Language:', 'Bahasa Indonesia'),
+                    _buildSummaryRow(context, Iconsax.global, l10n.languageLabel, 'Bahasa Indonesia'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.message_question, 'Questions:', '5 pertanyaan'),
+                    _buildSummaryRow(context, Iconsax.message_question, l10n.questionsLabel, l10n.questionsCount),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.timer_1, 'Duration:', '±15 menit'),
+                    _buildSummaryRow(context, Iconsax.timer_1, l10n.durationLabel, l10n.durationAprox),
                   ],
                 ),
               ),
@@ -134,7 +135,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                         Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
                         const SizedBox(width: 8),
                         Text(
-                          'STAR Method Guide',
+                          l10n.starMethodGuide,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
@@ -156,7 +157,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                       ),
-                      child: const Text('Lihat Contoh STAR Method →'),
+                      child: Text(l10n.viewStarExample),
                     ),
                   ],
                 ),
@@ -178,7 +179,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Tips: Berikan jawaban yang spesifik dan terukur. Gunakan angka dan hasil konkret untuk memperkuat cerita Anda.',
+                        l10n.starTips,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
                         ),
@@ -199,7 +200,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -211,9 +212,9 @@ class InterviewSetupStep4Screen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(56),
             ),
-            child: const Text(
-              'Mulai Interview Sekarang! →',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            child: Text(
+              l10n.startInterviewNow,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ),

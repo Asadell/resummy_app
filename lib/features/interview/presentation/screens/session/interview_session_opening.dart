@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewSessionOpeningScreen extends StatefulWidget {
@@ -16,19 +17,20 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
   bool _showTranscript = true;
 
   Future<void> _showExitDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Keluar Interview?'),
-        content: const Text('Progress akan hilang jika keluar sekarang.'),
+        title: Text(l10n.exitInterviewTitle),
+        content: Text(l10n.exitInterviewContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Lanjut Interview'),
+            child: Text(l10n.continueInterview),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Ya, Keluar'),
+            child: Text(l10n.exitYes),
           ),
         ],
       ),
@@ -41,8 +43,9 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Iconsax.close_circle, color: Theme.of(context).colorScheme.error),
@@ -52,7 +55,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
           children: [
             Icon(Iconsax.microphone_2, color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            const Text('Interview Started'),
+            Text(l10n.interviewStarted),
           ],
         ),
         actions: [
@@ -90,16 +93,16 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
               ),
               child: Row(
                 children: [
-                  Text(
-                    'Toggle Teks:',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    Text(
+                      l10n.toggleText,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const Spacer(),
-                  _buildToggleButton(true, 'ON 🟢'),
+                  _buildToggleButton(true, l10n.on),
                   const SizedBox(width: 8),
-                  _buildToggleButton(false, 'OFF ⚪'),
+                  _buildToggleButton(false, l10n.off),
                 ],
               ),
             ),
@@ -118,12 +121,12 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
-                            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.7)],
+                            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)],
                           ),
                           border: Border.all(color: Theme.of(context).colorScheme.surface, width: 4),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: AppColors.primary.withValues(alpha: 0.3),
                               blurRadius: 20,
                               spreadRadius: 5,
                             ),
@@ -146,7 +149,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
@@ -159,9 +162,9 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                               children: [
                                 Icon(Iconsax.profile_circle, color: Theme.of(context).colorScheme.primary, size: 18),
                                 const SizedBox(width: 8),
-                                Text(
-                                  'AI Interviewer:',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  Text(
+                                    l10n.aiInterviewer,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -170,7 +173,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Selamat pagi! Saya Maya, HRD dari PT Tech Startup Indonesia. Terima kasih sudah meluangkan waktu untuk interview hari ini.',
+                              l10n.aiMessageOpening,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -186,7 +189,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                           Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 18),
                           const SizedBox(width: 8),
                           Text(
-                            'Toggle teks untuk show/hide transcript',
+                            l10n.transcriptToggleHint,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
@@ -212,7 +215,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
@@ -226,7 +229,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Tap untuk Menjawab',
+                    l10n.tapToAnswer,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w500,
@@ -238,7 +241,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
-                    child: const Text('Mulai Interview'),
+                    child: Text(l10n.startInterview),
                   ),
                 ],
               ),
@@ -256,7 +259,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceVariant,
+          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(

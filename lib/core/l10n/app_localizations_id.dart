@@ -66,6 +66,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get finish => 'Selesai';
 
   @override
+  String get question => 'Pertanyaan';
+
+  @override
+  String get questions => 'Pertanyaan';
+
+  @override
+  String get previous => 'Sebelumnya';
+
+  @override
+  String get suggestion => 'Saran';
+
+  @override
   String get getStarted => 'Mulai';
 
   @override
@@ -426,4 +438,542 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get backToHome => 'Kembali ke Beranda';
+
+  @override
+  String get aiInterviewSimulator => 'Simulator Interview AI';
+
+  @override
+  String get setupStep1Desc =>
+      'Latihan interview dengan AI yang disesuaikan dengan CV dan role Anda';
+
+  @override
+  String get formatInterview => 'Format Interview:';
+
+  @override
+  String get durationAprox => 'Durasi: ±15 menit';
+
+  @override
+  String get questionsCount => 'Pertanyaan: 5 soal';
+
+  @override
+  String get languageOption => 'Bahasa: ID / EN';
+
+  @override
+  String get methodStar => 'Metode: berbasis STAR';
+
+  @override
+  String get step1SelectCv => 'Langkah 1: Pilih CV Anda';
+
+  @override
+  String get setupInterview => 'Setup Interview';
+
+  @override
+  String get appliedPositionLabel => 'Posisi yang Dilamar: *';
+
+  @override
+  String get companyNameLabel => 'Nama Perusahaan: (Opsional)';
+
+  @override
+  String get positionLevelLabel => 'Level Posisi:';
+
+  @override
+  String get industryLabel => 'Industri:';
+
+  @override
+  String get autoFillFromProfile => 'Auto-fill dari profil Anda';
+
+  @override
+  String get dataHelpsAiTailor =>
+      'Data ini membantu AI menyesuaikan pertanyaan interview dengan konteks yang relevan';
+
+  @override
+  String get juniorLevel => 'Junior (0-2 tahun)';
+
+  @override
+  String get midLevel => 'Mid-level (3-5 tahun)';
+
+  @override
+  String get seniorLevel => 'Senior (5+ tahun)';
+
+  @override
+  String get jobDescription => 'Job Description';
+
+  @override
+  String get step3PasteJd => 'Langkah 3: Paste Job Description';
+
+  @override
+  String get jdDetailHelpsAi =>
+      'Semakin detail JD, semakin akurat pertanyaan interview AI';
+
+  @override
+  String get pasteJobDescriptionLabel => 'Paste Job Description:';
+
+  @override
+  String get extractKeyRequirements => 'Ekstrak Persyaratan Utama';
+
+  @override
+  String get extractedRequirements => 'Persyaratan yang Diekstrak:';
+
+  @override
+  String get noJdQuestion => 'Tidak punya JD?';
+
+  @override
+  String get skipThisStep => 'Skip step ini →';
+
+  @override
+  String get setupComplete => 'Setup Selesai';
+
+  @override
+  String get readyToStartInterview => 'Siap untuk memulai interview';
+
+  @override
+  String get interviewSummary => 'Ringkasan Interview:';
+
+  @override
+  String get cvLabel => 'CV:';
+
+  @override
+  String get roleLabel => 'Role:';
+
+  @override
+  String get companyLabel => 'Perusahaan:';
+
+  @override
+  String get languageLabel => 'Bahasa:';
+
+  @override
+  String get questionsLabel => 'Pertanyaan:';
+
+  @override
+  String get durationLabel => 'Durasi:';
+
+  @override
+  String get starMethodGuide => 'Panduan Metode STAR';
+
+  @override
+  String get viewStarExample => 'Lihat Contoh Metode STAR →';
+
+  @override
+  String get starTips =>
+      'Tips: Berikan jawaban yang spesifik dan terukur. Gunakan angka dan hasil konkret untuk memperkuat cerita Anda.';
+
+  @override
+  String get startInterviewNow => 'Mulai Interview Sekarang! →';
+
+  @override
+  String get interviewStarted => 'Interview Dimulai';
+
+  @override
+  String get tapToAnswer => 'Tap untuk Menjawab';
+
+  @override
+  String get toggleText => 'Toggle Teks:';
+
+  @override
+  String get on => 'ON 🟢';
+
+  @override
+  String get off => 'OFF ⚪';
+
+  @override
+  String get exitInterviewTitle => 'Keluar Interview?';
+
+  @override
+  String get exitInterviewContent =>
+      'Progress akan hilang jika keluar sekarang.';
+
+  @override
+  String get continueInterview => 'Lanjut Interview';
+
+  @override
+  String get exitYes => 'Ya, Keluar';
+
+  @override
+  String questionXofY(int current, int total) {
+    return 'Pertanyaan $current dari $total';
+  }
+
+  @override
+  String get behavioralStar => 'Behavioral (STAR)';
+
+  @override
+  String get aiInterviewer => 'AI Interviewer:';
+
+  @override
+  String get hintStarMethod => 'Hint: Gunakan metode STAR';
+
+  @override
+  String get yourAnswer => 'Jawaban Anda';
+
+  @override
+  String get recording => 'Merekam...';
+
+  @override
+  String get noTimeLimit => 'Tidak ada batas waktu';
+
+  @override
+  String get speakRelaxed => '💬 Bicara dengan santai';
+
+  @override
+  String get transcriptRealTime => 'Transkrip (Waktu Nyata):';
+
+  @override
+  String wordsAndSeconds(int words, int seconds) {
+    return '~$words kata • ${seconds}s';
+  }
+
+  @override
+  String get goodStartSituation => 'Bagus: Anda sudah mulai dengan Situation!';
+
+  @override
+  String get pause => 'Jedah';
+
+  @override
+  String get finishAnswering => 'Selesai Jawab';
+
+  @override
+  String get startAnswering => 'Mulai Jawab';
+
+  @override
+  String get interviewResults => 'Hasil Interview';
+
+  @override
+  String get interviewFinished => 'Interview Selesai!';
+
+  @override
+  String get positionLabel => 'Posisi:';
+
+  @override
+  String get bandScore => 'Skor Band';
+
+  @override
+  String get passGood => 'Lulus Baik';
+
+  @override
+  String get goodJobReady =>
+      'Kerja bagus! Kamu sudah siap untuk interview sesungguhnya 🎉';
+
+  @override
+  String get scoreDetails => 'Rincian Skor';
+
+  @override
+  String get starStructure => 'Struktur STAR';
+
+  @override
+  String get contentQuality => 'Kualitas Konten';
+
+  @override
+  String get fluency => 'Kelancaran';
+
+  @override
+  String get confidence => 'Percaya Diri';
+
+  @override
+  String get viewFullReport => 'Lihat Laporan Lengkap';
+
+  @override
+  String get listenToRecording => 'Dengar Rekaman Anda';
+
+  @override
+  String get recommendations => 'Rekomendasi';
+
+  @override
+  String get basedOnPerformance => 'Berdasarkan performa interview Anda';
+
+  @override
+  String get yourStrengths => 'Kekuatan Kamu';
+
+  @override
+  String get areasForImprovement => 'Area untuk Ditingkatkan';
+
+  @override
+  String get selectedPractice => 'Latihan Terpilih';
+
+  @override
+  String get readyForInterview => 'Siap untuk Interview?';
+
+  @override
+  String get practiceAgain => 'Latihan Lagi';
+
+  @override
+  String get emailReport => 'Email Laporan';
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get aiMessageOpening =>
+      'Selamat pagi! Saya Maya, HRD dari PT Tech Startup Indonesia. Terima kasih sudah meluangkan waktu untuk interview hari ini.';
+
+  @override
+  String get transcriptToggleHint => 'Toggle teks untuk show/hide transcript';
+
+  @override
+  String get startInterview => 'Mulai Interview';
+
+  @override
+  String get sampleQuestion1 =>
+      'Ceritakan pengalaman Anda saat memimpin sebuah project yang challenging dan bagaimana Anda mengatasinya.';
+
+  @override
+  String get sampleQuestion2 =>
+      'Bagaimana Anda menangani konflik dengan rekan kerja?';
+
+  @override
+  String get sampleQuestion3 =>
+      'Ceritakan tentang kegagalan terbesar Anda dan apa yang Anda pelajari.';
+
+  @override
+  String get sampleQuestion4 =>
+      'Bagaimana Anda memprioritaskan tugas ketika deadline mendesak?';
+
+  @override
+  String get sampleQuestion5 =>
+      'Mengapa Anda tertarik bekerja di perusahaan kami?';
+
+  @override
+  String get hintStarDetail =>
+      'S: Jelaskan situasi\nT: Tugas Anda\nA: Aksi yang diambil\nR: Hasil terukur';
+
+  @override
+  String get followupQuestion => 'Pertanyaan Follow-up';
+
+  @override
+  String get prevAnswerLabel => 'Jawaban Anda:';
+
+  @override
+  String get showFullAnswer => 'Lihat full answer ▼';
+
+  @override
+  String get hideFullAnswer => 'Sembunyikan ▲';
+
+  @override
+  String get followupHint =>
+      'AI meminta detail lebih lanjut. Fokus pada tantangan spesifik dan decision-making process Anda.';
+
+  @override
+  String get depthThinkingHint =>
+      'Follow-up questions membantu AI memahami depth dan critical thinking Anda';
+
+  @override
+  String get interviewCompleted => 'Interview Selesai!';
+
+  @override
+  String goodJobUser(Object name) {
+    return 'Kerja bagus, $name!';
+  }
+
+  @override
+  String get analyzingAnswers => 'Menganalisis jawaban';
+
+  @override
+  String get evaluatingStar => 'Mengevaluasi struktur STAR';
+
+  @override
+  String get calculatingFluency => 'Menghitung skor kelancaran';
+
+  @override
+  String get generatingRecommendations => 'Membuat rekomendasi';
+
+  @override
+  String get generatingFeedbackProgress => 'Sedang membuat feedback...';
+
+  @override
+  String get estimateTime => 'Estimasi: 15-20 detik';
+
+  @override
+  String get totalDuration => 'Total Durasi';
+
+  @override
+  String questionsAnswered(Object count) {
+    return '$count dijawab';
+  }
+
+  @override
+  String get wordsSpoken => 'Kata diucapkan';
+
+  @override
+  String get followups => 'Follow-up';
+
+  @override
+  String get yourQuestionsTitle => 'Pertanyaan Anda';
+
+  @override
+  String get anyQuestionsPrompt =>
+      'Apakah Anda punya pertanyaan untuk interviewer?';
+
+  @override
+  String get askInterviewer => 'Tanya ke Interviewer';
+
+  @override
+  String aiClosingMessage(Object name) {
+    return 'Terima kasih banyak, $name. Anda akan mendapat feedback detail dalam beberapa saat.';
+  }
+
+  @override
+  String get excellentStructure => 'Struktur sangat baik';
+
+  @override
+  String get relevantDetailed => 'Relevan & detail';
+
+  @override
+  String get tooManyFillers => 'Terlalu banyak filler';
+
+  @override
+  String get goodPaceTone => 'Pace & tone baik';
+
+  @override
+  String get starAnalysis => 'Analisis Struktur STAR';
+
+  @override
+  String get fluencyAnalysis => 'Analisis Kelancaran';
+
+  @override
+  String get speakingPace => 'Kecepatan Bicara';
+
+  @override
+  String wordsPerMinute(Object wpm) {
+    return 'Kata per menit: $wpm WPM';
+  }
+
+  @override
+  String syllablesPerMinute(Object spm) {
+    return 'Suku kata/menit: $spm SPM';
+  }
+
+  @override
+  String get speakingPaceChart => 'Kecepatan Bicara Seiring Waktu:';
+
+  @override
+  String get fillerWordsLabel => 'Filler Words';
+
+  @override
+  String totalFillerLabel(Object percentage) {
+    return 'Total filler → $percentage% (Target: <5%)';
+  }
+
+  @override
+  String get pauseAnalysis => 'Jeda & Keraguan';
+
+  @override
+  String get improvedSpeechTitle => '✨ Ucapan Anda vs Ucapan Ditingkatkan';
+
+  @override
+  String get originalSpeechLabel => 'Ucapan Asli Anda';
+
+  @override
+  String get improvedSpeechLabel => 'Ucapan Ditingkatkan';
+
+  @override
+  String get listenImprovedVersion => 'Dengar Versi Ditingkatkan';
+
+  @override
+  String get proTips => 'Tips Pro:';
+
+  @override
+  String get yourProgress => 'Progress Kamu';
+
+  @override
+  String get trackingLast5Sessions => 'Tracking 5 sesi terakhir';
+
+  @override
+  String get scoreHistory => 'Riwayat Skor Interview';
+
+  @override
+  String get metricComparison => 'Perbandingan Metrik';
+
+  @override
+  String get overallScore => 'Skor Keseluruhan';
+
+  @override
+  String get focusThisWeekFiller => 'Fokus Minggu Ini: Kurangi Filler!';
+
+  @override
+  String get milestonesReached => 'Milestone Tercapai';
+
+  @override
+  String get compareSessions => 'Bandingkan Sesi';
+
+  @override
+  String get fullReport => 'Laporan Lengkap';
+
+  @override
+  String get fullReportTitle => 'Laporan Interview Lengkap';
+
+  @override
+  String get strengthsLabel => 'Kekuatan Kamu';
+
+  @override
+  String get improvementsLabel => 'Area untuk Ditingkatkan';
+
+  @override
+  String get selectedPracticeLabel => 'Latihan Terpilih';
+
+  @override
+  String get readinessAssessment => 'Siap untuk Interview?';
+
+  @override
+  String get exportReport => 'Export Progress Report';
+
+  @override
+  String get compare => 'Bandingkan';
+
+  @override
+  String get viewDetail => 'Lihat Detail →';
+
+  @override
+  String get viewPracticeTips => 'Lihat Tips Latihan';
+
+  @override
+  String get fiveInterviewsCompleted => '5 Interview\nSelesai';
+
+  @override
+  String get score75FirstTime => 'Skor 7.5+\nPertama Kali';
+
+  @override
+  String get score80 => 'Skor 8.0+';
+
+  @override
+  String get tenInterviewsCompleted => '10 Interview\nSelesai';
+
+  @override
+  String session(Object number) {
+    return 'Sesi #$number';
+  }
+
+  @override
+  String get vs => 'vs';
+
+  @override
+  String get downloadPdf => 'Download Laporan PDF';
+
+  @override
+  String get practiceQ1Filler => 'Ulangi Q1 fokus hilangkan filler';
+
+  @override
+  String get practiceQ1Button => 'Latihan Q1 →';
+
+  @override
+  String get practiceQ5Star => 'Latihan Q5 dengan STAR lebih baik';
+
+  @override
+  String get practiceQ5Button => 'Latihan Q5 →';
+
+  @override
+  String get practiceStrongResults => 'Siapkan 3 cerita Result yang kuat';
+
+  @override
+  String get practiceTipsButton => 'Pelajari Tips →';
+
+  @override
+  String get readinessScoreMessage => 'Berdasarkan skor 7.5/10, kamu SIAP:';
+
+  @override
+  String get readinessJuniorMid => '✓ Posisi Junior-Mid level';
+
+  @override
+  String get readinessStartupEnv => '✓ Lingkungan startup (fast-paced)';
+
+  @override
+  String get readinessSeniorRoles => '⚠️ Senior roles - tambah metrik & dampak';
 }

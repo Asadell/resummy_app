@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'dart:async';
 
@@ -23,12 +24,12 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
   String _transcript = '';
   bool _showHint = false;
 
-  final List<String> _questions = [
-    'Ceritakan pengalaman Anda saat memimpin sebuah project yang challenging dan bagaimana Anda mengatasinya.',
-    'Bagaimana Anda menangani konflik dengan rekan kerja?',
-    'Ceritakan tentang kegagalan terbesar Anda dan apa yang Anda pelajari.',
-    'Bagaimana Anda memprioritaskan tugas ketika deadline mendesak?',
-    'Mengapa Anda tertarik bekerja di perusahaan kami?',
+  List<String> _questions(AppLocalizations l10n) => [
+    l10n.sampleQuestion1,
+    l10n.sampleQuestion2,
+    l10n.sampleQuestion3,
+    l10n.sampleQuestion4,
+    l10n.sampleQuestion5,
   ];
 
   @override
@@ -79,19 +80,20 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
   }
 
   Future<void> _showExitDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Keluar Interview?'),
-        content: const Text('Progress akan hilang jika keluar sekarang.'),
+        title: Text(l10n.exitInterviewTitle),
+        content: Text(l10n.exitInterviewContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Lanjut Interview'),
+            child: Text(l10n.continueInterview),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Ya, Keluar'),
+            child: Text(l10n.exitYes),
           ),
         ],
       ),
@@ -104,14 +106,15 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Iconsax.close_circle, color: Theme.of(context).colorScheme.error),
           onPressed: _showExitDialog,
         ),
-        title: Text('Question $_currentQuestion of $_totalQuestions'),
+        title: Text(l10n.questionXofY(_currentQuestion, _totalQuestions)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -147,15 +150,15 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
               child: Row(
                 children: [
                   Text(
-                    'Toggle Teks:',
+                    l10n.toggleText,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const Spacer(),
-                  _buildToggleButton(true, 'ON 🟢'),
+                  _buildToggleButton(true, l10n.on),
                   const SizedBox(width: 8),
-                  _buildToggleButton(false, 'OFF ⚪'),
+                  _buildToggleButton(false, l10n.off),
                 ],
               ),
             ),
@@ -179,7 +182,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                           Icon(Iconsax.cpu_charge, color: Theme.of(context).colorScheme.onPrimary, size: 16),
                           const SizedBox(width: 8),
                           Text(
-                            'Behavioral (STAR)',
+                            l10n.behavioralStar,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
@@ -206,7 +209,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                 Icon(Iconsax.profile_circle, color: Theme.of(context).colorScheme.primary, size: 16),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'AI Interviewer:',
+                                  l10n.aiInterviewer,
                                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w600,
@@ -216,7 +219,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             ),
                           const SizedBox(height: 12),
                           Text(
-                            _questions[_currentQuestion - 1],
+                            _questions(l10n)[_currentQuestion - 1],
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
@@ -242,7 +245,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                   Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
                                   const SizedBox(width: 12),
                                 Text(
-                                  'Hint: Gunakan STAR method',
+                                  l10n.hintStarMethod,
                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                     color: Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.w600,
@@ -259,7 +262,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                           if (_showHint) ...[
                             const SizedBox(height: 12),
                             Text(
-                              'S: Jelaskan situasi\nT: Tugas Anda\nA: Aksi yang diambil\nR: Hasil terukur',
+                              l10n.hintStarDetail,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
@@ -278,9 +281,9 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Text(
-                            'Your Answer',
+                            l10n.yourAnswer,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                              color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                             ),
                           ),
                         ),
@@ -303,7 +306,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(context).colorScheme.error.withOpacity(0.4),
+                                    color: Theme.of(context).colorScheme.error.withValues(alpha: 0.4),
                                     blurRadius: 20,
                                     spreadRadius: 5,
                                   ),
@@ -317,7 +320,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'Recording...',
+                              l10n.recording,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: Theme.of(context).colorScheme.error,
                                 fontWeight: FontWeight.w600,
@@ -349,18 +352,25 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                         child: Column(
                           children: [
                             Text(
-                              'Tidak ada batas waktu',
+                              l10n.noTimeLimit,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '💬 Bicara dengan santai',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Iconsax.message_text, size: 14, color: Theme.of(context).colorScheme.secondary),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    l10n.speakRelaxed,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -382,7 +392,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Transcript (Real-time):',
+                              l10n.transcriptRealTime,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 fontWeight: FontWeight.w600,
@@ -398,9 +408,9 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '~${_transcript.split(' ').length} words • ${_recordingSeconds}s',
+                                  l10n.wordsAndSeconds(_transcript.split(' ').length, _recordingSeconds),
                                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                                   ),
                                 ),
                               ],
@@ -418,7 +428,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'Good: Anda sudah mulai dengan Situation!',
+                                    l10n.goodStartSituation,
                                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontWeight: FontWeight.w500,
@@ -442,7 +452,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                 color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
                     blurRadius: 10,
                     offset: const Offset(0, -2),
                   ),
@@ -455,7 +465,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                       child: OutlinedButton.icon(
                         onPressed: _isRecording ? _stopRecording : null,
                         icon: const Icon(Icons.pause),
-                        label: const Text('Pause'),
+                        label: Text(l10n.pause),
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(48),
                         ),
@@ -467,7 +477,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                       child: ElevatedButton.icon(
                         onPressed: _isRecording ? _nextQuestion : _startRecording,
                         icon: Icon(_isRecording ? Icons.check : Icons.mic),
-                        label: Text(_isRecording ? 'Selesai Jawab' : 'Mulai Jawab'),
+                        label: Text(_isRecording ? l10n.finishAnswering : l10n.startAnswering),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(48),
                         ),
@@ -490,7 +500,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceVariant,
+          color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(

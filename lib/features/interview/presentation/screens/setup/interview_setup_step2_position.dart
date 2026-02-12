@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewSetupStep2Screen extends StatefulWidget {
@@ -20,10 +20,11 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Setup Interview'),
+        title: Text(l10n.setupInterview),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const InterviewSetupStep1Route()),
@@ -33,7 +34,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                'Step 2/5',
+                l10n.stepProgress(2, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -86,7 +87,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   children: [
                     // Position Field
                     Text(
-                      'Posisi yang Dilamar: *',
+                      l10n.appliedPositionLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -103,7 +104,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Auto-fill dari profil Anda',
+                      l10n.autoFillFromProfile,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -113,7 +114,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
 
                     // Company Field
                     Text(
-                      'Nama Perusahaan: (Opsional)',
+                      l10n.companyNameLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -134,7 +135,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
 
                     // Level Position
                     Text(
-                      'Level Posisi:',
+                      l10n.positionLevelLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -142,11 +143,11 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     const SizedBox(height: 12),
                     Column(
                       children: [
-                        _buildLevelOption(0, 'Junior (0-2 tahun)'),
+                        _buildLevelOption(0, l10n.juniorLevel),
                         const SizedBox(height: 8),
-                        _buildLevelOption(1, 'Mid-level (3-5 tahun)'),
+                        _buildLevelOption(1, l10n.midLevel),
                         const SizedBox(height: 8),
-                        _buildLevelOption(2, 'Senior (5+ tahun)'),
+                        _buildLevelOption(2, l10n.seniorLevel),
                       ],
                     ),
 
@@ -154,14 +155,14 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
 
                     // Industry
                     Text(
-                      'Industry:',
+                      l10n.industryLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _selectedIndustry,
+                      initialValue: _selectedIndustry,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -199,7 +200,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Data ini membantu AI menyesuaikan pertanyaan interview dengan konteks yang relevan',
+                        l10n.dataHelpsAiTailor,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
@@ -220,7 +221,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -235,7 +236,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),
-                  child: const Text('← Kembali'),
+                  child: Text('← ${l10n.back}'),
                 ),
               ),
               const SizedBox(width: 12),
@@ -246,7 +247,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.continueText} →'),
                 ),
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'dart:math' as math;
@@ -11,8 +12,9 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_2),
@@ -22,7 +24,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
           children: [
             Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            const Text('Interview Results'),
+            Text(l10n.interviewResults),
           ],
         ),
         actions: [
@@ -49,7 +51,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 24),
                         const SizedBox(width: 12),
                         Text(
-                          'Interview Selesai!',
+                          l10n.interviewFinished,
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -58,16 +60,16 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Posisi: Software Engineer',
+                      '${l10n.positionLabel} Software Engineer',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.gray600,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '29 Jan 2026 | Durasi: 14:32',
+                      '29 Jan 2026 | ${l10n.durationLabel}: 14:32',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -87,7 +89,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Skor Band',
+                      l10n.bandScore,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontWeight: FontWeight.w600,
@@ -100,7 +102,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                       painter: _CircularGaugePainter(
                         value: 7.5,
                         maxValue: 10,
-                        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                         progressColor: Theme.of(context).colorScheme.primary,
                       ),
                       child: SizedBox(
@@ -119,7 +121,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                               Text(
                                 '/10',
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                                 ),
                               ),
                             ],
@@ -129,7 +131,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Lulus Baik',
+                      l10n.passGood,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.w600,
@@ -137,7 +139,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Kerja bagus! Kamu sudah siap untuk interview sesungguhnya 🎉',
+                      l10n.goodJobReady,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.gray600,
                       ),
@@ -165,7 +167,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 24),
                         const SizedBox(width: 12),
                         Text(
-                          'Rincian Skor',
+                          l10n.scoreDetails,
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -175,34 +177,34 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     _buildScoreItem(
                       context,
-                      'Struktur STAR',
+                      l10n.starStructure,
                       8.0,
                       AppColors.secondary,
-                      'Excellent structure',
+                      l10n.excellentStructure,
                     ),
                     const SizedBox(height: 16),
                     _buildScoreItem(
                       context,
-                      'Kualitas Konten',
+                      l10n.contentQuality,
                       7.5,
                       AppColors.primary,
-                      'Relevant & detailed',
+                      l10n.relevantDetailed,
                     ),
                     const SizedBox(height: 16),
                     _buildScoreItem(
                       context,
-                      'Kelancaran',
+                      l10n.fluency,
                       6.5,
                       AppColors.warning,
-                      'Terlalu banyak filler',
+                      l10n.tooManyFillers,
                     ),
                     const SizedBox(height: 16),
                     _buildScoreItem(
                       context,
-                      'Percaya Diri',
+                      l10n.confidence,
                       7.0,
                       AppColors.primary,
-                      'Good pace & tone',
+                      l10n.goodPaceTone,
                     ),
                   ],
                 ),
@@ -223,7 +225,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () => context.router.push(const InterviewFeedbackQuestionsRoute()),
                       icon: const Icon(Iconsax.document_text, size: 20),
-                      label: const Text('Lihat Laporan Lengkap'),
+                      label: Text(l10n.viewFullReport),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(52),
                       ),
@@ -232,7 +234,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     OutlinedButton.icon(
                       onPressed: () {},
                       icon: const Icon(Iconsax.headphone, size: 20),
-                      label: const Text('Dengar Rekaman Anda'),
+                      label: Text(l10n.listenToRecording),
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
                       ),
@@ -277,7 +279,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
           child: LinearProgressIndicator(
             value: score / 10,
             minHeight: 8,
-            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(color),
           ),
         ),
@@ -331,7 +333,7 @@ class _CircularGaugePainter extends CustomPainter {
     // Progress arc
     final progressPaint = Paint()
       ..shader = LinearGradient(
-        colors: [progressColor, progressColor.withOpacity(0.6)],
+        colors: [progressColor, progressColor.withValues(alpha: 0.6)],
       ).createShader(Rect.fromCircle(center: center, radius: radius))
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20

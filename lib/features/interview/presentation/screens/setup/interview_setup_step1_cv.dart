@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class InterviewSetupStep1Screen extends StatefulWidget {
@@ -17,14 +18,15 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Row(
           children: [
             Icon(Iconsax.microphone_2, color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            const Text('AI Interview Simulator'),
+            Text(l10n.aiInterviewSimulator),
           ],
         ),
         leading: IconButton(
@@ -46,7 +48,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -61,7 +63,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'AI Interview Simulator',
+                      l10n.aiInterviewSimulator,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -69,7 +71,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Latihan interview dengan AI yang disesuaikan dengan CV dan role Anda',
+                      l10n.setupStep1Desc,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -95,7 +97,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                         Icon(Iconsax.document_text, color: Theme.of(context).colorScheme.primary, size: 20),
                         const SizedBox(width: 8),
                         Text(
-                          'Format Interview:',
+                          l10n.formatInterview,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -111,10 +113,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                       crossAxisSpacing: 12,
                       childAspectRatio: 2.5,
                       children: [
-                        _buildInfoChip('Durasi: ±15 menit'),
-                        _buildInfoChip('Pertanyaan: 5 soal'),
-                        _buildInfoChip('Bahasa: ID / EN'),
-                        _buildInfoChip('Method: STAR-based'),
+                        _buildInfoChip(context, l10n.durationAprox),
+                        _buildInfoChip(context, l10n.questionsCount),
+                        _buildInfoChip(context, l10n.languageOption),
+                        _buildInfoChip(context, l10n.methodStar),
                       ],
                     ),
                   ],
@@ -130,7 +132,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
-                        'Step 1: Pilih CV Anda',
+                        l10n.step1SelectCv,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -151,19 +153,16 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                 ),
                 child: Column(
                   children: [
-                    _buildCvOption(
-                      index: 0,
-                      filename: 'CV_Software_Engineer.pdf',
-                      score: 78,
-                    ),
-                    const SizedBox(height: 12),
-                    _buildCvOption(
-                      index: 1,
-                      filename: 'CV_Product_Manager.pdf',
-                      score: 85,
-                    ),
-                    const SizedBox(height: 12),
-                    _buildUploadOption(),
+                    ...[0, 1].map((i) => Padding(
+                      padding: EdgeInsets.only(bottom: i == 1 ? 12 : 0),
+                      child: _buildCvItem(
+                        context,
+                        index: i,
+                        filename: i == 0 ? 'CV_Software_Engineer.pdf' : 'CV_Product_Manager.pdf',
+                        score: i == 0 ? 78 : 85,
+                      ),
+                    )),
+                    _buildUploadOption(context),
                   ],
                 ),
               ),
@@ -179,7 +178,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -191,14 +190,14 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(52),
             ),
-            child: const Text('Lanjut →'),
+            child: Text('${l10n.continueText} →'),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInfoChip(String text) {
+  Widget _buildInfoChip(BuildContext context, String text) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -216,7 +215,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     );
   }
 
-  Widget _buildCvOption({required int index, required String filename, required int score}) {
+  Widget _buildCvItem(BuildContext context, {required int index, required String filename, required int score}) {
+    final l10n = AppLocalizations.of(context)!;
     final isSelected = _selectedCvIndex == index;
     return InkWell(
       onTap: () => setState(() => _selectedCvIndex = index),
@@ -248,7 +248,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
               ),
             ),
             Text(
-              'Score: $score/100',
+              l10n.score(score),
               style: TextStyle(
                 fontSize: 12,
                 color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -261,7 +261,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     );
   }
 
-  Widget _buildUploadOption() {
+  Widget _buildUploadOption(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -278,7 +279,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           Icon(Iconsax.document_upload, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Text(
-            'Upload CV Baru',
+            l10n.uploadNewCv,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.w600,
