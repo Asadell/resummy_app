@@ -349,11 +349,81 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadCv => 'Upload CV';
 
   @override
-  String get uploadYourCv => 'Upload Your CV';
+  String get chooseCvSource => 'Choose your CV source';
 
   @override
   String get uploadNewCv => 'Upload New CV';
 
   @override
-  String get useCvFromBuilder => 'Use CV from Builder';
+  String get uploadCvFileHint => 'Upload PDF file (Max 5MB)';
+
+  @override
+  String get or => 'or';
+
+  @override
+  String get useExistingCv => 'Use Existing CV';
+
+  @override
+  String get savedCvs => 'Saved CVs';
+
+  @override
+  String cvNumber(int number) {
+    return 'CV $number';
+  }
+
+  @override
+  String createdOnDate(String date) {
+    return 'Created on $date';
+  }
+
+  @override
+  String get appliedPosition => 'Applied Position';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get startAnalysis => 'Start Analysis';
+
+  @override
+  String get noFileSelected => 'No file selected';
+
+  @override
+  String get analyzingCvPleaseWait => 'Analyzing CV, please wait...';
+
+  @override
+  String get processingCv => 'Processing your CV, please wait...';
+
+  @override
+  String get analysisResult => 'Analysis Result';
+
+  @override
+  String get yourCvScore => 'Your CV Score';
+
+  @override
+  String get detailScore => 'Score Details';
+
+  @override
+  String get keywordMatch => 'Keyword Match';
+
+  @override
+  String get quantifiableAchievements => 'Quantifiable Achievements';
+
+  @override
+  String get structureCompleteness => 'Structure Completeness';
+
+  @override
+  String get languageProfessionalism => 'Language Professionalism';
+
+  @override
+  String get missingKeywords => 'Missing Keywords';
+
+  @override
+  String get improvementSuggestions => 'Improvement Suggestions';
+
+  @override
+  String get summaryFeedback => 'Summary Feedback';
+
+  @override
+  String get backToHome => 'Back to Home';
 }

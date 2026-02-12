@@ -746,11 +746,11 @@ abstract class AppLocalizations {
   /// **'Upload CV'**
   String get uploadCv;
 
-  /// No description provided for @uploadYourCv.
+  /// No description provided for @chooseCvSource.
   ///
   /// In en, this message translates to:
-  /// **'Upload Your CV'**
-  String get uploadYourCv;
+  /// **'Choose your CV source'**
+  String get chooseCvSource;
 
   /// No description provided for @uploadNewCv.
   ///
@@ -758,11 +758,143 @@ abstract class AppLocalizations {
   /// **'Upload New CV'**
   String get uploadNewCv;
 
-  /// No description provided for @useCvFromBuilder.
+  /// No description provided for @uploadCvFileHint.
   ///
   /// In en, this message translates to:
-  /// **'Use CV from Builder'**
-  String get useCvFromBuilder;
+  /// **'Upload PDF file (Max 5MB)'**
+  String get uploadCvFileHint;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get or;
+
+  /// No description provided for @useExistingCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Existing CV'**
+  String get useExistingCv;
+
+  /// No description provided for @savedCvs.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved CVs'**
+  String get savedCvs;
+
+  /// No description provided for @cvNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'CV {number}'**
+  String cvNumber(int number);
+
+  /// No description provided for @createdOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on {date}'**
+  String createdOnDate(String date);
+
+  /// No description provided for @appliedPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied Position'**
+  String get appliedPosition;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @startAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Analysis'**
+  String get startAnalysis;
+
+  /// No description provided for @noFileSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get noFileSelected;
+
+  /// No description provided for @analyzingCvPleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing CV, please wait...'**
+  String get analyzingCvPleaseWait;
+
+  /// No description provided for @processingCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing your CV, please wait...'**
+  String get processingCv;
+
+  /// No description provided for @analysisResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis Result'**
+  String get analysisResult;
+
+  /// No description provided for @yourCvScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CV Score'**
+  String get yourCvScore;
+
+  /// No description provided for @detailScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score Details'**
+  String get detailScore;
+
+  /// No description provided for @keywordMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyword Match'**
+  String get keywordMatch;
+
+  /// No description provided for @quantifiableAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantifiable Achievements'**
+  String get quantifiableAchievements;
+
+  /// No description provided for @structureCompleteness.
+  ///
+  /// In en, this message translates to:
+  /// **'Structure Completeness'**
+  String get structureCompleteness;
+
+  /// No description provided for @languageProfessionalism.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Professionalism'**
+  String get languageProfessionalism;
+
+  /// No description provided for @missingKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing Keywords'**
+  String get missingKeywords;
+
+  /// No description provided for @improvementSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvement Suggestions'**
+  String get improvementSuggestions;
+
+  /// No description provided for @summaryFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary Feedback'**
+  String get summaryFeedback;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
 }
 
 class _AppLocalizationsDelegate

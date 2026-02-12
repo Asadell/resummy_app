@@ -53,7 +53,7 @@ class CvTranslatorDownloadScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: () => context.router.push(const CvAnalyzerLoadingRoute()),
+                onPressed: () => context.router.push(const CvTranslatorLoadingRoute()),
                 child: const Text('Analisis CV'),
               ),
               const SizedBox(height: 12),

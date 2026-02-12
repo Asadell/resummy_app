@@ -40,7 +40,9 @@ class CvBuilderPreviewScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: () => context.router.push(const CvAnalyzerLoadingRoute()),
+                onPressed: () {
+                  // no loading screen, make your own loading indicator with LoadingIndicator widget
+                },
                 child: const Text('Analisis CV Ini'),
               ),
               const SizedBox(height: 12),
@@ -68,7 +70,8 @@ class CvBuilderPreviewScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => context.router.push(const CvBuilderStep1Route()),
+                onPressed: () =>
+                    context.router.push(const CvBuilderStep1Route()),
                 child: const Text('Edit'),
               ),
             ],
