@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'dart:math' as math;
@@ -13,14 +14,20 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
-        title: const Text('📈 Progress Kamu'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_2),
           onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+        ),
+        title: Row(
+          children: [
+            Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 20),
+            const SizedBox(width: 8),
+            const Text('Progress Kamu'),
+          ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: const Icon(Iconsax.filter),
             onPressed: () {},
           ),
         ],
@@ -32,11 +39,17 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Title
-              Text(
-                '📈 Progress Kamu Seiring Waktu',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 32),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Progress Kamu',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(
@@ -124,7 +137,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('🎯', style: TextStyle(fontSize: 32)),
+                    Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.primary, size: 32),
                     const SizedBox(height: 12),
                     Text(
                       'Fokus Minggu Ini: Kurangi Filler!',
@@ -165,11 +178,17 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '🏆 Milestone Tercapai',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.award, color: Theme.of(context).colorScheme.secondary, size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Milestone Tercapai',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     GridView.count(
@@ -180,10 +199,10 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.5,
                       children: [
-                        _buildBadge(context, '🎖️', '5 Interview\nSelesai', true, Theme.of(context).colorScheme.secondaryContainer),
-                        _buildBadge(context, '⭐', 'Skor 7.5+\nPertama Kali', true, const Color(0xFFFEF3C7)),
-                        _buildBadge(context, '🔒', 'Skor 8.0+', false, Theme.of(context).colorScheme.surfaceVariant),
-                        _buildBadge(context, '🔒', '10 Interview\nSelesai', false, Theme.of(context).colorScheme.surfaceVariant),
+                        _buildBadge(context, Iconsax.award, '5 Interview\nSelesai', true, Theme.of(context).colorScheme.secondaryContainer),
+                        _buildBadge(context, Iconsax.ranking, 'Skor 7.5+\nPertama Kali', true, const Color(0xFFFEF3C7)),
+                        _buildBadge(context, Iconsax.lock, 'Skor 8.0+', false, Theme.of(context).colorScheme.surfaceVariant),
+                        _buildBadge(context, Iconsax.lock, '10 Interview\nSelesai', false, Theme.of(context).colorScheme.surfaceVariant),
                       ],
                     ),
                   ],
@@ -285,8 +304,8 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
         child: SafeArea(
           child: ElevatedButton.icon(
             onPressed: () {},
-            icon: const Icon(Icons.bar_chart),
-            label: const Text('📊 Export Progress Report'),
+            icon: const Icon(Iconsax.chart_1),
+            label: const Text('Export Progress Report'),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(52),
             ),
@@ -321,9 +340,9 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Icon(
               isPositive
-                  ? (isBig ? Icons.trending_up : Icons.arrow_upward)
-                  : (isBig ? Icons.trending_down : Icons.arrow_downward),
-              color: isPositive ? AppColors.secondary : AppColors.error,
+                  ? (isBig ? Iconsax.trend_up : Iconsax.arrow_up_3)
+                  : (isBig ? Iconsax.trend_down : Iconsax.arrow_down_1),
+              color: isPositive ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.error,
               size: isBig ? 24 : 20,
             ),
           ],
@@ -332,7 +351,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBadge(BuildContext context, String emoji, String title, bool unlocked, Color bgColor) {
+  Widget _buildBadge(BuildContext context, IconData icon, String title, bool unlocked, Color bgColor) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -342,13 +361,9 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            unlocked ? emoji : '🔒',
-            style: TextStyle(
-              fontSize: unlocked ? 32 : 24,
-              color: unlocked ? null : AppColors.gray400,
-            ),
-          ),
+          unlocked 
+            ? Icon(icon, size: 32, color: Theme.of(context).colorScheme.primary)
+            : Icon(Iconsax.lock, size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.3)),
           const SizedBox(height: 8),
           Text(
             title,

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -56,7 +57,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.check_circle, color: AppColors.secondary, size: 20),
+                    Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -102,9 +103,9 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '← Auto-fill dari profil Anda',
+                      'Auto-fill dari profil Anda',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
 
@@ -122,7 +123,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                       controller: _companyController,
                       decoration: InputDecoration(
                         hintText: 'e.g. PT Tech Startup',
-                        prefixIcon: const Icon(Icons.business),
+                        prefixIcon: const Icon(Iconsax.building_3),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -194,7 +195,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('💡', style: TextStyle(fontSize: 20)),
+                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -272,7 +273,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
         child: Row(
           children: [
             Icon(
-              isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+              isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
               color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),

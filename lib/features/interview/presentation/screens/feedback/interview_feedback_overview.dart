@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'dart:math' as math;
@@ -14,13 +15,19 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_2),
           onPressed: () => context.router.push(const InterviewPrepRoute()),
         ),
-        title: const Text('🎯 Interview Results'),
+        title: Row(
+          children: [
+            Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.primary, size: 20),
+            const SizedBox(width: 8),
+            const Text('Interview Results'),
+          ],
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Iconsax.share),
             onPressed: () {},
           ),
         ],
@@ -37,11 +44,17 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '🎯 Interview Selesai!',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Interview Selesai!',
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -118,7 +131,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     Text(
                       'Lulus Baik',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppColors.secondary,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -147,11 +160,17 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '📊 Rincian Skor',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.chart_21, color: Theme.of(context).colorScheme.primary, size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Rincian Skor',
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     _buildScoreItem(
@@ -203,7 +222,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () => context.router.push(const InterviewFeedbackQuestionsRoute()),
-                      icon: const Text('📄', style: TextStyle(fontSize: 20)),
+                      icon: const Icon(Iconsax.document_text, size: 20),
                       label: const Text('Lihat Laporan Lengkap'),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(52),
@@ -212,7 +231,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     OutlinedButton.icon(
                       onPressed: () {},
-                      icon: const Text('🎧', style: TextStyle(fontSize: 20)),
+                      icon: const Icon(Iconsax.headphone, size: 20),
                       label: const Text('Dengar Rekaman Anda'),
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
@@ -267,7 +286,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
           Text(
             subtitle,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: color == AppColors.warning ? AppColors.warning : Theme.of(context).colorScheme.onSurfaceVariant,
+              color: color == Theme.of(context).colorScheme.error ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ],

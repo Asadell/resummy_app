@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -101,17 +102,17 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, '📄', 'CV:', 'CV_Software_Engineer.pdf'),
+                    _buildSummaryRow(context, Iconsax.document_1, 'CV:', 'CV_Software_Engineer.pdf'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, '🎯', 'Role:', 'Software Engineer'),
+                    _buildSummaryRow(context, Iconsax.direct_up, 'Role:', 'Software Engineer'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, '🏢', 'Company:', 'PT Tech Startup'),
+                    _buildSummaryRow(context, Iconsax.building_3, 'Company:', 'PT Tech Startup'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, '🌐', 'Language:', 'Bahasa Indonesia'),
+                    _buildSummaryRow(context, Iconsax.global, 'Language:', 'Bahasa Indonesia'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, '❓', 'Questions:', '5 pertanyaan'),
+                    _buildSummaryRow(context, Iconsax.message_question, 'Questions:', '5 pertanyaan'),
                     const SizedBox(height: 12),
-                    _buildSummaryRow(context, '⏱️', 'Duration:', '±15 menit'),
+                    _buildSummaryRow(context, Iconsax.timer_1, 'Duration:', '±15 menit'),
                   ],
                 ),
               ),
@@ -128,12 +129,18 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '💡 STAR Method Guide',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          'STAR Method Guide',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -167,7 +174,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('💡', style: TextStyle(fontSize: 20)),
+                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.secondary, size: 24),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -214,11 +221,11 @@ class InterviewSetupStep4Screen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(BuildContext context, String icon, String label, String value) {
+  Widget _buildSummaryRow(BuildContext context, IconData icon, String label, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(icon, style: const TextStyle(fontSize: 20)),
+        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
         const SizedBox(width: 12),
         Expanded(
           child: RichText(

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -12,14 +13,20 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
-        title: const Text('💡 Rekomendasi'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_2),
           onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+        ),
+        title: Row(
+          children: [
+            Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
+            const SizedBox(width: 8),
+            const Text('Rekomendasi'),
+          ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.download),
+            icon: const Icon(Iconsax.document_download),
             onPressed: () {},
           ),
         ],
@@ -31,11 +38,17 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Title
-              Text(
-                '💡 Rekomendasi & Langkah Selanjutnya',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 32),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Rekomendasi',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(
@@ -60,7 +73,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('💪', style: TextStyle(fontSize: 32)),
+                    Icon(Iconsax.weight, color: Theme.of(context).colorScheme.secondary, size: 32),
                     const SizedBox(height: 12),
                     Text(
                       'Kekuatan Kamu',
@@ -94,7 +107,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('🎯', style: TextStyle(fontSize: 32)),
+                    Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.error, size: 32),
                     const SizedBox(height: 12),
                     Text(
                       'Area untuk Ditingkatkan',
@@ -125,11 +138,17 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '📚 Latihan yang Direkomendasikan',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.book, color: Theme.of(context).colorScheme.primary, size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Latihan Terpilih',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     _buildPracticeItem(
@@ -172,10 +191,10 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('✅', style: TextStyle(fontSize: 40, color: Colors.white)),
+                    Icon(Iconsax.tick_circle, size: 40, color: Theme.of(context).colorScheme.onSecondary),
                     const SizedBox(height: 12),
                     const Text(
-                      'Siap untuk Interview Sungguhan? ✅',
+                      'Siap untuk Interview?',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -224,8 +243,8 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {},
-                icon: const Icon(Icons.refresh),
-                label: const Text('🔄 Latihan Lagi'),
+                icon: const Icon(Iconsax.refresh),
+                label: const Text('Latihan Lagi'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                 ),

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 
 @RoutePage()
@@ -22,7 +23,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.construction,
+              Iconsax.setting_2,
               size: 64,
               color: Theme.of(context).colorScheme.primary,
             ),

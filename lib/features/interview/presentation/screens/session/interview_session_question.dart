@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'dart:async';
@@ -107,7 +108,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.error),
+          icon: Icon(Iconsax.close_circle, color: Theme.of(context).colorScheme.error),
           onPressed: _showExitDialog,
         ),
         title: Text('Question $_currentQuestion of $_totalQuestions'),
@@ -117,12 +118,12 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
             child: Center(
               child: Row(
                 children: [
-                  const Icon(Icons.timer, size: 16, color: AppColors.primary),
+                  Icon(Iconsax.timer_1, size: 16, color: Theme.of(context).colorScheme.primary),
                   const SizedBox(width: 4),
                   Text(
                     '${(_recordingSeconds ~/ 60).toString().padLeft(2, '0')}:${(_recordingSeconds % 60).toString().padLeft(2, '0')}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -169,18 +170,18 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('🧠', style: TextStyle(fontSize: 16)),
+                          Icon(Iconsax.cpu_charge, color: Theme.of(context).colorScheme.onPrimary, size: 16),
                           const SizedBox(width: 8),
                           Text(
                             'Behavioral (STAR)',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -200,19 +201,19 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Text('👤', style: TextStyle(fontSize: 16)),
-                              const SizedBox(width: 8),
-                              Text(
-                                'AI Interviewer:',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
+                            Row(
+                              children: [
+                                Icon(Iconsax.profile_circle, color: Theme.of(context).colorScheme.primary, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'AI Interviewer:',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                           const SizedBox(height: 12),
                           Text(
                             _questions[_currentQuestion - 1],
@@ -236,10 +237,10 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                         children: [
                           InkWell(
                             onTap: () => setState(() => _showHint = !_showHint),
-                            child: Row(
-                              children: [
-                                const Text('💡', style: TextStyle(fontSize: 20)),
-                                const SizedBox(width: 12),
+                              child: Row(
+                                children: [
+                                  Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
+                                  const SizedBox(width: 12),
                                 Text(
                                   'Hint: Gunakan STAR method',
                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -298,19 +299,19 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                color: AppColors.error,
+                                color: Theme.of(context).colorScheme.error,
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.error.withOpacity(0.4),
+                                    color: Theme.of(context).colorScheme.error.withOpacity(0.4),
                                     blurRadius: 20,
                                     spreadRadius: 5,
                                   ),
                                 ],
                               ),
-                              child: const Icon(
-                                Icons.mic,
-                                color: Colors.white,
+                              child: Icon(
+                                Iconsax.microphone_2,
+                                color: Theme.of(context).colorScheme.onError,
                                 size: 40,
                               ),
                             ),
@@ -318,7 +319,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             Text(
                               'Recording...',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.error,
+                                color: Theme.of(context).colorScheme.error,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -333,7 +334,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                   width: 4,
                                   height: 20 + (index % 3) * 10,
                                   decoration: BoxDecoration(
-                                    color: AppColors.error,
+                                    color: Theme.of(context).colorScheme.error,
                                     borderRadius: BorderRadius.circular(2),
                                   ),
                                 ),
@@ -357,7 +358,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             Text(
                               '💬 Bicara dengan santai',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ],
@@ -367,16 +368,16 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                     ],
 
                     // Transcript Card
-                    if (_showTranscript && _transcript.isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardTheme.color,
-                          borderRadius: BorderRadius.circular(12),
-                          border: const Border(
-                            left: BorderSide(color: AppColors.primary, width: 4),
+                      if (_showTranscript && _transcript.isNotEmpty) ...[
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardTheme.color,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border(
+                              left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 4),
+                            ),
                           ),
-                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -411,24 +412,20 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                       if (_transcript.contains('startup')) ...[
                         Container(
                           padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary100,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.check_circle, color: AppColors.secondary, size: 16),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  'Good: Anda sudah mulai dengan Situation!',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.secondary800,
-                                    fontWeight: FontWeight.w500,
+                            child: Row(
+                              children: [
+                                Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 16),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Good: Anda sudah mulai dengan Situation!',
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
                           ),
                         ),
                       ],
@@ -499,7 +496,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
         child: Text(
           label,
           style: TextStyle(
-            color: isActive ? Colors.white : Theme.of(context).colorScheme.onSurfaceVariant,
+            color: isActive ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),

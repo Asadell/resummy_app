@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -225,7 +226,14 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
                                 }).toList(),
                               ),
                             ),
-
+                            const SizedBox(height: 12), // Added SizedBox for spacing
+                            Row(
+                              children: [
+                                Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary),
+                                const SizedBox(width: 8),
+                                const Text('Strong Points:'),
+                              ],
+                            ),
                             if (isExpanded) ...[
                               const SizedBox(height: 12),
                               Text(

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -44,22 +45,28 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.error),
+          icon: Icon(Iconsax.close_circle, color: Theme.of(context).colorScheme.error),
           onPressed: _showExitDialog,
         ),
-        title: const Text('🎤 Interview Started'),
+        title: Row(
+          children: [
+            Icon(Iconsax.microphone_2, color: Theme.of(context).colorScheme.primary, size: 20),
+            const SizedBox(width: 8),
+            const Text('Interview Started'),
+          ],
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Row(
                 children: [
-                  const Icon(Icons.timer, size: 16, color: AppColors.primary),
+                  Icon(Iconsax.timer_1, size: 16, color: Theme.of(context).colorScheme.primary),
                   const SizedBox(width: 4),
                   Text(
                     '00:15',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -110,10 +117,10 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                         height: 80,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [AppColors.primary, AppColors.primaryLight],
+                          gradient: LinearGradient(
+                            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.7)],
                           ),
-                          border: Border.all(color: Colors.white, width: 4),
+                          border: Border.all(color: Theme.of(context).colorScheme.surface, width: 4),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.primary.withOpacity(0.3),
@@ -122,9 +129,9 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.person,
-                          color: Colors.white,
+                        child: Icon(
+                          Iconsax.profile_circle,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           size: 40,
                         ),
                       ),
@@ -150,7 +157,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                           children: [
                             Row(
                               children: [
-                                const Text('👤', style: TextStyle(fontSize: 16)),
+                                Icon(Iconsax.profile_circle, color: Theme.of(context).colorScheme.primary, size: 18),
                                 const SizedBox(width: 8),
                                 Text(
                                   'AI Interviewer:',
@@ -176,12 +183,12 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('💡', style: TextStyle(fontSize: 16)),
+                          Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 18),
                           const SizedBox(width: 8),
                           Text(
                             'Toggle teks untuk show/hide transcript',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.gray600,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -201,19 +208,19 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.mic,
-                      color: Colors.white,
+                    child: Icon(
+                      Iconsax.microphone_2,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       size: 48,
                     ),
                   ),
@@ -221,7 +228,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
                   Text(
                     'Tap untuk Menjawab',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -255,7 +262,7 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
         child: Text(
           label,
           style: TextStyle(
-            color: isActive ? Colors.white : Theme.of(context).colorScheme.onSurfaceVariant,
+            color: isActive ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),

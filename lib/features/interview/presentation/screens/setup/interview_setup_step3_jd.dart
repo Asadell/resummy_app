@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -72,7 +73,7 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('💡', style: TextStyle(fontSize: 24)),
+                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 24),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -155,7 +156,7 @@ Responsibilities:
                 onPressed: () {
                   setState(() => _showExtracted = true);
                 },
-                icon: const Text('🤖', style: TextStyle(fontSize: 20)),
+                icon: const Icon(Iconsax.cpu_charge, size: 20),
                 label: const Text('Extract Key Requirements'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
@@ -273,13 +274,13 @@ Responsibilities:
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.secondary,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),

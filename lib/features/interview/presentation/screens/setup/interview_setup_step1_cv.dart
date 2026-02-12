@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -19,7 +20,13 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
-        title: const Text('🎤 AI Interview Simulator'),
+        title: Row(
+          children: [
+            Icon(Iconsax.microphone_2, color: Theme.of(context).colorScheme.primary, size: 20),
+            const SizedBox(width: 8),
+            const Text('AI Interview Simulator'),
+          ],
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const InterviewPrepRoute()),
@@ -47,9 +54,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '🎤',
-                      style: TextStyle(fontSize: 48),
+                    Icon(
+                      Iconsax.microphone_2,
+                      size: 64,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -82,11 +90,17 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '📝 Format Interview:',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Iconsax.document_text, color: Theme.of(context).colorScheme.primary, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Format Interview:',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     GridView.count(
@@ -219,11 +233,11 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         child: Row(
           children: [
             Icon(
-              isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+              isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
               color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
-            const Text('📄', style: TextStyle(fontSize: 24)),
+            Icon(Iconsax.document_1, color: Theme.of(context).colorScheme.primary, size: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -261,12 +275,12 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.upload_file, color: AppColors.primary),
+          Icon(Iconsax.document_upload, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Text(
-            '📤 Upload CV Baru',
+            'Upload CV Baru',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppColors.primary,
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.w600,
             ),
           ),

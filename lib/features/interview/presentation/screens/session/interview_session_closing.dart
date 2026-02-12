@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 
@@ -54,9 +55,12 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
           icon: const Icon(Icons.close),
           onPressed: () {},
         ),
-        title: const Text(
-          'Interview Completed! 🎉',
-          style: TextStyle(color: AppColors.secondary),
+        title: Row(
+          children: [
+            const Text('Interview Completed!'),
+            const SizedBox(width: 8),
+            Icon(Iconsax.award, color: Theme.of(context).colorScheme.secondary, size: 24),
+          ],
         ),
       ),
       body: SafeArea(
@@ -73,7 +77,7 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                 builder: (context, double scale, child) {
                   return Transform.scale(
                     scale: scale,
-                    child: const Text('🏆', style: TextStyle(fontSize: 100)),
+                    child: Icon(Iconsax.award, size: 100, color: Theme.of(context).colorScheme.secondary),
                   );
                 },
               ),
@@ -109,20 +113,15 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '📊 Session Summary:',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
                     Row(
                       children: [
-                        Expanded(
-                          child: _buildStatItem('⏱️', 'Total Duration', '14:32'),
-                        ),
-                        Expanded(
-                          child: _buildStatItem('❓', 'Questions', '5 answered'),
+                        Icon(Iconsax.chart_2, color: Theme.of(context).colorScheme.primary, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Session Summary:',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -130,10 +129,21 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                     Row(
                       children: [
                         Expanded(
-                          child: _buildStatItem('💬', 'Words spoken', '~1,250'),
+                          child: _buildStatItem(Iconsax.timer_1, 'Total Duration', '14:32'),
                         ),
                         Expanded(
-                          child: _buildStatItem('🎯', 'Follow-ups', '2'),
+                          child: _buildStatItem(Iconsax.message_question, 'Questions', '5 answered'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatItem(Iconsax.message_text_1, 'Words spoken', '~1,250'),
+                        ),
+                        Expanded(
+                          child: _buildStatItem(Iconsax.direct_up, 'Follow-ups', '2'),
                         ),
                       ],
                     ),
@@ -157,15 +167,15 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                         Container(
                           width: 40,
                           height: 40,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [AppColors.primary, AppColors.primaryLight],
+                              colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withAlpha(200)],
                             ),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.white,
+                          child: Icon(
+                            Iconsax.profile_circle,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             size: 24,
                           ),
                         ),
@@ -185,12 +195,19 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
               const SizedBox(height: 32),
 
               // Generating Feedback
-              Text(
-                'Generating feedback... ⏳',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Generating feedback...',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Iconsax.timer_1, color: Theme.of(context).colorScheme.primary, size: 24),
+                ],
               ),
 
               const SizedBox(height: 20),
@@ -201,8 +218,8 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                 child: LinearProgressIndicator(
                   value: _progress,
                   minHeight: 8,
-                  backgroundColor: AppColors.gray200,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
                 ),
               ),
 
@@ -211,7 +228,7 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
               Text(
                 '${(_progress * 100).toInt()}%',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -234,14 +251,14 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                       child: Row(
                         children: [
                           if (isDone)
-                            const Icon(Icons.check_circle, color: AppColors.secondary, size: 20)
+                            Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 20)
                           else if (isInProgress)
-                            const SizedBox(
+                            SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
                               ),
                             )
                           else
@@ -251,10 +268,10 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                             _steps[index],
                             style: TextStyle(
                               color: isDone
-                                  ? AppColors.secondary700
+                                  ? Theme.of(context).colorScheme.secondary
                                   : isInProgress
-                                      ? AppColors.primary
-                                      : AppColors.gray300,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
                               fontWeight: isDone || isInProgress ? FontWeight.w600 : FontWeight.normal,
                             ),
                           ),
@@ -282,10 +299,10 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
     );
   }
 
-  Widget _buildStatItem(String icon, String label, String value) {
+  Widget _buildStatItem(IconData icon, String label, String value) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 24)),
+        Icon(icon, size: 24, color: Theme.of(context).colorScheme.primary),
         const SizedBox(height: 8),
         Text(
           label,
