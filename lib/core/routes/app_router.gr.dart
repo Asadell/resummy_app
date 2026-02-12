@@ -11,7 +11,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i50;
 import 'package:flutter/material.dart' as _i51;
-import 'package:resummy_app/features/main/presentation/screens/main_screen.dart' as _i42;
 import 'package:resummy_app/features/auth/presentation/screens/auth_screen.dart'
     as _i1;
 import 'package:resummy_app/features/auth/presentation/screens/language_selection_screen.dart'
@@ -106,6 +105,8 @@ import 'package:resummy_app/features/interview/presentation/screens/setup/interv
     as _i39;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_step4_preferences.dart'
     as _i40;
+import 'package:resummy_app/features/main/presentation/screens/main_screen.dart'
+    as _i42;
 import 'package:resummy_app/features/profile/presentation/screens/profile_screen.dart'
     as _i48;
 
