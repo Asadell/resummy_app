@@ -7,42 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:570883569559:android:8d65af0d78fce3ffd9f6d2",
-        "android_client_info": {
-          "package_name": "com.example.resummy_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "570883569559-96is71110ahufsrs5unulv297colvu9m.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA7aTMNOpQvsm60dJWtpyCM5zQrNIOnmSI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "570883569559-96is71110ahufsrs5unulv297colvu9m.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "570883569559-a0g0pjm7q2j7t57qb4cvukclr28irt2r.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.resummyApp"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:570883569559:android:7c1753d47b22be5ed9f6d2",
         "android_client_info": {
           "package_name": "com.resummy.resummy_app"
@@ -55,6 +19,22 @@
           "android_info": {
             "package_name": "com.resummy.resummy_app",
             "certificate_hash": "c62f6767bd1cd35ba916da0fceb649f2134c96ba"
+          }
+        },
+        {
+          "client_id": "570883569559-juaobnd7l73kps0l6cfv86vrr0sbb7ns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.resummy.resummy_app",
+            "certificate_hash": "9f2c513b2f4fbbda2f4a8df83c48a06b18d425af"
+          }
+        },
+        {
+          "client_id": "570883569559-umu0bqmccl056e5thohnvu22bqe9h35b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.resummy.resummy_app",
+            "certificate_hash": "9a6b90985c5b858b40a9d77ec0ec7138b95ade53"
           }
         },
         {

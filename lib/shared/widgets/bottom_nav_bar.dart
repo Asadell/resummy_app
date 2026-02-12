@@ -43,19 +43,19 @@ class BottomNavBar extends StatelessWidget {
   void _onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        context.router.push(const HomeRoute());
+        context.router.replace(const HomeRoute());
         break;
       case 1:
-        context.router.push(const CvToolsHubRoute());
+        context.router.replace(const CvToolsHubRoute());
         break;
       case 2:
-        context.router.push(const InterviewPrepRoute());
+        context.router.replace(const InterviewPrepRoute());
         break;
       case 3:
-        context.router.push(const HistoryRoute());
+        context.router.replace(const HistoryRoute());
         break;
       case 4:
-        context.router.push(const ProfileRoute());
+        context.router.replace(const ProfileRoute());
         break;
     }
   }

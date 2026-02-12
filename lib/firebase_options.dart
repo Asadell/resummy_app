@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     projectId: 'resummy-app',
     storageBucket: 'resummy-app.firebasestorage.app',
   );
+
 }
