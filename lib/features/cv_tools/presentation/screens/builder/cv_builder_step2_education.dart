@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -18,10 +19,12 @@ class CvBuilderStep2Screen extends StatefulWidget {
 class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Pendidikan'),
+        title: Text(l10n.education),
         centerTitle: true,
         actions: [
           Padding(
@@ -67,9 +70,9 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 2/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(2, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -78,10 +81,10 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '2. Riwayat Pendidikan',
-                          style: TextStyle(
+                          l10n.educationHistoryHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -89,10 +92,10 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Tambahkan pendidikan formal/non-formal',
-                          style: TextStyle(
+                          l10n.educationHistoryDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -119,19 +122,19 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                   color: Color(0xFF9CA3AF),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text(
-                                  'Belum ada data pendidikan',
-                                  style: TextStyle(
+                                Text(
+                                  l10n.noEducationData,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF374151),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                const Text(
-                                  'Tambahkan riwayat pendidikanmu agar CV terlihat lebih profesional.',
+                                Text(
+                                  l10n.addEducationPrompt,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Color(0xFF6B7280),
                                   ),
                                 ),
@@ -139,7 +142,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                 OutlinedButton.icon(
                                   onPressed: () => _showEducationForm(context),
                                   icon: const Icon(Iconsax.add),
-                                  label: const Text('Tambah Pendidikan'),
+                                  label: Text(l10n.addEducation),
                                 ),
                               ],
                             ),
@@ -156,8 +159,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                           itemBuilder: (context, index) {
                             final edu = educationList[index];
                             final period = edu.isCurrentlyStudying 
-                                ? '${edu.startYear} - Sekarang'
-                                : '${edu.startYear} - ${edu.endYear ?? "Terkini"}';
+                                ? '${edu.startYear} - ${l10n.present}'
+                                : '${edu.startYear} - ${edu.endYear ?? l10n.present}';
                                 
                             return Card(
                               child: ListTile(
@@ -219,7 +222,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                             side: const BorderSide(color: Color(0xFF0EA5E9)),
                           ),
                           icon: const Icon(Iconsax.add),
-                          label: const Text('Tambah Pendidikan Lainnya'),
+                          label: Text(l10n.addAnotherEducation),
                         ),
                       ],
                       
@@ -256,7 +259,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -275,7 +278,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.next} →'),
                 ),
               ),
             ],
@@ -364,6 +367,8 @@ class _EducationFormState extends State<_EducationForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -385,7 +390,7 @@ class _EducationFormState extends State<_EducationForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.education != null ? 'Edit Pendidikan' : 'Tambah Pendidikan',
+                      widget.education != null ? l10n.editEducation : l10n.addEducation,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -402,36 +407,36 @@ class _EducationFormState extends State<_EducationForm> {
                 // Institution
                 TextFormField(
                   controller: _institutionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama Institusi *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.institutionName} *',
                     hintText: 'Universitas Indonesia',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
                 // Major
                 TextFormField(
                   controller: _majorController,
-                  decoration: const InputDecoration(
-                    labelText: 'Jurusan *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.major} *',
                     hintText: 'Teknik Informatika',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
                 // Degree
                 TextFormField(
                   controller: _degreeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Gelar *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.degree} *',
                     hintText: 'Sarjana (S1)',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
@@ -442,12 +447,12 @@ class _EducationFormState extends State<_EducationForm> {
                       child: TextFormField(
                         controller: _startYearController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Tahun Mulai *',
+                        decoration: InputDecoration(
+                          labelText: '${l10n.startYear} *',
                           hintText: '2018',
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
-                        validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                        validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -456,10 +461,10 @@ class _EducationFormState extends State<_EducationForm> {
                         controller: _endYearController,
                         keyboardType: TextInputType.number,
                         enabled: !_isCurrentlyStudying,
-                        decoration: const InputDecoration(
-                          labelText: 'Tahun Selesai',
+                        decoration: InputDecoration(
+                          labelText: l10n.endYear,
                           hintText: '2022',
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
                       ),
                     ),
@@ -476,7 +481,7 @@ class _EducationFormState extends State<_EducationForm> {
                       }
                     });
                   },
-                  title: const Text('Masih belajar di sini'),
+                  title: Text(l10n.currentlyStudying),
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
@@ -487,10 +492,10 @@ class _EducationFormState extends State<_EducationForm> {
                 TextFormField(
                   controller: _gpaController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'IPK / Nilai Akhir (Opsional)',
+                  decoration: InputDecoration(
+                    labelText: l10n.gpaOptional,
                     hintText: '3.85',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 
@@ -506,7 +511,7 @@ class _EducationFormState extends State<_EducationForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Simpan'),
+                  child: Text(l10n.save),
                 ),
               ],
             ),

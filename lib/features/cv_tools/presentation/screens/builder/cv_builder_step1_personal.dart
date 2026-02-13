@@ -6,6 +6,8 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 
+import 'package:resummy_app/core/l10n/app_localizations.dart';
+
 @RoutePage()
 class CvBuilderStep1Screen extends StatefulWidget {
   const CvBuilderStep1Screen({super.key});
@@ -97,12 +99,12 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
 
   @override
   Widget build(BuildContext context) {
-    // final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Buat CV'),
+        title: Text(l10n.cvBuilder),
         centerTitle: true,
         actions: [
           Padding(
@@ -157,9 +159,9 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
               ),
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
-              tabs: const [
-                Tab(text: 'Edit'),
-                Tab(text: 'Preview'),
+              tabs: [
+                Tab(text: l10n.edit),
+                Tab(text: l10n.previewCV),
               ],
             ),
           ),
@@ -200,9 +202,9 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
-              'Lanjut →',
-              style: TextStyle(
+            child: Text(
+              '${l10n.next} →',
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -214,6 +216,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
   }
   
   Widget _buildEditContent() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -228,9 +231,9 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                 border: Border.all(color: const Color(0xFF0EA5E9)),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
-                'Step 1/7',
-                style: TextStyle(
+              child: Text(
+                l10n.stepHeader(1, 7),
+                style: const TextStyle(
                   color: Color(0xFF0EA5E9),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -239,10 +242,10 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
             ),
           ),
           const SizedBox(height: 12),
-          const Center(
+          Center(
             child: Text(
-              '1. Data Pribadi / Header',
-              style: TextStyle(
+              l10n.personalInfoHeader,
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF111827),
@@ -250,10 +253,10 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
             ),
           ),
           const SizedBox(height: 4),
-          const Center(
+          Center(
             child: Text(
-              'Informasi kontak dasar',
-              style: TextStyle(
+              l10n.personalInfoDesc,
+              style: const TextStyle(
                 fontSize: 14,
                 color: Color(0xFF6B7280),
               ),
@@ -273,10 +276,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                     // Full Name (Required)
                     _buildTextField(
                       controller: _nameController,
-                      label: 'Nama Lengkap',
+                      label: l10n.fullName,
                       isRequired: true,
                       hint: 'John Doe',
-                      helperText: '← Auto-fill jika toggle ON',
+                      helperText: l10n.autoFillHint,
+                      context: context,
                     ),
                     
                     const SizedBox(height: 16),
@@ -288,6 +292,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                       isRequired: true,
                       hint: 'john@example.com',
                       keyboardType: TextInputType.emailAddress,
+                      context: context,
                     ),
                     
                     const SizedBox(height: 16),
@@ -295,11 +300,12 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                     // Phone (Required)
                     _buildTextField(
                       controller: _phoneController,
-                      label: 'No. Telepon',
+                      label: l10n.phoneNumber,
                       isRequired: true,
                       hint: '+62 812-3456-7890',
                       keyboardType: TextInputType.phone,
                       prefixIcon: Iconsax.call,
+                      context: context,
                     ),
                     
                     const SizedBox(height: 16),
@@ -307,10 +313,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                     // LinkedIn (Optional)
                     _buildTextField(
                       controller: _linkedinController,
-                      label: 'LinkedIn',
+                      label: l10n.linkedin,
                       isOptional: true,
                       hint: 'linkedin.com/in/john',
                       prefixIcon: Iconsax.link_1,
+                      context: context,
                     ),
                     
                     const SizedBox(height: 16),
@@ -318,10 +325,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                     // Portfolio (Optional)
                     _buildTextField(
                       controller: _portfolioController,
-                      label: 'Portfolio/Website',
+                      label: l10n.portfolio,
                       isOptional: true,
                       hint: 'github.com/johndoe',
                       prefixIcon: Iconsax.global,
+                      context: context,
                     ),
                     
                     const SizedBox(height: 16),
@@ -329,10 +337,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                     // Location (Required)
                     _buildTextField(
                       controller: _locationController,
-                      label: 'Kota, Negara',
+                      label: l10n.location,
                       isRequired: true,
                       hint: 'Jakarta, Indonesia',
                       prefixIcon: Iconsax.location,
+                      context: context,
                     ),
                   ],
                 ),
@@ -360,6 +369,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
+    required BuildContext context,
     bool isRequired = false,
     bool isOptional = false,
     String? hint,
@@ -367,6 +377,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
     TextInputType? keyboardType,
     IconData? prefixIcon,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -385,9 +396,9 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                   style: TextStyle(color: Colors.red),
                 ),
               if (isOptional)
-                const TextSpan(
-                  text: ' (Opsional)',
-                  style: TextStyle(
+                TextSpan(
+                  text: ' ${l10n.optionalField}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Color(0xFF6B7280),
                   ),
@@ -408,7 +419,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
                   // but form validation might want other fields.
                   // For now, let's just make Name required, others optional warning.
                   if (label.contains('Nama') && (value == null || value.isEmpty)) {
-                    return 'Wajib diisi';
+                    return l10n.requiredField;
                   }
                   return null;
                 }

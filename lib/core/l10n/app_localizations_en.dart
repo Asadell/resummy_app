@@ -315,7 +315,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get freshGraduate => 'Fresh Graduate';
 
   @override
-  String get currentlyWorking => 'Currently Working';
+  String get currentlyWorking => 'Currently working here';
 
   @override
   String get lookingForJob => 'Looking for Job';
@@ -964,7 +964,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vs => 'vs';
 
   @override
-  String get downloadPdf => 'Download PDF Report';
+  String get downloadPdf => 'Download PDF';
 
   @override
   String get practiceQ1Filler => 'Repeat Q1 focusing on removing fillers';
@@ -1102,5 +1102,347 @@ class AppLocalizationsEn extends AppLocalizations {
   String get industryOther => 'Other';
 
   @override
+  String get selectDate => 'Select Date';
+
+  @override
+  String get endDateError => 'Select end date or check \"Currently Working\"';
+
+  @override
+  String get credentialUrlHelper => 'Link to verify certificate';
+
+  @override
+  String get skipStepPrompt => 'If none, you can skip this step.';
+
+  @override
+  String get skillHint => 'E.g., Flutter, Leadership, English';
+
+  @override
+  String get skillTip => 'Tip: Enter one by one or press enter.';
+
+  @override
+  String get aiSuggestion => 'AI Suggestion';
+
+  @override
+  String get featureComingSoon => 'This feature is coming soon!';
+
+  @override
+  String get aiInspirationTitle => 'Need inspiration?';
+
+  @override
+  String get aiInspirationDesc =>
+      'Our AI can generate a professional summary based on the data you\'ve entered.';
+
+  @override
+  String get generateWithAi => 'Generate with AI';
+
+  @override
+  String get summaryLabel => 'Summary';
+
+  @override
+  String get summaryHint =>
+      'Write a brief summary of your most notable experiences and skills...';
+
+  @override
+  String get summaryTip =>
+      'Tip: Use 2-4 strong sentences to describe your experience and career goals.';
+
+  @override
+  String get additionalHeader => 'Additional Information';
+
+  @override
+  String get additionalDesc => 'Languages, Hobbies, Projects, etc.';
+
+  @override
+  String get sectionLanguages => 'Languages';
+
+  @override
+  String get sectionVolunteer => 'Volunteer';
+
+  @override
+  String get sectionReferences => 'References';
+
+  @override
+  String get sectionInterests => 'Interests & Hobbies';
+
+  @override
+  String get hintLanguages => 'E.g., English (Passive), Japanese (N3)';
+
+  @override
+  String get hintVolunteer =>
+      'E.g., Disaster Relief Volunteer (2018), Event Committee Chair';
+
+  @override
+  String get hintReferences => 'E.g., John Doe - Manager (08123xxxx)';
+
+  @override
+  String get hintInterests => 'E.g., Reading, Traveling, Photography';
+
+  @override
+  String get previewCV => 'Preview CV';
+
+  @override
+  String get yourNamePlaceholder => 'YOUR NAME';
+
+  @override
+  String get labelTechnicalSkills => 'Technical Skills';
+
+  @override
+  String get labelSoftSkills => 'Soft Skills';
+
+  @override
+  String cvSavedTo(Object path) {
+    return 'CV saved to $path';
+  }
+
+  @override
+  String failedToGeneratePdf(Object error) {
+    return 'Failed to generate PDF: $error';
+  }
+
+  @override
+  String get noCvData => 'No CV Data Found';
+
+  @override
   String get goBack => 'Go Back';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get optionalField => '(Optional)';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String stepHeader(Object current, Object total) {
+    return 'Step $current/$total';
+  }
+
+  @override
+  String get personalInfoHeader => 'Personal Info / Header';
+
+  @override
+  String get personalInfoDesc => 'Basic contact information';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get linkedin => 'LinkedIn';
+
+  @override
+  String get portfolio => 'Portfolio/Website';
+
+  @override
+  String get location => 'City, Country';
+
+  @override
+  String get autoFillHint => '← Auto-fill if toggle ON';
+
+  @override
+  String get educationHistoryHeader => 'Education History';
+
+  @override
+  String get educationHistoryDesc => 'Add formal/non-formal education';
+
+  @override
+  String get noEducationData => 'No education data yet';
+
+  @override
+  String get addEducationPrompt =>
+      'Add your education history to make your CV look professional.';
+
+  @override
+  String get addEducation => 'Add Education';
+
+  @override
+  String get addAnotherEducation => 'Add Another Education';
+
+  @override
+  String get editEducation => 'Edit Education';
+
+  @override
+  String get institutionName => 'Institution Name';
+
+  @override
+  String get major => 'Major';
+
+  @override
+  String get degree => 'Degree';
+
+  @override
+  String get startYear => 'Start Year';
+
+  @override
+  String get endYear => 'End Year';
+
+  @override
+  String get currentlyStudying => 'Currently studying here';
+
+  @override
+  String get gpa => 'GPA';
+
+  @override
+  String get gpaOptional => 'GPA / Final Grade (Optional)';
+
+  @override
+  String get experienceHistoryHeader => 'Work Experience';
+
+  @override
+  String get experienceHistoryDesc => 'Add relevant work experience';
+
+  @override
+  String get noExperienceData => 'No experience data yet';
+
+  @override
+  String get addExperiencePrompt =>
+      'Work experience is crucial to show your qualifications.';
+
+  @override
+  String get addExperience => 'Add Experience';
+
+  @override
+  String get addAnotherExperience => 'Add Another Experience';
+
+  @override
+  String get editExperience => 'Edit Experience';
+
+  @override
+  String get jobTitle => 'Job Title';
+
+  @override
+  String get companyName => 'Company Name';
+
+  @override
+  String get startDate => 'Start Date';
+
+  @override
+  String get endDate => 'End Date';
+
+  @override
+  String get responsibilities => 'Description / Responsibilities';
+
+  @override
+  String get responsibilitiesHint =>
+      'Describe your responsibilities and achievements...';
+
+  @override
+  String get certificationHeader => 'Certifications & Licenses';
+
+  @override
+  String get certificationDesc => 'Add relevant certifications';
+
+  @override
+  String get noCertificationData => 'No certification data yet';
+
+  @override
+  String get addCertificationPrompt =>
+      'Certifications can validate your skills.';
+
+  @override
+  String get addCertification => 'Add Certification';
+
+  @override
+  String get addAnotherCertification => 'Add Another Certification';
+
+  @override
+  String get editCertification => 'Edit Certification';
+
+  @override
+  String get certificationName => 'Certification Name';
+
+  @override
+  String get issuingOrganization => 'Issuing Organization';
+
+  @override
+  String get issueDate => 'Issue Date';
+
+  @override
+  String get expirationDate => 'Expiration Date';
+
+  @override
+  String get doesNotExpire => 'Does not expire';
+
+  @override
+  String get credentialId => 'Credential ID (Optional)';
+
+  @override
+  String get credentialUrl => 'Credential URL (Optional)';
+
+  @override
+  String get skillsHeader => 'Skills';
+
+  @override
+  String get skillsDesc => 'Add technical and soft skills';
+
+  @override
+  String get noSkillsData => 'No skills data yet';
+
+  @override
+  String get addSkillPrompt =>
+      'Specific skills will help you pass ATS screening.';
+
+  @override
+  String get addSkill => 'Add Skill';
+
+  @override
+  String get addAnotherSkill => 'Add Another Skill';
+
+  @override
+  String get editSkill => 'Edit Skill';
+
+  @override
+  String get skillName => 'Skill Name';
+
+  @override
+  String get skillLevel => 'Proficiency Level';
+
+  @override
+  String get levelBeginner => 'Beginner';
+
+  @override
+  String get levelIntermediate => 'Intermediate';
+
+  @override
+  String get levelAdvanced => 'Advanced';
+
+  @override
+  String get levelExpert => 'Expert';
+
+  @override
+  String get summaryHeader => 'Professional Summary';
+
+  @override
+  String get summaryDesc => 'Brief summary of your profile';
+
+  @override
+  String get generatingSummary => 'Generating summary...';
+
+  @override
+  String get noAdditionalData => 'No additional information yet';
+
+  @override
+  String get addAdditional => 'Add Information';
+
+  @override
+  String get addAnotherAdditional => 'Add Another Information';
+
+  @override
+  String get editAdditional => 'Edit Information';
+
+  @override
+  String get sectionLabel => 'Section Label';
+
+  @override
+  String get sectionLabelHint => 'E.g., Languages, Hobbies, Projects';
+
+  @override
+  String get sectionValue => 'Description';
+
+  @override
+  String get sectionValueHint => 'E.g., English (Active), Football';
+
+  @override
+  String get saveAndFinish => 'Save & Finish';
 }

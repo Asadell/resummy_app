@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 /// Reusable CV Preview Card Widget
 /// Displays CV data in a professional format
@@ -13,6 +14,8 @@ class CvPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (cvData == null) {
       return Container(
         padding: const EdgeInsets.all(24),
@@ -27,10 +30,10 @@ class CvPreviewCard extends StatelessWidget {
             ),
           ],
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'No CV data available',
-            style: TextStyle(color: Color(0xFF9CA3AF)),
+            l10n.noCvData,
+            style: const TextStyle(color: Color(0xFF9CA3AF)),
           ),
         ),
       );
@@ -57,7 +60,7 @@ class CvPreviewCard extends StatelessWidget {
           // Header
           Center(
             child: Text(
-              cv.name.isNotEmpty ? cv.name.toUpperCase() : 'YOUR NAME',
+              cv.name.isNotEmpty ? cv.name.toUpperCase() : l10n.yourNamePlaceholder,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -75,13 +78,13 @@ class CvPreviewCard extends StatelessWidget {
               runSpacing: 4,
               alignment: WrapAlignment.center,
               children: [
-                _buildContactText(cv.email, 'email@example.com'),
+                _buildContactText(cv.email, l10n.userEmail),
                 if (cv.email?.isNotEmpty == true || cv.phone?.isNotEmpty == true)
                   const Text('|', style: TextStyle(color: Color(0xFF9CA3AF))),
-                _buildContactText(cv.phone, '+62 xxx-xxxx'),
+                _buildContactText(cv.phone, l10n.phoneNumber),
                 if (cv.email?.isNotEmpty == true || cv.phone?.isNotEmpty == true || cv.location?.isNotEmpty == true)
                   const Text('|', style: TextStyle(color: Color(0xFF9CA3AF))),
-                _buildContactText(cv.location, 'Location'),
+                _buildContactText(cv.location, l10n.location),
               ],
             ),
           ),
@@ -109,7 +112,7 @@ class CvPreviewCard extends StatelessWidget {
 
           // Professional Summary
           if (cv.professionalSummary?.isNotEmpty == true) ...[
-            _buildSectionTitle('RINGKASAN PROFESIONAL'),
+            _buildSectionTitle(l10n.summaryHeader.toUpperCase()),
             Text(
               cv.professionalSummary!,
               style: const TextStyle(height: 1.5, fontSize: 14),
@@ -119,7 +122,7 @@ class CvPreviewCard extends StatelessWidget {
 
           // Work Experience
           if (cv.workExperience.isNotEmpty) ...[
-            _buildSectionTitle('PENGALAMAN KERJA'),
+            _buildSectionTitle(l10n.experienceHistoryHeader.toUpperCase()),
             ...cv.workExperience.map((work) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Column(
@@ -138,7 +141,7 @@ class CvPreviewCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${work.startDate.month}/${work.startDate.year} - ${work.isCurrentlyWorking ? "Sekarang" : "${work.endDate?.month}/${work.endDate?.year}"}',
+                        '${work.startDate.month}/${work.startDate.year} - ${work.isCurrentlyWorking ? l10n.present : "${work.endDate?.month}/${work.endDate?.year}"}',
                         style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                       ),
                     ],
@@ -167,7 +170,7 @@ class CvPreviewCard extends StatelessWidget {
 
           // Education
           if (cv.education.isNotEmpty) ...[
-            _buildSectionTitle('PENDIDIKAN'),
+            _buildSectionTitle(l10n.educationHistoryHeader.toUpperCase()),
             ...cv.education.map((edu) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Column(
@@ -186,7 +189,7 @@ class CvPreviewCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${edu.startYear} - ${edu.isCurrentlyStudying ? "Sekarang" : (edu.endYear ?? "")}',
+                        '${edu.startYear} - ${edu.isCurrentlyStudying ? l10n.present : (edu.endYear ?? "")}',
                         style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                       ),
                     ],
@@ -204,11 +207,11 @@ class CvPreviewCard extends StatelessWidget {
 
           // Skills
           if (cv.technicalSkills.isNotEmpty || cv.softSkills.isNotEmpty) ...[
-            _buildSectionTitle('KEAHLIAN'),
+            _buildSectionTitle(l10n.skillsHeader.toUpperCase()),
             if (cv.technicalSkills.isNotEmpty) ...[
-              const Text(
-                'Technical Skills:',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              Text(
+                '${l10n.labelTechnicalSkills}:',
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
               ),
               const SizedBox(height: 4),
               Text(
@@ -218,9 +221,9 @@ class CvPreviewCard extends StatelessWidget {
               const SizedBox(height: 8),
             ],
             if (cv.softSkills.isNotEmpty) ...[
-              const Text(
-                'Soft Skills:',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              Text(
+                '${l10n.labelSoftSkills}:',
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
               ),
               const SizedBox(height: 4),
               Text(
@@ -233,7 +236,7 @@ class CvPreviewCard extends StatelessWidget {
 
           // Certifications
           if (cv.certifications.isNotEmpty) ...[
-            _buildSectionTitle('SERTIFIKASI'),
+            _buildSectionTitle(l10n.certificationHeader.toUpperCase()),
             ...cv.certifications.map((cert) => Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Text(

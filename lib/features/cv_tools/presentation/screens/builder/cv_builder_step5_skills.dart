@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderStep5Screen extends StatefulWidget {
@@ -36,10 +37,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Keahlian'),
+        title: Text(l10n.skillsHeader),
         centerTitle: true,
         actions: [
           Padding(
@@ -85,9 +88,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 5/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(5, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -96,10 +99,10 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '5. Keahlian (Skills)',
-                          style: TextStyle(
+                          l10n.skillsHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -107,10 +110,10 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Hard skills & soft skills yang relevan',
-                          style: TextStyle(
+                          l10n.skillsDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -137,9 +140,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Tambah Keahlian',
-                              style: TextStyle(
+                            Text(
+                              l10n.addSkill,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -151,10 +154,10 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                                   child: TextField(
                                     controller: _skillController,
                                     focusNode: _skillFocusNode,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Contoh: Flutter, Leadership, English',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    decoration: InputDecoration(
+                                      hintText: l10n.skillHint,
+                                      border: const OutlineInputBorder(),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                     ),
                                     onSubmitted: (_) => _addSkill(provider),
                                   ),
@@ -176,9 +179,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'Tip: Masukkan satu per satu atau tekan enter.',
-                              style: TextStyle(
+                            Text(
+                              l10n.skillTip,
+                              style: const TextStyle(
                                 color: Color(0xFF9CA3AF),
                                 fontSize: 12,
                               ),
@@ -192,11 +195,11 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                             OutlinedButton.icon(
                               onPressed: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('AI Suggestion coming soon!')),
+                                  SnackBar(content: Text(l10n.featureComingSoon)),
                                 );
                               },
                               icon: const Icon(Iconsax.magic_star, size: 18),
-                              label: const Text('Saran AI'),
+                              label: Text(l10n.aiSuggestion),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.purple,
                                 side: const BorderSide(color: Colors.purple),
@@ -218,7 +221,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                                 Icon(Iconsax.task_square, size: 48, color: Colors.grey[300]),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'Belum ada keahlian ditambahkan',
+                                  l10n.noSkillsData,
                                   style: TextStyle(color: Colors.grey[500]),
                                 ),
                               ],
@@ -276,7 +279,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -295,7 +298,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.next} →'),
                 ),
               ),
             ],

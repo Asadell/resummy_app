@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -18,10 +19,12 @@ class CvBuilderStep3Screen extends StatefulWidget {
 class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Pengalaman Kerja'),
+        title: Text(l10n.experienceHistoryHeader),
         centerTitle: true,
         actions: [
           Padding(
@@ -67,9 +70,9 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 3/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(3, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -78,10 +81,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '3. Pengalaman Kerja',
-                          style: TextStyle(
+                          l10n.experienceHistoryHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -89,10 +92,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Full-time, part-time, magang, atau freelance',
-                          style: TextStyle(
+                          l10n.experienceHistoryDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -119,19 +122,19 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                                   color: Color(0xFF9CA3AF),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text(
-                                  'Belum ada pengalaman kerja',
-                                  style: TextStyle(
+                                Text(
+                                  l10n.noExperienceData,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF374151),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                const Text(
-                                  'Tambahkan pengalaman kerja termasuk magang atau organisasi.',
+                                Text(
+                                  l10n.addExperiencePrompt,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Color(0xFF6B7280),
                                   ),
                                 ),
@@ -139,7 +142,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                                 OutlinedButton.icon(
                                   onPressed: () => _showWorkForm(context),
                                   icon: const Icon(Iconsax.add),
-                                  label: const Text('Tambah Pengalaman'),
+                                  label: Text(l10n.addExperience),
                                 ),
                               ],
                             ),
@@ -157,7 +160,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             final work = workList[index];
                             final start = '${work.startDate.month}/${work.startDate.year}';
                             final end = work.isCurrentlyWorking 
-                                ? 'Sekarang'
+                                ? l10n.present
                                 : '${work.endDate?.month}/${work.endDate?.year}';
                                 
                             return Card(
@@ -219,7 +222,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             side: const BorderSide(color: Color(0xFF0EA5E9)),
                           ),
                           icon: const Icon(Iconsax.add),
-                          label: const Text('Tambah Pengalaman Lainnya'),
+                          label: Text(l10n.addAnotherExperience),
                         ),
                       ],
                       
@@ -256,7 +259,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -275,7 +278,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.next} →'),
                 ),
               ),
             ],
@@ -346,7 +349,7 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
       if (_endDate == null && !_isCurrentlyWorking) {
         // Show error for end date if not currently working
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pilih tanggal selesai atau centang "Masih Bekerja"')),
+           SnackBar(content: Text(AppLocalizations.of(context)!.endDateError)),
         );
         return;
       }
@@ -394,6 +397,8 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -415,7 +420,7 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.work != null ? 'Edit Pengalaman' : 'Tambah Pengalaman',
+                      widget.work != null ? l10n.editExperience : l10n.addExperience,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -432,24 +437,24 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                 // Job Title
                 TextFormField(
                   controller: _jobTitleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Posisi / Jabatan *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.jobTitle} *',
                     hintText: 'Software Engineer',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
                 // Company
                 TextFormField(
                   controller: _companyController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama Perusahaan *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.companyName} *',
                     hintText: 'Google Inc.',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
@@ -476,11 +481,11 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                 // Location
                 TextFormField(
                   controller: _locationController,
-                  decoration: const InputDecoration(
-                    labelText: 'Lokasi (Opsional)',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.location} ${l10n.optionalField}',
                     hintText: 'Jakarta, Indonesia',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Iconsax.location),
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Iconsax.location),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -489,13 +494,13 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                 Row(
                   children: [
                     Expanded(
-                      child: InkWell(
+                        child: InkWell(
                         onTap: () => _selectDate(context, true),
                         child: InputDecorator(
-                          decoration: const InputDecoration(
-                            labelText: 'Mulai *',
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.calendar_today, size: 16),
+                          decoration: InputDecoration(
+                            labelText: '${l10n.startDate} *',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: const Icon(Icons.calendar_today, size: 16),
                           ),
                           child: Text('${_startDate.day}/${_startDate.month}/${_startDate.year}'),
                         ),
@@ -507,17 +512,17 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                         onTap: _isCurrentlyWorking ? null : () => _selectDate(context, false),
                         child: InputDecorator(
                           decoration: InputDecoration(
-                            labelText: 'Selesai',
+                            labelText: l10n.endDate,
                             border: const OutlineInputBorder(),
                             suffixIcon: const Icon(Icons.calendar_today, size: 16),
                             enabled: !_isCurrentlyWorking,
                           ),
                           child: Text(
                             _isCurrentlyWorking 
-                                ? 'Sekarang' 
+                                ? l10n.present 
                                 : (_endDate != null 
                                     ? '${_endDate!.day}/${_endDate!.month}/${_endDate!.year}'
-                                    : 'Pilih Tanggal'),
+                                    : l10n.selectDate),
                             style: TextStyle(
                               color: _isCurrentlyWorking ? Colors.grey : Colors.black,
                             ),
@@ -538,7 +543,7 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                       }
                     });
                   },
-                  title: const Text('Masih bekerja di sini'),
+                  title: Text(l10n.currentlyWorking),
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
@@ -551,10 +556,10 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 5,
-                      decoration: const InputDecoration(
-                        labelText: 'Deskripsi Pekerjaan / Pencapaian',
-                        hintText: '• Mengembangkan aplikasi flutter...\n• Meningkatkan performa sebesar 20%...',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l10n.responsibilities,
+                        hintText: l10n.responsibilitiesHint,
+                        border: const OutlineInputBorder(),
                         alignLabelWithHint: true,
                       ),
                     ),
@@ -562,7 +567,7 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                       right: 8,
                       top: 8,
                       child: Tooltip(
-                        message: 'Generate with AI (Coming Soon)',
+                        message: l10n.generateWithAi,
                         child: CircleAvatar(
                           radius: 16,
                           backgroundColor: Colors.purple.withValues(alpha: 0.1),
@@ -585,7 +590,7 @@ class _WorkExperienceFormState extends State<_WorkExperienceForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Simpan'),
+                  child: Text(l10n.save),
                 ),
               ],
             ),

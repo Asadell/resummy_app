@@ -6,6 +6,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderPreviewScreen extends StatefulWidget {
@@ -25,9 +26,10 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       final path = await service.generateAndSavePDF(cv);
       
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('CV saved to $path'),
+            content: Text(l10n.cvSavedTo(path)),
             action: SnackBarAction(
               label: 'OK',
               onPressed: () {},
@@ -38,8 +40,9 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to generate PDF: $e')),
+          SnackBar(content: Text(l10n.failedToGeneratePdf(e.toString()))),
         );
       }
     } finally {
@@ -53,17 +56,19 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
   Widget build(BuildContext context) {
     return Consumer<CVBuilderProvider>(
       builder: (context, provider, child) {
+        final l10n = AppLocalizations.of(context)!;
+
         final cv = provider.currentCV;
         if (cv == null) {
-          return const Scaffold(
-            body: Center(child: Text('No CV Data Found')),
+          return Scaffold(
+            body: Center(child: Text(l10n.noCvData)),
           );
         }
 
         return Scaffold(
           backgroundColor: const Color(0xFF525659), // Dark background like PDF viewers
           appBar: AppBar(
-            title: const Text('Preview CV'),
+            title: Text(l10n.previewCV),
             centerTitle: true,
             actions: [
               IconButton(
@@ -99,7 +104,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           // Header
                           Center(
                             child: Text(
-                              cv.name.toUpperCase(),
+                              cv.name.isNotEmpty ? cv.name.toUpperCase() : l10n.yourNamePlaceholder,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -146,14 +151,14 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           
                           // Summary
                           if (cv.summary != null && cv.summary!.isNotEmpty) ...[
-                            _buildSectionTitle('SUMMARY'),
+                            _buildSectionTitle(l10n.summaryHeader.toUpperCase()),
                             Text(cv.summary!, style: const TextStyle(height: 1.5)),
                             const SizedBox(height: 24),
                           ],
                           
                           // Experience
                           if (cv.workExperience.isNotEmpty) ...[
-                            _buildSectionTitle('EXPERIENCE'),
+                            _buildSectionTitle(l10n.experienceHistoryHeader.toUpperCase()),
                             ...cv.workExperience.map((work) => Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: Column(
@@ -167,7 +172,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        '${work.startDate.month}/${work.startDate.year} - ${work.isCurrentlyWorking ? "Present" : "${work.endDate?.month}/${work.endDate?.year}"}',
+                                        '${work.startDate.month}/${work.startDate.year} - ${work.isCurrentlyWorking ? l10n.present : "${work.endDate?.month}/${work.endDate?.year}"}',
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
@@ -192,7 +197,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           
                           // Education
                           if (cv.education.isNotEmpty) ...[
-                            _buildSectionTitle('EDUCATION'),
+                            _buildSectionTitle(l10n.educationHistoryHeader.toUpperCase()),
                             ...cv.education.map((edu) => Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: Column(
@@ -206,7 +211,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        '${edu.startYear} - ${edu.isCurrentlyStudying ? "Present" : (edu.endYear ?? "")}',
+                                        '${edu.startYear} - ${edu.isCurrentlyStudying ? l10n.present : (edu.endYear ?? "")}',
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
@@ -224,7 +229,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           
                           // Skills
                           if (cv.skills.isNotEmpty) ...[
-                            _buildSectionTitle('SKILLS'),
+                            _buildSectionTitle(l10n.skillsHeader.toUpperCase()),
                             Text(
                               cv.skills.join(', '),
                               style: const TextStyle(height: 1.5),
@@ -234,7 +239,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           
                           // Certifications
                           if (cv.certifications.isNotEmpty) ...[
-                            _buildSectionTitle('CERTIFICATIONS'),
+                            _buildSectionTitle(l10n.certificationHeader.toUpperCase()),
                             ...cv.certifications.map((cert) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Text(
@@ -264,7 +269,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _isGenerating ? null : () => _downloadPdf(cv),
             icon: const Icon(Iconsax.document_download),
-            label: const Text('Download PDF'),
+            label: Text(l10n.downloadPdf),
             backgroundColor: const Color(0xFF0EA5E9),
           ),
         );

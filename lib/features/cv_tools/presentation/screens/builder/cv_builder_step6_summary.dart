@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderStep6Screen extends StatefulWidget {
@@ -35,10 +36,12 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Ringkasan Profesional'),
+        title: Text(l10n.summaryHeader),
         centerTitle: true,
         actions: [
           Padding(
@@ -82,9 +85,9 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 6/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(6, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -93,10 +96,10 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '6. Ringkasan Profesional',
-                          style: TextStyle(
+                          l10n.summaryHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -104,10 +107,10 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Ceritakan singkat tentang dirimu dan karirmu',
-                          style: TextStyle(
+                          l10n.summaryDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -133,10 +136,10 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                             Row(
                               children: [
                                 const Icon(Iconsax.magic_star, color: Color(0xFF0EA5E9)),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Butuh inspirasi?',
-                                  style: TextStyle(
+                              const SizedBox(width: 8),
+                                Text(
+                                  l10n.aiInspirationTitle,
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF0EA5E9),
                                   ),
@@ -144,9 +147,9 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'AI kami dapat membuatkan ringkasan profesional berdasarkan data yang sudah kamu masukkan sebelumnya.',
-                              style: TextStyle(fontSize: 12, color: Color(0xFF4B5563)),
+                            Text(
+                              l10n.aiInspirationDesc,
+                              style: const TextStyle(fontSize: 12, color: Color(0xFF4B5563)),
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
@@ -154,11 +157,11 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('AI Generation coming soon!')),
+                                    SnackBar(content: Text(l10n.featureComingSoon)),
                                   );
                                 },
                                 icon: const Icon(Iconsax.hierarchy, size: 18),
-                                label: const Text('Generate with AI'),
+                                label: Text(l10n.generateWithAi),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   foregroundColor: const Color(0xFF0EA5E9),
@@ -173,25 +176,27 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                       
                       const SizedBox(height: 24),
                       
-                      const Text(
-                        'Ringkasan',
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                      const SizedBox(height: 24),
+                      
+                      Text(
+                        l10n.summaryLabel,
+                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _summaryController,
                         maxLines: 10,
-                        decoration: const InputDecoration(
-                          hintText: 'Contoh: Software Engineer berpengalaman 5 tahun dengan spesialisasi dalam pengembangan aplikasi mobile menggunakan Flutter...',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          hintText: l10n.summaryHint,
+                          border: const OutlineInputBorder(),
                           alignLabelWithHint: true,
                         ),
                         onChanged: (value) => _save(provider),
                       ),
                        const SizedBox(height: 8),
-                      const Text(
-                        'Tip: Gunakan 2-4 kalimat yang kuat untuk menggambarkan pengalaman dan tujuan karirmu.',
-                        style: TextStyle(
+                      Text(
+                        l10n.summaryTip,
+                        style: const TextStyle(
                           color: Color(0xFF9CA3AF),
                           fontSize: 12,
                         ),
@@ -230,7 +235,7 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -249,7 +254,7 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.next} →'),
                 ),
               ),
             ],

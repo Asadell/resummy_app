@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderStep7Screen extends StatefulWidget {
@@ -58,10 +59,12 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Informasi Tambahan'),
+        title: Text(l10n.additionalHeader),
         centerTitle: true,
         actions: [
           Padding(
@@ -105,9 +108,9 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 7/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(7, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -116,10 +119,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '7. Informasi Tambahan',
-                          style: TextStyle(
+                          l10n.additionalHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -127,10 +130,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Pilih bagian tambahan yang ingin ditampilkan',
-                          style: TextStyle(
+                          l10n.additionalDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -148,7 +151,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                             children: [
                               CheckboxListTile(
                                 title: Text(
-                                  _getLocalizedSectionName(key),
+                                  _getLocalizedSectionName(context, key),
                                   style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 value: _sections[key],
@@ -170,7 +173,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                                     controller: _controllers[key],
                                     maxLines: 3,
                                     decoration: InputDecoration(
-                                      hintText: _getSectionHint(key),
+                                      hintText: _getSectionHint(context, key),
                                       border: const OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.grey[50],
@@ -216,7 +219,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -235,7 +238,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Preview CV →'),
+                  child: Text('${l10n.previewCV} →'),
                 ),
               ),
             ],
@@ -245,22 +248,24 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     );
   }
 
-  String _getLocalizedSectionName(String key) {
+  String _getLocalizedSectionName(BuildContext context, String key) {
+    final l10n = AppLocalizations.of(context)!;
     switch (key) {
-      case 'Languages': return 'Bahasa';
-      case 'Volunteer': return 'Sukarelawan';
-      case 'References': return 'Referensi';
-      case 'Interests': return 'Minat & Hobi';
+      case 'Languages': return l10n.sectionLanguages;
+      case 'Volunteer': return l10n.sectionVolunteer;
+      case 'References': return l10n.sectionReferences;
+      case 'Interests': return l10n.sectionInterests;
       default: return key;
     }
   }
 
-  String _getSectionHint(String key) {
+  String _getSectionHint(BuildContext context, String key) {
+    final l10n = AppLocalizations.of(context)!;
     switch (key) {
-      case 'Languages': return 'Contoh: Bahasa Inggris (Pasif), Bahasa Jepang (N3)';
-      case 'Volunteer': return 'Contoh: Relawan Bencana Alam Palu (2018), Ketua Panitia 17 Agustus';
-      case 'References': return 'Contoh: Budi Santoso - Manager (08123xxxx)';
-      case 'Interests': return 'Contoh: Membaca, Traveling, Fotografi';
+      case 'Languages': return l10n.hintLanguages;
+      case 'Volunteer': return l10n.hintVolunteer;
+      case 'References': return l10n.hintReferences;
+      case 'Interests': return l10n.hintInterests;
       default: return '';
     }
   }

@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -18,10 +19,12 @@ class CvBuilderStep4Screen extends StatefulWidget {
 class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: const Text('Sertifikasi'),
+        title: Text(l10n.certificationHeader),
         centerTitle: true,
         actions: [
           Padding(
@@ -67,9 +70,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                             border: Border.all(color: const Color(0xFF0EA5E9)),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            'Step 4/7',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.stepHeader(4, 7),
+                            style: const TextStyle(
                               color: Color(0xFF0EA5E9),
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -78,10 +81,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Center(
+                      Center(
                         child: Text(
-                          '4. Sertifikasi & Lisensi',
-                          style: TextStyle(
+                          l10n.certificationHeader,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
@@ -89,10 +92,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Center(
+                      Center(
                         child: Text(
-                          'Sertifikat profesional, kursus, atau penghargaan',
-                          style: TextStyle(
+                          l10n.certificationDesc,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -119,19 +122,19 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                                   color: Color(0xFF9CA3AF),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text(
-                                  'Belum ada sertifikasi',
-                                  style: TextStyle(
+                                Text(
+                                  l10n.noCertificationData,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF374151),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                const Text(
-                                  'Jika tidak ada, kamu bisa melewati langkah ini.',
+                                Text(
+                                  l10n.skipStepPrompt,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Color(0xFF6B7280),
                                   ),
                                 ),
@@ -139,7 +142,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                                 OutlinedButton.icon(
                                   onPressed: () => _showCertForm(context),
                                   icon: const Icon(Iconsax.add),
-                                  label: const Text('Tambah Sertifikasi'),
+                                  label: Text(l10n.addCertification),
                                 ),
                               ],
                             ),
@@ -208,7 +211,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                             side: const BorderSide(color: Color(0xFF0EA5E9)),
                           ),
                           icon: const Icon(Iconsax.add),
-                          label: const Text('Tambah Sertifikasi Lainnya'),
+                          label: Text(l10n.addAnotherCertification),
                         ),
                       ],
                       
@@ -245,7 +248,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.goBack),
                 ),
               ),
               const SizedBox(width: 16),
@@ -264,7 +267,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Lanjut →'),
+                  child: Text('${l10n.next} →'),
                 ),
               ),
             ],
@@ -372,6 +375,8 @@ class _CertificationFormState extends State<_CertificationForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -393,7 +398,7 @@ class _CertificationFormState extends State<_CertificationForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.cert != null ? 'Edit Sertifikasi' : 'Tambah Sertifikasi',
+                      widget.cert != null ? l10n.editCertification : l10n.addCertification,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -410,24 +415,24 @@ class _CertificationFormState extends State<_CertificationForm> {
                 // Name
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama Sertifikasi *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.certificationName} *',
                     hintText: 'Google Cloud Associate',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
                 // Organization
                 TextFormField(
                   controller: _organizationController,
-                  decoration: const InputDecoration(
-                    labelText: 'Organisasi Penerbit *',
+                  decoration: InputDecoration(
+                    labelText: '${l10n.issuingOrganization} *',
                     hintText: 'Google',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Wajib diisi' : null,
+                  validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
                 ),
                 const SizedBox(height: 16),
                 
@@ -435,13 +440,13 @@ class _CertificationFormState extends State<_CertificationForm> {
                 Row(
                   children: [
                     Expanded(
-                      child: InkWell(
+                        child: InkWell(
                         onTap: () => _selectDate(context, true),
                         child: InputDecorator(
-                          decoration: const InputDecoration(
-                            labelText: 'Tanggal Terbit *',
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.calendar_today, size: 16),
+                          decoration: InputDecoration(
+                            labelText: '${l10n.issueDate} *',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: const Icon(Icons.calendar_today, size: 16),
                           ),
                           child: Text('${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
                         ),
@@ -453,7 +458,7 @@ class _CertificationFormState extends State<_CertificationForm> {
                         onTap: _doesNotExpire ? null : () => _selectDate(context, false),
                         child: InputDecorator(
                           decoration: InputDecoration(
-                            labelText: 'Tanggal Kadaluarsa',
+                            labelText: l10n.expirationDate,
                             border: const OutlineInputBorder(),
                             suffixIcon: const Icon(Icons.calendar_today, size: 16),
                             enabled: !_doesNotExpire,
@@ -463,7 +468,7 @@ class _CertificationFormState extends State<_CertificationForm> {
                                 ? '-' 
                                 : (_expirationDate != null 
                                     ? '${_expirationDate!.day}/${_expirationDate!.month}/${_expirationDate!.year}'
-                                    : 'Pilih Tanggal'),
+                                    : l10n.selectDate),
                             style: TextStyle(
                               color: _doesNotExpire ? Colors.grey : Colors.black,
                             ),
@@ -484,7 +489,7 @@ class _CertificationFormState extends State<_CertificationForm> {
                       }
                     });
                   },
-                  title: const Text('Credential ini tidak memiliki masa berlaku'),
+                  title: Text(l10n.doesNotExpire),
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
@@ -494,9 +499,9 @@ class _CertificationFormState extends State<_CertificationForm> {
                 // Credential ID
                 TextFormField(
                   controller: _credentialIdController,
-                  decoration: const InputDecoration(
-                    labelText: 'Credential ID (Opsional)',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.credentialId,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -504,11 +509,11 @@ class _CertificationFormState extends State<_CertificationForm> {
                 // Credential URL
                 TextFormField(
                   controller: _credentialUrlController,
-                  decoration: const InputDecoration(
-                    labelText: 'Credential URL (Opsional)',
-                    border: OutlineInputBorder(),
-                    helperText: 'Link untuk verifikasi sertifikat',
-                    prefixIcon: Icon(Iconsax.link_1),
+                  decoration: InputDecoration(
+                    labelText: l10n.credentialUrl,
+                    border: const OutlineInputBorder(),
+                    helperText: l10n.credentialUrlHelper,
+                    prefixIcon: const Icon(Iconsax.link_1),
                   ),
                 ),
                 
@@ -524,7 +529,7 @@ class _CertificationFormState extends State<_CertificationForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Simpan'),
+                  child: Text(l10n.save),
                 ),
               ],
             ),
