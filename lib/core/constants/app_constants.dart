@@ -42,4 +42,25 @@ class AppConstants {
 
   @EnviedField(varName: 'GEMINI_API_KEY_13', defaultValue: '')
   static const String geminiApiKey13 = _AppConstants.geminiApiKey13;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_14', defaultValue: '')
+  static const String geminiApiKey14 = _AppConstants.geminiApiKey14;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_15', defaultValue: '')
+  static const String geminiApiKey15 = _AppConstants.geminiApiKey15;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_16', defaultValue: '')
+  static const String geminiApiKey16 = _AppConstants.geminiApiKey16;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_17', defaultValue: '')
+  static const String geminiApiKey17 = _AppConstants.geminiApiKey17;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_18', defaultValue: '')
+  static const String geminiApiKey18 = _AppConstants.geminiApiKey18;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_19', defaultValue: '')
+  static const String geminiApiKey19 = _AppConstants.geminiApiKey19;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_20', defaultValue: '')
+  static const String geminiApiKey20 = _AppConstants.geminiApiKey20;
 }

@@ -117,20 +117,45 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
         // Handle Error State
         if (provider.status == InterviewStatus.error) {
            return Scaffold(
-            appBar: AppBar(title: const Text('Error')),
+            appBar: AppBar(title: Text(l10n.errorTitle)),
             body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Iconsax.warning_2, size: 48, color: Theme.of(context).colorScheme.error),
-                  const SizedBox(height: 16),
-                  Text(provider.errorMessage ?? 'Unknown error'),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () => context.router.maybePop(),
-                    child: const Text('Go Back'),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Iconsax.warning_2, size: 64, color: Theme.of(context).colorScheme.error),
+                    const SizedBox(height: 16),
+                    Text(
+                      provider.errorMessage ?? 'Unknown error',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // Retry interview generation
+                        provider.startInterview(
+                          role: provider.role ?? "Candidate",
+                          focus: provider.selectedFocus,
+                        );
+                      },
+                      icon: const Icon(Iconsax.refresh),
+                      label: const Text('Coba Lagi'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        provider.resetInterview();
+                        context.router.push(const InterviewPrepRoute());
+                      },
+                      child: Text(l10n.back),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -252,14 +277,16 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                         ),
                                       ),
                                     ),
-                                    // Replay Button
+                                    // Replay/Stop Button
                                     IconButton(
                                       icon: Icon(
-                                        provider.isPlayingQuestion ? Icons.volume_up : Icons.volume_up_outlined,
-                                        color: provider.isPlayingQuestion ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
+                                        provider.isPlayingQuestion ? Iconsax.stop_circle : Iconsax.refresh,
+                                        color: provider.isPlayingQuestion 
+                                            ? Theme.of(context).colorScheme.error 
+                                            : Theme.of(context).colorScheme.primary,
                                       ),
                                       onPressed: () => provider.playQuestionAudio(),
-                                      tooltip: 'Replay Question',
+                                      tooltip: provider.isPlayingQuestion ? 'Stop' : 'Replay Question',
                                     ),
                                   ],
                                 ),
@@ -372,6 +399,23 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                     waveColor: Theme.of(context).colorScheme.error,
                                     extendWaveform: true,
                                     showMiddleLine: false,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ] else if (provider.isTranscribing) ...[
+                          Center(
+                            child: Column(
+                              children: [
+                                const CircularProgressIndicator(),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "Memproses jawaban...",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -506,7 +550,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             )
                         else if (provider.currentTranscript.isEmpty)
                            ElevatedButton.icon(
-                            onPressed: () async {
+                            onPressed: provider.isTranscribing ? null : () async {
                               // Fix: Cancel any zombie timers
                               _stopTimer(); 
                               setState(() {
@@ -519,8 +563,10 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                 _startTimer();
                               }
                             },
-                            icon: const Icon(Icons.mic),
-                            label: Text(l10n.startAnswering),
+                            icon: provider.isTranscribing 
+                                ? const SizedBox()  // kodongin aja, udah ada loader di atasnya
+                                : const Icon(Icons.mic),
+                            label: Text(provider.isTranscribing ? "Memproses..." : l10n.startAnswering),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size.fromHeight(56),
                               elevation: 2,
@@ -532,7 +578,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             children: [
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () {
+                                  onPressed: provider.isTranscribing ? null : () {
                                     // Reset to record again
                                     provider.updateTranscript(''); 
                                     setState(() {
@@ -548,7 +594,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                               const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: provider.isTranscribing ? null : () {
                                       provider.nextQuestion();
                                       if (provider.status == InterviewStatus.analyzing) {
                                         context.router.push(const InterviewSessionFollowupRoute());

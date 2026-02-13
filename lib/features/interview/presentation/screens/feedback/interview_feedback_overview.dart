@@ -295,14 +295,14 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
   
   double _calculateAverageStarScore(providerReport) {
     if (providerReport.questionFeedbacks.isEmpty) return 0.0;
-    final total = providerReport.questionFeedbacks.fold(0, (sum, q) => sum + q.starScore);
+    final total = providerReport.questionFeedbacks.fold(0, (sum, q) => sum + q.starAnalysis.score);
     // starScore is 1-10. Let's return as is.
     return total / providerReport.questionFeedbacks.length;
   }
 
   double _calculateAverageFluencyScore(providerReport) {
      if (providerReport.questionFeedbacks.isEmpty) return 0.0;
-    final total = providerReport.questionFeedbacks.fold(0, (sum, q) => sum + q.fluencyScore);
+    final total = providerReport.questionFeedbacks.fold(0, (sum, q) => sum + q.fluencyAnalysis.score);
     return total / providerReport.questionFeedbacks.length;
   }
 

@@ -259,10 +259,12 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                           children: [
                             Icon(Iconsax.magic_star, color: Theme.of(context).textTheme.titleLarge?.color),
                             const SizedBox(width: 8),
-                            Text(
-                              l10n.improvedSpeechTitle,
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w600,
+                            Expanded(
+                              child: Text(
+                                l10n.improvedSpeechTitle,
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],

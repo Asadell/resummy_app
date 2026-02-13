@@ -149,24 +149,29 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
           ],
         ),
         child: SafeArea(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-              minimumSize: const Size(double.infinity, 50),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: () {
+                     // Start Interview
+                     context.read<InterviewProvider>().startInterview(
+                        role: provider.role ?? "Candidate",
+                        focus: provider.selectedFocus,
+                     );
+                     context.router.push(const InterviewSessionOpeningRoute());
+                  },
+                  child: Text(
+                    l10n.startInterviewNow,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () {
-               // Start Interview
-               context.read<InterviewProvider>().startInterview(
-                  role: provider.role ?? "Candidate",
-                  focus: provider.selectedFocus,
-               );
-               context.router.push(const InterviewSessionOpeningRoute());
-            },
-            child: Text(
-              l10n.startInterviewNow,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
         ),
       ),
     );

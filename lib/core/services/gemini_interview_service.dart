@@ -6,31 +6,66 @@ import 'package:resummy_app/features/interview/domain/entities/interview_questio
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 
 class GeminiInterviewService {
-  final List<String> _apiKeys;
-  int _currentKeyIndex = 0;
+  final List<GenerativeModel> _models;
+  int _currentModelIndex = 0;
   
-  GeminiInterviewService() : _apiKeys = [
-    AppConstants.geminiApiKey,
-    if (AppConstants.geminiApiKey2.isNotEmpty) AppConstants.geminiApiKey2,
-    if (AppConstants.geminiApiKey3.isNotEmpty) AppConstants.geminiApiKey3,
-  ];
+  GeminiInterviewService() : _models = [
+    if (AppConstants.geminiApiKey16.isNotEmpty)
+      GenerativeModel(
+        model: 'gemini-3-flash-preview',
+        apiKey: AppConstants.geminiApiKey16,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      ),
+    if (AppConstants.geminiApiKey17.isNotEmpty)
+      GenerativeModel(
+        model: 'gemini-3-flash-preview',
+        apiKey: AppConstants.geminiApiKey17,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      ),
+    if (AppConstants.geminiApiKey18.isNotEmpty)
+      GenerativeModel(
+        model: 'gemini-3-flash-preview',
+        apiKey: AppConstants.geminiApiKey18,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      ),
+    if (AppConstants.geminiApiKey19.isNotEmpty)
+      GenerativeModel(
+        model: 'gemini-3-flash-preview',
+        apiKey: AppConstants.geminiApiKey19,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      ),
+    if (AppConstants.geminiApiKey20.isNotEmpty)
+      GenerativeModel(
+        model: 'gemini-3-flash-preview',
+        apiKey: AppConstants.geminiApiKey20,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      ),
+  ] {
+    if (_models.isEmpty) {
+      throw Exception('No Gemini API keys configured for interview service');
+    }
+  }
 
   GenerativeModel _getModel() {
-    final model = GenerativeModel(
-      model: 'gemini-3-flash-preview',
-      apiKey: _apiKeys[_currentKeyIndex],
-      generationConfig: GenerationConfig(
-        responseMimeType: 'application/json',
-      ),
-    );
-    _rotateKey();
+    final model = _models[_currentModelIndex];
+    _rotateModel();
     return model;
   }
 
-  void _rotateKey() {
-    if (_apiKeys.length > 1) {
-      _currentKeyIndex = (_currentKeyIndex + 1) % _apiKeys.length;
-      debugPrint('Rotating to API Key index: $_currentKeyIndex');
+  void _rotateModel() {
+    if (_models.length > 1) {
+      _currentModelIndex = (_currentModelIndex + 1) % _models.length;
+      debugPrint('Rotating to model index: $_currentModelIndex');
     }
   }
 
@@ -117,13 +152,17 @@ Return JSON format:
 
     return _retryWithKeyRotation(() async {
       final model = _getModel();
+      debugPrint('--- [STAR Analysis] Request ---');
+      debugPrint('Question: $question');
+      debugPrint('Transcript Length: ${transcript.length}');
+      
       final response = await model.generateContent([Content.text(prompt)]);
       
       if (response.text == null) throw Exception('Empty STAR analysis response');
       final json = jsonDecode(response.text!);
       
       return STARAnalysis(
-        score: json['score'] ?? 0,
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
         situation: ComponentDetection(
           present: json['situation']?['present'] ?? false,
           excerpt: json['situation']?['excerpt'] ?? '',
@@ -205,16 +244,19 @@ Return JSON:
 
     return _retryWithKeyRotation(() async {
       final model = _getModel();
+      debugPrint('--- [Content Quality] Request ---');
+      debugPrint('Question: $question');
+      
       final response = await model.generateContent([Content.text(prompt)]);
       
       if (response.text == null) throw Exception('Empty content quality response');
       final json = jsonDecode(response.text!);
       
       return ContentQualityAnalysis(
-        score: json['score'] ?? 0,
-        relevanceScore: json['relevanceScore'] ?? 0,
-        depthScore: json['depthScore'] ?? 0,
-        professionalImpact: json['professionalImpact'] ?? 0,
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        relevanceScore: (json['relevanceScore'] is int) ? json['relevanceScore'] : (json['relevanceScore'] ?? 0).toInt(),
+        depthScore: (json['depthScore'] is int) ? json['depthScore'] : (json['depthScore'] ?? 0).toInt(),
+        professionalImpact: (json['professionalImpact'] is int) ? json['professionalImpact'] : (json['professionalImpact'] ?? 0).toInt(),
         strengths: List<String>.from(json['strengths'] ?? []),
         weaknesses: List<String>.from(json['weaknesses'] ?? []),
         suggestions: List<String>.from(json['suggestions'] ?? []),
@@ -280,19 +322,22 @@ Return JSON:
 
     return _retryWithKeyRotation(() async {
       final model = _getModel();
+      debugPrint('--- [Fluency Analysis] Request ---');
+      debugPrint('Duration: $audioDurationSeconds s');
+      
       final response = await model.generateContent([Content.text(prompt)]);
       
       if (response.text == null) throw Exception('Empty fluency analysis response');
       final json = jsonDecode(response.text!);
       
       return FluencyAnalysis(
-        score: json['score'] ?? 0,
-        wordCount: json['wordCount'] ?? 0,
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        wordCount: (json['wordCount'] is int) ? json['wordCount'] : (json['wordCount'] ?? 0).toInt(),
         wpm: (json['wpm'] ?? 0).toDouble(),
         fillerWords: (json['fillerWords'] as List? ?? []).map((fw) {
           return FillerWord(
             word: fw['word'] ?? '',
-            count: fw['count'] ?? 0,
+            count: (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
             percentage: (fw['percentage'] ?? 0).toDouble(),
           );
         }).toList(),
@@ -359,13 +404,15 @@ Return JSON:
 
     return _retryWithKeyRotation(() async {
       final model = _getModel();
+      debugPrint('--- [Confidence Analysis] Request ---');
+      
       final response = await model.generateContent([Content.text(prompt)]);
       
       if (response.text == null) throw Exception('Empty confidence analysis response');
       final json = jsonDecode(response.text!);
       
       return ConfidenceAnalysis(
-        score: json['score'] ?? 0,
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
         toneAssessment: json['toneAssessment'] ?? 'neutral',
         energyLevel: json['energyLevel'] ?? 'low',
         convictionLevel: json['convictionLevel'] ?? 'weak',
@@ -428,6 +475,8 @@ Return JSON:
 
     return _retryWithKeyRotation(() async {
       final model = _getModel();
+      debugPrint('--- [Improved Speech] Request ---');
+      
       final response = await model.generateContent([Content.text(prompt)]);
       
       if (response.text == null) throw Exception('Empty improved speech response');
@@ -436,7 +485,7 @@ Return JSON:
       return ImprovedSpeechData(
         originalText: json['originalText'] ?? transcript,
         improvedText: json['improvedText'] ?? transcript,
-        fillerWordsRemoved: json['fillerWordsRemoved'] ?? 0,
+        fillerWordsRemoved: (json['fillerWordsRemoved'] is int) ? json['fillerWordsRemoved'] : (json['fillerWordsRemoved'] ?? 0).toInt(),
         keyChanges: List<String>.from(json['keyChanges'] ?? []),
         wpmBefore: (json['wpmBefore'] ?? originalWpm).toDouble(),
         wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
@@ -583,18 +632,27 @@ Return JSON:
 
   Future<T> _retryWithKeyRotation<T>(Future<T> Function() action, {required T fallback}) async {
     int attempts = 0;
-    while (attempts < _apiKeys.length) {
+    // Try each model at least once, plus one extra try
+    int maxAttempts = _models.length * 2; 
+
+    while (attempts < maxAttempts) {
       try {
         return await action();
       } catch (e) {
         attempts++;
-        debugPrint('Error with API Key $_currentKeyIndex: $e');
-        if (attempts < _apiKeys.length) {
-          _rotateKey();
-        } else {
-          debugPrint('All API keys failed. Using fallback.');
-          return fallback;
+        debugPrint('Error with Model $_currentModelIndex: $e');
+        
+        // Always rotate on error
+        _rotateModel();
+
+        // If we've exhausted all models multiple times, give up
+        if (attempts >= maxAttempts) {
+           debugPrint('All models failed after $attempts attempts. Using fallback.');
+           return fallback;
         }
+        
+        // Optional: Add small delay before retry
+        await Future.delayed(const Duration(milliseconds: 500));
       }
     }
     return fallback;

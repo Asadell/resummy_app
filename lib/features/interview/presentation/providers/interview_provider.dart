@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart'; // Keep for playback
 import 'package:resummy_app/core/services/gemini_speech_service.dart';
+import 'package:resummy_app/core/services/gemini_interview_service.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
@@ -16,6 +17,7 @@ enum InterviewFocus { behavioral, technical, mixed }
 
 class InterviewProvider extends ChangeNotifier {
   final GeminiSpeechService _geminiService;
+  final GeminiInterviewService _interviewService;
   
   // State
   InterviewStatus _status = InterviewStatus.initial;
@@ -35,6 +37,7 @@ class InterviewProvider extends ChangeNotifier {
   final FlutterSoundRecorder _audioRecorder = FlutterSoundRecorder();
   bool _isRecorderInitialized = false;
   bool _isRecording = false;
+  bool _isTranscribing = false;
   String? _currentRecordingPath;
   DateTime? _recordingStartTime;
   int _currentAudioDuration = 0;
@@ -63,7 +66,9 @@ class InterviewProvider extends ChangeNotifier {
 
   InterviewProvider({
     required GeminiSpeechService geminiService,
-  }) : _geminiService = geminiService {
+    required GeminiInterviewService interviewService,
+  }) : _geminiService = geminiService,
+       _interviewService = interviewService {
     // Suppress verbose audio logs
     AudioLogger.logLevel = AudioLogLevel.none;
   }
@@ -78,6 +83,7 @@ class InterviewProvider extends ChangeNotifier {
           ? _questions[_currentQuestionIndex] 
           : null;
   bool get isRecording => _isRecording;
+  bool get isTranscribing => _isTranscribing;
   String get currentTranscript => _currentTranscript;
   bool get isPlayingQuestion => _isPlayingQuestion;
   String get locale => _locale;
@@ -200,9 +206,42 @@ class InterviewProvider extends ChangeNotifier {
     } catch (e) {
       if (kDebugMode) print("Error in startInterview: $e");
       _status = InterviewStatus.error;
-      _errorMessage = e.toString();
+      
+      String errorStr = e.toString();
+      if (errorStr.contains('503')) {
+        _errorMessage = "Layanan AI sedang sibuk karena permintaan sedang tinggi. Silakan coba lagi sebentar lagi.";
+      } else if (errorStr.contains('401') || errorStr.contains('403')) {
+        _errorMessage = "Masalah koneksi API (API Key bermasalah). Silakan periksa pengaturan.";
+      } else if (errorStr.contains('Timeout') || errorStr.contains('connection')) {
+        _errorMessage = "Koneksi internet bermasalah. Silakan periksa jaringan Anda.";
+      } else {
+        _errorMessage = "Terjadi kesalahan: $e";
+      }
+      
       notifyListeners();
     }
+  }
+
+  // DEBUG: Start with dummy data to skip interview
+  Future<void> startInterviewWithDummyData() async {
+    _status = InterviewStatus.loading;
+    notifyListeners();
+    
+    await Future.delayed(const Duration(seconds: 1)); // Simulate loading
+    
+    // Dummy Questions
+    _questions = [
+      const InterviewQuestion(id: '1', text: 'Tell me about a time you faced a challenge.', difficulty: 'Medium', userAnswerTranscript: "I once faced a tight deadline where the backend API wasn't ready. I mocked the data using JSON files to continue frontend development, which allowed us to meet the deadline.", audioDurationSeconds: 15),
+      const InterviewQuestion(id: '2', text: 'Describe a project where you demonstrated leadership.', difficulty: 'Medium', userAnswerTranscript: "In my final year project, I led a team of 4. I organized daily standups and used Trello to track progress. We finished the project 2 weeks early.", audioDurationSeconds: 20),
+      const InterviewQuestion(id: '3', text: 'How do you prioritize tasks under pressure?', difficulty: 'Medium', userAnswerTranscript: "I use the Eisenhower Matrix to categorize tasks by urgency and importance. This helps me focus on what really matters.", audioDurationSeconds: 12),
+    ];
+    
+    _currentQuestionIndex = _questions.length - 1; // Set to last
+    _status = InterviewStatus.analyzing;
+    notifyListeners();
+    
+    // Auto-generate report
+    generateReport();
   }
 
   Future<void> _generateAndPlayQuestionAudio() async {
@@ -219,6 +258,8 @@ class InterviewProvider extends ChangeNotifier {
       
       if (audioFile != null) {
         _currentQuestionAudio = audioFile;
+        notifyListeners(); // Notify that audio is ready
+        
         // Only auto-play if "AI Interviewer" text/mode is visible/active
         if (_isQuestionTextVisible) {
              await playQuestionAudio();
@@ -235,7 +276,17 @@ class InterviewProvider extends ChangeNotifier {
 
 
   Future<void> startRecording() async {
+    if (_isTranscribing) {
+      if (kDebugMode) print("Cannot start recording while transcribing is in progress");
+      return;
+    }
     try {
+        // Stop AI audio if it's playing
+        if (_isPlayingQuestion) {
+          if (kDebugMode) print("Stopping AI audio before recording...");
+          await stopAudio();
+        }
+        
         if (!_isRecorderInitialized) await initRecorder();
 
         final tempDir = await getTemporaryDirectory();
@@ -269,10 +320,10 @@ class InterviewProvider extends ChangeNotifier {
 
         if (path != null) {
             _currentRecordingPath = path;
-            await _transcribeAudio(File(path));
+            await _transcribeAudio(File(path), _currentQuestionIndex);
         } else if (_currentRecordingPath != null) {
              // Sometimes path is null on stop but file exists at _currentRecordingPath
-             await _transcribeAudio(File(_currentRecordingPath!));
+             await _transcribeAudio(File(_currentRecordingPath!), _currentQuestionIndex);
         }
     } catch (e) {
          if (kDebugMode) print("Stop recording error: $e");
@@ -297,23 +348,41 @@ class InterviewProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _transcribeAudio(File audioFile) async {
+  Future<void> _transcribeAudio(File audioFile, int questionIndex) async {
     // Use dedicated STT key for this question
-    final apiKey = _geminiService.getSttApiKey(_currentQuestionIndex);
+    final apiKey = _geminiService.getSttApiKey(questionIndex);
+
+    _isTranscribing = true;
+    notifyListeners();
 
     try {
       final text = await _geminiService.speechToText(
         audioFile: audioFile,
         apiKey: apiKey,
       );
-      _currentTranscript = text;
-      notifyListeners();
+      
+      // SAFETY CHECK: Only update if we are still on the same question
+      if (_currentQuestionIndex == questionIndex) {
+        _currentTranscript = text;
+      } else {
+        if (kDebugMode) print("Transcription arrived but question index changed (was $questionIndex, now $_currentQuestionIndex). Discarding result.");
+        // We might want to save it to the actual question object even if index changed
+        if (questionIndex < _questions.length) {
+          _questions[questionIndex] = _questions[questionIndex].copyWith(
+            userAnswerTranscript: text,
+          );
+        }
+      }
     } catch (e) {
-       _currentTranscript = "Error describing audio: $e";
+       if (_currentQuestionIndex == questionIndex) {
+         _currentTranscript = "Error describing audio: $e";
+       }
        if (kDebugMode) {
          print("STT Error: $e");
        }
-       notifyListeners();
+    } finally {
+      _isTranscribing = false;
+      notifyListeners();
     }
   }
 
@@ -339,7 +408,7 @@ class InterviewProvider extends ChangeNotifier {
   }
 
   void nextQuestion() {
-    if (_questions.isEmpty) return;
+    if (_questions.isEmpty || _isTranscribing) return;
 
     // Save current answer
     _questions[_currentQuestionIndex] = _questions[_currentQuestionIndex].copyWith(
@@ -359,10 +428,39 @@ class InterviewProvider extends ChangeNotifier {
       _generateAndPlayQuestionAudio();
       notifyListeners();
     } else {
-      _status = InterviewStatus.analyzing; // Or complete
+      _status = InterviewStatus.analyzing;
       _stopSessionTimer();
       notifyListeners();
-      // Navigate to results or finish
+      // Generate report automatically
+      generateReport();
+    }
+  }
+  
+  /// Generate interview feedback report
+  Future<void> generateReport() async {
+    if (_status != InterviewStatus.analyzing) {
+      _status = InterviewStatus.analyzing;
+      notifyListeners();
+    }
+    
+    try {
+      if (kDebugMode) print('Starting report generation...');
+      
+      final report = await _interviewService.analyzeSession(
+        _questions,
+        language: _locale.startsWith('id') ? 'id' : 'en',
+      );
+      
+      _report = report;
+      _status = InterviewStatus.completed;
+      
+      if (kDebugMode) print('Report generated successfully!');
+    } catch (e) {
+      if (kDebugMode) print('Error generating report: $e');
+      _status = InterviewStatus.error;
+      _errorMessage = 'Failed to generate feedback: $e';
+    } finally {
+      notifyListeners();
     }
   }
   
@@ -389,6 +487,12 @@ class InterviewProvider extends ChangeNotifier {
       return;
     }
 
+    // Guard: Don't play if recording
+    if (_isRecording) {
+      if (kDebugMode) print("Blocking AI audio playback because recording is in progress");
+      return;
+    }
+
     if (_currentQuestionAudio != null) {
       try {
         if (kDebugMode) print('Starting audio playback: ${_currentQuestionAudio!.path}');
@@ -404,10 +508,7 @@ class InterviewProvider extends ChangeNotifier {
         notifyListeners();
         
         // Add 1s delay before playing as requested
-        if (kDebugMode) print('Waiting 1s before playing...');
-        await Future.delayed(const Duration(seconds: 1));
-        
-        if (_isDisposed) return;
+        if (_isDisposed || _isRecording) return;
         
         if (kDebugMode) print('Playing audio...');
         // Re-check disposed before playing
