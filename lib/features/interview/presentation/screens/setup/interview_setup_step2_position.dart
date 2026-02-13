@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
@@ -21,6 +23,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final provider = context.watch<InterviewProvider>();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -62,7 +65,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'CV: CV_Software_Engineer.pdf',
+                        '${l10n.cvLabel} ${provider.cvFileName ?? l10n.cvDefaultLabel}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSecondaryContainer,
                           fontWeight: FontWeight.w500,
@@ -96,7 +99,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     TextField(
                       controller: _positionController,
                       decoration: InputDecoration(
-                        hintText: 'e.g. Software Engineer',
+                        hintText: l10n.targetRoleHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -123,7 +126,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     TextField(
                       controller: _companyController,
                       decoration: InputDecoration(
-                        hintText: 'e.g. PT Tech Startup',
+                        hintText: 'e.g. Google, Microsoft',
                         prefixIcon: const Icon(Iconsax.building_3),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -169,10 +172,20 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                         ),
                       ),
                       items: ['Technology', 'Finance', 'Healthcare', 'Education', 'Other']
-                          .map((industry) => DropdownMenuItem(
+                          .map((industry) {
+                            String label = industry;
+                            switch (industry) {
+                              case 'Technology': label = l10n.industryTechnology; break;
+                              case 'Finance': label = l10n.industryFinance; break;
+                              case 'Healthcare': label = l10n.industryHealthcare; break;
+                              case 'Education': label = l10n.industryEducation; break;
+                              case 'Other': label = l10n.industryOther; break;
+                            }
+                            return DropdownMenuItem(
                                 value: industry,
-                                child: Text(industry),
-                              ))
+                                child: Text(label),
+                            );
+                          })
                           .toList(),
                       onChanged: (value) {
                         if (value != null) {
@@ -243,7 +256,16 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
               Expanded(
                 flex: 2,
                 child: ElevatedButton(
-                  onPressed: () => context.router.push(const InterviewSetupStep3Route()),
+                  onPressed: () {
+                    final provider = context.read<InterviewProvider>();
+                    final position = _positionController.text;
+                    final level = _selectedLevel == 0 ? l10n.juniorLevel : _selectedLevel == 1 ? l10n.midLevel : l10n.seniorLevel;
+                    final fullRole = "$level $position";
+                    
+                    provider.updateRole(fullRole);
+                    provider.updateCompanyName(_companyController.text);
+                    context.router.push(const InterviewSetupStep3Route());
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),

@@ -460,18 +460,48 @@ class HomeRoute extends _i48.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i23.InterviewFeedbackDetailScreen]
-class InterviewFeedbackDetailRoute extends _i48.PageRouteInfo<void> {
-  const InterviewFeedbackDetailRoute({List<_i48.PageRouteInfo>? children})
-    : super(InterviewFeedbackDetailRoute.name, initialChildren: children);
+class InterviewFeedbackDetailRoute
+    extends _i48.PageRouteInfo<InterviewFeedbackDetailRouteArgs> {
+  InterviewFeedbackDetailRoute({
+    _i49.Key? key,
+    int feedbackIndex = 0,
+    List<_i48.PageRouteInfo>? children,
+  }) : super(
+         InterviewFeedbackDetailRoute.name,
+         args: InterviewFeedbackDetailRouteArgs(
+           key: key,
+           feedbackIndex: feedbackIndex,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'InterviewFeedbackDetailRoute';
 
   static _i48.PageInfo page = _i48.PageInfo(
     name,
     builder: (data) {
-      return const _i23.InterviewFeedbackDetailScreen();
+      final args = data.argsAs<InterviewFeedbackDetailRouteArgs>(
+        orElse: () => const InterviewFeedbackDetailRouteArgs(),
+      );
+      return _i23.InterviewFeedbackDetailScreen(
+        key: args.key,
+        feedbackIndex: args.feedbackIndex,
+      );
     },
   );
+}
+
+class InterviewFeedbackDetailRouteArgs {
+  const InterviewFeedbackDetailRouteArgs({this.key, this.feedbackIndex = 0});
+
+  final _i49.Key? key;
+
+  final int feedbackIndex;
+
+  @override
+  String toString() {
+    return 'InterviewFeedbackDetailRouteArgs{key: $key, feedbackIndex: $feedbackIndex}';
+  }
 }
 
 /// generated route for

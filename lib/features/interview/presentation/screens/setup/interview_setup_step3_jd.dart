@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
@@ -117,16 +119,7 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                         fontSize: 14,
                       ),
                       decoration: InputDecoration(
-                        hintText: '''Requirements:
-- 3+ years exp in React
-- Strong in RESTful API
-- Experience with microservices
-- Docker & Kubernetes
-                        
-Responsibilities:
-- Lead frontend development
-- Mentor junior developers
-- Code review & quality''',
+                        hintText: l10n.jdHintText,
                         hintStyle: TextStyle(
                           fontFamily: 'monospace',
                           fontSize: 14,
@@ -258,7 +251,11 @@ Responsibilities:
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => context.router.push(const InterviewSetupStep4Route()),
+                  onPressed: () {
+                    final provider = context.read<InterviewProvider>();
+                    provider.updateJdText(_jdController.text);
+                    context.router.push(const InterviewSetupStep4Route());
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),

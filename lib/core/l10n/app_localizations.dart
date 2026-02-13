@@ -224,6 +224,30 @@ abstract class AppLocalizations {
   /// **'Questions'**
   String get questions;
 
+  /// No description provided for @totalOf.
+  ///
+  /// In en, this message translates to:
+  /// **'of'**
+  String get totalOf;
+
+  /// No description provided for @feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedback;
+
+  /// No description provided for @strengths.
+  ///
+  /// In en, this message translates to:
+  /// **'Strengths'**
+  String get strengths;
+
+  /// No description provided for @improvements.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvements'**
+  String get improvements;
+
   /// No description provided for @previous.
   ///
   /// In en, this message translates to:
@@ -695,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @typeToSeeSuggestions.
   ///
   /// In en, this message translates to:
-  /// **'💡 Type to see suggestions'**
+  /// **'Type to see suggestions'**
   String get typeToSeeSuggestions;
 
   /// No description provided for @whatsYourCareerGoal.
@@ -1253,7 +1277,7 @@ abstract class AppLocalizations {
   /// No description provided for @speakRelaxed.
   ///
   /// In en, this message translates to:
-  /// **'💬 Speak naturally'**
+  /// **'Speak naturally'**
   String get speakRelaxed;
 
   /// No description provided for @transcriptRealTime.
@@ -1291,6 +1315,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Answering'**
   String get startAnswering;
+
+  /// No description provided for @noAnswerRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer recorded'**
+  String get noAnswerRecorded;
+
+  /// No description provided for @passFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair Pass'**
+  String get passFair;
+
+  /// No description provided for @fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Practice'**
+  String get fail;
 
   /// No description provided for @interviewResults.
   ///
@@ -1691,7 +1733,7 @@ abstract class AppLocalizations {
   /// No description provided for @improvedSpeechTitle.
   ///
   /// In en, this message translates to:
-  /// **'✨ Your Speech vs Improved Speech'**
+  /// **'Your Speech vs Improved Speech'**
   String get improvedSpeechTitle;
 
   /// No description provided for @originalSpeechLabel.
@@ -1927,6 +1969,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'⚠️ Senior roles - add more metrics & impact'**
   String get readinessSeniorRoles;
+
+  /// No description provided for @readinessStatusExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for Interview'**
+  String get readinessStatusExcellent;
+
+  /// No description provided for @readinessStatusGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting There'**
+  String get readinessStatusGood;
+
+  /// No description provided for @readinessStatusNeedsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Practice'**
+  String get readinessStatusNeedsWork;
+
+  /// No description provided for @readinessDescExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'You show strong potential for the role.'**
+  String get readinessDescExcellent;
+
+  /// No description provided for @readinessDescGood.
+  ///
+  /// In en, this message translates to:
+  /// **'You have good points but need more practice.'**
+  String get readinessDescGood;
+
+  /// No description provided for @readinessDescNeedsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on the improvements above to get ready.'**
+  String get readinessDescNeedsWork;
+
+  /// No description provided for @generatingQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating interview questions...'**
+  String get generatingQuestions;
+
+  /// No description provided for @interviewFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Focus'**
+  String get interviewFocus;
+
+  /// No description provided for @selectInterviewFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Interview Focus'**
+  String get selectInterviewFocus;
+
+  /// No description provided for @interviewFocusDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Determine the type of questions you want to practice.'**
+  String get interviewFocusDesc;
+
+  /// No description provided for @focusBehavioralTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Behavioral (STAR)'**
+  String get focusBehavioralTitle;
+
+  /// No description provided for @focusBehavioralDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on soft skills, leadership, and past experiences using the STAR method.'**
+  String get focusBehavioralDesc;
+
+  /// No description provided for @focusTechnicalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical / Hard Skills'**
+  String get focusTechnicalTitle;
+
+  /// No description provided for @focusTechnicalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep focus on coding, architecture, and role-specific technical knowledge.'**
+  String get focusTechnicalDesc;
+
+  /// No description provided for @focusMixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed (Composition)'**
+  String get focusMixedTitle;
+
+  /// No description provided for @focusMixedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A balanced combination of technical and behavioral questions.'**
+  String get focusMixedDesc;
+
+  /// No description provided for @readyToStartDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ready to start the interview simulation.'**
+  String get readyToStartDesc;
+
+  /// No description provided for @uploadedFromDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded from device'**
+  String get uploadedFromDevice;
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorTitle;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get unknownError;
+
+  /// No description provided for @recordAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Again'**
+  String get recordAgain;
+
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stop;
+
+  /// No description provided for @replayQuestionTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay Question'**
+  String get replayQuestionTooltip;
+
+  /// No description provided for @jdHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirements:\n- 3+ years exp in React\n- Strong in RESTful API\n- Experience with microservices\n- Docker & Kubernetes\n\nResponsibilities:\n- Lead frontend development\n- Mentor junior developers\n- Code review & quality'**
+  String get jdHintText;
+
+  /// No description provided for @cvDefaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded CV'**
+  String get cvDefaultLabel;
+
+  /// No description provided for @questionsCountDynamic.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Questions'**
+  String questionsCountDynamic(Object count);
+
+  /// No description provided for @industryTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get industryTechnology;
+
+  /// No description provided for @industryFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get industryFinance;
+
+  /// No description provided for @industryHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get industryHealthcare;
+
+  /// No description provided for @industryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get industryEducation;
+
+  /// No description provided for @industryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get industryOther;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
 }
 
 class _AppLocalizationsDelegate

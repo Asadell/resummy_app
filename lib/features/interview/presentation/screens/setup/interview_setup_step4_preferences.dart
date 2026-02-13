@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
 class InterviewSetupStep4Screen extends StatelessWidget {
@@ -11,20 +14,22 @@ class InterviewSetupStep4Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final provider = context.watch<InterviewProvider>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(l10n.confirmation),
+        title: Text(l10n.interviewFocus),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.router.push(const InterviewSetupStep4Route()),
+          onPressed: () => context.router.push(const InterviewSetupStep3Route()),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                l10n.stepProgress(5, 5),
+                l10n.stepProgress(4, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -39,213 +44,161 @@ class InterviewSetupStep4Screen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 32),
-
-              // Success Icon
-              Center(
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Title
               Text(
-                l10n.setupComplete,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+                l10n.selectInterviewFocus,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                l10n.readyToStartInterview,
+                l10n.interviewFocusDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 24),
 
-              const SizedBox(height: 32),
-
-              // Summary Card
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.interviewSummary,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel, 'CV_Software_Engineer.pdf'),
-                    const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.direct_up, l10n.roleLabel, 'Software Engineer'),
-                    const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.building_3, l10n.companyLabel, 'PT Tech Startup'),
-                    const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.global, l10n.languageLabel, 'Bahasa Indonesia'),
-                    const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.message_question, l10n.questionsLabel, l10n.questionsCount),
-                    const SizedBox(height: 12),
-                    _buildSummaryRow(context, Iconsax.timer_1, l10n.durationLabel, l10n.durationAprox),
-                  ],
-                ),
+              _buildFocusCard(
+                context,
+                title: l10n.focusBehavioralTitle,
+                description: l10n.focusBehavioralDesc,
+                icon: Iconsax.user_search,
+                value: InterviewFocus.behavioral,
+                groupValue: provider.selectedFocus,
+                onChanged: (val) => provider.updateFocus(val!),
               ),
-
               const SizedBox(height: 16),
-
-              // STAR Method Guide
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).dividerTheme.color!,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          l10n.starMethodGuide,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'S - Situation (Konteks)\nT - Task (Tugas/Tanggung jawab)\nA - Action (Aksi yang diambil)\nR - Result (Hasil terukur)',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        height: 1.6,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: Text(l10n.viewStarExample),
-                    ),
-                  ],
-                ),
+              _buildFocusCard(
+                context,
+                title: l10n.focusTechnicalTitle,
+                description: l10n.focusTechnicalDesc,
+                icon: Iconsax.code_1,
+                value: InterviewFocus.technical,
+                groupValue: provider.selectedFocus,
+                onChanged: (val) => provider.updateFocus(val!),
               ),
-
               const SizedBox(height: 16),
-
-              // Tips Box
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.secondary, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        l10n.starTips,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              _buildFocusCard(
+                context,
+                title: l10n.focusMixedTitle,
+                description: l10n.focusMixedDesc,
+                icon: Iconsax.blend_2,
+                value: InterviewFocus.mixed,
+                groupValue: provider.selectedFocus,
+                onChanged: (val) => provider.updateFocus(val!),
               ),
-
+              
               const SizedBox(height: 100),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
           ],
         ),
         child: SafeArea(
-          child: ElevatedButton(
-            onPressed: () => context.router.push(const InterviewSessionOpeningRoute()),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(56),
-            ),
-            child: Text(
-              l10n.startInterviewNow,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.router.push(const InterviewSetupStep3Route()),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                  ),
+                  child: Text('← ${l10n.back}'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.router.push(const InterviewSetupConfirmationRoute());
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                  ),
+                  child: Text('${l10n.continueText} →'),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSummaryRow(BuildContext context, IconData icon, String label, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
-        const SizedBox(width: 12),
-        Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              children: [
-                TextSpan(
-                  text: '$label ',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                TextSpan(text: value),
-              ],
-            ),
+  Widget _buildFocusCard(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required IconData icon,
+    required InterviewFocus value,
+    required InterviewFocus groupValue,
+    required ValueChanged<InterviewFocus?> onChanged,
+  }) {
+    final isSelected = value == groupValue;
+    return InkWell(
+      onTap: () => onChanged(value),
+      borderRadius: BorderRadius.circular(12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.2) : Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
+            width: isSelected ? 2 : 1,
           ),
         ),
-      ],
+        child: Row(
+          children: [
+            Radio<InterviewFocus>(
+              value: value,
+              groupValue: groupValue,
+              onChanged: onChanged,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(icon, size: 20, color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant),
+                      const SizedBox(width: 8),
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
 class InterviewSessionOpeningScreen extends StatefulWidget {
@@ -62,18 +64,20 @@ class _InterviewSessionOpeningScreenState extends State<InterviewSessionOpeningS
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
-              child: Row(
-                children: [
-                  Icon(Iconsax.timer_1, size: 16, color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(width: 4),
-                  Text(
-                    '00:15',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w500,
+              child: Consumer<InterviewProvider>(
+                builder: (context, provider, _) => Row(
+                  children: [
+                    Icon(Iconsax.timer_1, size: 16, color: Theme.of(context).colorScheme.primary),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${(provider.totalSessionDurationSeconds ~/ 60).toString().padLeft(2, '0')}:${(provider.totalSessionDurationSeconds % 60).toString().padLeft(2, '0')}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -10,6 +10,8 @@ import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_analys
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/core/services/gemini_speech_service.dart';
 
 import 'firebase_options.dart';
 
@@ -44,6 +46,7 @@ void main() async {
             ),
           ),
         ),
+        ChangeNotifierProvider(create: (_) => InterviewProvider(geminiService: GeminiSpeechService())),
       ],
       child: ResummyApp(),
     ),

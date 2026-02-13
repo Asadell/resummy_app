@@ -72,6 +72,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get questions => 'Questions';
 
   @override
+  String get totalOf => 'of';
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get strengths => 'Strengths';
+
+  @override
+  String get improvements => 'Improvements';
+
+  @override
   String get previous => 'Previous';
 
   @override
@@ -321,7 +333,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get targetRoleHint => 'e.g., Software Engineer, Product Manager';
 
   @override
-  String get typeToSeeSuggestions => '💡 Type to see suggestions';
+  String get typeToSeeSuggestions => 'Type to see suggestions';
 
   @override
   String get whatsYourCareerGoal => 'What\'s your career goal?';
@@ -611,7 +623,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTimeLimit => 'No time limit';
 
   @override
-  String get speakRelaxed => '💬 Speak naturally';
+  String get speakRelaxed => 'Speak naturally';
 
   @override
   String get transcriptRealTime => 'Transcript (Real-time):';
@@ -632,6 +644,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startAnswering => 'Start Answering';
+
+  @override
+  String get noAnswerRecorded => 'No answer recorded';
+
+  @override
+  String get passFair => 'Fair Pass';
+
+  @override
+  String get fail => 'Needs Practice';
 
   @override
   String get interviewResults => 'Interview Results';
@@ -854,7 +875,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pauseAnalysis => 'Pauses & Hesitations';
 
   @override
-  String get improvedSpeechTitle => '✨ Your Speech vs Improved Speech';
+  String get improvedSpeechTitle => 'Your Speech vs Improved Speech';
 
   @override
   String get originalSpeechLabel => 'Your Original Speech';
@@ -975,4 +996,111 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get readinessSeniorRoles =>
       '⚠️ Senior roles - add more metrics & impact';
+
+  @override
+  String get readinessStatusExcellent => 'Ready for Interview';
+
+  @override
+  String get readinessStatusGood => 'Getting There';
+
+  @override
+  String get readinessStatusNeedsWork => 'Needs Practice';
+
+  @override
+  String get readinessDescExcellent =>
+      'You show strong potential for the role.';
+
+  @override
+  String get readinessDescGood =>
+      'You have good points but need more practice.';
+
+  @override
+  String get readinessDescNeedsWork =>
+      'Focus on the improvements above to get ready.';
+
+  @override
+  String get generatingQuestions => 'Generating interview questions...';
+
+  @override
+  String get interviewFocus => 'Interview Focus';
+
+  @override
+  String get selectInterviewFocus => 'Select Interview Focus';
+
+  @override
+  String get interviewFocusDesc =>
+      'Determine the type of questions you want to practice.';
+
+  @override
+  String get focusBehavioralTitle => 'Behavioral (STAR)';
+
+  @override
+  String get focusBehavioralDesc =>
+      'Focus on soft skills, leadership, and past experiences using the STAR method.';
+
+  @override
+  String get focusTechnicalTitle => 'Technical / Hard Skills';
+
+  @override
+  String get focusTechnicalDesc =>
+      'Deep focus on coding, architecture, and role-specific technical knowledge.';
+
+  @override
+  String get focusMixedTitle => 'Mixed (Composition)';
+
+  @override
+  String get focusMixedDesc =>
+      'A balanced combination of technical and behavioral questions.';
+
+  @override
+  String get readyToStartDesc =>
+      'You\'re ready to start the interview simulation.';
+
+  @override
+  String get uploadedFromDevice => 'Uploaded from device';
+
+  @override
+  String get errorTitle => 'Error';
+
+  @override
+  String get unknownError => 'An unknown error occurred';
+
+  @override
+  String get recordAgain => 'Record Again';
+
+  @override
+  String get stop => 'Stop';
+
+  @override
+  String get replayQuestionTooltip => 'Replay Question';
+
+  @override
+  String get jdHintText =>
+      'Requirements:\n- 3+ years exp in React\n- Strong in RESTful API\n- Experience with microservices\n- Docker & Kubernetes\n\nResponsibilities:\n- Lead frontend development\n- Mentor junior developers\n- Code review & quality';
+
+  @override
+  String get cvDefaultLabel => 'Uploaded CV';
+
+  @override
+  String questionsCountDynamic(Object count) {
+    return '$count Questions';
+  }
+
+  @override
+  String get industryTechnology => 'Technology';
+
+  @override
+  String get industryFinance => 'Finance';
+
+  @override
+  String get industryHealthcare => 'Healthcare';
+
+  @override
+  String get industryEducation => 'Education';
+
+  @override
+  String get industryOther => 'Other';
+
+  @override
+  String get goBack => 'Go Back';
 }

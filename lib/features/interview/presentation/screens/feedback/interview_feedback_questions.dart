@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
 class InterviewFeedbackQuestionsScreen extends StatefulWidget {
@@ -16,291 +18,271 @@ class InterviewFeedbackQuestionsScreen extends StatefulWidget {
 class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQuestionsScreen> {
   int _expandedIndex = 0;
 
-  final List<Map<String, dynamic>> _questions = [
-    {
-      'title': 'Pertanyaan 1: Project challenging',
-      'score': 8.5,
-      'color': AppColors.secondary,
-      'preview': 'Anda menjelaskan situasi dengan jelas tentang memimpin project MVP...',
-      'breakdown': {
-        'STAR': 8.5,
-        'Lancar': 6.0,
-        'Konten': 7.5,
-        'Confidence': 7.0,
-      }
-    },
-    {
-      'title': 'Pertanyaan 2: Memimpin tim',
-      'score': 7.8,
-      'color': AppColors.primary,
-      'preview': 'Good explanation tentang leadership dalam kondisi pressure...',
-      'breakdown': {
-        'STAR': 8.0,
-        'Lancar': 7.0,
-        'Konten': 8.0,
-        'Confidence': 8.0,
-      }
-    },
-    {
-      'title': 'Pertanyaan 3: Handle konflik',
-      'score': 6.5,
-      'color': AppColors.warning,
-      'preview': 'Situasi dijelaskan tapi perlu lebih spesifik pada resolution...',
-      'breakdown': {
-        'STAR': 6.0,
-        'Lancar': 6.5,
-        'Konten': 7.0,
-        'Confidence': 6.5,
-      }
-    },
-    {
-      'title': 'Pertanyaan 4: Kegagalan dipelajari',
-      'score': 7.2,
-      'color': AppColors.primary,
-      'preview': 'Strong reflection dan learning points, tapi bisa tambah impact...',
-      'breakdown': {
-        'STAR': 7.5,
-        'Lancar': 7.0,
-        'Konten': 7.0,
-        'Confidence': 7.2,
-      }
-    },
-    {
-      'title': 'Pertanyaan 5: Kenapa kerja di sini',
-      'score': 7.0,
-      'color': AppColors.primary,
-      'preview': 'Research tentang company baik, tapi STAR structure lemah...',
-      'breakdown': {
-        'STAR': 6.0,
-        'Lancar': 7.5,
-        'Konten': 7.5,
-        'Confidence': 7.0,
-      }
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text('📋 ${l10n.fullReport}'),
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Summary Header
-            Container(
-              padding: const EdgeInsets.all(20),
-              color: Theme.of(context).cardTheme.color,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    
+    return Consumer<InterviewProvider>(
+      builder: (context, provider, child) {
+        final report = provider.report;
+        if (report == null) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final feedbacks = report.questionFeedbacks;
+
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Text('📋 ${l10n.fullReport}'),
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left_1),
+              onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+            ),
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                // Summary Header
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  color: Theme.of(context).cardTheme.color,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Iconsax.clipboard_text, color: Theme.of(context).textTheme.headlineMedium?.color),
-                      const SizedBox(width: 8),
+                      Row(
+                        children: [
+                          Icon(Iconsax.clipboard_text, color: Theme.of(context).textTheme.headlineMedium?.color),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.fullReportTitle,
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                       Text(
-                        l10n.fullReportTitle,
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                        '${feedbacks.length} ${l10n.questions} | ${l10n.overallScore}: ${report.overallScore}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '5 ${l10n.questions} | ${l10n.overallScore}: 7.5',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            const SizedBox(height: 8),
+                const SizedBox(height: 8),
 
-            // Question Cards
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: _questions.length,
-                itemBuilder: (context, index) {
-                  final question = _questions[index];
-                  final isExpanded = _expandedIndex == index;
-                  
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border(
-                        left: BorderSide(
-                          color: question['color'] as Color,
-                          width: 4,
-                        ),
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _expandedIndex = isExpanded ? -1 : index;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Header
-                            Row(
-                              children: [
-                                Icon(
-                                  isExpanded ? Iconsax.arrow_up_2 : Iconsax.arrow_down_2,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    question['title'] as String,
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: question['color'] as Color,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '${question['score']}/10',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                // Question Cards
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: feedbacks.length,
+                    itemBuilder: (context, index) {
+                      final feedback = feedbacks[index];
+                      // Find the original question text if possible
+                      final question = provider.questions.isNotEmpty && index < provider.questions.length 
+                          ? provider.questions[index] 
+                          : null;
+                      final questionTitle = question?.text ?? '${l10n.question} ${index + 1}';
+                          
+                      final isExpanded = _expandedIndex == index;
+                      final scoreColor = _getScoreColor(feedback.starAnalysis.score * 10); // Scale 1-10 to 1-100 for color logic
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardTheme.color,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border(
+                            left: BorderSide(
+                              color: scoreColor,
+                              width: 4,
                             ),
-
-                            const SizedBox(height: 12),
-
-                            // Mini Scores
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: (question['breakdown'] as Map<String, double>)
-                                    .entries
-                                    .map((entry) {
-                                  Color chipColor = AppColors.primary;
-                                  if (entry.value >= 8.0) {
-                                    chipColor = AppColors.secondary;
-                                  } else if (entry.value < 7.0) {
-                                    chipColor = AppColors.warning;
-                                  }
-                                  
-                                  return Container(
-                                    margin: const EdgeInsets.only(right: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 6,
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _expandedIndex = isExpanded ? -1 : index;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Header
+                                Row(
+                                  children: [
+                                    Icon(
+                                      isExpanded ? Iconsax.arrow_up_2 : Iconsax.arrow_down_2,
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      size: 20,
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: chipColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Text(
-                                      '${entry.key}: ${entry.value}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        questionTitle,
+                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        maxLines: isExpanded ? null : 1,
+                                        overflow: isExpanded ? null : TextOverflow.ellipsis,
                                       ),
                                     ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                            const SizedBox(height: 12), // Added SizedBox for spacing
-                            Row(
-                              children: [
-                                Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary),
-                                const SizedBox(width: 8),
-                                const Text('Strong Points:'),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: scoreColor,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        '${feedback.starAnalysis.score}/10',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 12),
+
+                                // Mini Scores
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      _buildScoreChip(context, 'STAR', feedback.starAnalysis.score.toDouble()),
+                                      const SizedBox(width: 8),
+                                      _buildScoreChip(context, l10n.fluency, feedback.fluencyAnalysis.score.toDouble()),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                // Only show detailed info if expanded
+                                if (isExpanded) ...[
+                                   Row(
+                                    children: [
+                                      Icon(Iconsax.info_circle, color: Theme.of(context).colorScheme.primary, size: 16),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        l10n.feedback,
+                                        style: Theme.of(context).textTheme.titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    feedback.starAnalysis.overallFeedback,
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: TextButton(
+                                      // Pass the index or ID to detail screen
+                                      // Since we didn't update the router yet, let's just push for now
+                                      // But wait, InterviewFeedbackDetailRoute probably doesn't take args yet.
+                                      // We need to update InterviewFeedbackDetailScreen to accept args.
+                                      onPressed: () => context.router.push(InterviewFeedbackDetailRoute(feedbackIndex: index)),
+                                      child: Text('${l10n.viewDetail} →'),
+                                    ),
+                                  ),
+                                ] else ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    feedback.starAnalysis.overallFeedback,
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ],
                             ),
-                            if (isExpanded) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                question['preview'] as String,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () => context.router.push(const InterviewFeedbackDetailRoute()),
-                                  child: Text('${l10n.viewDetail} →'),
-                                ),
-                              ),
-                            ] else ...[
-                              const SizedBox(height: 8),
-                              Text(
-                                question['preview'] as String,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-          boxShadow: [
-            BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Iconsax.document_download),
-             label: Text(l10n.downloadPdf),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
+          bottomNavigationBar: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                   // Implement PDF download
+                },
+                icon: const Icon(Iconsax.document_download),
+                 label: Text(l10n.downloadPdf),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(52),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Color _getScoreColor(int score) {
+    if (score >= 80) return AppColors.secondary; // Green-ish
+    if (score >= 60) return AppColors.primary; // Blue-ish
+    return AppColors.warning; // Red/Orange-ish
+  }
+
+  Widget _buildScoreChip(BuildContext context, String label, double score) {
+    Color chipColor = AppColors.primary;
+    if (score >= 8.0) {
+      chipColor = AppColors.secondary;
+    } else if (score < 6.0) {
+      chipColor = AppColors.warning;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        color: chipColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Text(
+        '$label: ${score.toStringAsFixed(1)}',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

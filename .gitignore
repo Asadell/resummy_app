@@ -47,6 +47,6 @@ app.*.map.json
 # etc
 .env
 **/app_constants.g.dart
-uy.md
+*.md
 .last_build_id
 *.txt

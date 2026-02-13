@@ -72,6 +72,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get questions => 'Pertanyaan';
 
   @override
+  String get totalOf => 'dari';
+
+  @override
+  String get feedback => 'Umpan Balik';
+
+  @override
+  String get strengths => 'Kekuatan';
+
+  @override
+  String get improvements => 'Peningkatan';
+
+  @override
   String get previous => 'Sebelumnya';
 
   @override
@@ -321,7 +333,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get targetRoleHint => 'contoh: Software Engineer, Product Manager';
 
   @override
-  String get typeToSeeSuggestions => '💡 Ketik untuk lihat saran';
+  String get typeToSeeSuggestions => 'Ketik untuk lihat saran';
 
   @override
   String get whatsYourCareerGoal => 'Apa tujuan karir Anda?';
@@ -612,7 +624,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get noTimeLimit => 'Tidak ada batas waktu';
 
   @override
-  String get speakRelaxed => '💬 Bicara dengan santai';
+  String get speakRelaxed => 'Bicara dengan santai';
 
   @override
   String get transcriptRealTime => 'Transkrip (Waktu Nyata):';
@@ -633,6 +645,15 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get startAnswering => 'Mulai Jawab';
+
+  @override
+  String get noAnswerRecorded => 'Tidak ada jawaban terekam';
+
+  @override
+  String get passFair => 'Cukup';
+
+  @override
+  String get fail => 'Perlu Latihan';
 
   @override
   String get interviewResults => 'Hasil Interview';
@@ -856,7 +877,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get pauseAnalysis => 'Jeda & Keraguan';
 
   @override
-  String get improvedSpeechTitle => '✨ Ucapan Anda vs Ucapan Ditingkatkan';
+  String get improvedSpeechTitle => 'Ucapan Anda vs Ucapan Ditingkatkan';
 
   @override
   String get originalSpeechLabel => 'Ucapan Asli Anda';
@@ -976,4 +997,110 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get readinessSeniorRoles => '⚠️ Senior roles - tambah metrik & dampak';
+
+  @override
+  String get readinessStatusExcellent => 'Siap untuk Interview';
+
+  @override
+  String get readinessStatusGood => 'Hampir Siap';
+
+  @override
+  String get readinessStatusNeedsWork => 'Perlu Latihan';
+
+  @override
+  String get readinessDescExcellent =>
+      'Anda menunjukkan potensi kuat untuk posisi ini.';
+
+  @override
+  String get readinessDescGood =>
+      'Anda memiliki poin bagus tetapi perlu lebih banyak latihan.';
+
+  @override
+  String get readinessDescNeedsWork =>
+      'Fokus pada perbaikan di atas untuk bersiap.';
+
+  @override
+  String get generatingQuestions => 'Sedang membuat pertanyaan interview...';
+
+  @override
+  String get interviewFocus => 'Fokus Interview';
+
+  @override
+  String get selectInterviewFocus => 'Pilih Fokus Interview';
+
+  @override
+  String get interviewFocusDesc =>
+      'Tentukan jenis pertanyaan yang ingin Anda latih.';
+
+  @override
+  String get focusBehavioralTitle => 'Behavioral (STAR)';
+
+  @override
+  String get focusBehavioralDesc =>
+      'Fokus pada soft skills, kepemimpinan, dan pengalaman masa lalu menggunakan metode STAR.';
+
+  @override
+  String get focusTechnicalTitle => 'Technical / Hard Skills';
+
+  @override
+  String get focusTechnicalDesc =>
+      'Fokus mendalam pada coding, arsitektur, dan pengetahuan teknis spesifik role.';
+
+  @override
+  String get focusMixedTitle => 'Mixed (Campuran)';
+
+  @override
+  String get focusMixedDesc =>
+      'Kombinasi seimbang antara pertanyaan teknis dan behavioral.';
+
+  @override
+  String get readyToStartDesc => 'Anda siap memulai simulasi interview.';
+
+  @override
+  String get uploadedFromDevice => 'Diunggah dari perangkat';
+
+  @override
+  String get errorTitle => 'Error';
+
+  @override
+  String get unknownError => 'Terjadi kesalahan yang tidak diketahui';
+
+  @override
+  String get recordAgain => 'Rekam Ulang';
+
+  @override
+  String get stop => 'Berhenti';
+
+  @override
+  String get replayQuestionTooltip => 'Putar Ulang Pertanyaan';
+
+  @override
+  String get jdHintText =>
+      'Requirements:\n- 3+ years exp in React\n- Strong in RESTful API\n- Experience with microservices\n- Docker & Kubernetes\n\nResponsibilities:\n- Lead frontend development\n- Mentor junior developers\n- Code review & quality';
+
+  @override
+  String get cvDefaultLabel => 'CV Terunggah';
+
+  @override
+  String questionsCountDynamic(Object count) {
+    return '$count Pertanyaan';
+  }
+
+  @override
+  String get industryTechnology => 'Teknologi';
+
+  @override
+  String get industryFinance => 'Keuangan';
+
+  @override
+  String get industryHealthcare => 'Kesehatan';
+
+  @override
+  String get industryEducation => 'Pendidikan';
+
+  @override
+  String get industryOther => 'Lainnya';
+
+  @override
+  String get goBack => 'Kembali';
 }
