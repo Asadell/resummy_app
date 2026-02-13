@@ -1,60 +1,442 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 
 @RoutePage()
-class CvBuilderStep1Screen extends StatelessWidget {
+class CvBuilderStep1Screen extends StatefulWidget {
   const CvBuilderStep1Screen({super.key});
 
   @override
+  State<CvBuilderStep1Screen> createState() => _CvBuilderStep1ScreenState();
+}
+
+class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
+    with SingleTickerProviderStateMixin {
+  final _formKey = GlobalKey<FormState>();
+  late TabController _tabController;
+  
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _linkedinController;
+  late TextEditingController _portfolioController;
+  late TextEditingController _locationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    
+    final provider = context.read<CVBuilderProvider>();
+    final cv = provider.currentCV;
+    
+    _nameController = TextEditingController(text: cv?.name);
+    _emailController = TextEditingController(text: cv?.email);
+    _phoneController = TextEditingController(text: cv?.phone);
+    _linkedinController = TextEditingController(text: cv?.linkedin);
+    _portfolioController = TextEditingController(text: cv?.portfolio);
+    _locationController = TextEditingController(text: cv?.location);
+    
+    // Add listeners for real-time preview updates
+    _nameController.addListener(_updatePreview);
+    _emailController.addListener(_updatePreview);
+    _phoneController.addListener(_updatePreview);
+    _linkedinController.addListener(_updatePreview);
+    _portfolioController.addListener(_updatePreview);
+    _locationController.addListener(_updatePreview);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _linkedinController.dispose();
+    _portfolioController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+  
+  void _updatePreview() {
+    final provider = context.read<CVBuilderProvider>();
+    provider.updatePersonalInfo(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      phone: _phoneController.text.trim(),
+      linkedin: _linkedinController.text.trim(),
+      portfolio: _portfolioController.text.trim(),
+      location: _locationController.text.trim(),
+    );
+  }
+
+  void _saveAndNext() {
+    if (_formKey.currentState!.validate()) {
+      final provider = context.read<CVBuilderProvider>();
+      
+      provider.updatePersonalInfo(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        linkedin: _linkedinController.text.trim(),
+        portfolio: _portfolioController.text.trim(),
+        location: _locationController.text.trim(),
+      );
+      
+      // Auto-save progress
+      provider.saveCurrentCV();
+      
+      // Navigate to next step
+      context.router.push(const CvBuilderStep2Route());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    // final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
+      backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: Text(l10n.personalInfo),
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.router.push(const CvBuilderWelcomeRoute()),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Iconsax.setting_3,
-              size: 64,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.personalInfo,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.screenUnderConstruction,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
+        title: const Text('Buat CV'),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text(
+                '1/7',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF6B7280),
+                  fontWeight: FontWeight.w500,
                 ),
-                onPressed: () => context.router.push(const CvBuilderStep2Route()),
-                child: Text('${l10n.next} →'),
               ),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Progress Bar
+          LinearProgressIndicator(
+            value: 1 / 7,
+            backgroundColor: const Color(0xFFE5E7EB),
+            color: const Color(0xFF0EA5E9),
+            minHeight: 4,
+          ),
+          
+          // Tab Bar
+          Container(
+            height: 48,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  color: Color(0xFFE5E7EB),
+                  width: 1,
+                ),
+              ),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              indicatorColor: const Color(0xFF0EA5E9),
+              indicatorWeight: 3,
+              labelColor: const Color(0xFF0EA5E9),
+              unselectedLabelColor: const Color(0xFF6B7280),
+              labelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
+              tabs: const [
+                Tab(text: 'Edit'),
+                Tab(text: 'Preview'),
+              ],
+            ),
+          ),
+          
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // Edit Tab
+                _buildEditContent(),
+                // Preview Tab
+                _buildPreviewContent(),
+              ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              offset: const Offset(0, -4),
+              blurRadius: 16,
             ),
           ],
         ),
+        child: SafeArea(
+          child: ElevatedButton(
+            onPressed: _saveAndNext,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF0EA5E9),
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'Lanjut →',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
       ),
+    );
+  }
+  
+  Widget _buildEditContent() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Step Header
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: const Color(0xFF0EA5E9)),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'Step 1/7',
+                style: TextStyle(
+                  color: Color(0xFF0EA5E9),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Center(
+            child: Text(
+              '1. Data Pribadi / Header',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF111827),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Center(
+            child: Text(
+              'Informasi kontak dasar',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF6B7280),
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Form Card
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // Full Name (Required)
+                    _buildTextField(
+                      controller: _nameController,
+                      label: 'Nama Lengkap',
+                      isRequired: true,
+                      hint: 'John Doe',
+                      helperText: '← Auto-fill jika toggle ON',
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Email (Required)
+                    _buildTextField(
+                      controller: _emailController,
+                      label: 'Email',
+                      isRequired: true,
+                      hint: 'john@example.com',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Phone (Required)
+                    _buildTextField(
+                      controller: _phoneController,
+                      label: 'No. Telepon',
+                      isRequired: true,
+                      hint: '+62 812-3456-7890',
+                      keyboardType: TextInputType.phone,
+                      prefixIcon: Iconsax.call,
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // LinkedIn (Optional)
+                    _buildTextField(
+                      controller: _linkedinController,
+                      label: 'LinkedIn',
+                      isOptional: true,
+                      hint: 'linkedin.com/in/john',
+                      prefixIcon: Iconsax.link_1,
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Portfolio (Optional)
+                    _buildTextField(
+                      controller: _portfolioController,
+                      label: 'Portfolio/Website',
+                      isOptional: true,
+                      hint: 'github.com/johndoe',
+                      prefixIcon: Iconsax.global,
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Location (Required)
+                    _buildTextField(
+                      controller: _locationController,
+                      label: 'Kota, Negara',
+                      isRequired: true,
+                      hint: 'Jakarta, Indonesia',
+                      prefixIcon: Iconsax.location,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: 80), // Bottom padding for sticky button
+        ],
       ),
+    );
+  }
+  
+  Widget _buildPreviewContent() {
+    return Consumer<CVBuilderProvider>(
+      builder: (context, provider, child) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: CvPreviewCard(cvData: provider.currentCV),
+        );
+      },
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    bool isRequired = false,
+    bool isOptional = false,
+    String? hint,
+    String? helperText,
+    TextInputType? keyboardType,
+    IconData? prefixIcon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            text: label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF374151),
+            ),
+            children: [
+              if (isRequired)
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(color: Colors.red),
+                ),
+              if (isOptional)
+                const TextSpan(
+                  text: ' (Opsional)',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          validator: isRequired
+              ? (value) {
+                  // Only Name is strictly required for logical data model, 
+                  // but UI can enforce more if needed. 
+                  // Per user req: "minimal nama aja bisa save".
+                  // So only Name field technically determines if valid to save,
+                  // but form validation might want other fields.
+                  // For now, let's just make Name required, others optional warning.
+                  if (label.contains('Nama') && (value == null || value.isEmpty)) {
+                    return 'Wajib diisi';
+                  }
+                  return null;
+                }
+              : null,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+            helperText: helperText,
+            helperStyle: const TextStyle(color: Color(0xFF0EA5E9)),
+            prefixIcon: prefixIcon != null
+                ? Icon(prefixIcon, size: 20, color: const Color(0xFF6B7280))
+                : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFF0EA5E9)),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
     );
   }
 }

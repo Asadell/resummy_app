@@ -1,0 +1,297 @@
+import 'package:flutter/material.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+
+/// Reusable CV Preview Card Widget
+/// Displays CV data in a professional format
+class CvPreviewCard extends StatelessWidget {
+  final CVData? cvData;
+
+  const CvPreviewCard({
+    super.key,
+    required this.cvData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (cvData == null) {
+      return Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            'No CV data available',
+            style: TextStyle(color: Color(0xFF9CA3AF)),
+          ),
+        ),
+      );
+    }
+
+    final cv = cvData!;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Center(
+            child: Text(
+              cv.name.isNotEmpty ? cv.name.toUpperCase() : 'YOUR NAME',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.0,
+                color: cv.name.isNotEmpty ? Colors.black : const Color(0xFF9CA3AF),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Contact Info
+          Center(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              alignment: WrapAlignment.center,
+              children: [
+                _buildContactText(cv.email, 'email@example.com'),
+                if (cv.email?.isNotEmpty == true || cv.phone?.isNotEmpty == true)
+                  const Text('|', style: TextStyle(color: Color(0xFF9CA3AF))),
+                _buildContactText(cv.phone, '+62 xxx-xxxx'),
+                if (cv.email?.isNotEmpty == true || cv.phone?.isNotEmpty == true || cv.location?.isNotEmpty == true)
+                  const Text('|', style: TextStyle(color: Color(0xFF9CA3AF))),
+                _buildContactText(cv.location, 'Location'),
+              ],
+            ),
+          ),
+
+          if (cv.linkedin?.isNotEmpty == true || cv.portfolio?.isNotEmpty == true) ...[
+            const SizedBox(height: 4),
+            Center(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 4,
+                alignment: WrapAlignment.center,
+                children: [
+                  if (cv.linkedin?.isNotEmpty == true)
+                    const Text('LinkedIn', style: TextStyle(color: Colors.blue, fontSize: 12)),
+                  if (cv.portfolio?.isNotEmpty == true)
+                    const Text('Portfolio', style: TextStyle(color: Colors.blue, fontSize: 12)),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 16),
+          const Divider(thickness: 1),
+          const SizedBox(height: 16),
+
+          // Professional Summary
+          if (cv.professionalSummary?.isNotEmpty == true) ...[
+            _buildSectionTitle('RINGKASAN PROFESIONAL'),
+            Text(
+              cv.professionalSummary!,
+              style: const TextStyle(height: 1.5, fontSize: 14),
+            ),
+            const SizedBox(height: 20),
+          ],
+
+          // Work Experience
+          if (cv.workExperience.isNotEmpty) ...[
+            _buildSectionTitle('PENGALAMAN KERJA'),
+            ...cv.workExperience.map((work) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          work.jobTitle.toUpperCase(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${work.startDate.month}/${work.startDate.year} - ${work.isCurrentlyWorking ? "Sekarang" : "${work.endDate?.month}/${work.endDate?.year}"}',
+                        style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${work.companyName}${work.location != null ? ", ${work.location}" : ""}',
+                    style: const TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                  if (work.responsibilities.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      work.responsibilities,
+                      style: const TextStyle(height: 1.4, fontSize: 13),
+                    ),
+                  ],
+                ],
+              ),
+            )),
+            const SizedBox(height: 8),
+          ],
+
+          // Education
+          if (cv.education.isNotEmpty) ...[
+            _buildSectionTitle('PENDIDIKAN'),
+            ...cv.education.map((edu) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          edu.institution.toUpperCase(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${edu.startYear} - ${edu.isCurrentlyStudying ? "Sekarang" : (edu.endYear ?? "")}',
+                        style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${edu.degree}, ${edu.major}${edu.gpa != null ? " (IPK: ${edu.gpa})" : ""}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            )),
+            const SizedBox(height: 8),
+          ],
+
+          // Skills
+          if (cv.technicalSkills.isNotEmpty || cv.softSkills.isNotEmpty) ...[
+            _buildSectionTitle('KEAHLIAN'),
+            if (cv.technicalSkills.isNotEmpty) ...[
+              const Text(
+                'Technical Skills:',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                cv.technicalSkills.join(', '),
+                style: const TextStyle(height: 1.5, fontSize: 13),
+              ),
+              const SizedBox(height: 8),
+            ],
+            if (cv.softSkills.isNotEmpty) ...[
+              const Text(
+                'Soft Skills:',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                cv.softSkills.join(', '),
+                style: const TextStyle(height: 1.5, fontSize: 13),
+              ),
+            ],
+            const SizedBox(height: 20),
+          ],
+
+          // Certifications
+          if (cv.certifications.isNotEmpty) ...[
+            _buildSectionTitle('SERTIFIKASI'),
+            ...cv.certifications.map((cert) => Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                '• ${cert.name} - ${cert.issuingOrganization} (${cert.issueDate.year})',
+                style: const TextStyle(height: 1.4, fontSize: 13),
+              ),
+            )),
+            const SizedBox(height: 20),
+          ],
+
+          // Additional Sections
+          if (cv.additionalSections.isNotEmpty) ...[
+            ...cv.additionalSections.entries.map((entry) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSectionTitle(entry.key.toUpperCase()),
+                Text(
+                  entry.value.toString(),
+                  style: const TextStyle(height: 1.5, fontSize: 13),
+                ),
+                const SizedBox(height: 20),
+              ],
+            )),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactText(String? value, String placeholder) {
+    return Text(
+      value?.isNotEmpty == true ? value! : placeholder,
+      style: TextStyle(
+        fontSize: 12,
+        color: value?.isNotEmpty == true ? const Color(0xFF374151) : const Color(0xFF9CA3AF),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+              color: Color(0xFF0EA5E9),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Divider(thickness: 1, height: 1),
+        ],
+      ),
+    );
+  }
+}

@@ -9,11 +9,15 @@ import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_analysis_remote_data_source.dart';
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_repository_impl.dart';
+import 'package:resummy_app/features/cv_tools/data/repositories/cv_builder_repository_impl.dart';
+import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
 import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/core/services/gemini_speech_service.dart';
 import 'package:resummy_app/core/services/gemini_interview_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -34,6 +38,9 @@ void main() async {
   final localeProvider = LocaleProvider();
   final authProvider = AuthProvider();
 
+  // Initialize SharedPreferences for CV Builder
+  final prefs = await SharedPreferences.getInstance();
+
   await Future.wait([
     themeProvider.init(),
     localeProvider.init(),
@@ -51,6 +58,13 @@ void main() async {
             userProfileRepository: UserProfileRepository(),
             analyzeCvUseCase: AnalyzeCvUseCase(
               CvRepositoryImpl(CvAnalysisRemoteDataSourceImpl()),
+            ),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CVBuilderProvider(
+            CVBuilderRepositoryImpl(
+              CVLocalDataSource(prefs),
             ),
           ),
         ),

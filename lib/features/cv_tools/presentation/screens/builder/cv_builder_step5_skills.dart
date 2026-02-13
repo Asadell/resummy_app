@@ -1,59 +1,306 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 
 @RoutePage()
-class CvBuilderStep5Screen extends StatelessWidget {
+class CvBuilderStep5Screen extends StatefulWidget {
   const CvBuilderStep5Screen({super.key});
 
   @override
+  State<CvBuilderStep5Screen> createState() => _CvBuilderStep5ScreenState();
+}
+
+class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
+  final TextEditingController _skillController = TextEditingController();
+  final FocusNode _skillFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _skillController.dispose();
+    _skillFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _addSkill(CVBuilderProvider provider) {
+    final skill = _skillController.text.trim();
+    if (skill.isNotEmpty) {
+      provider.addSkill(skill);
+      _skillController.clear();
+      // Keep focus to add more
+      _skillFocusNode.requestFocus();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        title: Text(l10n.skills),
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.router.push(const CvBuilderStep4Route()),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Iconsax.setting_3,
-              size: 64,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.skills,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.screenUnderConstruction,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
+        title: const Text('Keahlian'),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text(
+                '5/7',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF6B7280),
+                  fontWeight: FontWeight.w500,
                 ),
-                onPressed: () => context.router.push(const CvBuilderStep6Route()),
-                child: Text('${l10n.next} →'),
               ),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Progress Bar
+          LinearProgressIndicator(
+            value: 5 / 7,
+            backgroundColor: const Color(0xFFE5E7EB),
+            color: const Color(0xFF0EA5E9),
+            minHeight: 4,
+          ),
+          
+          Expanded(
+            child: Consumer<CVBuilderProvider>(
+              builder: (context, provider, child) {
+                final skills = provider.currentCV?.skills ?? [];
+                
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Step Header
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xFF0EA5E9)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'Step 5/7',
+                            style: TextStyle(
+                              color: Color(0xFF0EA5E9),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Center(
+                        child: Text(
+                          '5. Keahlian (Skills)',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF111827),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Center(
+                        child: Text(
+                          'Hard skills & soft skills yang relevan',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 32),
+                      
+                      // Input Field
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFE5E7EB)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Tambah Keahlian',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _skillController,
+                                    focusNode: _skillFocusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Contoh: Flutter, Leadership, English',
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    ),
+                                    onSubmitted: (_) => _addSkill(provider),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                ElevatedButton(
+                                  onPressed: () => _addSkill(provider),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF0EA5E9),
+                                    foregroundColor: Colors.white,
+                                    minimumSize: const Size(48, 48),
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Icon(Iconsax.add),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Tip: Masukkan satu per satu atau tekan enter.',
+                              style: TextStyle(
+                                color: Color(0xFF9CA3AF),
+                                fontSize: 12,
+                              ),
+                            ),
+                            
+                            const SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 16),
+                            
+                            // AI Suggestion (Placeholder)
+                            OutlinedButton.icon(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('AI Suggestion coming soon!')),
+                                );
+                              },
+                              icon: const Icon(Iconsax.magic_star, size: 18),
+                              label: const Text('Saran AI'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.purple,
+                                side: const BorderSide(color: Colors.purple),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 24),
+                      
+                      // Skills List
+                      if (skills.isEmpty)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              children: [
+                                Icon(Iconsax.task_square, size: 48, color: Colors.grey[300]),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Belum ada keahlian ditambahkan',
+                                  style: TextStyle(color: Colors.grey[500]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: skills.map((skill) {
+                            return Chip(
+                              label: Text(skill),
+                              deleteIcon: const Icon(Icons.close, size: 16),
+                              onDeleted: () => provider.removeSkill(skill),
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(color: Color(0xFFE5E7EB)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        
+                      const SizedBox(height: 80),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              offset: const Offset(0, -4),
+              blurRadius: 16,
             ),
           ],
         ),
-      ),
+        child: SafeArea(
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.router.maybePop(),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Kembali'),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Save and next
+                    context.read<CVBuilderProvider>().saveCurrentCV();
+                    context.router.push(const CvBuilderStep6Route());
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0EA5E9),
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Lanjut →'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
