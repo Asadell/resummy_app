@@ -212,6 +212,54 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
+  /// No description provided for @question.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get question;
+
+  /// No description provided for @questions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get questions;
+
+  /// No description provided for @totalOf.
+  ///
+  /// In en, this message translates to:
+  /// **'of'**
+  String get totalOf;
+
+  /// No description provided for @feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedback;
+
+  /// No description provided for @strengths.
+  ///
+  /// In en, this message translates to:
+  /// **'Strengths'**
+  String get strengths;
+
+  /// No description provided for @improvements.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvements'**
+  String get improvements;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @suggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion'**
+  String get suggestion;
+
   /// No description provided for @getStarted.
   ///
   /// In en, this message translates to:
@@ -671,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @typeToSeeSuggestions.
   ///
   /// In en, this message translates to:
-  /// **'💡 Type to see suggestions'**
+  /// **'Type to see suggestions'**
   String get typeToSeeSuggestions;
 
   /// No description provided for @whatsYourCareerGoal.
@@ -895,6 +943,1224 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to Home'**
   String get backToHome;
+
+  /// No description provided for @aiInterviewSimulator.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Interview Simulator'**
+  String get aiInterviewSimulator;
+
+  /// No description provided for @setupStep1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice interview with AI tailored to your CV and role'**
+  String get setupStep1Desc;
+
+  /// No description provided for @formatInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Format:'**
+  String get formatInterview;
+
+  /// No description provided for @durationAprox.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: ±15 minutes'**
+  String get durationAprox;
+
+  /// No description provided for @questionsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions: 5 questions'**
+  String get questionsCount;
+
+  /// No description provided for @languageOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Language: ID / EN'**
+  String get languageOption;
+
+  /// No description provided for @methodStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Method: STAR-based'**
+  String get methodStar;
+
+  /// No description provided for @step1SelectCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1: Select your CV'**
+  String get step1SelectCv;
+
+  /// No description provided for @setupInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Interview'**
+  String get setupInterview;
+
+  /// No description provided for @appliedPositionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied Position: *'**
+  String get appliedPositionLabel;
+
+  /// No description provided for @companyNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Name: (Optional)'**
+  String get companyNameLabel;
+
+  /// No description provided for @positionLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Position Level:'**
+  String get positionLevelLabel;
+
+  /// No description provided for @industryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Industry:'**
+  String get industryLabel;
+
+  /// No description provided for @autoFillFromProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-fill from your profile'**
+  String get autoFillFromProfile;
+
+  /// No description provided for @dataHelpsAiTailor.
+  ///
+  /// In en, this message translates to:
+  /// **'This data helps AI tailor interview questions with relevant context'**
+  String get dataHelpsAiTailor;
+
+  /// No description provided for @juniorLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Junior (0-2 years)'**
+  String get juniorLevel;
+
+  /// No description provided for @midLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mid-level (3-5 years)'**
+  String get midLevel;
+
+  /// No description provided for @seniorLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Senior (5+ years)'**
+  String get seniorLevel;
+
+  /// No description provided for @jobDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Job Description'**
+  String get jobDescription;
+
+  /// No description provided for @step3PasteJd.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 3: Paste Job Description'**
+  String get step3PasteJd;
+
+  /// No description provided for @jdDetailHelpsAi.
+  ///
+  /// In en, this message translates to:
+  /// **'The more detailed the JD, the more accurate the AI interview questions'**
+  String get jdDetailHelpsAi;
+
+  /// No description provided for @pasteJobDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Job Description:'**
+  String get pasteJobDescriptionLabel;
+
+  /// No description provided for @extractKeyRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract Key Requirements'**
+  String get extractKeyRequirements;
+
+  /// No description provided for @extractedRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracted Requirements:'**
+  String get extractedRequirements;
+
+  /// No description provided for @noJdQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have a JD?'**
+  String get noJdQuestion;
+
+  /// No description provided for @skipThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this step →'**
+  String get skipThisStep;
+
+  /// No description provided for @setupComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Complete'**
+  String get setupComplete;
+
+  /// No description provided for @readyToStartInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to start the interview'**
+  String get readyToStartInterview;
+
+  /// No description provided for @interviewSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Summary:'**
+  String get interviewSummary;
+
+  /// No description provided for @cvLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CV:'**
+  String get cvLabel;
+
+  /// No description provided for @roleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Role:'**
+  String get roleLabel;
+
+  /// No description provided for @companyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Company:'**
+  String get companyLabel;
+
+  /// No description provided for @languageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language:'**
+  String get languageLabel;
+
+  /// No description provided for @questionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions:'**
+  String get questionsLabel;
+
+  /// No description provided for @durationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration:'**
+  String get durationLabel;
+
+  /// No description provided for @starMethodGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'STAR Method Guide'**
+  String get starMethodGuide;
+
+  /// No description provided for @viewStarExample.
+  ///
+  /// In en, this message translates to:
+  /// **'View STAR Method Example →'**
+  String get viewStarExample;
+
+  /// No description provided for @starTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips: Give specific and measurable answers. Use numbers and concrete results to strengthen your story.'**
+  String get starTips;
+
+  /// No description provided for @startInterviewNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Interview Now! →'**
+  String get startInterviewNow;
+
+  /// No description provided for @interviewStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Started'**
+  String get interviewStarted;
+
+  /// No description provided for @tapToAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to Answer'**
+  String get tapToAnswer;
+
+  /// No description provided for @toggleText.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Text:'**
+  String get toggleText;
+
+  /// No description provided for @on.
+  ///
+  /// In en, this message translates to:
+  /// **'ON 🟢'**
+  String get on;
+
+  /// No description provided for @off.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF ⚪'**
+  String get off;
+
+  /// No description provided for @exitInterviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Interview?'**
+  String get exitInterviewTitle;
+
+  /// No description provided for @exitInterviewContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress will be lost if you exit now.'**
+  String get exitInterviewContent;
+
+  /// No description provided for @continueInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Interview'**
+  String get continueInterview;
+
+  /// No description provided for @exitYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Exit'**
+  String get exitYes;
+
+  /// No description provided for @questionXofY.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} of {total}'**
+  String questionXofY(int current, int total);
+
+  /// No description provided for @behavioralStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Behavioral (STAR)'**
+  String get behavioralStar;
+
+  /// No description provided for @aiInterviewer.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Interviewer:'**
+  String get aiInterviewer;
+
+  /// No description provided for @hintStarMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint: Use STAR method'**
+  String get hintStarMethod;
+
+  /// No description provided for @yourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Answer'**
+  String get yourAnswer;
+
+  /// No description provided for @recording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get recording;
+
+  /// No description provided for @noTimeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'No time limit'**
+  String get noTimeLimit;
+
+  /// No description provided for @speakRelaxed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak naturally'**
+  String get speakRelaxed;
+
+  /// No description provided for @transcriptRealTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcript (Real-time):'**
+  String get transcriptRealTime;
+
+  /// No description provided for @wordsAndSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'~{words} words • {seconds}s'**
+  String wordsAndSeconds(int words, int seconds);
+
+  /// No description provided for @goodStartSituation.
+  ///
+  /// In en, this message translates to:
+  /// **'Good: You started with Situation!'**
+  String get goodStartSituation;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @finishAnswering.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Answering'**
+  String get finishAnswering;
+
+  /// No description provided for @startAnswering.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Answering'**
+  String get startAnswering;
+
+  /// No description provided for @noAnswerRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer recorded'**
+  String get noAnswerRecorded;
+
+  /// No description provided for @passFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair Pass'**
+  String get passFair;
+
+  /// No description provided for @fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Practice'**
+  String get fail;
+
+  /// No description provided for @interviewResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Results'**
+  String get interviewResults;
+
+  /// No description provided for @interviewFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Finished!'**
+  String get interviewFinished;
+
+  /// No description provided for @positionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Position:'**
+  String get positionLabel;
+
+  /// No description provided for @bandScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Band Score'**
+  String get bandScore;
+
+  /// No description provided for @passGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Pass'**
+  String get passGood;
+
+  /// No description provided for @goodJobReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job! You are ready for the real interview 🎉'**
+  String get goodJobReady;
+
+  /// No description provided for @scoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Score Details'**
+  String get scoreDetails;
+
+  /// No description provided for @starStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'STAR Structure'**
+  String get starStructure;
+
+  /// No description provided for @contentQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Content Quality'**
+  String get contentQuality;
+
+  /// No description provided for @fluency.
+  ///
+  /// In en, this message translates to:
+  /// **'Fluency'**
+  String get fluency;
+
+  /// No description provided for @confidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence'**
+  String get confidence;
+
+  /// No description provided for @viewFullReport.
+  ///
+  /// In en, this message translates to:
+  /// **'View Full Report'**
+  String get viewFullReport;
+
+  /// No description provided for @listenToRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to Your Recording'**
+  String get listenToRecording;
+
+  /// No description provided for @recommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations'**
+  String get recommendations;
+
+  /// No description provided for @basedOnPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your interview performance'**
+  String get basedOnPerformance;
+
+  /// No description provided for @yourStrengths.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Strengths'**
+  String get yourStrengths;
+
+  /// No description provided for @areasForImprovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Areas for Improvement'**
+  String get areasForImprovement;
+
+  /// No description provided for @selectedPractice.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Practice'**
+  String get selectedPractice;
+
+  /// No description provided for @readyForInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for Interview?'**
+  String get readyForInterview;
+
+  /// No description provided for @practiceAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Again'**
+  String get practiceAgain;
+
+  /// No description provided for @emailReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Report'**
+  String get emailReport;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @aiMessageOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning! I\'m Maya, HR from PT Tech Startup Indonesia. Thank you for taking the time for the interview today.'**
+  String get aiMessageOpening;
+
+  /// No description provided for @transcriptToggleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle text to show/hide transcript'**
+  String get transcriptToggleHint;
+
+  /// No description provided for @startInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Interview'**
+  String get startInterview;
+
+  /// No description provided for @sampleQuestion1.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me about a time you led a challenging project and how you handled it.'**
+  String get sampleQuestion1;
+
+  /// No description provided for @sampleQuestion2.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you handle conflict with coworkers?'**
+  String get sampleQuestion2;
+
+  /// No description provided for @sampleQuestion3.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me about your biggest failure and what you learned.'**
+  String get sampleQuestion3;
+
+  /// No description provided for @sampleQuestion4.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you prioritize tasks when deadlines are tight?'**
+  String get sampleQuestion4;
+
+  /// No description provided for @sampleQuestion5.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you interested in working for our company?'**
+  String get sampleQuestion5;
+
+  /// No description provided for @hintStarDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'S: Describe the situation\nT: Your task\nA: Action taken\nR: Measurable results'**
+  String get hintStarDetail;
+
+  /// No description provided for @followupQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-up Question'**
+  String get followupQuestion;
+
+  /// No description provided for @prevAnswerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Answer:'**
+  String get prevAnswerLabel;
+
+  /// No description provided for @showFullAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'View full answer ▼'**
+  String get showFullAnswer;
+
+  /// No description provided for @hideFullAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide ▲'**
+  String get hideFullAnswer;
+
+  /// No description provided for @followupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'AI asks for more detail. Focus on specific challenges and your decision-making process.'**
+  String get followupHint;
+
+  /// No description provided for @depthThinkingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-up questions help AI understand your depth and critical thinking'**
+  String get depthThinkingHint;
+
+  /// No description provided for @interviewCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Completed!'**
+  String get interviewCompleted;
+
+  /// No description provided for @goodJobUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Good job, {name}!'**
+  String goodJobUser(Object name);
+
+  /// No description provided for @analyzingAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing answers'**
+  String get analyzingAnswers;
+
+  /// No description provided for @evaluatingStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluating STAR structure'**
+  String get evaluatingStar;
+
+  /// No description provided for @calculatingFluency.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating fluency score'**
+  String get calculatingFluency;
+
+  /// No description provided for @generatingRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating recommendations'**
+  String get generatingRecommendations;
+
+  /// No description provided for @generatingFeedbackProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating feedback...'**
+  String get generatingFeedbackProgress;
+
+  /// No description provided for @estimateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate: 15-20 seconds'**
+  String get estimateTime;
+
+  /// No description provided for @totalDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Duration'**
+  String get totalDuration;
+
+  /// No description provided for @questionsAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} answered'**
+  String questionsAnswered(Object count);
+
+  /// No description provided for @wordsSpoken.
+  ///
+  /// In en, this message translates to:
+  /// **'Words spoken'**
+  String get wordsSpoken;
+
+  /// No description provided for @followups.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-ups'**
+  String get followups;
+
+  /// No description provided for @yourQuestionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Questions'**
+  String get yourQuestionsTitle;
+
+  /// No description provided for @anyQuestionsPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you have any questions for the interviewer?'**
+  String get anyQuestionsPrompt;
+
+  /// No description provided for @askInterviewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Interviewer'**
+  String get askInterviewer;
+
+  /// No description provided for @aiClosingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you very much, {name}. You will receive detailed feedback in a moment.'**
+  String aiClosingMessage(Object name);
+
+  /// No description provided for @excellentStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent structure'**
+  String get excellentStructure;
+
+  /// No description provided for @relevantDetailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevant & detailed'**
+  String get relevantDetailed;
+
+  /// No description provided for @tooManyFillers.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many fillers'**
+  String get tooManyFillers;
+
+  /// No description provided for @goodPaceTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Good pace & tone'**
+  String get goodPaceTone;
+
+  /// No description provided for @starAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'STAR Structure Analysis'**
+  String get starAnalysis;
+
+  /// No description provided for @fluencyAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Fluency Analysis'**
+  String get fluencyAnalysis;
+
+  /// No description provided for @speakingPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaking Pace'**
+  String get speakingPace;
+
+  /// No description provided for @wordsPerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Words per minute: {wpm} WPM'**
+  String wordsPerMinute(Object wpm);
+
+  /// No description provided for @syllablesPerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Syllables/minute: {spm} SPM'**
+  String syllablesPerMinute(Object spm);
+
+  /// No description provided for @speakingPaceChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaking Pace Over Time:'**
+  String get speakingPaceChart;
+
+  /// No description provided for @fillerWordsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Filler Words'**
+  String get fillerWordsLabel;
+
+  /// No description provided for @totalFillerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total filler → {percentage}% (Target: <5%)'**
+  String totalFillerLabel(Object percentage);
+
+  /// No description provided for @pauseAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauses & Hesitations'**
+  String get pauseAnalysis;
+
+  /// No description provided for @improvedSpeechTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Speech vs Improved Speech'**
+  String get improvedSpeechTitle;
+
+  /// No description provided for @originalSpeechLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Original Speech'**
+  String get originalSpeechLabel;
+
+  /// No description provided for @improvedSpeechLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Improved Speech'**
+  String get improvedSpeechLabel;
+
+  /// No description provided for @listenImprovedVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to Improved Version'**
+  String get listenImprovedVersion;
+
+  /// No description provided for @proTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro Tips:'**
+  String get proTips;
+
+  /// No description provided for @yourProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Progress'**
+  String get yourProgress;
+
+  /// No description provided for @trackingLast5Sessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking last 5 sessions'**
+  String get trackingLast5Sessions;
+
+  /// No description provided for @scoreHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Score History'**
+  String get scoreHistory;
+
+  /// No description provided for @metricComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric Comparison'**
+  String get metricComparison;
+
+  /// No description provided for @overallScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall Score'**
+  String get overallScore;
+
+  /// No description provided for @focusThisWeekFiller.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week\'s Focus: Reduce Fillers!'**
+  String get focusThisWeekFiller;
+
+  /// No description provided for @milestonesReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones Reached'**
+  String get milestonesReached;
+
+  /// No description provided for @compareSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Sessions'**
+  String get compareSessions;
+
+  /// No description provided for @fullReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Report'**
+  String get fullReport;
+
+  /// No description provided for @fullReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Interview Report'**
+  String get fullReportTitle;
+
+  /// No description provided for @strengthsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Strengths'**
+  String get strengthsLabel;
+
+  /// No description provided for @improvementsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Areas for Improvement'**
+  String get improvementsLabel;
+
+  /// No description provided for @selectedPracticeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Practice'**
+  String get selectedPracticeLabel;
+
+  /// No description provided for @readinessAssessment.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for Interview?'**
+  String get readinessAssessment;
+
+  /// No description provided for @exportReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Progress Report'**
+  String get exportReport;
+
+  /// No description provided for @compare.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compare;
+
+  /// No description provided for @viewDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'View Detail →'**
+  String get viewDetail;
+
+  /// No description provided for @viewPracticeTips.
+  ///
+  /// In en, this message translates to:
+  /// **'View Practice Tips'**
+  String get viewPracticeTips;
+
+  /// No description provided for @fiveInterviewsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'5 Interviews\nCompleted'**
+  String get fiveInterviewsCompleted;
+
+  /// No description provided for @score75FirstTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Score 7.5+\nFirst Time'**
+  String get score75FirstTime;
+
+  /// No description provided for @score80.
+  ///
+  /// In en, this message translates to:
+  /// **'Score 8.0+'**
+  String get score80;
+
+  /// No description provided for @tenInterviewsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'10 Interviews\nCompleted'**
+  String get tenInterviewsCompleted;
+
+  /// No description provided for @session.
+  ///
+  /// In en, this message translates to:
+  /// **'Session #{number}'**
+  String session(Object number);
+
+  /// No description provided for @vs.
+  ///
+  /// In en, this message translates to:
+  /// **'vs'**
+  String get vs;
+
+  /// No description provided for @downloadPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Download PDF Report'**
+  String get downloadPdf;
+
+  /// No description provided for @practiceQ1Filler.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat Q1 focusing on removing fillers'**
+  String get practiceQ1Filler;
+
+  /// No description provided for @practiceQ1Button.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Q1 →'**
+  String get practiceQ1Button;
+
+  /// No description provided for @practiceQ5Star.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Q5 with better STAR structure'**
+  String get practiceQ5Star;
+
+  /// No description provided for @practiceQ5Button.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Q5 →'**
+  String get practiceQ5Button;
+
+  /// No description provided for @practiceStrongResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare 3 strong Result stories'**
+  String get practiceStrongResults;
+
+  /// No description provided for @practiceTipsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Study Tips →'**
+  String get practiceTipsButton;
+
+  /// No description provided for @readinessScoreMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on 7.5/10 score, you are READY:'**
+  String get readinessScoreMessage;
+
+  /// No description provided for @readinessJuniorMid.
+  ///
+  /// In en, this message translates to:
+  /// **'✓ Junior-Mid level positions'**
+  String get readinessJuniorMid;
+
+  /// No description provided for @readinessStartupEnv.
+  ///
+  /// In en, this message translates to:
+  /// **'✓ Startup environment (fast-paced)'**
+  String get readinessStartupEnv;
+
+  /// No description provided for @readinessSeniorRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Senior roles - add more metrics & impact'**
+  String get readinessSeniorRoles;
+
+  /// No description provided for @readinessStatusExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for Interview'**
+  String get readinessStatusExcellent;
+
+  /// No description provided for @readinessStatusGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting There'**
+  String get readinessStatusGood;
+
+  /// No description provided for @readinessStatusNeedsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Practice'**
+  String get readinessStatusNeedsWork;
+
+  /// No description provided for @readinessDescExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'You show strong potential for the role.'**
+  String get readinessDescExcellent;
+
+  /// No description provided for @readinessDescGood.
+  ///
+  /// In en, this message translates to:
+  /// **'You have good points but need more practice.'**
+  String get readinessDescGood;
+
+  /// No description provided for @readinessDescNeedsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on the improvements above to get ready.'**
+  String get readinessDescNeedsWork;
+
+  /// No description provided for @generatingQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating interview questions...'**
+  String get generatingQuestions;
+
+  /// No description provided for @interviewFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview Focus'**
+  String get interviewFocus;
+
+  /// No description provided for @selectInterviewFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Interview Focus'**
+  String get selectInterviewFocus;
+
+  /// No description provided for @interviewFocusDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Determine the type of questions you want to practice.'**
+  String get interviewFocusDesc;
+
+  /// No description provided for @focusBehavioralTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Behavioral (STAR)'**
+  String get focusBehavioralTitle;
+
+  /// No description provided for @focusBehavioralDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on soft skills, leadership, and past experiences using the STAR method.'**
+  String get focusBehavioralDesc;
+
+  /// No description provided for @focusTechnicalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical / Hard Skills'**
+  String get focusTechnicalTitle;
+
+  /// No description provided for @focusTechnicalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep focus on coding, architecture, and role-specific technical knowledge.'**
+  String get focusTechnicalDesc;
+
+  /// No description provided for @focusMixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed (Composition)'**
+  String get focusMixedTitle;
+
+  /// No description provided for @focusMixedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A balanced combination of technical and behavioral questions.'**
+  String get focusMixedDesc;
+
+  /// No description provided for @readyToStartDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ready to start the interview simulation.'**
+  String get readyToStartDesc;
+
+  /// No description provided for @uploadedFromDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded from device'**
+  String get uploadedFromDevice;
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorTitle;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get unknownError;
+
+  /// No description provided for @recordAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Again'**
+  String get recordAgain;
+
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stop;
+
+  /// No description provided for @replayQuestionTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay Question'**
+  String get replayQuestionTooltip;
+
+  /// No description provided for @jdHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirements:\n- 3+ years exp in React\n- Strong in RESTful API\n- Experience with microservices\n- Docker & Kubernetes\n\nResponsibilities:\n- Lead frontend development\n- Mentor junior developers\n- Code review & quality'**
+  String get jdHintText;
+
+  /// No description provided for @cvDefaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded CV'**
+  String get cvDefaultLabel;
+
+  /// No description provided for @questionsCountDynamic.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Questions'**
+  String questionsCountDynamic(Object count);
+
+  /// No description provided for @industryTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get industryTechnology;
+
+  /// No description provided for @industryFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get industryFinance;
+
+  /// No description provided for @industryHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get industryHealthcare;
+
+  /// No description provided for @industryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get industryEducation;
+
+  /// No description provided for @industryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get industryOther;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
 }
 
 class _AppLocalizationsDelegate

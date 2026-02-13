@@ -66,6 +66,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
+  String get question => 'Question';
+
+  @override
+  String get questions => 'Questions';
+
+  @override
+  String get totalOf => 'of';
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get strengths => 'Strengths';
+
+  @override
+  String get improvements => 'Improvements';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get suggestion => 'Suggestion';
+
+  @override
   String get getStarted => 'Get Started';
 
   @override
@@ -309,7 +333,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get targetRoleHint => 'e.g., Software Engineer, Product Manager';
 
   @override
-  String get typeToSeeSuggestions => '💡 Type to see suggestions';
+  String get typeToSeeSuggestions => 'Type to see suggestions';
 
   @override
   String get whatsYourCareerGoal => 'What\'s your career goal?';
@@ -426,4 +450,657 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToHome => 'Back to Home';
+
+  @override
+  String get aiInterviewSimulator => 'AI Interview Simulator';
+
+  @override
+  String get setupStep1Desc =>
+      'Practice interview with AI tailored to your CV and role';
+
+  @override
+  String get formatInterview => 'Interview Format:';
+
+  @override
+  String get durationAprox => 'Duration: ±15 minutes';
+
+  @override
+  String get questionsCount => 'Questions: 5 questions';
+
+  @override
+  String get languageOption => 'Language: ID / EN';
+
+  @override
+  String get methodStar => 'Method: STAR-based';
+
+  @override
+  String get step1SelectCv => 'Step 1: Select your CV';
+
+  @override
+  String get setupInterview => 'Setup Interview';
+
+  @override
+  String get appliedPositionLabel => 'Applied Position: *';
+
+  @override
+  String get companyNameLabel => 'Company Name: (Optional)';
+
+  @override
+  String get positionLevelLabel => 'Position Level:';
+
+  @override
+  String get industryLabel => 'Industry:';
+
+  @override
+  String get autoFillFromProfile => 'Auto-fill from your profile';
+
+  @override
+  String get dataHelpsAiTailor =>
+      'This data helps AI tailor interview questions with relevant context';
+
+  @override
+  String get juniorLevel => 'Junior (0-2 years)';
+
+  @override
+  String get midLevel => 'Mid-level (3-5 years)';
+
+  @override
+  String get seniorLevel => 'Senior (5+ years)';
+
+  @override
+  String get jobDescription => 'Job Description';
+
+  @override
+  String get step3PasteJd => 'Step 3: Paste Job Description';
+
+  @override
+  String get jdDetailHelpsAi =>
+      'The more detailed the JD, the more accurate the AI interview questions';
+
+  @override
+  String get pasteJobDescriptionLabel => 'Paste Job Description:';
+
+  @override
+  String get extractKeyRequirements => 'Extract Key Requirements';
+
+  @override
+  String get extractedRequirements => 'Extracted Requirements:';
+
+  @override
+  String get noJdQuestion => 'Don\'t have a JD?';
+
+  @override
+  String get skipThisStep => 'Skip this step →';
+
+  @override
+  String get setupComplete => 'Setup Complete';
+
+  @override
+  String get readyToStartInterview => 'Ready to start the interview';
+
+  @override
+  String get interviewSummary => 'Interview Summary:';
+
+  @override
+  String get cvLabel => 'CV:';
+
+  @override
+  String get roleLabel => 'Role:';
+
+  @override
+  String get companyLabel => 'Company:';
+
+  @override
+  String get languageLabel => 'Language:';
+
+  @override
+  String get questionsLabel => 'Questions:';
+
+  @override
+  String get durationLabel => 'Duration:';
+
+  @override
+  String get starMethodGuide => 'STAR Method Guide';
+
+  @override
+  String get viewStarExample => 'View STAR Method Example →';
+
+  @override
+  String get starTips =>
+      'Tips: Give specific and measurable answers. Use numbers and concrete results to strengthen your story.';
+
+  @override
+  String get startInterviewNow => 'Start Interview Now! →';
+
+  @override
+  String get interviewStarted => 'Interview Started';
+
+  @override
+  String get tapToAnswer => 'Tap to Answer';
+
+  @override
+  String get toggleText => 'Toggle Text:';
+
+  @override
+  String get on => 'ON 🟢';
+
+  @override
+  String get off => 'OFF ⚪';
+
+  @override
+  String get exitInterviewTitle => 'Exit Interview?';
+
+  @override
+  String get exitInterviewContent => 'Progress will be lost if you exit now.';
+
+  @override
+  String get continueInterview => 'Continue Interview';
+
+  @override
+  String get exitYes => 'Yes, Exit';
+
+  @override
+  String questionXofY(int current, int total) {
+    return 'Question $current of $total';
+  }
+
+  @override
+  String get behavioralStar => 'Behavioral (STAR)';
+
+  @override
+  String get aiInterviewer => 'AI Interviewer:';
+
+  @override
+  String get hintStarMethod => 'Hint: Use STAR method';
+
+  @override
+  String get yourAnswer => 'Your Answer';
+
+  @override
+  String get recording => 'Recording...';
+
+  @override
+  String get noTimeLimit => 'No time limit';
+
+  @override
+  String get speakRelaxed => 'Speak naturally';
+
+  @override
+  String get transcriptRealTime => 'Transcript (Real-time):';
+
+  @override
+  String wordsAndSeconds(int words, int seconds) {
+    return '~$words words • ${seconds}s';
+  }
+
+  @override
+  String get goodStartSituation => 'Good: You started with Situation!';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get finishAnswering => 'Finish Answering';
+
+  @override
+  String get startAnswering => 'Start Answering';
+
+  @override
+  String get noAnswerRecorded => 'No answer recorded';
+
+  @override
+  String get passFair => 'Fair Pass';
+
+  @override
+  String get fail => 'Needs Practice';
+
+  @override
+  String get interviewResults => 'Interview Results';
+
+  @override
+  String get interviewFinished => 'Interview Finished!';
+
+  @override
+  String get positionLabel => 'Position:';
+
+  @override
+  String get bandScore => 'Band Score';
+
+  @override
+  String get passGood => 'Good Pass';
+
+  @override
+  String get goodJobReady =>
+      'Great job! You are ready for the real interview 🎉';
+
+  @override
+  String get scoreDetails => 'Score Details';
+
+  @override
+  String get starStructure => 'STAR Structure';
+
+  @override
+  String get contentQuality => 'Content Quality';
+
+  @override
+  String get fluency => 'Fluency';
+
+  @override
+  String get confidence => 'Confidence';
+
+  @override
+  String get viewFullReport => 'View Full Report';
+
+  @override
+  String get listenToRecording => 'Listen to Your Recording';
+
+  @override
+  String get recommendations => 'Recommendations';
+
+  @override
+  String get basedOnPerformance => 'Based on your interview performance';
+
+  @override
+  String get yourStrengths => 'Your Strengths';
+
+  @override
+  String get areasForImprovement => 'Areas for Improvement';
+
+  @override
+  String get selectedPractice => 'Selected Practice';
+
+  @override
+  String get readyForInterview => 'Ready for Interview?';
+
+  @override
+  String get practiceAgain => 'Practice Again';
+
+  @override
+  String get emailReport => 'Email Report';
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get aiMessageOpening =>
+      'Good morning! I\'m Maya, HR from PT Tech Startup Indonesia. Thank you for taking the time for the interview today.';
+
+  @override
+  String get transcriptToggleHint => 'Toggle text to show/hide transcript';
+
+  @override
+  String get startInterview => 'Start Interview';
+
+  @override
+  String get sampleQuestion1 =>
+      'Tell me about a time you led a challenging project and how you handled it.';
+
+  @override
+  String get sampleQuestion2 => 'How do you handle conflict with coworkers?';
+
+  @override
+  String get sampleQuestion3 =>
+      'Tell me about your biggest failure and what you learned.';
+
+  @override
+  String get sampleQuestion4 =>
+      'How do you prioritize tasks when deadlines are tight?';
+
+  @override
+  String get sampleQuestion5 =>
+      'Why are you interested in working for our company?';
+
+  @override
+  String get hintStarDetail =>
+      'S: Describe the situation\nT: Your task\nA: Action taken\nR: Measurable results';
+
+  @override
+  String get followupQuestion => 'Follow-up Question';
+
+  @override
+  String get prevAnswerLabel => 'Your Answer:';
+
+  @override
+  String get showFullAnswer => 'View full answer ▼';
+
+  @override
+  String get hideFullAnswer => 'Hide ▲';
+
+  @override
+  String get followupHint =>
+      'AI asks for more detail. Focus on specific challenges and your decision-making process.';
+
+  @override
+  String get depthThinkingHint =>
+      'Follow-up questions help AI understand your depth and critical thinking';
+
+  @override
+  String get interviewCompleted => 'Interview Completed!';
+
+  @override
+  String goodJobUser(Object name) {
+    return 'Good job, $name!';
+  }
+
+  @override
+  String get analyzingAnswers => 'Analyzing answers';
+
+  @override
+  String get evaluatingStar => 'Evaluating STAR structure';
+
+  @override
+  String get calculatingFluency => 'Calculating fluency score';
+
+  @override
+  String get generatingRecommendations => 'Generating recommendations';
+
+  @override
+  String get generatingFeedbackProgress => 'Generating feedback...';
+
+  @override
+  String get estimateTime => 'Estimate: 15-20 seconds';
+
+  @override
+  String get totalDuration => 'Total Duration';
+
+  @override
+  String questionsAnswered(Object count) {
+    return '$count answered';
+  }
+
+  @override
+  String get wordsSpoken => 'Words spoken';
+
+  @override
+  String get followups => 'Follow-ups';
+
+  @override
+  String get yourQuestionsTitle => 'Your Questions';
+
+  @override
+  String get anyQuestionsPrompt =>
+      'Do you have any questions for the interviewer?';
+
+  @override
+  String get askInterviewer => 'Ask Interviewer';
+
+  @override
+  String aiClosingMessage(Object name) {
+    return 'Thank you very much, $name. You will receive detailed feedback in a moment.';
+  }
+
+  @override
+  String get excellentStructure => 'Excellent structure';
+
+  @override
+  String get relevantDetailed => 'Relevant & detailed';
+
+  @override
+  String get tooManyFillers => 'Too many fillers';
+
+  @override
+  String get goodPaceTone => 'Good pace & tone';
+
+  @override
+  String get starAnalysis => 'STAR Structure Analysis';
+
+  @override
+  String get fluencyAnalysis => 'Fluency Analysis';
+
+  @override
+  String get speakingPace => 'Speaking Pace';
+
+  @override
+  String wordsPerMinute(Object wpm) {
+    return 'Words per minute: $wpm WPM';
+  }
+
+  @override
+  String syllablesPerMinute(Object spm) {
+    return 'Syllables/minute: $spm SPM';
+  }
+
+  @override
+  String get speakingPaceChart => 'Speaking Pace Over Time:';
+
+  @override
+  String get fillerWordsLabel => 'Filler Words';
+
+  @override
+  String totalFillerLabel(Object percentage) {
+    return 'Total filler → $percentage% (Target: <5%)';
+  }
+
+  @override
+  String get pauseAnalysis => 'Pauses & Hesitations';
+
+  @override
+  String get improvedSpeechTitle => 'Your Speech vs Improved Speech';
+
+  @override
+  String get originalSpeechLabel => 'Your Original Speech';
+
+  @override
+  String get improvedSpeechLabel => 'Improved Speech';
+
+  @override
+  String get listenImprovedVersion => 'Listen to Improved Version';
+
+  @override
+  String get proTips => 'Pro Tips:';
+
+  @override
+  String get yourProgress => 'Your Progress';
+
+  @override
+  String get trackingLast5Sessions => 'Tracking last 5 sessions';
+
+  @override
+  String get scoreHistory => 'Interview Score History';
+
+  @override
+  String get metricComparison => 'Metric Comparison';
+
+  @override
+  String get overallScore => 'Overall Score';
+
+  @override
+  String get focusThisWeekFiller => 'This Week\'s Focus: Reduce Fillers!';
+
+  @override
+  String get milestonesReached => 'Milestones Reached';
+
+  @override
+  String get compareSessions => 'Compare Sessions';
+
+  @override
+  String get fullReport => 'Full Report';
+
+  @override
+  String get fullReportTitle => 'Full Interview Report';
+
+  @override
+  String get strengthsLabel => 'Your Strengths';
+
+  @override
+  String get improvementsLabel => 'Areas for Improvement';
+
+  @override
+  String get selectedPracticeLabel => 'Selected Practice';
+
+  @override
+  String get readinessAssessment => 'Ready for Interview?';
+
+  @override
+  String get exportReport => 'Export Progress Report';
+
+  @override
+  String get compare => 'Compare';
+
+  @override
+  String get viewDetail => 'View Detail →';
+
+  @override
+  String get viewPracticeTips => 'View Practice Tips';
+
+  @override
+  String get fiveInterviewsCompleted => '5 Interviews\nCompleted';
+
+  @override
+  String get score75FirstTime => 'Score 7.5+\nFirst Time';
+
+  @override
+  String get score80 => 'Score 8.0+';
+
+  @override
+  String get tenInterviewsCompleted => '10 Interviews\nCompleted';
+
+  @override
+  String session(Object number) {
+    return 'Session #$number';
+  }
+
+  @override
+  String get vs => 'vs';
+
+  @override
+  String get downloadPdf => 'Download PDF Report';
+
+  @override
+  String get practiceQ1Filler => 'Repeat Q1 focusing on removing fillers';
+
+  @override
+  String get practiceQ1Button => 'Practice Q1 →';
+
+  @override
+  String get practiceQ5Star => 'Practice Q5 with better STAR structure';
+
+  @override
+  String get practiceQ5Button => 'Practice Q5 →';
+
+  @override
+  String get practiceStrongResults => 'Prepare 3 strong Result stories';
+
+  @override
+  String get practiceTipsButton => 'Study Tips →';
+
+  @override
+  String get readinessScoreMessage => 'Based on 7.5/10 score, you are READY:';
+
+  @override
+  String get readinessJuniorMid => '✓ Junior-Mid level positions';
+
+  @override
+  String get readinessStartupEnv => '✓ Startup environment (fast-paced)';
+
+  @override
+  String get readinessSeniorRoles =>
+      '⚠️ Senior roles - add more metrics & impact';
+
+  @override
+  String get readinessStatusExcellent => 'Ready for Interview';
+
+  @override
+  String get readinessStatusGood => 'Getting There';
+
+  @override
+  String get readinessStatusNeedsWork => 'Needs Practice';
+
+  @override
+  String get readinessDescExcellent =>
+      'You show strong potential for the role.';
+
+  @override
+  String get readinessDescGood =>
+      'You have good points but need more practice.';
+
+  @override
+  String get readinessDescNeedsWork =>
+      'Focus on the improvements above to get ready.';
+
+  @override
+  String get generatingQuestions => 'Generating interview questions...';
+
+  @override
+  String get interviewFocus => 'Interview Focus';
+
+  @override
+  String get selectInterviewFocus => 'Select Interview Focus';
+
+  @override
+  String get interviewFocusDesc =>
+      'Determine the type of questions you want to practice.';
+
+  @override
+  String get focusBehavioralTitle => 'Behavioral (STAR)';
+
+  @override
+  String get focusBehavioralDesc =>
+      'Focus on soft skills, leadership, and past experiences using the STAR method.';
+
+  @override
+  String get focusTechnicalTitle => 'Technical / Hard Skills';
+
+  @override
+  String get focusTechnicalDesc =>
+      'Deep focus on coding, architecture, and role-specific technical knowledge.';
+
+  @override
+  String get focusMixedTitle => 'Mixed (Composition)';
+
+  @override
+  String get focusMixedDesc =>
+      'A balanced combination of technical and behavioral questions.';
+
+  @override
+  String get readyToStartDesc =>
+      'You\'re ready to start the interview simulation.';
+
+  @override
+  String get uploadedFromDevice => 'Uploaded from device';
+
+  @override
+  String get errorTitle => 'Error';
+
+  @override
+  String get unknownError => 'An unknown error occurred';
+
+  @override
+  String get recordAgain => 'Record Again';
+
+  @override
+  String get stop => 'Stop';
+
+  @override
+  String get replayQuestionTooltip => 'Replay Question';
+
+  @override
+  String get jdHintText =>
+      'Requirements:\n- 3+ years exp in React\n- Strong in RESTful API\n- Experience with microservices\n- Docker & Kubernetes\n\nResponsibilities:\n- Lead frontend development\n- Mentor junior developers\n- Code review & quality';
+
+  @override
+  String get cvDefaultLabel => 'Uploaded CV';
+
+  @override
+  String questionsCountDynamic(Object count) {
+    return '$count Questions';
+  }
+
+  @override
+  String get industryTechnology => 'Technology';
+
+  @override
+  String get industryFinance => 'Finance';
+
+  @override
+  String get industryHealthcare => 'Healthcare';
+
+  @override
+  String get industryEducation => 'Education';
+
+  @override
+  String get industryOther => 'Other';
+
+  @override
+  String get goBack => 'Go Back';
 }
