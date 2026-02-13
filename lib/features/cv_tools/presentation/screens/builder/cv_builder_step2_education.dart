@@ -22,7 +22,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.education),
         centerTitle: true,
@@ -33,7 +33,6 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               child: Text(
                 '2/7',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF6B7280),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -66,14 +65,14 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFF0EA5E9)),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             l10n.stepHeader(2, 7),
-                            style: const TextStyle(
-                              color: Color(0xFF0EA5E9),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -84,10 +83,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       Center(
                         child: Text(
                           l10n.educationHistoryHeader,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF111827),
                           ),
                         ),
                       ),
@@ -95,9 +92,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       Center(
                         child: Text(
                           l10n.educationHistoryDesc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF6B7280),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -110,9 +106,9 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                           child: Container(
                             padding: const EdgeInsets.all(32),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFFE5E7EB)),
+                              border: Border.all(color: Theme.of(context).dividerColor),
                             ),
                             child: Column(
                               children: [
@@ -124,10 +120,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                 const SizedBox(height: 16),
                                 Text(
                                   l10n.noEducationData,
-                                  style: const TextStyle(
-                                    fontSize: 16,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF374151),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -141,7 +135,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                 const SizedBox(height: 24),
                                 OutlinedButton.icon(
                                   onPressed: () => _showEducationForm(context),
-                                  icon: const Icon(Iconsax.add),
+                                  icon: const Icon(Iconsax.add, size: 20),
                                   label: Text(l10n.addEducation),
                                 ),
                               ],
@@ -177,8 +171,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                     const SizedBox(height: 4),
                                     Text(
                                       period,
-                                      style: const TextStyle(
-                                        color: Color(0xFF6B7280),
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: const Color(0xFF6B7280),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -187,7 +181,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                                       Text(
                                         'IPK: ${edu.gpa}',
                                         style: const TextStyle(
-                                          color: Color(0xFF0EA5E9),
+                                          color: Theme.of(context).colorScheme.primary,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 12,
                                         ),
@@ -219,7 +213,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                           onPressed: () => _showEducationForm(context),
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 48),
-                            side: const BorderSide(color: Color(0xFF0EA5E9)),
+                            side: BorderSide(color: Theme.of(context).colorScheme.primary),
                           ),
                           icon: const Icon(Iconsax.add),
                           label: Text(l10n.addAnotherEducation),
@@ -238,7 +232,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -271,8 +265,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                     context.router.push(const CvBuilderStep3Route());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0EA5E9),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size(double.infinity, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -370,8 +364,8 @@ class _EducationFormState extends State<_EducationForm> {
     final l10n = AppLocalizations.of(context)!;
     
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       padding: EdgeInsets.only(

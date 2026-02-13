@@ -102,7 +102,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.cvBuilder),
         centerTitle: true,
@@ -113,7 +113,6 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
               child: Text(
                 '1/7',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF6B7280),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -134,11 +133,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
           // Tab Bar
           Container(
             height: 48,
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
               border: Border(
                 bottom: BorderSide(
-                  color: Color(0xFFE5E7EB),
+                  color: Theme.of(context).dividerColor,
                   width: 1,
                 ),
               ),
@@ -182,7 +181,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -194,9 +193,10 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
         child: SafeArea(
           child: ElevatedButton(
             onPressed: _saveAndNext,
+            onPressed: _saveAndNext,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0EA5E9),
-              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -227,8 +227,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: const Color(0xFF0EA5E9)),
+                color: Theme.of(context).cardColor,
+                border: Border.all(color: Theme.of(context).primaryColor),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -245,10 +245,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
           Center(
             child: Text(
               l10n.personalInfoHeader,
-              style: const TextStyle(
-                fontSize: 22,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
               ),
             ),
           ),
@@ -256,9 +254,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
           Center(
             child: Text(
               l10n.personalInfoDesc,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFF6B7280),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -384,10 +381,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen>
         RichText(
           text: TextSpan(
             text: label,
-            style: const TextStyle(
-              fontSize: 14,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF374151),
             ),
             children: [
               if (isRequired)

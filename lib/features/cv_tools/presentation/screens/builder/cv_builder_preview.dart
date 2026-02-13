@@ -66,7 +66,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         }
 
         return Scaffold(
-          backgroundColor: const Color(0xFF525659), // Dark background like PDF viewers
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: Text(l10n.previewCV),
             centerTitle: true,
@@ -92,13 +92,15 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: Theme(
+                        data: ThemeData.light(),
+                        child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Header
@@ -264,13 +266,14 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                         ], // Column children
                       ),
                     ),
+                    ),
                   ),
                 ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _isGenerating ? null : () => _downloadPdf(cv),
             icon: const Icon(Iconsax.document_download),
             label: Text(l10n.downloadPdf),
-            backgroundColor: const Color(0xFF0EA5E9),
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },
@@ -289,7 +292,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               fontSize: 16,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.0,
-              color: Color(0xFF0EA5E9),
+              color: Theme.of(context).primaryColor,
             ),
           ),
           const SizedBox(height: 4),

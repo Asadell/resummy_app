@@ -40,7 +40,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.skillsHeader),
         centerTitle: true,
@@ -51,7 +51,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               child: Text(
                 '5/7',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF6B7280),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -84,14 +83,14 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFF0EA5E9)),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             l10n.stepHeader(5, 7),
-                            style: const TextStyle(
-                              color: Color(0xFF0EA5E9),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -102,10 +101,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       Center(
                         child: Text(
                           l10n.skillsHeader,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF111827),
                           ),
                         ),
                       ),
@@ -113,9 +110,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       Center(
                         child: Text(
                           l10n.skillsDesc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF6B7280),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -126,9 +122,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFE5E7EB)),
+                          border: Border.all(color: Theme.of(context).dividerColor),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.05),
@@ -166,8 +162,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                                 ElevatedButton(
                                   onPressed: () => _addSkill(provider),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF0EA5E9),
-                                    foregroundColor: Colors.white,
+                                    backgroundColor: Theme.of(context).colorScheme.primary,
+                                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                                     minimumSize: const Size(48, 48),
                                     padding: EdgeInsets.zero,
                                     shape: RoundedRectangleBorder(
@@ -237,8 +233,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                               label: Text(skill),
                               deleteIcon: const Icon(Icons.close, size: 16),
                               onDeleted: () => provider.removeSkill(skill),
-                              backgroundColor: Colors.white,
-                              side: const BorderSide(color: Color(0xFFE5E7EB)),
+                              backgroundColor: Theme.of(context).cardColor,
+                              side: BorderSide(color: Theme.of(context).dividerColor),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -258,7 +254,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -291,8 +287,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     context.router.push(const CvBuilderStep6Route());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0EA5E9),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size(double.infinity, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

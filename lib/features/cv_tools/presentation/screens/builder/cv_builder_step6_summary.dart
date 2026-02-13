@@ -39,7 +39,7 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.summaryHeader),
         centerTitle: true,
@@ -50,7 +50,6 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
               child: Text(
                 '6/7',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF6B7280),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -81,14 +80,14 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFF0EA5E9)),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             l10n.stepHeader(6, 7),
-                            style: const TextStyle(
-                              color: Color(0xFF0EA5E9),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -99,10 +98,8 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                       Center(
                         child: Text(
                           l10n.summaryHeader,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF111827),
                           ),
                         ),
                       ),
@@ -110,9 +107,8 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                       Center(
                         child: Text(
                           l10n.summaryDesc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF6B7280),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -134,14 +130,15 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                         child: Column(
                           children: [
                             Row(
+                            Row(
                               children: [
-                                const Icon(Iconsax.magic_star, color: Color(0xFF0EA5E9)),
-                              const SizedBox(width: 8),
+                                Icon(Iconsax.magic_star, color: Theme.of(context).primaryColor),
+                                const SizedBox(width: 8),
                                 Text(
                                   l10n.aiInspirationTitle,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0EA5E9),
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                               ],
@@ -149,7 +146,7 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                             const SizedBox(height: 8),
                             Text(
                               l10n.aiInspirationDesc,
-                              style: const TextStyle(fontSize: 12, color: Color(0xFF4B5563)),
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
@@ -163,10 +160,10 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                                 icon: const Icon(Iconsax.hierarchy, size: 18),
                                 label: Text(l10n.generateWithAi),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: const Color(0xFF0EA5E9),
+                                  backgroundColor: Theme.of(context).cardColor,
+                                  foregroundColor: Theme.of(context).primaryColor,
                                   shadowColor: Colors.transparent,
-                                  side: const BorderSide(color: Color(0xFF0EA5E9)),
+                                  side: BorderSide(color: Theme.of(context).primaryColor),
                                 ),
                               ),
                             ),
@@ -214,7 +211,7 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -247,8 +244,8 @@ class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
                     context.router.push(const CvBuilderStep7Route());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0EA5E9),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size(double.infinity, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

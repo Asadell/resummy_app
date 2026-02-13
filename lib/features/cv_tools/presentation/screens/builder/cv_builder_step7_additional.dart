@@ -62,7 +62,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.additionalHeader),
         centerTitle: true,
@@ -73,7 +73,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               child: Text(
                 '7/7',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF6B7280),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -104,14 +103,14 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFF0EA5E9)),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             l10n.stepHeader(7, 7),
-                            style: const TextStyle(
-                              color: Color(0xFF0EA5E9),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -122,10 +121,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       Center(
                         child: Text(
                           l10n.additionalHeader,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF111827),
                           ),
                         ),
                       ),
@@ -133,9 +130,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       Center(
                         child: Text(
                           l10n.additionalDesc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF6B7280),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -164,7 +160,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                                     }
                                   });
                                 },
-                                secondary: Icon(_getSectionIcon(key), color: const Color(0xFF0EA5E9)),
+                                secondary: Icon(_getSectionIcon(key), color: Theme.of(context).primaryColor),
                               ),
                               if (_sections[key]!)
                                 Padding(
@@ -176,7 +172,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                                       hintText: _getSectionHint(context, key),
                                       border: const OutlineInputBorder(),
                                       filled: true,
-                                      fillColor: Colors.grey[50],
+                                      fillColor: Theme.of(context).canvasColor,
                                     ),
                                     onChanged: (_) => _save(provider),
                                   ),
@@ -198,7 +194,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -231,8 +227,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                     context.router.push(const CvBuilderPreviewRoute());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0EA5E9),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size(double.infinity, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
