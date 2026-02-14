@@ -3,12 +3,67 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis_entity.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_history_entity.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_history_provider.dart';
+import 'package:uuid/uuid.dart';
 
 @RoutePage()
 class CvAnalyzerResultScreen extends StatelessWidget {
   const CvAnalyzerResultScreen({super.key});
+
+  Future<void> _saveHistoryAndNavigateHome(BuildContext context) async {
+    final analyzerProvider = context.read<CvAnalyzerProvider>();
+    final historyProvider = context.read<CvHistoryProvider>();
+    final userId = context.read<AuthProvider>().user?.uid;
+    final language = context.read<LocaleProvider>().locale.languageCode;
+
+    if (userId == null || analyzerProvider.analysisResult == null) {
+      analyzerProvider.clearState();
+      if (context.mounted) {
+        context.router.popUntilRoot();
+      }
+      return;
+    }
+
+    final result = analyzerProvider.analysisResult!;
+    final fileInfo = analyzerProvider.selectedFileInfo;
+
+    final history = CvAnalysisHistory(
+      id: const Uuid().v4(),
+      userId: userId,
+      cvFileName: fileInfo?.name ?? 'Unknown CV',
+      score: result.overallScore,
+      grade: result.grade,
+      summary: result.summaryFeedback,
+      analyzedAt: DateTime.now(),
+      positionTarget: analyzerProvider.jobPosition.isNotEmpty
+          ? analyzerProvider.jobPosition
+          : null,
+      language: language,
+      analysisData: result.toJson(), // Save full analysis data
+    );
+
+    final saved = await historyProvider.saveCvAnalysisHistory(history);
+
+    if (!saved && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(historyProvider.errorMessage.isNotEmpty
+              ? historyProvider.errorMessage
+              : 'Failed to save analysis history'),
+        ),
+      );
+    }
+
+    analyzerProvider.clearState();
+    if (context.mounted) {
+      context.router.popUntilRoot();
+    }
+  }
 
   Color _getScoreColor(BuildContext context, int score) {
     if (score >= CvAnalysisGradeThresholds.fair) {
@@ -50,9 +105,8 @@ class CvAnalyzerResultScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {
-                    context.read<CvAnalyzerProvider>().clearState();
-                    context.router.popUntilRoot();
+                  onPressed: () async {
+                    await _saveHistoryAndNavigateHome(context);
                   },
                   child: Text(l10n.backToHome),
                 ),
