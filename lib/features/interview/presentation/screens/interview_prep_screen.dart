@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
 class InterviewPrepScreen extends StatelessWidget {
@@ -59,6 +62,16 @@ class InterviewPrepScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                 ),
               ),
+              if (kDebugMode) ...[
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: () {
+                     context.read<InterviewProvider>().startInterviewWithDummyData();
+                     context.router.push(const InterviewSessionFollowupRoute());
+                  },
+                  child: const Text('DEBUG: Skip with Dummy Data'),
+                ),
+              ],
               const SizedBox(height: 16),
               
               // History button
