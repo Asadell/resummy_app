@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -31,29 +32,33 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     final currentAdditional = provider.currentCV?.additionalSections ?? {};
     
     // Initialize state from existing data
-    _sections.keys.forEach((key) {
+    for (final key in _sections.keys) {
       if (currentAdditional.containsKey(key)) {
         _sections[key] = true;
         _controllers[key] = TextEditingController(text: currentAdditional[key]?.toString() ?? '');
       } else {
         _controllers[key] = TextEditingController();
       }
-    });
+    }
   }
 
   @override
   void dispose() {
-    _controllers.values.forEach((c) => c.dispose());
+    for (final c in _controllers.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 
   void _save(CVBuilderProvider provider) {
     final Map<String, dynamic> additionalData = {};
-    _sections.forEach((key, isEnabled) {
+    for (final entry in _sections.entries) {
+      final key = entry.key;
+      final isEnabled = entry.value;
       if (isEnabled && _controllers[key]!.text.isNotEmpty) {
         additionalData[key] = _controllers[key]!.text.trim();
       }
-    });
+    }
     provider.updateAdditionalSections(additionalData);
   }
 
@@ -61,185 +66,112 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(l10n.additionalHeader),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                '7/7',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
+    return CVBuilderStepLayout(
+      title: l10n.cvBuilder,
+      currentStep: 7,
+      totalSteps: 7,
+      onBack: () => context.router.maybePop(),
+      onNext: () {
+        context.read<CVBuilderProvider>().saveCurrentCV();
+        context.router.push(const CvBuilderPreviewRoute());
+      },
+      nextLabel: l10n.previewCV,
+      editContent: Consumer<CVBuilderProvider>(
+        builder: (context, provider, child) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Step Header
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l10n.stepHeader(7, 7),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Progress Bar
-          LinearProgressIndicator(
-            value: 1.0,
-            backgroundColor: const Color(0xFFE5E7EB),
-            color: const Color(0xFF0EA5E9),
-            minHeight: 4,
-          ),
-          
-          Expanded(
-            child: Consumer<CVBuilderProvider>(
-              builder: (context, provider, child) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Step Header
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            border: Border.all(color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 12),
+                Center(
+                  child: Text(
+                    l10n.additionalHeader,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Center(
+                  child: Text(
+                    l10n.additionalDesc,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // Sections List
+                ..._sections.keys.map((key) {
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(
+                            _getLocalizedSectionName(context, key),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          child: Text(
-                            l10n.stepHeader(7, 7),
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                          value: _sections[key],
+                          onChanged: (val) {
+                            setState(() {
+                              _sections[key] = val ?? false;
+                              if (!_sections[key]!) {
+                                _controllers[key]?.clear();
+                                _save(provider);
+                              }
+                            });
+                          },
+                          secondary: Icon(_getSectionIcon(key), color: Theme.of(context).primaryColor),
+                        ),
+                        if (_sections[key]!)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            child: TextField(
+                              controller: _controllers[key],
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                hintText: _getSectionHint(context, key),
+                                border: const OutlineInputBorder(),
+                                filled: true,
+                                fillColor: Theme.of(context).canvasColor,
+                              ),
+                              onChanged: (_) => _save(provider),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Center(
-                        child: Text(
-                          l10n.additionalHeader,
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Center(
-                        child: Text(
-                          l10n.additionalDesc,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 24),
-                      
-                      // Sections List
-                      ..._sections.keys.map((key) {
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          child: Column(
-                            children: [
-                              CheckboxListTile(
-                                title: Text(
-                                  _getLocalizedSectionName(context, key),
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                value: _sections[key],
-                                onChanged: (val) {
-                                  setState(() {
-                                    _sections[key] = val ?? false;
-                                    if (!_sections[key]!) {
-                                      _controllers[key]?.clear();
-                                      _save(provider);
-                                    }
-                                  });
-                                },
-                                secondary: Icon(_getSectionIcon(key), color: Theme.of(context).primaryColor),
-                              ),
-                              if (_sections[key]!)
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                                  child: TextField(
-                                    controller: _controllers[key],
-                                    maxLines: 3,
-                                    decoration: InputDecoration(
-                                      hintText: _getSectionHint(context, key),
-                                      border: const OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Theme.of(context).canvasColor,
-                                    ),
-                                    onChanged: (_) => _save(provider),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        );
-                      }),
-                      
-                      const SizedBox(height: 80),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              offset: const Offset(0, -4),
-              blurRadius: 16,
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.router.maybePop(),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      ],
                     ),
-                  ),
-                  child: Text(l10n.goBack),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Save and next
-                    context.read<CVBuilderProvider>().saveCurrentCV();
-                    context.router.push(const CvBuilderPreviewRoute());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text('${l10n.previewCV} →'),
-                ),
-              ),
-            ],
-          ),
-        ),
+                  );
+                }),
+                
+                const SizedBox(height: 80),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

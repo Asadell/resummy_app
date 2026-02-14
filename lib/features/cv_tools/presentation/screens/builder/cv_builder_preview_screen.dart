@@ -1,6 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvBuilderPreviewScreen extends StatelessWidget {
@@ -8,75 +12,110 @@ class CvBuilderPreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Preview CV'),
+        title: Text(l10n.previewCV),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.router.push(const CvBuilderStep7Route()),
+          onPressed: () => context.router.maybePop(),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.file_present, size: 80, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text('PDF Preview Placeholder'),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: () {
-                  // no loading screen, make your own loading indicator with LoadingIndicator widget
-                },
-                child: const Text('Analisis CV Ini'),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: () {
-                  // TODO: Implement download
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Downloading...')),
-                  );
-                },
-                child: const Text('Download Langsung'),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: () => context.router.push(const CvToolsHubRoute()),
-                child: const Text('Simpan sebagai Draft'),
-              ),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: () =>
-                    context.router.push(const CvBuilderStep1Route()),
-                child: const Text('Edit'),
-              ),
-            ],
+      body: Column(
+        children: [
+          // Preview Area
+          Expanded(
+            child: Consumer<CVBuilderProvider>(
+              builder: (context, provider, child) {
+                return CvPreviewCard(cvData: provider.currentCV);
+              },
+            ),
           ),
-        ),
+          
+          // Action Buttons
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  offset: const Offset(0, -4),
+                  blurRadius: 16,
+                ),
+              ],
+            ),
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Save as Draft Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      padding: const EdgeInsets.all(16),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final provider = context.read<CVBuilderProvider>();
+                      await provider.saveCurrentCV();
+                      
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('CV berhasil disimpan!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        // Navigate to hub to see saved CV
+                        context.router.push(const CvToolsHubRoute());
+                      }
+                    },
+                    child: const Text('Simpan sebagai Draft'),
+                  ),
+                  
+                  const SizedBox(height: 12),
+                  
+                  // Download PDF Button (placeholder)
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {
+                      // TODO: Implement PDF download
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Download PDF akan segera tersedia!'),
+                        ),
+                      );
+                    },
+                    child: const Text('Download PDF'),
+                  ),
+                  
+                  const SizedBox(height: 12),
+                  
+                  // Edit Button
+                  TextButton(
+                    onPressed: () => context.router.push(const CvBuilderStep1Route()),
+                    child: Text(l10n.edit),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

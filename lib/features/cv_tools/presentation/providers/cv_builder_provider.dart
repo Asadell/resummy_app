@@ -175,26 +175,37 @@ class CVBuilderProvider extends ChangeNotifier {
     if (_currentCV == null) return;
 
     _currentCV = _currentCV!.copyWith(
-      name: name ?? _currentCV!.name,
-      email: email,
-      phone: phone,
-      linkedin: linkedin,
-      portfolio: portfolio,
-      location: location,
+      name: name?.trim() ?? _currentCV!.name,
+      email: email?.trim(),
+      phone: phone?.trim(),
+      linkedin: linkedin?.trim(),
+      portfolio: portfolio?.trim(),
+      location: location?.trim(),
       updatedAt: DateTime.now(),
     );
     notifyListeners();
   }
 
+
+
   /// Add education entry (Step 2)
   void addEducation(Education education) {
     if (_currentCV == null) return;
 
-    final updatedEducation = List<Education>.from(_currentCV!.education)..add(education);
+    final trimmedEdu = education.copyWith(
+      institution: education.institution.trim(),
+      major: education.major.trim(),
+      degree: education.degree.trim(),
+      gpa: education.gpa?.trim(),
+      achievements: education.achievements?.trim(),
+    );
+
+    final updatedEducation = List<Education>.from(_currentCV!.education)..add(trimmedEdu);
     _currentCV = _currentCV!.copyWith(
       education: updatedEducation,
       updatedAt: DateTime.now(),
     );
+
     notifyListeners();
   }
 
@@ -202,8 +213,16 @@ class CVBuilderProvider extends ChangeNotifier {
   void updateEducation(int index, Education education) {
     if (_currentCV == null || index >= _currentCV!.education.length) return;
 
+    final trimmedEdu = education.copyWith(
+      institution: education.institution.trim(),
+      major: education.major.trim(),
+      degree: education.degree.trim(),
+      gpa: education.gpa?.trim(),
+      achievements: education.achievements?.trim(),
+    );
+
     final updatedEducation = List<Education>.from(_currentCV!.education);
-    updatedEducation[index] = education;
+    updatedEducation[index] = trimmedEdu;
     _currentCV = _currentCV!.copyWith(
       education: updatedEducation,
       updatedAt: DateTime.now(),
@@ -223,15 +242,25 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   /// Add work experience entry (Step 3)
   void addWorkExperience(WorkExperience experience) {
     if (_currentCV == null) return;
 
-    final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience)..add(experience);
+    final trimmedExp = experience.copyWith(
+      jobTitle: experience.jobTitle.trim(),
+      companyName: experience.companyName.trim(),
+      location: experience.location?.trim(),
+      responsibilities: experience.responsibilities.trim(),
+    );
+
+    final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience)..add(trimmedExp);
     _currentCV = _currentCV!.copyWith(
       workExperience: updatedExperience,
       updatedAt: DateTime.now(),
     );
+
     notifyListeners();
   }
 
@@ -239,8 +268,15 @@ class CVBuilderProvider extends ChangeNotifier {
   void updateWorkExperience(int index, WorkExperience experience) {
     if (_currentCV == null || index >= _currentCV!.workExperience.length) return;
 
+    final trimmedExp = experience.copyWith(
+      jobTitle: experience.jobTitle.trim(),
+      companyName: experience.companyName.trim(),
+      location: experience.location?.trim(),
+      responsibilities: experience.responsibilities.trim(),
+    );
+
     final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience);
-    updatedExperience[index] = experience;
+    updatedExperience[index] = trimmedExp;
     _currentCV = _currentCV!.copyWith(
       workExperience: updatedExperience,
       updatedAt: DateTime.now(),
@@ -260,15 +296,25 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   /// Add certification (Step 4)
   void addCertification(Certification certification) {
     if (_currentCV == null) return;
 
-    final updatedCertifications = List<Certification>.from(_currentCV!.certifications)..add(certification);
+    final trimmedCert = certification.copyWith(
+      name: certification.name.trim(),
+      issuingOrganization: certification.issuingOrganization.trim(),
+      credentialId: certification.credentialId?.trim(),
+      credentialUrl: certification.credentialUrl?.trim(),
+    );
+
+    final updatedCertifications = List<Certification>.from(_currentCV!.certifications)..add(trimmedCert);
     _currentCV = _currentCV!.copyWith(
       certifications: updatedCertifications,
       updatedAt: DateTime.now(),
     );
+
     notifyListeners();
   }
 
@@ -276,8 +322,15 @@ class CVBuilderProvider extends ChangeNotifier {
   void updateCertification(int index, Certification certification) {
     if (_currentCV == null || index >= _currentCV!.certifications.length) return;
 
+    final trimmedCert = certification.copyWith(
+      name: certification.name.trim(),
+      issuingOrganization: certification.issuingOrganization.trim(),
+      credentialId: certification.credentialId?.trim(),
+      credentialUrl: certification.credentialUrl?.trim(),
+    );
+
     final updatedCertifications = List<Certification>.from(_currentCV!.certifications);
-    updatedCertifications[index] = certification;
+    updatedCertifications[index] = trimmedCert;
     _currentCV = _currentCV!.copyWith(
       certifications: updatedCertifications,
       updatedAt: DateTime.now(),

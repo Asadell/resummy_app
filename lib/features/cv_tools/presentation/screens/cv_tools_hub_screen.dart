@@ -177,14 +177,18 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                             subtitle: Text('Updated: $date • ${cv.template}'),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.edit),
-                              onPressed: () {
-                                provider.loadCV(cv.id);
-                                context.router.push(const CvBuilderStep1Route());
+                              onPressed: () async {
+                                await provider.loadCV(cv.id);
+                                if (context.mounted) {
+                                  context.router.push(const CvBuilderStep1Route());
+                                }
                               },
                             ),
-                            onTap: () {
-                                provider.loadCV(cv.id);
+                            onTap: () async {
+                              await provider.loadCV(cv.id);
+                              if (context.mounted) {
                                 context.router.push(const CvBuilderStep1Route());
+                              }
                             },
                           ),
                         ),

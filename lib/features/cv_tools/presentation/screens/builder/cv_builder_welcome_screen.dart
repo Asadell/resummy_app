@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 
 @RoutePage()
 class CvBuilderWelcomeScreen extends StatelessWidget {
@@ -48,7 +50,11 @@ class CvBuilderWelcomeScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
-                onPressed: () => context.router.push(const CvBuilderStep1Route()),
+                onPressed: () {
+                  // Initialize new CV before navigating
+                  context.read<CVBuilderProvider>().startNewCV();
+                  context.router.push(const CvBuilderStep1Route());
+                },
                 child: Text(l10n.startCreatingCv),
               ),
             ],
