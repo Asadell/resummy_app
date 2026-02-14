@@ -33,7 +33,7 @@ import 'package:resummy_app/features/cv_tools/presentation/screens/analyzer/cv_a
     as _i3;
 import 'package:resummy_app/features/cv_tools/presentation/screens/analyzer/cv_analyzer_upload_screen.dart'
     as _i4;
-import 'package:resummy_app/features/cv_tools/presentation/screens/builder/cv_builder_preview_screen.dart'
+import 'package:resummy_app/features/cv_tools/presentation/screens/builder/cv_builder_preview.dart'
     as _i5;
 import 'package:resummy_app/features/cv_tools/presentation/screens/builder/cv_builder_step1_personal.dart'
     as _i6;

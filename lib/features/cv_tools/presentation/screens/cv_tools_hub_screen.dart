@@ -3,14 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 
 @RoutePage()
-class CvToolsHubScreen extends StatelessWidget {
+class CvToolsHubScreen extends StatefulWidget {
   const CvToolsHubScreen({super.key});
+
+  @override
+  State<CvToolsHubScreen> createState() => _CvToolsHubScreenState();
+}
+
+class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Load saved CVs when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CVBuilderProvider>().loadAllCVs();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.cvTools),
@@ -21,17 +38,7 @@ class CvToolsHubScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // CV Analyzer
-              _FeatureCard(
-                icon: Iconsax.chart_2,
-                title: l10n.cvAnalyzer,
-                description: l10n.cvAnalyzerDesc,
-                color: Theme.of(context).colorScheme.secondary,
-                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
-              ),
-              const SizedBox(height: 16),
-              
-              // CV Builder
+              // Feature Cards
               _FeatureCard(
                 icon: Iconsax.document_text,
                 title: l10n.cvBuilder,
@@ -40,8 +47,14 @@ class CvToolsHubScreen extends StatelessWidget {
                 onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
               ),
               const SizedBox(height: 16),
-              
-              // CV Translator
+              _FeatureCard(
+                icon: Iconsax.chart_2,
+                title: l10n.cvAnalyzer,
+                description: l10n.cvAnalyzerDesc,
+                color: Theme.of(context).colorScheme.secondary,
+                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
+              ),
+              const SizedBox(height: 16),
               _FeatureCard(
                 icon: Iconsax.translate,
                 title: l10n.cvTranslator,
@@ -50,14 +63,139 @@ class CvToolsHubScreen extends StatelessWidget {
                 onTap: () => context.router.push(const CvTranslatorUploadRoute()),
               ),
               const SizedBox(height: 16),
-              
-              // CV History
               _FeatureCard(
                 icon: Iconsax.clock,
                 title: l10n.cvHistory,
                 description: l10n.cvHistoryDesc,
                 color: Theme.of(context).colorScheme.tertiary,
                 onTap: () => context.router.push(const CvHistoryRoute()),
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Saved CVs Section
+              Text(
+                'My CVs',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              
+              Consumer<CVBuilderProvider>(
+                builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  
+                  if (provider.savedCVs.isEmpty) {
+                    return Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Iconsax.folder_open, size: 48, color: Colors.grey[400]),
+                          const SizedBox(height: 12),
+                          Text(
+                            'No saved CVs yet',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          OutlinedButton.icon(
+                            onPressed: () => context.router.push(const CvBuilderWelcomeRoute()),
+                            icon: const Icon(Iconsax.add),
+                            label: const Text('Create New CV'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: provider.savedCVs.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final cv = provider.savedCVs[index];
+                      // Format date: dd/MM/yyyy
+                      final date = '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
+                      
+                      return Dismissible(
+                        key: Key(cv.id),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          color: Colors.red,
+                          child: const Icon(Iconsax.trash, color: Colors.white),
+                        ),
+                        confirmDismiss: (direction) async {
+                           return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Confirm"),
+                                content: const Text("Are you sure you want to delete this CV?"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text("CANCEL"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: const Text("DELETE", style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        onDismissed: (direction) {
+                          provider.deleteCV(cv.id);
+                        },
+                        child: Card(
+                          margin: EdgeInsets.zero,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                              child: Text(
+                                cv.template.substring(0, 1).toUpperCase(),
+                                style: TextStyle(color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            title: Text(
+                              cv.name.isNotEmpty ? cv.name : 'Untitled CV',
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text('Updated: $date • ${cv.template}'),
+                            trailing: IconButton(
+                              icon: const Icon(Iconsax.edit),
+                              onPressed: () async {
+                                await provider.loadCV(cv.id);
+                                if (context.mounted) {
+                                  context.router.push(const CvBuilderStep1Route());
+                                }
+                              },
+                            ),
+                            onTap: () async {
+                              await provider.loadCV(cv.id);
+                              if (context.mounted) {
+                                context.router.push(const CvBuilderStep1Route());
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),

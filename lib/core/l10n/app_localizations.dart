@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @currentlyWorking.
   ///
   /// In en, this message translates to:
-  /// **'Currently Working'**
+  /// **'Currently working here'**
   String get currentlyWorking;
 
   /// No description provided for @lookingForJob.
@@ -1907,7 +1907,7 @@ abstract class AppLocalizations {
   /// No description provided for @downloadPdf.
   ///
   /// In en, this message translates to:
-  /// **'Download PDF Report'**
+  /// **'Download PDF'**
   String get downloadPdf;
 
   /// No description provided for @practiceQ1Filler.
@@ -2156,11 +2156,665 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get industryOther;
 
+  /// No description provided for @selectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get selectDate;
+
+  /// No description provided for @endDateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Select end date or check \"Currently Working\"'**
+  String get endDateError;
+
+  /// No description provided for @credentialUrlHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Link to verify certificate'**
+  String get credentialUrlHelper;
+
+  /// No description provided for @skipStepPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'If none, you can skip this step.'**
+  String get skipStepPrompt;
+
+  /// No description provided for @skillHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., Flutter, Leadership, English'**
+  String get skillHint;
+
+  /// No description provided for @skillTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: Enter one by one or press enter.'**
+  String get skillTip;
+
+  /// No description provided for @aiSuggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Suggestion'**
+  String get aiSuggestion;
+
+  /// No description provided for @featureComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is coming soon!'**
+  String get featureComingSoon;
+
+  /// No description provided for @aiInspirationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Need inspiration?'**
+  String get aiInspirationTitle;
+
+  /// No description provided for @aiInspirationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Our AI can generate a professional summary based on the data you\'ve entered.'**
+  String get aiInspirationDesc;
+
+  /// No description provided for @generateWithAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate with AI'**
+  String get generateWithAi;
+
+  /// No description provided for @summaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summaryLabel;
+
+  /// No description provided for @summaryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a brief summary of your most notable experiences and skills...'**
+  String get summaryHint;
+
+  /// No description provided for @summaryTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: Use 2-4 strong sentences to describe your experience and career goals.'**
+  String get summaryTip;
+
+  /// No description provided for @additionalHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Information'**
+  String get additionalHeader;
+
+  /// No description provided for @additionalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages, Hobbies, Projects, etc.'**
+  String get additionalDesc;
+
+  /// No description provided for @sectionLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get sectionLanguages;
+
+  /// No description provided for @sectionVolunteer.
+  ///
+  /// In en, this message translates to:
+  /// **'Volunteer'**
+  String get sectionVolunteer;
+
+  /// No description provided for @sectionReferences.
+  ///
+  /// In en, this message translates to:
+  /// **'References'**
+  String get sectionReferences;
+
+  /// No description provided for @sectionInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests & Hobbies'**
+  String get sectionInterests;
+
+  /// No description provided for @hintLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., English (Passive), Japanese (N3)'**
+  String get hintLanguages;
+
+  /// No description provided for @hintVolunteer.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., Disaster Relief Volunteer (2018), Event Committee Chair'**
+  String get hintVolunteer;
+
+  /// No description provided for @hintReferences.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., John Doe - Manager (08123xxxx)'**
+  String get hintReferences;
+
+  /// No description provided for @hintInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., Reading, Traveling, Photography'**
+  String get hintInterests;
+
+  /// No description provided for @previewCV.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview CV'**
+  String get previewCV;
+
+  /// No description provided for @yourNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR NAME'**
+  String get yourNamePlaceholder;
+
+  /// No description provided for @labelTechnicalSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Skills'**
+  String get labelTechnicalSkills;
+
+  /// No description provided for @labelSoftSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft Skills'**
+  String get labelSoftSkills;
+
+  /// No description provided for @cvSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'CV saved to {path}'**
+  String cvSavedTo(Object path);
+
+  /// No description provided for @failedToGeneratePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate PDF: {error}'**
+  String failedToGeneratePdf(Object error);
+
+  /// No description provided for @noCvData.
+  ///
+  /// In en, this message translates to:
+  /// **'No CV Data Found'**
+  String get noCvData;
+
   /// No description provided for @goBack.
   ///
   /// In en, this message translates to:
   /// **'Go Back'**
   String get goBack;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredField;
+
+  /// No description provided for @optionalField.
+  ///
+  /// In en, this message translates to:
+  /// **'(Optional)'**
+  String get optionalField;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @stepHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current}/{total}'**
+  String stepHeader(Object current, Object total);
+
+  /// No description provided for @personalInfoHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Info / Header'**
+  String get personalInfoHeader;
+
+  /// No description provided for @personalInfoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic contact information'**
+  String get personalInfoDesc;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @linkedin.
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get linkedin;
+
+  /// No description provided for @portfolio.
+  ///
+  /// In en, this message translates to:
+  /// **'Portfolio/Website'**
+  String get portfolio;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'City, Country'**
+  String get location;
+
+  /// No description provided for @autoFillHint.
+  ///
+  /// In en, this message translates to:
+  /// **'← Auto-fill if toggle ON'**
+  String get autoFillHint;
+
+  /// No description provided for @educationHistoryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Education History'**
+  String get educationHistoryHeader;
+
+  /// No description provided for @educationHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add formal/non-formal education'**
+  String get educationHistoryDesc;
+
+  /// No description provided for @noEducationData.
+  ///
+  /// In en, this message translates to:
+  /// **'No education data yet'**
+  String get noEducationData;
+
+  /// No description provided for @addEducationPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your education history to make your CV look professional.'**
+  String get addEducationPrompt;
+
+  /// No description provided for @addEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Education'**
+  String get addEducation;
+
+  /// No description provided for @addAnotherEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Education'**
+  String get addAnotherEducation;
+
+  /// No description provided for @editEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Education'**
+  String get editEducation;
+
+  /// No description provided for @institutionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Institution Name'**
+  String get institutionName;
+
+  /// No description provided for @major.
+  ///
+  /// In en, this message translates to:
+  /// **'Major'**
+  String get major;
+
+  /// No description provided for @degree.
+  ///
+  /// In en, this message translates to:
+  /// **'Degree'**
+  String get degree;
+
+  /// No description provided for @startYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Year'**
+  String get startYear;
+
+  /// No description provided for @endYear.
+  ///
+  /// In en, this message translates to:
+  /// **'End Year'**
+  String get endYear;
+
+  /// No description provided for @currentlyStudying.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently studying here'**
+  String get currentlyStudying;
+
+  /// No description provided for @gpa.
+  ///
+  /// In en, this message translates to:
+  /// **'GPA'**
+  String get gpa;
+
+  /// No description provided for @gpaOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'GPA / Final Grade (Optional)'**
+  String get gpaOptional;
+
+  /// No description provided for @experienceHistoryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Experience'**
+  String get experienceHistoryHeader;
+
+  /// No description provided for @experienceHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add relevant work experience'**
+  String get experienceHistoryDesc;
+
+  /// No description provided for @noExperienceData.
+  ///
+  /// In en, this message translates to:
+  /// **'No experience data yet'**
+  String get noExperienceData;
+
+  /// No description provided for @addExperiencePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Work experience is crucial to show your qualifications.'**
+  String get addExperiencePrompt;
+
+  /// No description provided for @addExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Experience'**
+  String get addExperience;
+
+  /// No description provided for @addAnotherExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Experience'**
+  String get addAnotherExperience;
+
+  /// No description provided for @editExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Experience'**
+  String get editExperience;
+
+  /// No description provided for @jobTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Job Title'**
+  String get jobTitle;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Name'**
+  String get companyName;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDate;
+
+  /// No description provided for @responsibilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Description / Responsibilities'**
+  String get responsibilities;
+
+  /// No description provided for @responsibilitiesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your responsibilities and achievements...'**
+  String get responsibilitiesHint;
+
+  /// No description provided for @certificationHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications & Licenses'**
+  String get certificationHeader;
+
+  /// No description provided for @certificationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add relevant certifications'**
+  String get certificationDesc;
+
+  /// No description provided for @noCertificationData.
+  ///
+  /// In en, this message translates to:
+  /// **'No certification data yet'**
+  String get noCertificationData;
+
+  /// No description provided for @addCertificationPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications can validate your skills.'**
+  String get addCertificationPrompt;
+
+  /// No description provided for @addCertification.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Certification'**
+  String get addCertification;
+
+  /// No description provided for @addAnotherCertification.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Certification'**
+  String get addAnotherCertification;
+
+  /// No description provided for @editCertification.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Certification'**
+  String get editCertification;
+
+  /// No description provided for @certificationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Certification Name'**
+  String get certificationName;
+
+  /// No description provided for @issuingOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuing Organization'**
+  String get issuingOrganization;
+
+  /// No description provided for @issueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue Date'**
+  String get issueDate;
+
+  /// No description provided for @expirationDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiration Date'**
+  String get expirationDate;
+
+  /// No description provided for @doesNotExpire.
+  ///
+  /// In en, this message translates to:
+  /// **'Does not expire'**
+  String get doesNotExpire;
+
+  /// No description provided for @credentialId.
+  ///
+  /// In en, this message translates to:
+  /// **'Credential ID (Optional)'**
+  String get credentialId;
+
+  /// No description provided for @credentialUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Credential URL (Optional)'**
+  String get credentialUrl;
+
+  /// No description provided for @skillsHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills'**
+  String get skillsHeader;
+
+  /// No description provided for @skillsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add technical and soft skills'**
+  String get skillsDesc;
+
+  /// No description provided for @noSkillsData.
+  ///
+  /// In en, this message translates to:
+  /// **'No skills data yet'**
+  String get noSkillsData;
+
+  /// No description provided for @addSkillPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific skills will help you pass ATS screening.'**
+  String get addSkillPrompt;
+
+  /// No description provided for @addSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Skill'**
+  String get addSkill;
+
+  /// No description provided for @addAnotherSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Skill'**
+  String get addAnotherSkill;
+
+  /// No description provided for @editSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Skill'**
+  String get editSkill;
+
+  /// No description provided for @skillName.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill Name'**
+  String get skillName;
+
+  /// No description provided for @skillLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Proficiency Level'**
+  String get skillLevel;
+
+  /// No description provided for @levelBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get levelBeginner;
+
+  /// No description provided for @levelIntermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get levelIntermediate;
+
+  /// No description provided for @levelAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get levelAdvanced;
+
+  /// No description provided for @levelExpert.
+  ///
+  /// In en, this message translates to:
+  /// **'Expert'**
+  String get levelExpert;
+
+  /// No description provided for @summaryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional Summary'**
+  String get summaryHeader;
+
+  /// No description provided for @summaryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Brief summary of your profile'**
+  String get summaryDesc;
+
+  /// No description provided for @generatingSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating summary...'**
+  String get generatingSummary;
+
+  /// No description provided for @noAdditionalData.
+  ///
+  /// In en, this message translates to:
+  /// **'No additional information yet'**
+  String get noAdditionalData;
+
+  /// No description provided for @addAdditional.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Information'**
+  String get addAdditional;
+
+  /// No description provided for @addAnotherAdditional.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Information'**
+  String get addAnotherAdditional;
+
+  /// No description provided for @editAdditional.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Information'**
+  String get editAdditional;
+
+  /// No description provided for @sectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Section Label'**
+  String get sectionLabel;
+
+  /// No description provided for @sectionLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., Languages, Hobbies, Projects'**
+  String get sectionLabelHint;
+
+  /// No description provided for @sectionValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get sectionValue;
+
+  /// No description provided for @sectionValueHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g., English (Active), Football'**
+  String get sectionValueHint;
+
+  /// No description provided for @saveAndFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Finish'**
+  String get saveAndFinish;
 }
 
 class _AppLocalizationsDelegate

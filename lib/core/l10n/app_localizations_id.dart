@@ -315,7 +315,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get freshGraduate => 'Lulusan Baru';
 
   @override
-  String get currentlyWorking => 'Sedang Bekerja';
+  String get currentlyWorking => 'Masih bekerja di sini';
 
   @override
   String get lookingForJob => 'Sedang Mencari Kerja';
@@ -966,7 +966,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get vs => 'vs';
 
   @override
-  String get downloadPdf => 'Download Laporan PDF';
+  String get downloadPdf => 'Unduh PDF';
 
   @override
   String get practiceQ1Filler => 'Ulangi Q1 fokus hilangkan filler';
@@ -1102,5 +1102,350 @@ class AppLocalizationsId extends AppLocalizations {
   String get industryOther => 'Lainnya';
 
   @override
+  String get selectDate => 'Pilih Tanggal';
+
+  @override
+  String get endDateError =>
+      'Pilih tanggal selesai atau centang \"Masih Bekerja\"';
+
+  @override
+  String get credentialUrlHelper => 'Link untuk verifikasi sertifikat';
+
+  @override
+  String get skipStepPrompt =>
+      'Jika tidak ada, kamu bisa melewati langkah ini.';
+
+  @override
+  String get skillHint => 'Contoh: Flutter, Leadership, English';
+
+  @override
+  String get skillTip => 'Tip: Masukkan satu per satu atau tekan enter.';
+
+  @override
+  String get aiSuggestion => 'Saran AI';
+
+  @override
+  String get featureComingSoon => 'Fitur ini akan segera hadir!';
+
+  @override
+  String get aiInspirationTitle => 'Butuh inspirasi?';
+
+  @override
+  String get aiInspirationDesc =>
+      'AI kami dapat membuatkan ringkasan profesional berdasarkan data yang sudah kamu masukkan sebelumnya.';
+
+  @override
+  String get generateWithAi => 'Generate with AI';
+
+  @override
+  String get summaryLabel => 'Ringkasan';
+
+  @override
+  String get summaryHint =>
+      'Tulis ringkasan singkat tentang pengalaman dan keahlianmu yang paling menonjol...';
+
+  @override
+  String get summaryTip =>
+      'Tip: Gunakan 2-4 kalimat yang kuat untuk menggambarkan pengalaman dan tujuan karirmu.';
+
+  @override
+  String get additionalHeader => 'Informasi Tambahan';
+
+  @override
+  String get additionalDesc => 'Bahasa, Hobi, Project, dll';
+
+  @override
+  String get sectionLanguages => 'Bahasa';
+
+  @override
+  String get sectionVolunteer => 'Sukarelawan';
+
+  @override
+  String get sectionReferences => 'Referensi';
+
+  @override
+  String get sectionInterests => 'Minat & Hobi';
+
+  @override
+  String get hintLanguages =>
+      'Contoh: Bahasa Inggris (Pasif), Bahasa Jepang (N3)';
+
+  @override
+  String get hintVolunteer =>
+      'Contoh: Relawan Bencana Alam Palu (2018), Ketua Panitia 17 Agustus';
+
+  @override
+  String get hintReferences => 'Contoh: Budi Santoso - Manager (08123xxxx)';
+
+  @override
+  String get hintInterests => 'Contoh: Membaca, Traveling, Fotografi';
+
+  @override
+  String get previewCV => 'Lihat CV';
+
+  @override
+  String get yourNamePlaceholder => 'NAMA ANDA';
+
+  @override
+  String get labelTechnicalSkills => 'Keahlian Teknis';
+
+  @override
+  String get labelSoftSkills => 'Soft Skills';
+
+  @override
+  String cvSavedTo(Object path) {
+    return 'CV disimpan di $path';
+  }
+
+  @override
+  String failedToGeneratePdf(Object error) {
+    return 'Gagal membuat PDF: $error';
+  }
+
+  @override
+  String get noCvData => 'Tidak ada data CV ditemukan';
+
+  @override
   String get goBack => 'Kembali';
+
+  @override
+  String get requiredField => 'Wajib diisi';
+
+  @override
+  String get optionalField => '(Opsional)';
+
+  @override
+  String get present => 'Sekarang';
+
+  @override
+  String stepHeader(Object current, Object total) {
+    return 'Langkah $current/$total';
+  }
+
+  @override
+  String get personalInfoHeader => 'Data Pribadi / Header';
+
+  @override
+  String get personalInfoDesc => 'Informasi kontak dasar';
+
+  @override
+  String get phoneNumber => 'No. Telepon';
+
+  @override
+  String get linkedin => 'LinkedIn';
+
+  @override
+  String get portfolio => 'Portfolio/Website';
+
+  @override
+  String get location => 'Kota, Negara';
+
+  @override
+  String get autoFillHint => '← Auto-fill jika toggle ON';
+
+  @override
+  String get educationHistoryHeader => 'Riwayat Pendidikan';
+
+  @override
+  String get educationHistoryDesc => 'Tambahkan pendidikan formal/non-formal';
+
+  @override
+  String get noEducationData => 'Belum ada data pendidikan';
+
+  @override
+  String get addEducationPrompt =>
+      'Tambahkan riwayat pendidikanmu agar CV terlihat lebih profesional.';
+
+  @override
+  String get addEducation => 'Tambah Pendidikan';
+
+  @override
+  String get addAnotherEducation => 'Tambah Pendidikan Lainnya';
+
+  @override
+  String get editEducation => 'Edit Pendidikan';
+
+  @override
+  String get institutionName => 'Nama Institusi';
+
+  @override
+  String get major => 'Jurusan';
+
+  @override
+  String get degree => 'Gelar';
+
+  @override
+  String get startYear => 'Tahun Mulai';
+
+  @override
+  String get endYear => 'Tahun Selesai';
+
+  @override
+  String get currentlyStudying => 'Masih belajar di sini';
+
+  @override
+  String get gpa => 'IPK';
+
+  @override
+  String get gpaOptional => 'IPK / Nilai Akhir (Opsional)';
+
+  @override
+  String get experienceHistoryHeader => 'Pengalaman Kerja';
+
+  @override
+  String get experienceHistoryDesc => 'Tambahkan pengalaman kerja yang relevan';
+
+  @override
+  String get noExperienceData => 'Belum ada data pengalaman';
+
+  @override
+  String get addExperiencePrompt =>
+      'Pengalaman kerja sangat penting untuk menunjukkan kualifikasimu.';
+
+  @override
+  String get addExperience => 'Tambah Pengalaman';
+
+  @override
+  String get addAnotherExperience => 'Tambah Pengalaman Lainnya';
+
+  @override
+  String get editExperience => 'Edit Pengalaman';
+
+  @override
+  String get jobTitle => 'Posisi / Jabatan';
+
+  @override
+  String get companyName => 'Nama Perusahaan';
+
+  @override
+  String get startDate => 'Tanggal Mulai';
+
+  @override
+  String get endDate => 'Tanggal Selesai';
+
+  @override
+  String get responsibilities => 'Deskripsi / Tanggung Jawab';
+
+  @override
+  String get responsibilitiesHint =>
+      'Jelaskan tanggung jawab dan pencapaianmu...';
+
+  @override
+  String get certificationHeader => 'Sertifikasi & Lisensi';
+
+  @override
+  String get certificationDesc => 'Tambahkan sertifikasi yang relevan';
+
+  @override
+  String get noCertificationData => 'Belum ada data sertifikasi';
+
+  @override
+  String get addCertificationPrompt =>
+      'Sertifikasi dapat memvalidasi keahlianmu.';
+
+  @override
+  String get addCertification => 'Tambah Sertifikasi';
+
+  @override
+  String get addAnotherCertification => 'Tambah Sertifikasi Lainnya';
+
+  @override
+  String get editCertification => 'Edit Sertifikasi';
+
+  @override
+  String get certificationName => 'Nama Sertifikasi';
+
+  @override
+  String get issuingOrganization => 'Organisasi Penerbit';
+
+  @override
+  String get issueDate => 'Tanggal Terbit';
+
+  @override
+  String get expirationDate => 'Tanggal Kadaluarsa';
+
+  @override
+  String get doesNotExpire => 'Tidak ada masa berlaku';
+
+  @override
+  String get credentialId => 'ID Kredensial (Opsional)';
+
+  @override
+  String get credentialUrl => 'URL Kredensial (Opsional)';
+
+  @override
+  String get skillsHeader => 'Keahlian (Skills)';
+
+  @override
+  String get skillsDesc => 'Tambahkan keahlian teknis dan non-teknis';
+
+  @override
+  String get noSkillsData => 'Belum ada data keahlian';
+
+  @override
+  String get addSkillPrompt =>
+      'Keahlian spesifik akan membantumu lolos screening ATS.';
+
+  @override
+  String get addSkill => 'Tambah Keahlian';
+
+  @override
+  String get addAnotherSkill => 'Tambah Keahlian Lainnya';
+
+  @override
+  String get editSkill => 'Edit Keahlian';
+
+  @override
+  String get skillName => 'Nama Keahlian';
+
+  @override
+  String get skillLevel => 'Level Penguasaan';
+
+  @override
+  String get levelBeginner => 'Pemula';
+
+  @override
+  String get levelIntermediate => 'Menengah';
+
+  @override
+  String get levelAdvanced => 'Lanjutan';
+
+  @override
+  String get levelExpert => 'Ahli';
+
+  @override
+  String get summaryHeader => 'Ringkasan Profesional';
+
+  @override
+  String get summaryDesc => 'Ringkasan singkat profilmu';
+
+  @override
+  String get generatingSummary => 'Sedang membuat ringkasan...';
+
+  @override
+  String get noAdditionalData => 'Belum ada informasi tambahan';
+
+  @override
+  String get addAdditional => 'Tambah Informasi';
+
+  @override
+  String get addAnotherAdditional => 'Tambah Informasi Lainnya';
+
+  @override
+  String get editAdditional => 'Edit Informasi';
+
+  @override
+  String get sectionLabel => 'Label Bagian';
+
+  @override
+  String get sectionLabelHint => 'Contoh: Bahasa, Hobi, Project';
+
+  @override
+  String get sectionValue => 'Keterangan';
+
+  @override
+  String get sectionValueHint => 'Contoh: Inggris (Aktif), Sepak Bola';
+
+  @override
+  String get saveAndFinish => 'Simpan & Selesai';
 }

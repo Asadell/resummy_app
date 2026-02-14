@@ -4,7 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
+
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
