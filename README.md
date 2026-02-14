@@ -416,19 +416,51 @@ Rules saat ini (development mode):
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users: hanya bisa akses data sendiri
+    // Allow authenticated users to read/write their own data
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
-    // CVs: hanya pemilik yang bisa akses
+    // Allow authenticated users to read/write their own CVs
     match /cvs/{cvId} {
       allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
     }
     
-    // Interviews: hanya pemilik yang bisa akses
+    // Allow authenticated users to read/write their own interviews
     match /interviews/{interviewId} {
       allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Allow authenticated users to read/write their own activities
+    match /activities/{activityId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Allow users configure their own CVs Analysis History
+    match /cv_analysis_history/{historyId} {
+      // Allow users to read their own history
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Allow users to create their own history
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+
+      // Allow users to delete their own history
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Todos collection
+    match /todos/{todoId} {
+      // Allow read own todos
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      
+      // Allow read all todos if isPublic is true
+      allow read: if request.auth != null && resource.data.isPublic == true;
+      
+      // Allow create own todos
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      
+      // Allow update/delete own todos
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
   }
 }

@@ -8,12 +8,18 @@ import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_analysis_remote_data_source.dart';
+import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_history_remote_data_source.dart';
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_builder_repository_impl.dart';
+import 'package:resummy_app/features/cv_tools/data/repositories/cv_history_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
 import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
+import 'package:resummy_app/features/cv_tools/domain/usecases/get_cv_analysis_history_usecase.dart';
+import 'package:resummy_app/features/cv_tools/domain/usecases/save_cv_analysis_history_usecase.dart';
+import 'package:resummy_app/features/cv_tools/domain/usecases/delete_cv_analysis_history_usecase.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_history_provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/core/services/gemini_speech_service.dart';
 import 'package:resummy_app/core/services/gemini_interview_service.dart';
@@ -67,6 +73,18 @@ void main() async {
               CVLocalDataSource(prefs),
             ),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final repository = CvHistoryRepositoryImpl(
+              remoteDataSource: CvHistoryRemoteDataSourceImpl(),
+            );
+            return CvHistoryProvider(
+              saveHistoryUseCase: SaveCvAnalysisHistoryUseCase(repository),
+              getHistoryUseCase: GetCvAnalysisHistoryUseCase(repository),
+              deleteHistoryUseCase: DeleteCvAnalysisHistoryUseCase(repository),
+            );
+          },
         ),
         ChangeNotifierProvider(
           create: (_) => InterviewProvider(
