@@ -50,3 +50,4 @@ app.*.map.json
 *.md
 .last_build_id
 *.txt
+*.pdf

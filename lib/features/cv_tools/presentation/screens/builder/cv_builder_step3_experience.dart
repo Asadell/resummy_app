@@ -25,7 +25,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: 3,
-      totalSteps: 7,
+      totalSteps: 8,
       onBack: () => context.router.maybePop(),
       onNext: () {
         context.read<CVBuilderProvider>().saveCurrentCV();
@@ -50,7 +50,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      l10n.stepHeader(3, 7),
+                      l10n.stepHeader(3, 8),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 12,
@@ -213,6 +213,26 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
   bool _isCurrentlyWorking = false;
   String _employmentType = 'Full-time';
   int? _editingIndex;
+  bool _showValidation = false;
+
+  String? _validateStartDate(AppLocalizations l10n) {
+    if (_startDate.isAfter(DateTime.now())) {
+      return l10n.yearTooHigh; // Reusing yearTooHigh or could add dateTooHigh
+    }
+    return null;
+  }
+
+  String? _validateEndDate(AppLocalizations l10n) {
+    if (_isCurrentlyWorking) return null;
+    if (_endDate == null) return l10n.requiredField;
+    if (_endDate!.isAfter(DateTime.now())) {
+      return l10n.yearTooHigh;
+    }
+    if (_endDate!.isBefore(_startDate)) {
+      return l10n.dateStartAfterEnd;
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -248,11 +268,23 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       _endDate = null;
       _isCurrentlyWorking = false;
       _employmentType = 'Full-time';
+      _showValidation = false;
     });
   }
   
   void _saveForm(CVBuilderProvider provider) {
+    setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
+      if (!_isCurrentlyWorking && (_endDate == null || _endDate!.isBefore(_startDate))) {
+        // Validation failed for dates
+        return;
+      }
+      if (!_isCurrentlyWorking && _endDate!.isAfter(DateTime.now())) {
+         return;
+      }
+      if (_startDate.isAfter(DateTime.now())) {
+         return;
+      }
       if (_endDate == null && !_isCurrentlyWorking) {
         ScaffoldMessenger.of(context).showSnackBar(
            SnackBar(content: Text(AppLocalizations.of(context)!.endDateError)),
@@ -315,6 +347,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
+        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -344,8 +377,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                 labelText: '${l10n.jobTitle} *',
                 hintText: 'Software Engineer',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -356,8 +391,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                 labelText: '${l10n.companyName} *',
                 hintText: 'Google Inc.',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -387,10 +424,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               controller: _locationController,
               decoration: InputDecoration(
                 labelText: '${l10n.location} ${l10n.optionalField}',
-                hintText: 'Jakarta, Indonesia',
+                hintText: 'Surabaya, Indonesia',
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Iconsax.location),
+                counterText: '',
               ),
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -405,6 +444,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                         labelText: '${l10n.startDate} *',
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                        errorText: _showValidation ? _validateStartDate(l10n) : null,
                       ),
                       child: Text('${_startDate.day}/${_startDate.month}/${_startDate.year}'),
                     ),
@@ -420,6 +460,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyWorking,
+                        errorText: _showValidation ? _validateEndDate(l10n) : null,
                       ),
                       child: Text(
                         _isCurrentlyWorking 
@@ -465,7 +506,9 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                     hintText: l10n.responsibilitiesHint,
                     border: const OutlineInputBorder(),
                     alignLabelWithHint: true,
+                    counterText: '',
                   ),
+                  maxLength: 1000,
                 ),
                 Positioned(
                   right: 8,

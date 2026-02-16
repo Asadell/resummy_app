@@ -415,6 +415,14 @@
   "gpa": "IPK",
   "gpaOptional": "IPK / Nilai Akhir (Opsional)",
 
+  "organizationHistoryHeader": "Pengalaman Organisasi",
+  "organizationHistoryDesc": "Tambahkan pengalaman sukarelawan, kepemimpinan, atau lainnya",
+  "noOrganizationData": "Belum ada data organisasi",
+  "addOrganization": "Tambah Organisasi",
+  "editOrganization": "Edit Organisasi",
+  "organizationRole": "Peran",
+  "organizationName": "Nama Organisasi",
+
   "experienceHistoryHeader": "Pengalaman Kerja",
   "experienceHistoryDesc": "Tambahkan pengalaman kerja yang relevan",
   "noExperienceData": "Belum ada data pengalaman",
@@ -464,6 +472,14 @@
   "summaryHint": "Tulis ringkasan singkat tentang pengalaman dan keahlianmu yang paling menonjol...",
   "generateWithAi": "Generate with AI",
   "generatingSummary": "Sedang membuat ringkasan...",
+  "summaryTips": "Tips ringkasan ramah ATS:\n• Sebutkan tahun pengalaman\n• Cantumkan keahlian teknis utama\n• Fokus pada pencapaian terukur\n• Buat 2-3 kalimat",
+
+  "sectionManagerTitle": "Kelola Bagian",
+  "sectionManagerDesc": "Urutkan, ubah nama, sembunyikan/tampilkan, atau tambah bagian kustom",
+  "sectionManagerTips": "Geser untuk mengurutkan • Ketuk judul untuk mengubah nama • Toggle untuk menyembunyikan/menampilkan",
+  "addCustomSection": "Tambah Bagian Kustom",
+  "deleteSection": "Hapus Bagian",
+  "deleteSectionConfirmation": "Apakah Anda yakin ingin menghapus bagian ini?",
 
   "additionalHeader": "Informasi Tambahan",
   "additionalDesc": "Bahasa, Hobi, Project, dll",
@@ -477,5 +493,10 @@
   "sectionValueHint": "Contoh: Inggris (Aktif), Sepak Bola",
 
   "downloadPdf": "Unduh PDF",
-  "saveAndFinish": "Simpan & Selesai"
+  "saveAndFinish": "Simpan & Selesai",
+  "phoneNoLeadingZero": "Nomor telepon tidak boleh dimulai dengan 0",
+  "phoneTooShort": "Nomor telepon terlalu pendek",
+  "yearTooHigh": "Tidak boleh melebihi tahun saat ini",
+  "yearStartAfterEnd": "Tahun mulai tidak boleh melebihi tahun selesai",
+  "dateStartAfterEnd": "Tanggal mulai tidak boleh melebihi tanggal selesai"
 }

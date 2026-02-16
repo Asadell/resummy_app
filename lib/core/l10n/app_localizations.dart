@@ -2504,6 +2504,48 @@ abstract class AppLocalizations {
   /// **'GPA / Final Grade (Optional)'**
   String get gpaOptional;
 
+  /// No description provided for @organizationHistoryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Experience'**
+  String get organizationHistoryHeader;
+
+  /// No description provided for @organizationHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add volunteering, leadership, or other relevant experience'**
+  String get organizationHistoryDesc;
+
+  /// No description provided for @noOrganizationData.
+  ///
+  /// In en, this message translates to:
+  /// **'No organization data yet'**
+  String get noOrganizationData;
+
+  /// No description provided for @addOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Organization'**
+  String get addOrganization;
+
+  /// No description provided for @editOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Organization'**
+  String get editOrganization;
+
+  /// No description provided for @organizationRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get organizationRole;
+
+  /// No description provided for @organizationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Name'**
+  String get organizationName;
+
   /// No description provided for @experienceHistoryHeader.
   ///
   /// In en, this message translates to:
@@ -2762,6 +2804,48 @@ abstract class AppLocalizations {
   /// **'Generating summary...'**
   String get generatingSummary;
 
+  /// No description provided for @summaryTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips for ATS-friendly summary:\n• Mention years of experience\n• List key technical skills\n• Focus on measurable achievements\n• Keep it 2-3 sentences'**
+  String get summaryTips;
+
+  /// No description provided for @sectionManagerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Sections'**
+  String get sectionManagerTitle;
+
+  /// No description provided for @sectionManagerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder, rename, hide/show, or add custom sections'**
+  String get sectionManagerDesc;
+
+  /// No description provided for @sectionManagerTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag sections to reorder • Tap title to rename • Toggle to hide/show'**
+  String get sectionManagerTips;
+
+  /// No description provided for @addCustomSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Section'**
+  String get addCustomSection;
+
+  /// No description provided for @deleteSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Section'**
+  String get deleteSection;
+
+  /// No description provided for @deleteSectionConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this section?'**
+  String get deleteSectionConfirmation;
+
   /// No description provided for @noAdditionalData.
   ///
   /// In en, this message translates to:
@@ -2815,6 +2899,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save & Finish'**
   String get saveAndFinish;
+
+  /// No description provided for @phoneNoLeadingZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number cannot start with 0'**
+  String get phoneNoLeadingZero;
+
+  /// No description provided for @phoneTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is too short'**
+  String get phoneTooShort;
+
+  /// No description provided for @yearTooHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot exceed current year'**
+  String get yearTooHigh;
+
+  /// No description provided for @yearStartAfterEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Start year cannot be after end year'**
+  String get yearStartAfterEnd;
+
+  /// No description provided for @dateStartAfterEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date cannot be after end date'**
+  String get dateStartAfterEnd;
 }
 
 class _AppLocalizationsDelegate

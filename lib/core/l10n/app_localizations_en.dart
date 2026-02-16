@@ -1287,6 +1287,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gpaOptional => 'GPA / Final Grade (Optional)';
 
   @override
+  String get organizationHistoryHeader => 'Organization Experience';
+
+  @override
+  String get organizationHistoryDesc =>
+      'Add volunteering, leadership, or other relevant experience';
+
+  @override
+  String get noOrganizationData => 'No organization data yet';
+
+  @override
+  String get addOrganization => 'Add Organization';
+
+  @override
+  String get editOrganization => 'Edit Organization';
+
+  @override
+  String get organizationRole => 'Role';
+
+  @override
+  String get organizationName => 'Organization Name';
+
+  @override
   String get experienceHistoryHeader => 'Work Experience';
 
   @override
@@ -1420,6 +1442,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatingSummary => 'Generating summary...';
 
   @override
+  String get summaryTips =>
+      'Tips for ATS-friendly summary:\n• Mention years of experience\n• List key technical skills\n• Focus on measurable achievements\n• Keep it 2-3 sentences';
+
+  @override
+  String get sectionManagerTitle => 'Manage Sections';
+
+  @override
+  String get sectionManagerDesc =>
+      'Reorder, rename, hide/show, or add custom sections';
+
+  @override
+  String get sectionManagerTips =>
+      'Drag sections to reorder • Tap title to rename • Toggle to hide/show';
+
+  @override
+  String get addCustomSection => 'Add Custom Section';
+
+  @override
+  String get deleteSection => 'Delete Section';
+
+  @override
+  String get deleteSectionConfirmation =>
+      'Are you sure you want to delete this section?';
+
+  @override
   String get noAdditionalData => 'No additional information yet';
 
   @override
@@ -1445,4 +1492,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveAndFinish => 'Save & Finish';
+
+  @override
+  String get phoneNoLeadingZero => 'Phone number cannot start with 0';
+
+  @override
+  String get phoneTooShort => 'Phone number is too short';
+
+  @override
+  String get yearTooHigh => 'Cannot exceed current year';
+
+  @override
+  String get yearStartAfterEnd => 'Start year cannot be after end year';
+
+  @override
+  String get dateStartAfterEnd => 'Start date cannot be after end date';
 }

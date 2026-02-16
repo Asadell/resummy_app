@@ -30,73 +30,555 @@ class CVBuilderProvider extends ChangeNotifier {
   List<CVData> _savedCVs = [];
   List<CVData> get savedCVs => _savedCVs;
 
-  /// Initialize a new CV
-  void startNewCV({bool useProfileData = false}) {
+  /// Initialize a new CV with default section order
+  void startNewCV({
+    String? name,
+    String? email,
+    String? phone,
+  }) {
     final now = DateTime.now();
+    final headerId = _uuid.v4();
+    
     _currentCV = CVData(
       id: _uuid.v4(),
       createdAt: now,
       updatedAt: now,
-      name: useProfileData ? '' : '', // TODO: Load from user profile if available
-      email: useProfileData ? '' : null,
-      phone: useProfileData ? '' : null,
-      location: useProfileData ? '' : null,
+      header: HeaderSection(
+        id: headerId,
+        name: name ?? '',
+        email: email,
+        phone: phone,
+        location: null,
+      ),
+      sections: [
+        SummarySection(
+          id: _uuid.v4(),
+          title: 'Professional Summary',
+          content: '',
+          isVisible: true,
+        ),
+        ExperienceSection(
+          id: _uuid.v4(),
+          title: 'Work Experience',
+          entries: [],
+          isVisible: true,
+        ),
+        EducationSection(
+          id: _uuid.v4(),
+          title: 'Education',
+          entries: [],
+          isVisible: true,
+        ),
+        OrganizationSection(
+          id: _uuid.v4(),
+          title: 'Organization Experience',
+          entries: [],
+          isVisible: true,
+        ),
+        SkillsSection(
+          id: _uuid.v4(),
+          title: 'Skills',
+          skillCategories: {
+            'Technical': [],
+            'Soft Skills': [],
+          },
+          isVisible: true,
+        ),
+        CertificationsSection(
+          id: _uuid.v4(),
+          title: 'Certifications & Licenses',
+          entries: [],
+          isVisible: true,
+        ),
+      ],
     );
-    _currentStep = 1; // Start at Step 1 (Personal Info)
+    _currentStep = 1;
     _errorMessage = null;
     notifyListeners();
   }
 
-  /// Load existing CV for editing
-  Future<void> loadCV(String cvId) async {
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
+  /// Update header (personal info)
+  void updateHeader({
+    String? name,
+    String? email,
+    String? phone,
+    String? linkedin,
+    String? portfolio,
+    String? location,
+  }) {
+    if (_currentCV == null) return;
 
-    try {
-      final cv = await _repository.getCVById(cvId);
-      if (cv != null) {
-        _currentCV = cv;
-        _currentStep = 1; // Start at Step 1 when editing
-      } else {
-        _errorMessage = 'CV not found';
+    final updatedHeader = _currentCV!.header.copyWith(
+      name: name?.trim(),
+      email: email?.trim(),
+      phone: phone?.trim(),
+      linkedin: linkedin?.trim(),
+      portfolio: portfolio?.trim(),
+      location: location?.trim(),
+    );
+
+    _currentCV = _currentCV!.copyWith(
+      header: updatedHeader,
+      updatedAt: DateTime.now(),
+    );
+    notifyListeners();
+  }
+
+  /// Reorder sections (drag & drop)
+  void reorderSections(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = List<SectionData>.from(_currentCV!.sections);
+    
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    
+    final item = sections.removeAt(oldIndex);
+    sections.insert(newIndex, item);
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Toggle section visibility
+  void toggleSectionVisibility(String sectionId) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId) {
+        if (section is SummarySection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is ExperienceSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is EducationSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is OrganizationSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is SkillsSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is CertificationsSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        } else if (section is CustomSection) {
+          return section.copyWith(isVisible: !section.isVisible);
+        }
       }
-    } catch (e) {
-      _errorMessage = 'Failed to load CV: $e';
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
+      return section;
+    }).toList();
 
-  /// Load all saved CVs
-  Future<void> loadAllCVs() async {
-    _isLoading = true;
-    _errorMessage = null;
+    _currentCV = _currentCV!.copyWith(sections: sections);
     notifyListeners();
+  }
 
-    try {
-      _savedCVs = await _repository.getAllCVs();
-      // Sort by updated date (newest first)
-      _savedCVs.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    } catch (e) {
-      _errorMessage = 'Failed to load CVs: $e';
-      _savedCVs = [];
-    } finally {
-      _isLoading = false;
+  /// Update section title
+  void updateSectionTitle(String sectionId, String newTitle) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId) {
+        if (section is SummarySection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is ExperienceSection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is EducationSection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is OrganizationSection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is SkillsSection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is CertificationsSection) {
+          return section.copyWith(title: newTitle);
+        } else if (section is CustomSection) {
+          return section.copyWith(title: newTitle);
+        }
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update summary section
+  void updateSummary(String content) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SummarySection) {
+        return section.copyWith(content: content);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add work experience
+  void addWorkExperience(WorkExperience experience) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is ExperienceSection) {
+        final entries = List<WorkExperience>.from(section.entries)..add(experience);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update work experience
+  void updateWorkExperience(int index, WorkExperience experience) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is ExperienceSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<WorkExperience>.from(section.entries);
+        entries[index] = experience;
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove work experience
+  void removeWorkExperience(int index) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is ExperienceSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<WorkExperience>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add education
+  void addEducation(Education education) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is EducationSection) {
+        final entries = List<Education>.from(section.entries)..add(education);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update education
+  void updateEducation(int index, Education education) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is EducationSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<Education>.from(section.entries);
+        entries[index] = education;
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove education
+  void removeEducation(int index) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is EducationSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<Education>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add organization experience
+  void addOrganization(OrganizationExperience org) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is OrganizationSection) {
+        final entries = List<OrganizationExperience>.from(section.entries)..add(org);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update organization experience
+  void updateOrganization(int index, OrganizationExperience org) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is OrganizationSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<OrganizationExperience>.from(section.entries);
+        entries[index] = org;
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove organization
+  void removeOrganization(int index) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is OrganizationSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<OrganizationExperience>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add skill to category
+  void addSkillToCategory(String category, String skill) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        categories[category] = List.from(categories[category] ?? [])..add(skill);
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove skill from category
+  void removeSkillFromCategory(String category, String skill) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        categories[category] = List.from(categories[category] ?? [])..remove(skill);
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add certification
+  void addCertification(Certification cert) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is CertificationsSection) {
+        final entries = List<Certification>.from(section.entries)..add(cert);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update certification
+  void updateCertification(int index, Certification cert) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is CertificationsSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<Certification>.from(section.entries);
+        entries[index] = cert;
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove certification
+  void removeCertification(int index) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is CertificationsSection) {
+        if (index >= section.entries.length) return section;
+        final entries = List<Certification>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add custom section
+  void addCustomSection(String title, {SectionTemplate template = SectionTemplate.simpleList}) {
+    if (_currentCV == null) return;
+
+    final newSection = CustomSection(
+      id: _uuid.v4(),
+      title: title,
+      content: '',
+      template: template,
+    );
+
+    final sections = List<SectionData>.from(_currentCV!.sections)..add(newSection);
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update custom section
+  void updateCustomSection(String sectionId, String content) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        return section.copyWith(content: content);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Delete custom section
+  void deleteCustomSection(String sectionId) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections
+        .where((section) => section.id != sectionId)
+        .toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  // Backwards compatibility methods
+  void updatePersonalInfo({
+    String? name,
+    String? email,
+    String? phone,
+    String? linkedin,
+    String? portfolio,
+    String? location,
+  }) {
+    updateHeader(
+      name: name,
+      email: email,
+      phone: phone,
+      linkedin: linkedin,
+      portfolio: portfolio,
+      location: location,
+    );
+  }
+
+  void addSkill(String skill) {
+    addSkillToCategory('Technical', skill);
+  }
+
+  void removeSkill(String skill) {
+    removeSkillFromCategory('Technical', skill);
+  }
+
+  void updateProfessionalSummary(String? summary) {
+    if (summary != null) {
+      updateSummary(summary);
+    }
+  }
+
+  void updateSkills({List<String>? technicalSkills, List<String>? softSkills}) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        if (technicalSkills != null) {
+          categories['Technical'] = technicalSkills;
+        }
+        if (softSkills != null) {
+          categories['Soft Skills'] = softSkills;
+        }
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  void updateAdditionalSections(Map<String, dynamic> sections) {
+    // Handle legacy additional sections by converting to custom sections
+    // This is for backwards compatibility
+  }
+
+  // Navigation
+  void nextStep() {
+    if (_currentStep < 7) {
+      _currentStep++;
       notifyListeners();
     }
   }
 
-  /// Save current CV
-  Future<bool> saveCurrentCV() async {
-    if (_currentCV == null) {
-      _errorMessage = 'No CV to save';
-      return false;
+  void previousStep() {
+    if (_currentStep > 1) {
+      _currentStep--;
+      notifyListeners();
     }
+  }
 
-    // Validate: only name is required
-    if (!_currentCV!.isValid) {
+  void goToStep(int step) {
+    if (step >= 1 && step <= 7) {
+      _currentStep = step;
+      notifyListeners();
+    }
+  }
+
+  // Persistence
+  Future<bool> saveCurrentCV() async {
+    if (_currentCV == null || !_currentCV!.isValid) {
       _errorMessage = 'Name is required to save CV';
       return false;
     }
@@ -109,7 +591,7 @@ class CVBuilderProvider extends ChangeNotifier {
       final updatedCV = _currentCV!.copyWith(updatedAt: DateTime.now());
       await _repository.saveCV(updatedCV);
       _currentCV = updatedCV;
-      await loadAllCVs(); // Refresh the list
+      await loadAllCVs();
       return true;
     } catch (e) {
       _errorMessage = 'Failed to save CV: $e';
@@ -120,7 +602,44 @@ class CVBuilderProvider extends ChangeNotifier {
     }
   }
 
-  /// Delete a CV
+  Future<void> loadCV(String cvId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final cv = await _repository.getCVById(cvId);
+      if (cv != null) {
+        _currentCV = cv;
+        _currentStep = 1;
+      } else {
+        _errorMessage = 'CV not found';
+      }
+    } catch (e) {
+      _errorMessage = 'Failed to load CV: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadAllCVs() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _savedCVs = await _repository.getAllCVs();
+      _savedCVs.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    } catch (e) {
+      _errorMessage = 'Failed to load CVs: $e';
+      _savedCVs = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<bool> deleteCV(String cvId) async {
     _isLoading = true;
     _errorMessage = null;
@@ -128,7 +647,7 @@ class CVBuilderProvider extends ChangeNotifier {
 
     try {
       await _repository.deleteCV(cvId);
-      await loadAllCVs(); // Refresh the list
+      await loadAllCVs();
       return true;
     } catch (e) {
       _errorMessage = 'Failed to delete CV: $e';
@@ -139,266 +658,6 @@ class CVBuilderProvider extends ChangeNotifier {
     }
   }
 
-  /// Navigate to next step
-  void nextStep() {
-    if (_currentStep < 7) {
-      _currentStep++;
-      notifyListeners();
-    }
-  }
-
-  /// Navigate to previous step
-  void previousStep() {
-    if (_currentStep > 1) {
-      _currentStep--;
-      notifyListeners();
-    }
-  }
-
-  /// Go to specific step
-  void goToStep(int step) {
-    if (step >= 1 && step <= 7) {
-      _currentStep = step;
-      notifyListeners();
-    }
-  }
-
-  /// Update personal info (Step 1)
-  void updatePersonalInfo({
-    String? name,
-    String? email,
-    String? phone,
-    String? linkedin,
-    String? portfolio,
-    String? location,
-  }) {
-    if (_currentCV == null) return;
-
-    _currentCV = _currentCV!.copyWith(
-      name: name?.trim() ?? _currentCV!.name,
-      email: email?.trim(),
-      phone: phone?.trim(),
-      linkedin: linkedin?.trim(),
-      portfolio: portfolio?.trim(),
-      location: location?.trim(),
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-
-
-  /// Add education entry (Step 2)
-  void addEducation(Education education) {
-    if (_currentCV == null) return;
-
-    final trimmedEdu = education.copyWith(
-      institution: education.institution.trim(),
-      major: education.major.trim(),
-      degree: education.degree.trim(),
-      gpa: education.gpa?.trim(),
-      achievements: education.achievements?.trim(),
-    );
-
-    final updatedEducation = List<Education>.from(_currentCV!.education)..add(trimmedEdu);
-    _currentCV = _currentCV!.copyWith(
-      education: updatedEducation,
-      updatedAt: DateTime.now(),
-    );
-
-    notifyListeners();
-  }
-
-  /// Update education entry
-  void updateEducation(int index, Education education) {
-    if (_currentCV == null || index >= _currentCV!.education.length) return;
-
-    final trimmedEdu = education.copyWith(
-      institution: education.institution.trim(),
-      major: education.major.trim(),
-      degree: education.degree.trim(),
-      gpa: education.gpa?.trim(),
-      achievements: education.achievements?.trim(),
-    );
-
-    final updatedEducation = List<Education>.from(_currentCV!.education);
-    updatedEducation[index] = trimmedEdu;
-    _currentCV = _currentCV!.copyWith(
-      education: updatedEducation,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Remove education entry
-  void removeEducation(int index) {
-    if (_currentCV == null || index >= _currentCV!.education.length) return;
-
-    final updatedEducation = List<Education>.from(_currentCV!.education)..removeAt(index);
-    _currentCV = _currentCV!.copyWith(
-      education: updatedEducation,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-
-
-  /// Add work experience entry (Step 3)
-  void addWorkExperience(WorkExperience experience) {
-    if (_currentCV == null) return;
-
-    final trimmedExp = experience.copyWith(
-      jobTitle: experience.jobTitle.trim(),
-      companyName: experience.companyName.trim(),
-      location: experience.location?.trim(),
-      responsibilities: experience.responsibilities.trim(),
-    );
-
-    final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience)..add(trimmedExp);
-    _currentCV = _currentCV!.copyWith(
-      workExperience: updatedExperience,
-      updatedAt: DateTime.now(),
-    );
-
-    notifyListeners();
-  }
-
-  /// Update work experience entry
-  void updateWorkExperience(int index, WorkExperience experience) {
-    if (_currentCV == null || index >= _currentCV!.workExperience.length) return;
-
-    final trimmedExp = experience.copyWith(
-      jobTitle: experience.jobTitle.trim(),
-      companyName: experience.companyName.trim(),
-      location: experience.location?.trim(),
-      responsibilities: experience.responsibilities.trim(),
-    );
-
-    final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience);
-    updatedExperience[index] = trimmedExp;
-    _currentCV = _currentCV!.copyWith(
-      workExperience: updatedExperience,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Remove work experience entry
-  void removeWorkExperience(int index) {
-    if (_currentCV == null || index >= _currentCV!.workExperience.length) return;
-
-    final updatedExperience = List<WorkExperience>.from(_currentCV!.workExperience)..removeAt(index);
-    _currentCV = _currentCV!.copyWith(
-      workExperience: updatedExperience,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-
-
-  /// Add certification (Step 4)
-  void addCertification(Certification certification) {
-    if (_currentCV == null) return;
-
-    final trimmedCert = certification.copyWith(
-      name: certification.name.trim(),
-      issuingOrganization: certification.issuingOrganization.trim(),
-      credentialId: certification.credentialId?.trim(),
-      credentialUrl: certification.credentialUrl?.trim(),
-    );
-
-    final updatedCertifications = List<Certification>.from(_currentCV!.certifications)..add(trimmedCert);
-    _currentCV = _currentCV!.copyWith(
-      certifications: updatedCertifications,
-      updatedAt: DateTime.now(),
-    );
-
-    notifyListeners();
-  }
-
-  /// Update certification
-  void updateCertification(int index, Certification certification) {
-    if (_currentCV == null || index >= _currentCV!.certifications.length) return;
-
-    final trimmedCert = certification.copyWith(
-      name: certification.name.trim(),
-      issuingOrganization: certification.issuingOrganization.trim(),
-      credentialId: certification.credentialId?.trim(),
-      credentialUrl: certification.credentialUrl?.trim(),
-    );
-
-    final updatedCertifications = List<Certification>.from(_currentCV!.certifications);
-    updatedCertifications[index] = trimmedCert;
-    _currentCV = _currentCV!.copyWith(
-      certifications: updatedCertifications,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Remove certification
-  void removeCertification(int index) {
-    if (_currentCV == null || index >= _currentCV!.certifications.length) return;
-
-    final updatedCertifications = List<Certification>.from(_currentCV!.certifications)..removeAt(index);
-    _currentCV = _currentCV!.copyWith(
-      certifications: updatedCertifications,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Update skills (Step 5)
-  void updateSkills({
-    List<String>? technicalSkills,
-    List<String>? softSkills,
-  }) {
-    if (_currentCV == null) return;
-
-    _currentCV = _currentCV!.copyWith(
-      technicalSkills: technicalSkills ?? _currentCV!.technicalSkills,
-      softSkills: softSkills ?? _currentCV!.softSkills,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Update professional summary (Step 6)
-  void updateProfessionalSummary(String? summary) {
-    if (_currentCV == null) return;
-
-    _currentCV = _currentCV!.copyWith(
-      professionalSummary: summary,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Update additional sections (Step 7)
-  void updateAdditionalSections(Map<String, dynamic> sections) {
-    if (_currentCV == null) return;
-
-    _currentCV = _currentCV!.copyWith(
-      additionalSections: sections,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Update template
-  void updateTemplate(String template) {
-    if (_currentCV == null) return;
-
-    _currentCV = _currentCV!.copyWith(
-      template: template,
-      updatedAt: DateTime.now(),
-    );
-    notifyListeners();
-  }
-
-  /// Clear current CV
   void clearCurrentCV() {
     _currentCV = null;
     _currentStep = 0;
@@ -406,26 +665,8 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Clear error message
   void clearError() {
     _errorMessage = null;
     notifyListeners();
-  }
-
-  // Helper methods for UI compatibility
-  void addSkill(String skill) {
-    if (_currentCV == null) return;
-    if (!_currentCV!.technicalSkills.contains(skill)) {
-      updateSkills(technicalSkills: List.from(_currentCV!.technicalSkills)..add(skill));
-    }
-  }
-
-  void removeSkill(String skill) {
-    if (_currentCV == null) return;
-    updateSkills(technicalSkills: List.from(_currentCV!.technicalSkills)..remove(skill));
-  }
-
-  void updateSummary(String summary) {
-    updateProfessionalSummary(summary);
   }
 }

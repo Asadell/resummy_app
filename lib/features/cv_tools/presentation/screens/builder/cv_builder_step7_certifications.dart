@@ -10,26 +10,26 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
-class CvBuilderStep4Screen extends StatefulWidget {
-  const CvBuilderStep4Screen({super.key});
+class CvBuilderStep7Screen extends StatefulWidget {
+  const CvBuilderStep7Screen({super.key});
 
   @override
-  State<CvBuilderStep4Screen> createState() => _CvBuilderStep4ScreenState();
+  State<CvBuilderStep7Screen> createState() => _CvBuilderStep7ScreenState();
 }
 
-class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
+class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 4,
-      totalSteps: 7,
+      currentStep: 7,
+      totalSteps: 8,
       onBack: () => context.router.maybePop(),
       onNext: () {
         context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep5Route());
+        context.router.push(const CvBuilderStep8Route());
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -50,7 +50,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      l10n.stepHeader(4, 7),
+                      l10n.stepHeader(7, 8),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 12,
@@ -199,6 +199,23 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   DateTime? _expirationDate;
   bool _doesNotExpire = false;
   int? _editingIndex;
+  bool _showValidation = false;
+
+  String? _validateIssueDate(AppLocalizations l10n) {
+    if (_issueDate.isAfter(DateTime.now())) {
+      return l10n.yearTooHigh;
+    }
+    return null;
+  }
+
+  String? _validateExpirationDate(AppLocalizations l10n) {
+    if (_doesNotExpire) return null;
+    if (_expirationDate == null) return l10n.requiredField;
+    if (_expirationDate!.isBefore(_issueDate)) {
+      return l10n.dateStartAfterEnd;
+    }
+    return null;
+  }
   
   @override
   void dispose() {
@@ -232,11 +249,19 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
       _issueDate = DateTime.now();
       _expirationDate = null;
       _doesNotExpire = false;
+      _showValidation = false;
     });
   }
 
   void _saveForm(CVBuilderProvider provider) {
+    setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
+      if (!_doesNotExpire && (_expirationDate == null || _expirationDate!.isBefore(_issueDate))) {
+        return;
+      }
+      if (_issueDate.isAfter(DateTime.now())) {
+        return;
+      }
       final cert = Certification(
         id: _editingIndex != null 
             ? provider.currentCV!.certifications[_editingIndex!].id 
@@ -291,6 +316,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
+        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -320,8 +346,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                 labelText: '${l10n.certificationName} *',
                 hintText: 'Google Cloud Associate',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -332,8 +360,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                 labelText: '${l10n.issuingOrganization} *',
                 hintText: 'Google',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -348,6 +378,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                         labelText: '${l10n.issueDate} *',
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                        errorText: _showValidation ? _validateIssueDate(l10n) : null,
                       ),
                       child: Text('${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
                     ),
@@ -363,6 +394,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_doesNotExpire,
+                        errorText: _showValidation ? _validateExpirationDate(l10n) : null,
                       ),
                       child: Text(
                         _doesNotExpire 
@@ -403,7 +435,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               decoration: InputDecoration(
                 labelText: l10n.credentialId,
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -415,7 +449,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                 border: const OutlineInputBorder(),
                 helperText: l10n.credentialUrlHelper,
                 prefixIcon: const Icon(Iconsax.link_1),
+                counterText: '',
               ),
+              maxLength: 100,
             ),
             
             const SizedBox(height: 32),

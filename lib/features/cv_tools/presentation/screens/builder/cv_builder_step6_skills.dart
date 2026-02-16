@@ -8,14 +8,14 @@ import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_st
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
-class CvBuilderStep5Screen extends StatefulWidget {
-  const CvBuilderStep5Screen({super.key});
+class CvBuilderStep6Screen extends StatefulWidget {
+  const CvBuilderStep6Screen({super.key});
 
   @override
-  State<CvBuilderStep5Screen> createState() => _CvBuilderStep5ScreenState();
+  State<CvBuilderStep6Screen> createState() => _CvBuilderStep6ScreenState();
 }
 
-class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
+class _CvBuilderStep6ScreenState extends State<CvBuilderStep6Screen> {
   final TextEditingController _skillController = TextEditingController();
   final FocusNode _skillFocusNode = FocusNode();
 
@@ -42,12 +42,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 5,
-      totalSteps: 7,
+      currentStep: 6,
+      totalSteps: 8,
       onBack: () => context.router.maybePop(),
       onNext: () {
         context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep6Route());
+        context.router.push(const CvBuilderStep7Route());
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -68,7 +68,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      l10n.stepHeader(5, 7),
+                      l10n.stepHeader(6, 8),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 12,
@@ -130,12 +130,14 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                             child: TextField(
                               controller: _skillController,
                               focusNode: _skillFocusNode,
-                              decoration: InputDecoration(
-                                hintText: l10n.skillHint,
-                                border: const OutlineInputBorder(),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              ),
+                                decoration: InputDecoration(
+                                  hintText: l10n.skillHint,
+                                  border: const OutlineInputBorder(),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  counterText: '',
+                                ),
                               onSubmitted: (_) => _addSkill(provider),
+                              maxLength: 30,
                             ),
                           ),
                           const SizedBox(width: 12),

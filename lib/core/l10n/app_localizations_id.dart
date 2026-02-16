@@ -1290,6 +1290,28 @@ class AppLocalizationsId extends AppLocalizations {
   String get gpaOptional => 'IPK / Nilai Akhir (Opsional)';
 
   @override
+  String get organizationHistoryHeader => 'Pengalaman Organisasi';
+
+  @override
+  String get organizationHistoryDesc =>
+      'Tambahkan pengalaman sukarelawan, kepemimpinan, atau lainnya';
+
+  @override
+  String get noOrganizationData => 'Belum ada data organisasi';
+
+  @override
+  String get addOrganization => 'Tambah Organisasi';
+
+  @override
+  String get editOrganization => 'Edit Organisasi';
+
+  @override
+  String get organizationRole => 'Peran';
+
+  @override
+  String get organizationName => 'Nama Organisasi';
+
+  @override
   String get experienceHistoryHeader => 'Pengalaman Kerja';
 
   @override
@@ -1423,6 +1445,31 @@ class AppLocalizationsId extends AppLocalizations {
   String get generatingSummary => 'Sedang membuat ringkasan...';
 
   @override
+  String get summaryTips =>
+      'Tips ringkasan ramah ATS:\n• Sebutkan tahun pengalaman\n• Cantumkan keahlian teknis utama\n• Fokus pada pencapaian terukur\n• Buat 2-3 kalimat';
+
+  @override
+  String get sectionManagerTitle => 'Kelola Bagian';
+
+  @override
+  String get sectionManagerDesc =>
+      'Urutkan, ubah nama, sembunyikan/tampilkan, atau tambah bagian kustom';
+
+  @override
+  String get sectionManagerTips =>
+      'Geser untuk mengurutkan • Ketuk judul untuk mengubah nama • Toggle untuk menyembunyikan/menampilkan';
+
+  @override
+  String get addCustomSection => 'Tambah Bagian Kustom';
+
+  @override
+  String get deleteSection => 'Hapus Bagian';
+
+  @override
+  String get deleteSectionConfirmation =>
+      'Apakah Anda yakin ingin menghapus bagian ini?';
+
+  @override
   String get noAdditionalData => 'Belum ada informasi tambahan';
 
   @override
@@ -1448,4 +1495,21 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get saveAndFinish => 'Simpan & Selesai';
+
+  @override
+  String get phoneNoLeadingZero => 'Nomor telepon tidak boleh dimulai dengan 0';
+
+  @override
+  String get phoneTooShort => 'Nomor telepon terlalu pendek';
+
+  @override
+  String get yearTooHigh => 'Tidak boleh melebihi tahun saat ini';
+
+  @override
+  String get yearStartAfterEnd =>
+      'Tahun mulai tidak boleh melebihi tahun selesai';
+
+  @override
+  String get dateStartAfterEnd =>
+      'Tanggal mulai tidak boleh melebihi tanggal selesai';
 }

@@ -10,26 +10,26 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
-class CvBuilderStep2Screen extends StatefulWidget {
-  const CvBuilderStep2Screen({super.key});
+class CvBuilderStep4Screen extends StatefulWidget {
+  const CvBuilderStep4Screen({super.key});
 
   @override
-  State<CvBuilderStep2Screen> createState() => _CvBuilderStep2ScreenState();
+  State<CvBuilderStep4Screen> createState() => _CvBuilderStep4ScreenState();
 }
 
-class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
+class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 2,
-      totalSteps: 7,
+      currentStep: 4,
+      totalSteps: 8,
       onBack: () => context.router.maybePop(),
       onNext: () {
         context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep3Route());
+        context.router.push(const CvBuilderStep5Route());
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -50,7 +50,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      l10n.stepHeader(2, 7),
+                      l10n.stepHeader(4, 8),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 12,
@@ -210,6 +210,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
   final _startYearController = TextEditingController();
   final _endYearController = TextEditingController();
   bool _isCurrentlyStudying = false;
+  bool _showValidation = false;
   int? _editingIndex;
   
   @override
@@ -239,6 +240,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
   void _resetForm() {
     setState(() {
       _editingIndex = null;
+      _showValidation = false;
       _institutionController.clear();
       _majorController.clear();
       _degreeController.clear();
@@ -250,6 +252,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
   }
 
   void _saveForm(CVBuilderProvider provider) {
+    setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
       final edu = Education(
         id: _editingIndex != null 
@@ -287,6 +290,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
+        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -314,10 +318,12 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               controller: _institutionController,
               decoration: InputDecoration(
                 labelText: '${l10n.institutionName} *',
-                hintText: 'Universitas Indonesia',
+                hintText: 'Politeknik Elektronika Negeri Surabaya',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -328,8 +334,10 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                 labelText: '${l10n.major} *',
                 hintText: 'Teknik Informatika',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -337,11 +345,12 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
             TextFormField(
               controller: _degreeController,
               decoration: InputDecoration(
-                labelText: '${l10n.degree} *',
+                labelText: '${l10n.degree} ${l10n.optionalField}',
                 hintText: 'Sarjana (S1)',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+              maxLength: 50,
             ),
             const SizedBox(height: 16),
             
@@ -356,8 +365,16 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                       labelText: '${l10n.startYear} *',
                       hintText: '2018',
                       border: const OutlineInputBorder(),
+                      counterText: '',
                     ),
-                    validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) return l10n.requiredField;
+                      final year = int.tryParse(v);
+                      if (year == null) return l10n.requiredField;
+                      if (year > DateTime.now().year) return l10n.yearTooHigh;
+                      return null;
+                    },
+                    maxLength: 4,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -367,10 +384,27 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                     keyboardType: TextInputType.number,
                     enabled: !_isCurrentlyStudying,
                     decoration: InputDecoration(
-                      labelText: l10n.endYear,
+                      labelText: _isCurrentlyStudying 
+                          ? l10n.endYear 
+                          : '${l10n.endYear} *',
                       hintText: '2022',
                       border: const OutlineInputBorder(),
+                      counterText: '',
                     ),
+                    validator: _isCurrentlyStudying ? null : (v) {
+                      if (v == null || v.isEmpty) return l10n.requiredField;
+                      final endYear = int.tryParse(v);
+                      if (endYear == null) return l10n.requiredField;
+                      
+                      if (endYear > DateTime.now().year) return l10n.yearTooHigh;
+                      
+                      final startYear = int.tryParse(_startYearController.text);
+                      if (startYear != null && endYear < startYear) {
+                        return l10n.yearStartAfterEnd;
+                      }
+                      return null;
+                    },
+                    maxLength: 4,
                   ),
                 ),
               ],
@@ -401,7 +435,9 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                 labelText: l10n.gpaOptional,
                 hintText: '3.85',
                 border: const OutlineInputBorder(),
+                counterText: '',
               ),
+              maxLength: 5,
             ),
             
             const SizedBox(height: 24),
