@@ -498,5 +498,12 @@
   "phoneTooShort": "Nomor telepon terlalu pendek",
   "yearTooHigh": "Tidak boleh melebihi tahun saat ini",
   "yearStartAfterEnd": "Tahun mulai tidak boleh melebihi tahun selesai",
-  "dateStartAfterEnd": "Tanggal mulai tidak boleh melebihi tanggal selesai"
+  "dateStartAfterEnd": "Tanggal mulai tidak boleh melebihi tanggal selesai",
+  
+  "editContent": "Edit Konten",
+  "editCustomSection": "Edit Bagian Kustom",
+  "emptyCustomSection": "Belum ada konten. Klik \"Edit Konten\" untuk menambahkan.",
+  "templateLabel": "Template",
+  "contentLabel": "Konten",
+  "previewLabel": "Pratinjau"
 }

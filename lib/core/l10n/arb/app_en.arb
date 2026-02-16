@@ -585,5 +585,12 @@
   "phoneTooShort": "Phone number is too short",
   "yearTooHigh": "Cannot exceed current year",
   "yearStartAfterEnd": "Start year cannot be after end year",
-  "dateStartAfterEnd": "Start date cannot be after end date"
+  "dateStartAfterEnd": "Start date cannot be after end date",
+  
+  "editContent": "Edit Content",
+  "editCustomSection": "Edit Custom Section",
+  "emptyCustomSection": "No content yet. Click \"Edit Content\" to add.",
+  "templateLabel": "Template",
+  "contentLabel": "Content",
+  "previewLabel": "Preview"
 }

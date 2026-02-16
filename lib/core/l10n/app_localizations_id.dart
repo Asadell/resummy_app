@@ -1512,4 +1512,23 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get dateStartAfterEnd =>
       'Tanggal mulai tidak boleh melebihi tanggal selesai';
+
+  @override
+  String get editContent => 'Edit Konten';
+
+  @override
+  String get editCustomSection => 'Edit Bagian Kustom';
+
+  @override
+  String get emptyCustomSection =>
+      'Belum ada konten. Klik \"Edit Konten\" untuk menambahkan.';
+
+  @override
+  String get templateLabel => 'Template';
+
+  @override
+  String get contentLabel => 'Konten';
+
+  @override
+  String get previewLabel => 'Pratinjau';
 }

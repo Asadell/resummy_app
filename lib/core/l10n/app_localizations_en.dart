@@ -1507,4 +1507,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateStartAfterEnd => 'Start date cannot be after end date';
+
+  @override
+  String get editContent => 'Edit Content';
+
+  @override
+  String get editCustomSection => 'Edit Custom Section';
+
+  @override
+  String get emptyCustomSection =>
+      'No content yet. Click \"Edit Content\" to add.';
+
+  @override
+  String get templateLabel => 'Template';
+
+  @override
+  String get contentLabel => 'Content';
+
+  @override
+  String get previewLabel => 'Preview';
 }

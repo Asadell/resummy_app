@@ -7,6 +7,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/custom_section_editor_dialog.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -343,12 +344,28 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               ),
             ],
 
-            // Delete Button for Custom Sections
+            // ⭐ CUSTOM SECTION ACTIONS (BARU!)
             if (section is CustomSection) ...[
               const SizedBox(height: 12),
               Row(
                 children: [
                   const SizedBox(width: 44),
+                  
+                  // Edit Content Button
+                  TextButton.icon(
+                    onPressed: () => _showEditCustomSectionDialog(provider, section),
+                    icon: const Icon(Iconsax.edit, size: 16),
+                    label: Text(AppLocalizations.of(context)!.editContent ?? 'Edit Content'),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                  
+                  const SizedBox(width: 16),
+                  
+                  // Delete Button
                   TextButton.icon(
                     onPressed: () => _showDeleteConfirmation(provider, section),
                     icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
@@ -364,6 +381,63 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   ),
                 ],
               ),
+              
+              // Content Preview
+              if (section.content.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(left: 44),
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: theme.primaryColor.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Text(
+                    section.content.length > 100
+                        ? '${section.content.substring(0, 100)}...'
+                        : section.content,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ] else ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(left: 44),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.orange.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Iconsax.info_circle,
+                        size: 14,
+                        color: Colors.orange.shade700,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.emptyCustomSection ?? 'No content yet. Click "Edit Content" to add.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.orange.shade700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ],
         ),
@@ -377,6 +451,17 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     if (section is OrganizationSection) return section.entries.length;
     if (section is CertificationsSection) return section.entries.length;
     return 0;
+  }
+
+  // ⭐ NEW: Edit Custom Section Dialog
+  void _showEditCustomSectionDialog(CVBuilderProvider provider, CustomSection section) {
+    showDialog(
+      context: context,
+      builder: (context) => CustomSectionEditorDialog(
+        provider: provider,
+        section: section,
+      ),
+    );
   }
 
   void _showAddCustomSectionDialog(CVBuilderProvider provider) {
@@ -457,7 +542,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     );
   }
 
-  void _showDeleteConfirmation(CVBuilderProvider provider, SectionData section) {
+  void _showDeleteConfirmation(CVBuilderProvider provider, CustomSection section) {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
@@ -480,5 +565,31 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
         ],
       ),
     );
+  }
+
+  String _getTemplateName(SectionTemplate template) {
+    switch (template) {
+      case SectionTemplate.bulletList:
+        return 'Bullet List';
+      case SectionTemplate.categoryList:
+        return 'Category List';
+      case SectionTemplate.paragraph:
+        return 'Paragraph';
+      case SectionTemplate.simpleList:
+        return 'Simple List';
+    }
+  }
+
+  String _getTemplateDescription(SectionTemplate template) {
+    switch (template) {
+      case SectionTemplate.bulletList:
+        return 'Best for: Awards, Projects, Achievements\nFormat: • Bullet point entries';
+      case SectionTemplate.categoryList:
+        return 'Best for: Skills by category\nFormat: Category: item1, item2, item3';
+      case SectionTemplate.paragraph:
+        return 'Best for: Summary, Description\nFormat: Continuous paragraph text';
+      case SectionTemplate.simpleList:
+        return 'Best for: Simple lists\nFormat: • Item 1\n• Item 2';
+    }
   }
 }

@@ -2929,6 +2929,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start date cannot be after end date'**
   String get dateStartAfterEnd;
+
+  /// No description provided for @editContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Content'**
+  String get editContent;
+
+  /// No description provided for @editCustomSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Custom Section'**
+  String get editCustomSection;
+
+  /// No description provided for @emptyCustomSection.
+  ///
+  /// In en, this message translates to:
+  /// **'No content yet. Click \"Edit Content\" to add.'**
+  String get emptyCustomSection;
+
+  /// No description provided for @templateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Template'**
+  String get templateLabel;
+
+  /// No description provided for @contentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get contentLabel;
+
+  /// No description provided for @previewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get previewLabel;
 }
 
 class _AppLocalizationsDelegate

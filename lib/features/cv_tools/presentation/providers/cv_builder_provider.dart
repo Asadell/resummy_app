@@ -97,6 +97,12 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Update entire CV (for template changes or reordering)
+  void updateCV(CVData updatedCV) {
+    _currentCV = updatedCV;
+    notifyListeners();
+  }
+
   /// Update header (personal info)
   void updateHeader({
     String? name,
