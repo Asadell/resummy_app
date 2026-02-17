@@ -768,7 +768,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get extractKeyRequirements => 'Extract Key Requirements';
 
   @override
-  String get extractedRequirements => 'Extracted Requirements:';
+  String get extractedRequirements => 'Extracted Requirements';
 
   @override
   String get noJdQuestion => 'Don\'t have a JD?';
@@ -1298,7 +1298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get readyToStartDesc =>
-      'You\'re ready to start the interview simulation.';
+      'You are ready to start the AI interview simulation.';
 
   @override
   String get uploadedFromDevice => 'Uploaded from device';
@@ -2029,4 +2029,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noInterviewHistory => 'No interview history yet.';
+
+  @override
+  String get sectionOrderVisibility => 'Section Order & Visibility';
+
+  @override
+  String get sectionOrderTip =>
+      'Drag sections to reorder, toggle visibility, or edit titles';
+
+  @override
+  String get jobDescSubtitle => 'For more accurate keyword analysis';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterHigh => 'High';
+
+  @override
+  String get filterMedium => 'Medium';
+
+  @override
+  String get filterLow => 'Low';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get cobaLagi => 'Try Again';
+
+  @override
+  String get uploadYourCv => 'Upload Your CV';
+
+  @override
+  String get cvAnalyzerSetupDesc =>
+      'Get in-depth analysis and improvement suggestions for your CV';
+
+  @override
+  String get jobDescPasteHint =>
+      'Paste job description here for better keyword matching...';
+
+  @override
+  String get max5Pages => 'Max 5 pages';
+
+  @override
+  String get applyingSuggestions =>
+      'Applying suggestions and reformatting your CV...';
+
+  @override
+  String get overallAtsScore => 'Overall ATS Score';
+
+  @override
+  String get noSuggestionsForFilter => 'No suggestions for this filter';
+
+  @override
+  String get originalText => 'Original';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get undoApply => 'Undo Apply';
+
+  @override
+  String get undoDismiss => 'Undo Dismiss';
+
+  @override
+  String createCvFromSuggestions(Object count) {
+    return 'Create CV ATS from these $count suggestions';
+  }
+
+  @override
+  String get createNewAtsCvTitle => 'Create New CV ATS?';
+
+  @override
+  String get createCvAtsConfirmationDesc =>
+      'The system will create a new CV based on your original CV plus all the suggestions you have \"Applied\".\n\nThis CV can be edited again in the CV Builder.';
+
+  @override
+  String get createNow => 'Create Now';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get replayQuestion => 'Replay Question';
+
+  @override
+  String get processingAnswer => 'Processing answer...';
+
+  @override
+  String get processing => 'Processing...';
+
+  @override
+  String get companyNameHint => 'e.g. Google, Microsoft';
+
+  @override
+  String get max5PagesInterview => 'Max 5 pages for interview simulation.';
+
+  @override
+  String get profileInfo => 'Profile Info';
+
+  @override
+  String get errorSavingProfile => 'Error saving profile. Please try again.';
+
+  @override
+  String loginError(Object error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get buildYourCareer => 'Build Your Career';
 }

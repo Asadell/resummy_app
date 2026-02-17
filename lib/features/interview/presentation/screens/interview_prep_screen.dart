@@ -120,7 +120,7 @@ class InterviewPrepScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          title: Text('Interview Result'), // Context? Position?
+                          title: Text(l10n.interviewResults), // Context? Position?
                           subtitle: Text(
                             DateFormat.yMMMd().format(report.createdAt),
                             style: Theme.of(context).textTheme.bodySmall,

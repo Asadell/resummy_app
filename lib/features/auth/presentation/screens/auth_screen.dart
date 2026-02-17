@@ -109,7 +109,7 @@ class AuthScreen extends StatelessWidget {
     } else if (authProvider.error != null) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${authProvider.error}')),
+          SnackBar(content: Text(l10n.loginError(authProvider.error!))),
         );
       }
     }

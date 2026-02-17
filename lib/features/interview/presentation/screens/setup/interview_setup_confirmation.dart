@@ -82,7 +82,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                l10n.readyToStartDesc, // Localization needed
+                l10n.readyToStartDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

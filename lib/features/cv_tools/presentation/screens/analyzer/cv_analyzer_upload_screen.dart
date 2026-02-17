@@ -51,7 +51,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CV Analyzer'),
+        title: Text(l10n.cvAnalyzer),
         // actions: [
         //   Consumer<CvAnalyzerProvider>(
         //     builder: (context, provider, _) {
@@ -98,14 +98,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         children: [
           // Header
           Text(
-            'Upload CV Anda',
+            l10n.uploadYourCv,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Dapatkan analisis mendalam dan saran perbaikan untuk CV Anda',
+            l10n.cvAnalyzerSetupDesc,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -120,8 +120,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           TextField(
             controller: _jobPositionController,
             decoration: InputDecoration(
-              labelText: 'Posisi yang Dilamar *',
-              hintText: 'e.g., Software Engineer',
+              labelText: l10n.appliedPositionLabel,
+              hintText: l10n.targetRoleHint,
               prefixIcon: const Icon(Iconsax.briefcase),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -137,8 +137,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               children: [
                 ListTile(
                   leading: const Icon(Iconsax.document_text_1),
-                  title: const Text('Job Description (Opsional)'),
-                  subtitle: const Text('Untuk analisis keyword yang lebih akurat'),
+                  title: Text('${l10n.jobDescription} ${l10n.optionalField}'),
+                  subtitle: Text(l10n.jobDescSubtitle),
                   trailing: Icon(
                     _isJobDescExpanded
                         ? Iconsax.arrow_up_2
@@ -154,8 +154,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     child: TextField(
                       maxLines: 5,
                       decoration: InputDecoration(
-                        hintText:
-                            'Paste job description di sini untuk keyword matching yang lebih baik...',
+                        hintText: l10n.jobDescPasteHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -180,7 +179,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                       const Icon(Iconsax.language_square, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        'Bahasa Analisis',
+                        l10n.languageLabel,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
@@ -190,12 +189,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     segments: const [
                       ButtonSegment(
                         value: 'id',
-                        label: Text('Indonesia'),
+                        label: Text(l10n.indonesian),
                         icon: Icon(Icons.flag, size: 16),
                       ),
                       ButtonSegment(
                         value: 'en',
-                        label: Text('English'),
+                        label: Text(l10n.english),
                         icon: Icon(Icons.flag, size: 16),
                       ),
                     ],
@@ -240,7 +239,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ? () => provider.analyze(_selectedLanguage)
                 : null,
             icon: const Icon(Iconsax.scan_barcode),
-            label: const Text('Mulai Analisis'),
+            label: Text(l10n.startAnalysis),
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -293,14 +292,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               const SizedBox(height: 16),
               Text(
-                provider.isPickingFile ? 'Memproses PDF...' : 'Upload CV (PDF)',
+                provider.isPickingFile ? l10n.processingCv : l10n.uploadCv,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Maksimal 5 halaman',
+                l10n.max5Pages,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -325,14 +324,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           const CircularProgressIndicator(),
           const SizedBox(height: 24),
           Text(
-            isConverting ? 'Membuat CV ATS...' : 'Menganalisis CV Anda...',
+            isConverting ? l10n.applyingSuggestions : l10n.analyzingCv,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           Text(
             isConverting
-                ? 'Menerapkan saran dan memformat ulang CV Anda...'
-                : 'Ini mungkin memakan waktu 10-15 detik',
+                ? l10n.applyingSuggestions
+                : l10n.estimateTime,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -359,8 +358,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               child: TabBar(
                 controller: _tabController,
                 tabs: const [
-                  Tab(text: 'Report', icon: Icon(Iconsax.chart_1)),
-                  Tab(text: 'Saran', icon: Icon(Iconsax.message_edit)),
+                  Tab(text: l10n.report, icon: const Icon(Iconsax.chart_1)),
+                  Tab(text: l10n.suggestion, icon: const Icon(Iconsax.message_edit)),
                 ],
               ),
             ),
@@ -400,7 +399,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           // Summary Feedback
           if (result.summaryFeedback.isNotEmpty) ...[
             _buildSectionCard(
-              title: 'Ringkasan',
+              title: l10n.summary,
               icon: Iconsax.message_text,
               child: Text(result.summaryFeedback),
             ),
@@ -410,7 +409,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           // Highlights
           if (result.highlights.isNotEmpty) ...[
             _buildSectionCard(
-              title: 'Kekuatan CV',
+              title: l10n.strengths,
               icon: Iconsax.like_1,
               color: Colors.green,
               child: Column(
@@ -425,7 +424,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           // Improvements
           if (result.improvements.isNotEmpty) ...[
             _buildSectionCard(
-              title: 'Area Perbaikan',
+              title: l10n.improvements,
               icon: Iconsax.warning_2,
               color: Colors.orange,
               child: Column(
@@ -440,7 +439,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           // Missing Keywords
           if (result.missingKeywords.isNotEmpty) ...[
             _buildSectionCard(
-              title: 'Keyword yang Hilang',
+              title: l10n.missingKeywords,
               icon: Iconsax.search_normal,
               color: Colors.red,
               child: Wrap(
@@ -510,7 +509,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
             const SizedBox(height: 16),
             Text(
-              'Overall ATS Score',
+              l10n.overallAtsScore,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -529,21 +528,21 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Detail Metrik',
+              l10n.detailScore,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
             const SizedBox(height: 16),
-            _buildMetricBar('Keyword Match', metrics.keywordMatch, Colors.blue),
+            _buildMetricBar(l10n.keywordMatch, metrics.keywordMatch, Colors.blue),
             const SizedBox(height: 12),
-            _buildMetricBar('Measurable Impact',
+            _buildMetricBar(l10n.quantifiableAchievements,
                 metrics.quantifiableAchievements, Colors.green),
             const SizedBox(height: 12),
             _buildMetricBar(
-                'Structure', metrics.structureCompleteness, Colors.purple),
+                l10n.structureCompleteness, metrics.structureCompleteness, Colors.purple),
             const SizedBox(height: 12),
-            _buildMetricBar('Professionalism', metrics.languageProfessionalism,
+            _buildMetricBar(l10n.languageProfessionalism, metrics.languageProfessionalism,
                 Colors.orange),
           ],
         ),
@@ -559,7 +558,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-            Text('$value/100',
+            Text(l10n.score(value),
                 style: TextStyle(color: color, fontWeight: FontWeight.bold)),
           ],
         ),
@@ -661,28 +660,28 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 child: Row(
                   children: [
                     FilterChip(
-                      label: const Text('All'),
+                      label: Text(l10n.filterAll),
                       selected: _filterPriority == null,
                       onSelected: (_) =>
                           setState(() => _filterPriority = null),
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('High'),
+                      label: Text(l10n.filterHigh),
                       selected: _filterPriority == SuggestionPriority.high,
                       onSelected: (_) =>
                           setState(() => _filterPriority = SuggestionPriority.high),
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('Medium'),
+                      label: Text(l10n.filterMedium),
                       selected: _filterPriority == SuggestionPriority.medium,
                       onSelected: (_) => setState(
                           () => _filterPriority = SuggestionPriority.medium),
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('Low'),
+                      label: Text(l10n.filterLow),
                       selected: _filterPriority == SuggestionPriority.low,
                       onSelected: (_) =>
                           setState(() => _filterPriority = SuggestionPriority.low),
@@ -698,7 +697,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           child: filteredSuggestions.isEmpty
               ? Center(
                   child: Text(
-                    'Tidak ada saran untuk filter ini',
+                    l10n.noSuggestionsForFilter,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 )
@@ -812,7 +811,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                           size: 16, color: Colors.red.shade700),
                       const SizedBox(width: 4),
                       Text(
-                        'Original',
+                        l10n.originalText,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -845,7 +844,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                           size: 16, color: Colors.green.shade700),
                       const SizedBox(width: 4),
                       Text(
-                        'Suggestion',
+                        l10n.suggestion,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -894,7 +893,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     child: OutlinedButton.icon(
                       onPressed: () => provider.dismissSuggestion(suggestion.id),
                       icon: const Icon(Iconsax.close_circle, size: 16),
-                      label: const Text('Abaikan'),
+                      label: Text(l10n.dismiss),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.grey[700],
                       ),
@@ -905,7 +904,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     child: FilledButton.icon(
                       onPressed: () => provider.applySuggestion(suggestion.id),
                       icon: const Icon(Iconsax.tick_circle, size: 16),
-                      label: const Text('Terapkan'),
+                      label: Text(l10n.apply),
                     ),
                   ),
                 ],
@@ -914,7 +913,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               OutlinedButton.icon(
                 onPressed: () => provider.undoSuggestion(suggestion.id),
                 icon: const Icon(Iconsax.refresh, size: 16),
-                label: Text(suggestion.isApplied ? 'Batalkan Terapkan' : 'Batalkan Abaikan'),
+                label: Text(suggestion.isApplied ? l10n.undoApply : l10n.undoDismiss),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.blue,
                 ),
@@ -936,7 +935,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       child: FloatingActionButton.extended(
         onPressed: () => _handleBuatCvAts(provider),
         icon: const Icon(Iconsax.magicpen),
-        label: Text('Buat CV ATS dari ${result.appliedCount} Saran Ini'),
+        label: Text(l10n.createCvFromSuggestions(result.appliedCount)),
       ),
     );
   }
@@ -988,7 +987,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    'Buat CV ATS Baru?',
+                    l10n.createNewAtsCvTitle,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -998,7 +997,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
             const SizedBox(height: 20),
             Text(
-              'Sistem akan membuat CV baru berdasarkan CV asli kamu ditambah semua saran yang sudah kamu "Terapkan".\n\nCV ini bisa diedit lagi di CV Builder.',
+              l10n.createCvAtsConfirmationDesc,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.5,
@@ -1016,7 +1015,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Batal'),
+                    child: Text(l10n.cancel),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -1043,7 +1042,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Buat Sekarang'),
+                    child: Text(l10n.createNow),
                   ),
                 ),
               ],

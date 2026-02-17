@@ -180,7 +180,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
       setState(() => _isLoading = false);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error saving profile. Please try again.')),
+          SnackBar(content: Text(l10n.errorSavingProfile)),
         );
       }
     }

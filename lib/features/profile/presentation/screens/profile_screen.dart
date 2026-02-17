@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Profile Info',
+                                      l10n.profileInfo,
                                       style: Theme.of(context).textTheme.titleMedium,
                                     ),
                                     const Spacer(),

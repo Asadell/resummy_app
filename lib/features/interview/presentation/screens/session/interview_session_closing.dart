@@ -117,7 +117,7 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                   children: [
                     Icon(Iconsax.warning_2, size: 48, color: Theme.of(context).colorScheme.error),
                     const SizedBox(height: 16),
-                    Text(provider.errorMessage ?? 'Unknown error'),
+                    Text(provider.errorMessage ?? l10n.unknownError),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: () {
@@ -186,7 +186,7 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n.goodJobUser('John'), // You might want to get the user name from AuthProvider ideally
+                      l10n.goodJobUser(''), // Empty or use a placeholder if appropriate
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -223,8 +223,8 @@ class _InterviewSessionClosingScreenState extends State<InterviewSessionClosingS
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: Text(
-                                  l10n.aiClosingMessage('John'),
+                                  child: Text(
+                                    l10n.aiClosingMessage(''),
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ),

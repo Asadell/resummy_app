@@ -127,7 +127,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                     Icon(Iconsax.warning_2, size: 64, color: Theme.of(context).colorScheme.error),
                     const SizedBox(height: 16),
                     Text(
-                      provider.errorMessage ?? 'Unknown error',
+                      provider.errorMessage ?? l10n.unknownError,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
@@ -141,7 +141,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                         );
                       },
                       icon: const Icon(Iconsax.refresh),
-                      label: const Text('Coba Lagi'),
+                      label: Text(l10n.retry),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       ),
@@ -286,7 +286,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                             : Theme.of(context).colorScheme.primary,
                                       ),
                                       onPressed: () => provider.playQuestionAudio(),
-                                      tooltip: provider.isPlayingQuestion ? 'Stop' : 'Replay Question',
+                                      tooltip: provider.isPlayingQuestion ? l10n.stop : l10n.replayQuestion,
                                     ),
                                   ],
                                 ),
@@ -412,7 +412,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                 const CircularProgressIndicator(),
                                 const SizedBox(height: 16),
                                 Text(
-                                  "Memproses jawaban...",
+                                  l10n.processingAnswer,
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.w600,
@@ -537,7 +537,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                       _stopTimer();
                                     },
                                     icon: const Icon(Icons.stop_circle),
-                                    label: const Text('Stop'), 
+                                    label: Text(l10n.stop), 
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Theme.of(context).colorScheme.error,
                                       foregroundColor: Theme.of(context).colorScheme.onError,
@@ -566,7 +566,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                             icon: provider.isTranscribing 
                                 ? const SizedBox()  // kodongin aja, udah ada loader di atasnya
                                 : const Icon(Icons.mic),
-                            label: Text(provider.isTranscribing ? "Memproses..." : l10n.startAnswering),
+                            label: Text(provider.isTranscribing ? l10n.processing : l10n.startAnswering),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size.fromHeight(56),
                               elevation: 2,

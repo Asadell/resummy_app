@@ -17,7 +17,7 @@ class InterviewSetupStep2Screen extends StatefulWidget {
 
 class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
   late TextEditingController _positionController;
-  final _companyController = TextEditingController(text: 'PT Tech Startup Indonesia');
+  final _companyController = TextEditingController();
   int _selectedLevel = 1; // 0: Junior, 1: Mid, 2: Senior
   String _selectedIndustry = 'Technology';
 
@@ -143,7 +143,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     TextField(
                       controller: _companyController,
                       decoration: InputDecoration(
-                        hintText: 'e.g. Google, Microsoft',
+                        hintText: l10n.companyNameHint,
                         prefixIcon: const Icon(Iconsax.building_3),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),

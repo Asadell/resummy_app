@@ -70,7 +70,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Section Order & Visibility'),
+        title: Text(l10n.sectionOrderVisibility),
         centerTitle: true,
       ),
       body: Column(
@@ -85,7 +85,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Drag sections to reorder, toggle visibility, or edit titles',
+                    l10n.sectionOrderTip,
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey.shade700,
@@ -117,7 +117,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
             child: OutlinedButton.icon(
               onPressed: () => _showAddCustomSectionDialog(context, provider),
               icon: const Icon(Iconsax.add),
-              label: const Text('Add Custom Section'),
+              label: Text(l10n.addCustomSection),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
                 shape: RoundedRectangleBorder(
@@ -214,7 +214,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         _editingTitleSectionId = section.id;
                       });
                     },
-                    tooltip: 'Edit title',
+                    tooltip: l10n.edit,
                   ),
 
                 // Save button when editing
@@ -230,7 +230,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         _editingTitleSectionId = null;
                       });
                     },
-                    tooltip: 'Save',
+                    tooltip: l10n.save,
                   ),
 
                 const SizedBox(width: 8),
@@ -254,9 +254,9 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                   _showDeleteConfirmation(context, provider, section);
                 },
                 icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
-                label: const Text(
-                  'Delete Section',
-                  style: TextStyle(color: Colors.red),
+                label: Text(
+                  l10n.deleteSection,
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
             ],
@@ -317,7 +317,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
-                      'Add Custom Section',
+                      l10n.addCustomSection,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -328,18 +328,18 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               const SizedBox(height: 24),
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Section Title',
-                  hintText: 'e.g., Publications, Awards, Projects',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Iconsax.edit_2),
+                decoration: InputDecoration(
+                  labelText: l10n.categoryName,
+                  hintText: l10n.sectionLabelHint,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Iconsax.edit_2),
                 ),
                 autofocus: true,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Template:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              Text(
+                '${l10n.templateLabel}:',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<CustomSectionTemplate>(
@@ -374,7 +374,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('Cancel'),
+                      child: Text(l10n.cancel),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -396,7 +396,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('Add Section'),
+                      child: Text(l10n.add),
                     ),
                   ),
                 ],
@@ -458,7 +458,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    'Delete Section',
+                    l10n.deleteSection,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -468,7 +468,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Are you sure you want to delete "${section.title}"?',
+              l10n.deleteItemConfirmation(section.title),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     height: 1.5,
@@ -486,7 +486,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Cancel'),
+                    child: Text(l10n.cancel),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -505,7 +505,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Delete'),
+                    child: Text(l10n.delete),
                   ),
                 ),
               ],
@@ -519,15 +519,15 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
   String _getTemplateName(CustomSectionTemplate template) {
     switch (template) {
       case CustomSectionTemplate.experienceLike:
-        return 'Experience-like';
+        return l10n.templateExperienceNameLabel;
       case CustomSectionTemplate.educationLike:
-        return 'Education-like';
+        return l10n.templateEducationNameLabel;
       case CustomSectionTemplate.skillsLike:
-        return 'Skills / Category List';
+        return l10n.templateSkillsNameLabel;
       case CustomSectionTemplate.bulletList:
-        return 'Bullet List';
+        return l10n.templateBulletNameLabel;
       case CustomSectionTemplate.paragraph:
-        return 'Paragraph';
+        return l10n.templateParagraphNameLabel;
     }
   }
 }
