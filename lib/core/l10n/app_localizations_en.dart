@@ -2023,4 +2023,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get stopInterviewDesc =>
       'If you leave now, the analysis will be cancelled and you will lose your interview data.';
+
+  @override
+  String get recentInterviews => 'Recent Interviews';
+
+  @override
+  String get noInterviewHistory => 'No interview history yet.';
 }

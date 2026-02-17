@@ -670,5 +670,8 @@
   "addBulletPoint": "Tambah poin bullet",
   "invalidYearMin1945": "Tahun minimal 1945",
   "stopInterviewTitle": "Hentikan Analisis?",
-  "stopInterviewDesc": "Jika Anda keluar sekarang, analisis akan dibatalkan dan data wawancara Anda akan hilang."
+  "stopInterviewDesc": "Jika Anda keluar sekarang, analisis akan dibatalkan dan data wawancara Anda akan hilang.",
+  "recentInterviews": "Wawancara Terakhir",
+  "viewAll": "Lihat Semua",
+  "noInterviewHistory": "Belum ada riwayat wawancara."
 }

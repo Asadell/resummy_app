@@ -7,6 +7,8 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
 
@@ -179,6 +181,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       label: Text(l10n.logout),
                       onPressed: () => _showLogoutDialog(context),
                     ),
+
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 50),
+                      OutlinedButton(
+                        onPressed: () {
+                          context.read<InterviewProvider>().startInterviewWithDummyData();
+                          context.router.push(const InterviewSessionClosingRoute());
+                        },
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.all(16),
+                          side: BorderSide(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+                        ),
+                        child: const Text('DEBUG: Skip with 5 Questions'),
+                      ),
+                    ],
                   ],
                 ),
               ),

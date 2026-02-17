@@ -2033,4 +2033,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get stopInterviewDesc =>
       'Jika Anda keluar sekarang, analisis akan dibatalkan dan data wawancara Anda akan hilang.';
+
+  @override
+  String get recentInterviews => 'Wawancara Terakhir';
+
+  @override
+  String get noInterviewHistory => 'Belum ada riwayat wawancara.';
 }

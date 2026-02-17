@@ -3913,6 +3913,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If you leave now, the analysis will be cancelled and you will lose your interview data.'**
   String get stopInterviewDesc;
+
+  /// No description provided for @recentInterviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Interviews'**
+  String get recentInterviews;
+
+  /// No description provided for @noInterviewHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No interview history yet.'**
+  String get noInterviewHistory;
 }
 
 class _AppLocalizationsDelegate

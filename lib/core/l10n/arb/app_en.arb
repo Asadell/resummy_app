@@ -757,5 +757,8 @@
   "addBulletPoint": "Add bullet point",
   "invalidYearMin1945": "Year must be at least 1945",
   "stopInterviewTitle": "Stop Analysis?",
-  "stopInterviewDesc": "If you leave now, the analysis will be cancelled and you will lose your interview data."
+  "stopInterviewDesc": "If you leave now, the analysis will be cancelled and you will lose your interview data.",
+  "recentInterviews": "Recent Interviews",
+  "viewAll": "View All",
+  "noInterviewHistory": "No interview history yet."
 }

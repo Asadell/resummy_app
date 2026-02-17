@@ -16,7 +16,7 @@ import 'package:resummy_app/core/services/gemini_interview_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
-
+import 'package:resummy_app/features/interview/data/repositories/interview_history_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -36,6 +36,9 @@ void main() async {
 
   // Initialize SharedPreferences for CV Builder
   final prefs = await SharedPreferences.getInstance();
+  
+  // Repositories
+  final interviewHistoryRepository = InterviewHistoryRepository(prefs);
 
   await Future.wait([
     themeProvider.init(),
@@ -63,6 +66,7 @@ void main() async {
           create: (_) => InterviewProvider(
             geminiService: GeminiSpeechService(),
             interviewService: GeminiInterviewService(),
+            repository: interviewHistoryRepository,
           ),
         ),
       ],

@@ -542,16 +542,18 @@ Return JSON:
     }).toList();
 
     if (validQuestions.isEmpty) {
-        return const InterviewReport(
+        return InterviewReport(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          createdAt: DateTime.now(),
           overallScore: 0,
           starAverageScore: 0,
           contentQualityAverageScore: 0,
           fluencyAverageScore: 0,
           confidenceAverageScore: 0,
           overallFeedback: 'No valid answers to analyze',
-          strengths: [],
-          improvements: [],
-          questionFeedbacks: [],
+          strengths: const [],
+          improvements: const [],
+          questionFeedbacks: const [],
         );
     }
     
@@ -642,28 +644,32 @@ Return JSON:
     // 5. Check if we have enough data
     if (questionFeedbacks.isEmpty) {
       if (shouldStop?.call() ?? false) {
-         return const InterviewReport(
+         return InterviewReport(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            createdAt: DateTime.now(),
             overallScore: 0,
             starAverageScore: 0,
             contentQualityAverageScore: 0,
             fluencyAverageScore: 0,
             confidenceAverageScore: 0,
             overallFeedback: 'Analysis cancelled',
-            strengths: [],
-            improvements: [],
-            questionFeedbacks: [],
+            strengths: const [],
+            improvements: const [],
+            questionFeedbacks: const [],
          );
       }
-      return const InterviewReport(
+      return InterviewReport(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        createdAt: DateTime.now(),
         overallScore: 0,
         starAverageScore: 0,
         contentQualityAverageScore: 0,
         fluencyAverageScore: 0,
         confidenceAverageScore: 0,
         overallFeedback: 'All analyses failed. Please check your connection and try again.',
-        strengths: [],
-        improvements: [],
-        questionFeedbacks: [],
+        strengths: const [],
+        improvements: const [],
+        questionFeedbacks: const [],
       );
     }
 
@@ -699,6 +705,8 @@ Return JSON:
     }
 
     return InterviewReport(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      createdAt: DateTime.now(),
       overallScore: overall,
       starAverageScore: starAvg,
       contentQualityAverageScore: contentAvg,
