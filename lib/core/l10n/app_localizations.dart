@@ -3901,6 +3901,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Year must be at least 1945'**
   String get invalidYearMin1945;
+
+  /// No description provided for @stopInterviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Analysis?'**
+  String get stopInterviewTitle;
+
+  /// No description provided for @stopInterviewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If you leave now, the analysis will be cancelled and you will lose your interview data.'**
+  String get stopInterviewDesc;
 }
 
 class _AppLocalizationsDelegate

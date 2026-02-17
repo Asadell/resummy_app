@@ -78,10 +78,12 @@ class GeminiInterviewService {
     JD: $jdText
     
     Task: Generate 5 behavioral interview questions using the STAR method tailored to this candidate and job.
+    Also provide a brief "STAR Hint" for each question to guide the candidate (e.g., "Situation: Describe the context... Task: ...").
+    
     Language: Respond in $langPrompt.
     
-    Format: JSON list containing objects with 'id' (string), 'text' (string), 'difficulty' (string: Easy/Medium/Hard).
-    Example: [{"id": "1", "text": "Tell me about a time...", "difficulty": "Medium"}]
+    Format: JSON list containing objects with 'id' (string), 'text' (string), 'difficulty' (string: Easy/Medium/Hard), 'starHint' (string).
+    Example: [{"id": "1", "text": "Tell me about a time...", "difficulty": "Medium", "starHint": "S: Focus on..."}]
     ''';
 
     return _retryWithKeyRotation(() async {
@@ -96,14 +98,40 @@ class GeminiInterviewService {
           id: json['id'].toString(),
           text: json['text'],
           difficulty: json['difficulty'],
+          starHint: json['starHint'],
         );
       }).toList();
     }, fallback: [
-        const InterviewQuestion(id: '1', text: 'Tell me about a time you faced a challenge.', difficulty: 'Medium'),
-        const InterviewQuestion(id: '2', text: 'Describe a project where you demonstrated leadership.', difficulty: 'Medium'),
-        const InterviewQuestion(id: '3', text: 'How do you prioritize tasks under pressure?', difficulty: 'Medium'),
-        const InterviewQuestion(id: '4', text: 'Give an example of a conflict you resolved at work.', difficulty: 'Medium'),
-        const InterviewQuestion(id: '5', text: 'What is your greatest professional achievement?', difficulty: 'Medium'),
+        const InterviewQuestion(
+          id: '1', 
+          text: 'Tell me about a time you faced a challenge.', 
+          difficulty: 'Medium',
+          starHint: 'S: Describe the challenge. T: What was your responsibility? A: What steps did you take? R: What was the outcome?',
+        ),
+        const InterviewQuestion(
+          id: '2', 
+          text: 'Describe a project where you demonstrated leadership.', 
+          difficulty: 'Medium',
+          starHint: 'S: Context of the project. T: Your leadership role. A: How you led the team. R: Project success metrics.',
+        ),
+        const InterviewQuestion(
+          id: '3', 
+          text: 'How do you prioritize tasks under pressure?', 
+          difficulty: 'Medium',
+          starHint: 'S: A busy situation. T: Competing deadlines. A: Prioritization method used. R: All tasks completed on time.',
+        ),
+        const InterviewQuestion(
+          id: '4', 
+          text: 'Give an example of a conflict you resolved at work.', 
+          difficulty: 'Medium',
+          starHint: 'S: The conflict details. T: Goal to resolve it. A: Your communication strategy. R: Positive relationship restored.',
+        ),
+        const InterviewQuestion(
+          id: '5', 
+          text: 'What is your greatest professional achievement?', 
+          difficulty: 'Medium',
+          starHint: 'S: The opportunity/challenge. T: The goal you set. A: Your key actions. R: The quantifiable impact.',
+        ),
     ]);
   }
 

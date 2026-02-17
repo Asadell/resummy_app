@@ -2016,4 +2016,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidYearMin1945 => 'Year must be at least 1945';
+
+  @override
+  String get stopInterviewTitle => 'Stop Analysis?';
+
+  @override
+  String get stopInterviewDesc =>
+      'If you leave now, the analysis will be cancelled and you will lose your interview data.';
 }

@@ -36,7 +36,7 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            title: Text('📋 ${l10n.fullReport}'),
+            title: Text(l10n.fullReport),
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left_1),
               onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
@@ -193,13 +193,11 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
                                   const SizedBox(height: 12),
                                   Align(
                                     alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                      // Pass the index or ID to detail screen
-                                      // Since we didn't update the router yet, let's just push for now
-                                      // But wait, InterviewFeedbackDetailRoute probably doesn't take args yet.
-                                      // We need to update InterviewFeedbackDetailScreen to accept args.
+                                    child: TextButton.icon(
                                       onPressed: () => context.router.push(InterviewFeedbackDetailRoute(feedbackIndex: index)),
-                                      child: Text('${l10n.viewDetail} →'),
+                                      icon: const Icon(Iconsax.arrow_right_3, size: 16),
+                                      label: Text(l10n.viewDetail),
+                                      iconAlignment: IconAlignment.end,
                                     ),
                                   ),
                                 ] else ...[

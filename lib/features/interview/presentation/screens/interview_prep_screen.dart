@@ -67,7 +67,7 @@ class InterviewPrepScreen extends StatelessWidget {
                 OutlinedButton(
                   onPressed: () {
                      context.read<InterviewProvider>().startInterviewWithDummyData();
-                     context.router.push(const InterviewSessionFollowupRoute());
+                     context.router.push(const InterviewSessionClosingRoute());
                   },
                   child: const Text('DEBUG: Skip with Dummy Data'),
                 ),

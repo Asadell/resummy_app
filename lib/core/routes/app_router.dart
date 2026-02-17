@@ -67,8 +67,7 @@ class AppRouter extends RootStackRouter {
         // Interview Session (No Bottom Nav)
         AutoRoute(page: InterviewSessionOpeningRoute.page),
         AutoRoute(page: InterviewSessionQuestionRoute.page),
-        AutoRoute(page: InterviewSessionFollowupRoute.page),
-        AutoRoute(page: InterviewSessionUserQuestionsRoute.page),
+
         AutoRoute(page: InterviewSessionClosingRoute.page),
 
         // Interview Feedback (No Bottom Nav)

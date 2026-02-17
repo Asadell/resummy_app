@@ -71,7 +71,7 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
           appBar: AppBar(
             title: Text('${l10n.question} ${_currentIndex + 1} ${l10n.totalOf} $totalQuestions'),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Iconsax.arrow_left_1),
               onPressed: () => context.router.push(const InterviewFeedbackQuestionsRoute()),
             ),
           ),
@@ -385,13 +385,14 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
               child: Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
+                    child: OutlinedButton.icon(
                       onPressed: _currentIndex > 0
                           ? () {
                               setState(() => _currentIndex--);
                             }
                           : null,
-                       child: Text('⏮ ${l10n.previous}'),
+                       icon: const Icon(Iconsax.arrow_left_2, size: 18),
+                       label: Text(l10n.previous),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -403,13 +404,15 @@ class _InterviewFeedbackDetailScreenState extends State<InterviewFeedbackDetailS
                   // Or keep it to restart? But we have the restart button in overview.
                   
                   Expanded(
-                    child: OutlinedButton(
+                    child: OutlinedButton.icon(
                       onPressed: _currentIndex < totalQuestions - 1
                           ? () {
                               setState(() => _currentIndex++);
                             }
                           : null,
-                       child: Text('${l10n.next} ⏭'),
+                       icon: const Icon(Iconsax.arrow_right_3, size: 18), // Using arrow_right_3 for next
+                       label: Text(l10n.next),
+                       iconAlignment: IconAlignment.end,
                     ),
                   ),
                 ],

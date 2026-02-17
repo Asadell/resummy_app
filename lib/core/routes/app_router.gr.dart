@@ -9,24 +9,24 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i49;
-import 'package:flutter/material.dart' as _i50;
+import 'package:auto_route/auto_route.dart' as _i47;
+import 'package:flutter/material.dart' as _i48;
 import 'package:resummy_app/features/auth/presentation/screens/auth_screen.dart'
     as _i1;
 import 'package:resummy_app/features/auth/presentation/screens/language_selection_screen.dart'
-    as _i40;
+    as _i38;
 import 'package:resummy_app/features/auth/presentation/screens/onboarding/onboarding_confirmation.dart'
-    as _i42;
+    as _i40;
 import 'package:resummy_app/features/auth/presentation/screens/onboarding/onboarding_step1_name.dart'
-    as _i43;
+    as _i41;
 import 'package:resummy_app/features/auth/presentation/screens/onboarding/onboarding_step2_status.dart'
-    as _i44;
+    as _i42;
 import 'package:resummy_app/features/auth/presentation/screens/onboarding/onboarding_step3_role.dart'
-    as _i45;
+    as _i43;
 import 'package:resummy_app/features/auth/presentation/screens/onboarding/onboarding_step4_goal.dart'
-    as _i46;
+    as _i44;
 import 'package:resummy_app/features/auth/presentation/screens/splash_screen.dart'
-    as _i48;
+    as _i46;
 import 'package:resummy_app/features/cv_tools/presentation/screens/analyzer/cv_analyzer_upload_screen.dart'
     as _i2;
 import 'package:resummy_app/features/cv_tools/presentation/screens/builder/cv_builder_custom_section_step.dart'
@@ -85,38 +85,34 @@ import 'package:resummy_app/features/interview/presentation/screens/interview_pr
     as _i29;
 import 'package:resummy_app/features/interview/presentation/screens/session/interview_session_closing.dart'
     as _i30;
-import 'package:resummy_app/features/interview/presentation/screens/session/interview_session_followup.dart'
-    as _i31;
 import 'package:resummy_app/features/interview/presentation/screens/session/interview_session_opening.dart'
-    as _i32;
+    as _i31;
 import 'package:resummy_app/features/interview/presentation/screens/session/interview_session_question.dart'
-    as _i33;
-import 'package:resummy_app/features/interview/presentation/screens/session/interview_session_user_questions.dart'
-    as _i34;
+    as _i32;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_confirmation.dart'
-    as _i35;
+    as _i33;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_step1_cv.dart'
-    as _i36;
+    as _i34;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_step2_position.dart'
-    as _i37;
+    as _i35;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_step3_jd.dart'
-    as _i38;
+    as _i36;
 import 'package:resummy_app/features/interview/presentation/screens/setup/interview_setup_step4_preferences.dart'
-    as _i39;
+    as _i37;
 import 'package:resummy_app/features/main/presentation/screens/main_screen.dart'
-    as _i41;
+    as _i39;
 import 'package:resummy_app/features/profile/presentation/screens/profile_screen.dart'
-    as _i47;
+    as _i45;
 
 /// generated route for
 /// [_i1.AuthScreen]
-class AuthRoute extends _i49.PageRouteInfo<void> {
-  const AuthRoute({List<_i49.PageRouteInfo>? children})
+class AuthRoute extends _i47.PageRouteInfo<void> {
+  const AuthRoute({List<_i47.PageRouteInfo>? children})
     : super(AuthRoute.name, initialChildren: children);
 
   static const String name = 'AuthRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i1.AuthScreen();
@@ -126,13 +122,13 @@ class AuthRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.CvAnalyzerUploadScreen]
-class CvAnalyzerUploadRoute extends _i49.PageRouteInfo<void> {
-  const CvAnalyzerUploadRoute({List<_i49.PageRouteInfo>? children})
+class CvAnalyzerUploadRoute extends _i47.PageRouteInfo<void> {
+  const CvAnalyzerUploadRoute({List<_i47.PageRouteInfo>? children})
     : super(CvAnalyzerUploadRoute.name, initialChildren: children);
 
   static const String name = 'CvAnalyzerUploadRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i2.CvAnalyzerUploadScreen();
@@ -142,13 +138,13 @@ class CvAnalyzerUploadRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CvAtsConverterScreen]
-class CvAtsConverterRoute extends _i49.PageRouteInfo<void> {
-  const CvAtsConverterRoute({List<_i49.PageRouteInfo>? children})
+class CvAtsConverterRoute extends _i47.PageRouteInfo<void> {
+  const CvAtsConverterRoute({List<_i47.PageRouteInfo>? children})
     : super(CvAtsConverterRoute.name, initialChildren: children);
 
   static const String name = 'CvAtsConverterRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i3.CvAtsConverterScreen();
@@ -159,11 +155,11 @@ class CvAtsConverterRoute extends _i49.PageRouteInfo<void> {
 /// generated route for
 /// [_i4.CvBuilderCustomSectionStepScreen]
 class CvBuilderCustomSectionStepRoute
-    extends _i49.PageRouteInfo<CvBuilderCustomSectionStepRouteArgs> {
+    extends _i47.PageRouteInfo<CvBuilderCustomSectionStepRouteArgs> {
   CvBuilderCustomSectionStepRoute({
-    _i50.Key? key,
+    _i48.Key? key,
     required String sectionId,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          CvBuilderCustomSectionStepRoute.name,
          args: CvBuilderCustomSectionStepRouteArgs(
@@ -176,7 +172,7 @@ class CvBuilderCustomSectionStepRoute
 
   static const String name = 'CvBuilderCustomSectionStepRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final pathParams = data.inheritedPathParams;
@@ -199,7 +195,7 @@ class CvBuilderCustomSectionStepRouteArgs {
     required this.sectionId,
   });
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final String sectionId;
 
@@ -211,13 +207,13 @@ class CvBuilderCustomSectionStepRouteArgs {
 
 /// generated route for
 /// [_i5.CvBuilderPreviewScreen]
-class CvBuilderPreviewRoute extends _i49.PageRouteInfo<void> {
-  const CvBuilderPreviewRoute({List<_i49.PageRouteInfo>? children})
+class CvBuilderPreviewRoute extends _i47.PageRouteInfo<void> {
+  const CvBuilderPreviewRoute({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderPreviewRoute.name, initialChildren: children);
 
   static const String name = 'CvBuilderPreviewRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i5.CvBuilderPreviewScreen();
@@ -227,13 +223,13 @@ class CvBuilderPreviewRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.CvBuilderStep1Screen]
-class CvBuilderStep1Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep1Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep1Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep1Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep1Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep1Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i6.CvBuilderStep1Screen();
@@ -243,13 +239,13 @@ class CvBuilderStep1Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.CvBuilderStep2Screen]
-class CvBuilderStep2Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep2Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep2Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep2Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep2Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep2Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i7.CvBuilderStep2Screen();
@@ -259,13 +255,13 @@ class CvBuilderStep2Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.CvBuilderStep3Screen]
-class CvBuilderStep3Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep3Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep3Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep3Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep3Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep3Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i8.CvBuilderStep3Screen();
@@ -275,13 +271,13 @@ class CvBuilderStep3Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.CvBuilderStep4Screen]
-class CvBuilderStep4Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep4Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep4Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep4Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep4Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep4Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i9.CvBuilderStep4Screen();
@@ -291,13 +287,13 @@ class CvBuilderStep4Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.CvBuilderStep5Screen]
-class CvBuilderStep5Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep5Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep5Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep5Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep5Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep5Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i10.CvBuilderStep5Screen();
@@ -307,13 +303,13 @@ class CvBuilderStep5Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.CvBuilderStep6Screen]
-class CvBuilderStep6Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep6Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep6Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep6Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep6Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep6Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i11.CvBuilderStep6Screen();
@@ -323,13 +319,13 @@ class CvBuilderStep6Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.CvBuilderStep7Screen]
-class CvBuilderStep7Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep7Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep7Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep7Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep7Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep7Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i12.CvBuilderStep7Screen();
@@ -339,13 +335,13 @@ class CvBuilderStep7Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.CvBuilderStep8Screen]
-class CvBuilderStep8Route extends _i49.PageRouteInfo<void> {
-  const CvBuilderStep8Route({List<_i49.PageRouteInfo>? children})
+class CvBuilderStep8Route extends _i47.PageRouteInfo<void> {
+  const CvBuilderStep8Route({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderStep8Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep8Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i13.CvBuilderStep8Screen();
@@ -355,13 +351,13 @@ class CvBuilderStep8Route extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i14.CvBuilderWelcomeScreen]
-class CvBuilderWelcomeRoute extends _i49.PageRouteInfo<void> {
-  const CvBuilderWelcomeRoute({List<_i49.PageRouteInfo>? children})
+class CvBuilderWelcomeRoute extends _i47.PageRouteInfo<void> {
+  const CvBuilderWelcomeRoute({List<_i47.PageRouteInfo>? children})
     : super(CvBuilderWelcomeRoute.name, initialChildren: children);
 
   static const String name = 'CvBuilderWelcomeRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i14.CvBuilderWelcomeScreen();
@@ -371,13 +367,13 @@ class CvBuilderWelcomeRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i15.CvHistoryScreen]
-class CvHistoryRoute extends _i49.PageRouteInfo<void> {
-  const CvHistoryRoute({List<_i49.PageRouteInfo>? children})
+class CvHistoryRoute extends _i47.PageRouteInfo<void> {
+  const CvHistoryRoute({List<_i47.PageRouteInfo>? children})
     : super(CvHistoryRoute.name, initialChildren: children);
 
   static const String name = 'CvHistoryRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i15.CvHistoryScreen();
@@ -387,13 +383,13 @@ class CvHistoryRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.CvToolsHubScreen]
-class CvToolsHubRoute extends _i49.PageRouteInfo<void> {
-  const CvToolsHubRoute({List<_i49.PageRouteInfo>? children})
+class CvToolsHubRoute extends _i47.PageRouteInfo<void> {
+  const CvToolsHubRoute({List<_i47.PageRouteInfo>? children})
     : super(CvToolsHubRoute.name, initialChildren: children);
 
   static const String name = 'CvToolsHubRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i16.CvToolsHubScreen();
@@ -403,13 +399,13 @@ class CvToolsHubRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i17.CvTranslatorDownloadScreen]
-class CvTranslatorDownloadRoute extends _i49.PageRouteInfo<void> {
-  const CvTranslatorDownloadRoute({List<_i49.PageRouteInfo>? children})
+class CvTranslatorDownloadRoute extends _i47.PageRouteInfo<void> {
+  const CvTranslatorDownloadRoute({List<_i47.PageRouteInfo>? children})
     : super(CvTranslatorDownloadRoute.name, initialChildren: children);
 
   static const String name = 'CvTranslatorDownloadRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i17.CvTranslatorDownloadScreen();
@@ -419,13 +415,13 @@ class CvTranslatorDownloadRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i18.CvTranslatorLanguageScreen]
-class CvTranslatorLanguageRoute extends _i49.PageRouteInfo<void> {
-  const CvTranslatorLanguageRoute({List<_i49.PageRouteInfo>? children})
+class CvTranslatorLanguageRoute extends _i47.PageRouteInfo<void> {
+  const CvTranslatorLanguageRoute({List<_i47.PageRouteInfo>? children})
     : super(CvTranslatorLanguageRoute.name, initialChildren: children);
 
   static const String name = 'CvTranslatorLanguageRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i18.CvTranslatorLanguageScreen();
@@ -435,13 +431,13 @@ class CvTranslatorLanguageRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i19.CvTranslatorLoadingScreen]
-class CvTranslatorLoadingRoute extends _i49.PageRouteInfo<void> {
-  const CvTranslatorLoadingRoute({List<_i49.PageRouteInfo>? children})
+class CvTranslatorLoadingRoute extends _i47.PageRouteInfo<void> {
+  const CvTranslatorLoadingRoute({List<_i47.PageRouteInfo>? children})
     : super(CvTranslatorLoadingRoute.name, initialChildren: children);
 
   static const String name = 'CvTranslatorLoadingRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i19.CvTranslatorLoadingScreen();
@@ -451,13 +447,13 @@ class CvTranslatorLoadingRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i20.CvTranslatorReviewScreen]
-class CvTranslatorReviewRoute extends _i49.PageRouteInfo<void> {
-  const CvTranslatorReviewRoute({List<_i49.PageRouteInfo>? children})
+class CvTranslatorReviewRoute extends _i47.PageRouteInfo<void> {
+  const CvTranslatorReviewRoute({List<_i47.PageRouteInfo>? children})
     : super(CvTranslatorReviewRoute.name, initialChildren: children);
 
   static const String name = 'CvTranslatorReviewRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i20.CvTranslatorReviewScreen();
@@ -467,13 +463,13 @@ class CvTranslatorReviewRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i21.CvTranslatorUploadScreen]
-class CvTranslatorUploadRoute extends _i49.PageRouteInfo<void> {
-  const CvTranslatorUploadRoute({List<_i49.PageRouteInfo>? children})
+class CvTranslatorUploadRoute extends _i47.PageRouteInfo<void> {
+  const CvTranslatorUploadRoute({List<_i47.PageRouteInfo>? children})
     : super(CvTranslatorUploadRoute.name, initialChildren: children);
 
   static const String name = 'CvTranslatorUploadRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i21.CvTranslatorUploadScreen();
@@ -483,13 +479,13 @@ class CvTranslatorUploadRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i22.HistoryScreen]
-class HistoryRoute extends _i49.PageRouteInfo<void> {
-  const HistoryRoute({List<_i49.PageRouteInfo>? children})
+class HistoryRoute extends _i47.PageRouteInfo<void> {
+  const HistoryRoute({List<_i47.PageRouteInfo>? children})
     : super(HistoryRoute.name, initialChildren: children);
 
   static const String name = 'HistoryRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i22.HistoryScreen();
@@ -499,13 +495,13 @@ class HistoryRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i23.HomeScreen]
-class HomeRoute extends _i49.PageRouteInfo<void> {
-  const HomeRoute({List<_i49.PageRouteInfo>? children})
+class HomeRoute extends _i47.PageRouteInfo<void> {
+  const HomeRoute({List<_i47.PageRouteInfo>? children})
     : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i23.HomeScreen();
@@ -516,11 +512,11 @@ class HomeRoute extends _i49.PageRouteInfo<void> {
 /// generated route for
 /// [_i24.InterviewFeedbackDetailScreen]
 class InterviewFeedbackDetailRoute
-    extends _i49.PageRouteInfo<InterviewFeedbackDetailRouteArgs> {
+    extends _i47.PageRouteInfo<InterviewFeedbackDetailRouteArgs> {
   InterviewFeedbackDetailRoute({
-    _i50.Key? key,
+    _i48.Key? key,
     int feedbackIndex = 0,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          InterviewFeedbackDetailRoute.name,
          args: InterviewFeedbackDetailRouteArgs(
@@ -532,7 +528,7 @@ class InterviewFeedbackDetailRoute
 
   static const String name = 'InterviewFeedbackDetailRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<InterviewFeedbackDetailRouteArgs>(
@@ -549,7 +545,7 @@ class InterviewFeedbackDetailRoute
 class InterviewFeedbackDetailRouteArgs {
   const InterviewFeedbackDetailRouteArgs({this.key, this.feedbackIndex = 0});
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final int feedbackIndex;
 
@@ -561,13 +557,13 @@ class InterviewFeedbackDetailRouteArgs {
 
 /// generated route for
 /// [_i25.InterviewFeedbackOverviewScreen]
-class InterviewFeedbackOverviewRoute extends _i49.PageRouteInfo<void> {
-  const InterviewFeedbackOverviewRoute({List<_i49.PageRouteInfo>? children})
+class InterviewFeedbackOverviewRoute extends _i47.PageRouteInfo<void> {
+  const InterviewFeedbackOverviewRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewFeedbackOverviewRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackOverviewRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i25.InterviewFeedbackOverviewScreen();
@@ -577,13 +573,13 @@ class InterviewFeedbackOverviewRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i26.InterviewFeedbackProgressScreen]
-class InterviewFeedbackProgressRoute extends _i49.PageRouteInfo<void> {
-  const InterviewFeedbackProgressRoute({List<_i49.PageRouteInfo>? children})
+class InterviewFeedbackProgressRoute extends _i47.PageRouteInfo<void> {
+  const InterviewFeedbackProgressRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewFeedbackProgressRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackProgressRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i26.InterviewFeedbackProgressScreen();
@@ -593,13 +589,13 @@ class InterviewFeedbackProgressRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i27.InterviewFeedbackQuestionsScreen]
-class InterviewFeedbackQuestionsRoute extends _i49.PageRouteInfo<void> {
-  const InterviewFeedbackQuestionsRoute({List<_i49.PageRouteInfo>? children})
+class InterviewFeedbackQuestionsRoute extends _i47.PageRouteInfo<void> {
+  const InterviewFeedbackQuestionsRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewFeedbackQuestionsRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackQuestionsRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i27.InterviewFeedbackQuestionsScreen();
@@ -609,9 +605,9 @@ class InterviewFeedbackQuestionsRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i28.InterviewFeedbackRecommendationsScreen]
-class InterviewFeedbackRecommendationsRoute extends _i49.PageRouteInfo<void> {
+class InterviewFeedbackRecommendationsRoute extends _i47.PageRouteInfo<void> {
   const InterviewFeedbackRecommendationsRoute({
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          InterviewFeedbackRecommendationsRoute.name,
          initialChildren: children,
@@ -619,7 +615,7 @@ class InterviewFeedbackRecommendationsRoute extends _i49.PageRouteInfo<void> {
 
   static const String name = 'InterviewFeedbackRecommendationsRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i28.InterviewFeedbackRecommendationsScreen();
@@ -629,13 +625,13 @@ class InterviewFeedbackRecommendationsRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i29.InterviewPrepScreen]
-class InterviewPrepRoute extends _i49.PageRouteInfo<void> {
-  const InterviewPrepRoute({List<_i49.PageRouteInfo>? children})
+class InterviewPrepRoute extends _i47.PageRouteInfo<void> {
+  const InterviewPrepRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewPrepRoute.name, initialChildren: children);
 
   static const String name = 'InterviewPrepRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i29.InterviewPrepScreen();
@@ -645,13 +641,13 @@ class InterviewPrepRoute extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i30.InterviewSessionClosingScreen]
-class InterviewSessionClosingRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSessionClosingRoute({List<_i49.PageRouteInfo>? children})
+class InterviewSessionClosingRoute extends _i47.PageRouteInfo<void> {
+  const InterviewSessionClosingRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewSessionClosingRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionClosingRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       return const _i30.InterviewSessionClosingScreen();
@@ -660,192 +656,160 @@ class InterviewSessionClosingRoute extends _i49.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i31.InterviewSessionFollowupScreen]
-class InterviewSessionFollowupRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSessionFollowupRoute({List<_i49.PageRouteInfo>? children})
-    : super(InterviewSessionFollowupRoute.name, initialChildren: children);
-
-  static const String name = 'InterviewSessionFollowupRoute';
-
-  static _i49.PageInfo page = _i49.PageInfo(
-    name,
-    builder: (data) {
-      return const _i31.InterviewSessionFollowupScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [_i32.InterviewSessionOpeningScreen]
-class InterviewSessionOpeningRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSessionOpeningRoute({List<_i49.PageRouteInfo>? children})
+/// [_i31.InterviewSessionOpeningScreen]
+class InterviewSessionOpeningRoute extends _i47.PageRouteInfo<void> {
+  const InterviewSessionOpeningRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewSessionOpeningRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionOpeningRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i32.InterviewSessionOpeningScreen();
+      return const _i31.InterviewSessionOpeningScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i33.InterviewSessionQuestionScreen]
-class InterviewSessionQuestionRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSessionQuestionRoute({List<_i49.PageRouteInfo>? children})
+/// [_i32.InterviewSessionQuestionScreen]
+class InterviewSessionQuestionRoute extends _i47.PageRouteInfo<void> {
+  const InterviewSessionQuestionRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewSessionQuestionRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionQuestionRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i33.InterviewSessionQuestionScreen();
+      return const _i32.InterviewSessionQuestionScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i34.InterviewSessionUserQuestionsScreen]
-class InterviewSessionUserQuestionsRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSessionUserQuestionsRoute({List<_i49.PageRouteInfo>? children})
-    : super(InterviewSessionUserQuestionsRoute.name, initialChildren: children);
-
-  static const String name = 'InterviewSessionUserQuestionsRoute';
-
-  static _i49.PageInfo page = _i49.PageInfo(
-    name,
-    builder: (data) {
-      return const _i34.InterviewSessionUserQuestionsScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [_i35.InterviewSetupConfirmationScreen]
-class InterviewSetupConfirmationRoute extends _i49.PageRouteInfo<void> {
-  const InterviewSetupConfirmationRoute({List<_i49.PageRouteInfo>? children})
+/// [_i33.InterviewSetupConfirmationScreen]
+class InterviewSetupConfirmationRoute extends _i47.PageRouteInfo<void> {
+  const InterviewSetupConfirmationRoute({List<_i47.PageRouteInfo>? children})
     : super(InterviewSetupConfirmationRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSetupConfirmationRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i35.InterviewSetupConfirmationScreen();
+      return const _i33.InterviewSetupConfirmationScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i36.InterviewSetupStep1Screen]
-class InterviewSetupStep1Route extends _i49.PageRouteInfo<void> {
-  const InterviewSetupStep1Route({List<_i49.PageRouteInfo>? children})
+/// [_i34.InterviewSetupStep1Screen]
+class InterviewSetupStep1Route extends _i47.PageRouteInfo<void> {
+  const InterviewSetupStep1Route({List<_i47.PageRouteInfo>? children})
     : super(InterviewSetupStep1Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep1Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i36.InterviewSetupStep1Screen();
+      return const _i34.InterviewSetupStep1Screen();
     },
   );
 }
 
 /// generated route for
-/// [_i37.InterviewSetupStep2Screen]
-class InterviewSetupStep2Route extends _i49.PageRouteInfo<void> {
-  const InterviewSetupStep2Route({List<_i49.PageRouteInfo>? children})
+/// [_i35.InterviewSetupStep2Screen]
+class InterviewSetupStep2Route extends _i47.PageRouteInfo<void> {
+  const InterviewSetupStep2Route({List<_i47.PageRouteInfo>? children})
     : super(InterviewSetupStep2Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep2Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i37.InterviewSetupStep2Screen();
+      return const _i35.InterviewSetupStep2Screen();
     },
   );
 }
 
 /// generated route for
-/// [_i38.InterviewSetupStep3Screen]
-class InterviewSetupStep3Route extends _i49.PageRouteInfo<void> {
-  const InterviewSetupStep3Route({List<_i49.PageRouteInfo>? children})
+/// [_i36.InterviewSetupStep3Screen]
+class InterviewSetupStep3Route extends _i47.PageRouteInfo<void> {
+  const InterviewSetupStep3Route({List<_i47.PageRouteInfo>? children})
     : super(InterviewSetupStep3Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep3Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i38.InterviewSetupStep3Screen();
+      return const _i36.InterviewSetupStep3Screen();
     },
   );
 }
 
 /// generated route for
-/// [_i39.InterviewSetupStep4Screen]
-class InterviewSetupStep4Route extends _i49.PageRouteInfo<void> {
-  const InterviewSetupStep4Route({List<_i49.PageRouteInfo>? children})
+/// [_i37.InterviewSetupStep4Screen]
+class InterviewSetupStep4Route extends _i47.PageRouteInfo<void> {
+  const InterviewSetupStep4Route({List<_i47.PageRouteInfo>? children})
     : super(InterviewSetupStep4Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep4Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i39.InterviewSetupStep4Screen();
+      return const _i37.InterviewSetupStep4Screen();
     },
   );
 }
 
 /// generated route for
-/// [_i40.LanguageSelectionScreen]
-class LanguageSelectionRoute extends _i49.PageRouteInfo<void> {
-  const LanguageSelectionRoute({List<_i49.PageRouteInfo>? children})
+/// [_i38.LanguageSelectionScreen]
+class LanguageSelectionRoute extends _i47.PageRouteInfo<void> {
+  const LanguageSelectionRoute({List<_i47.PageRouteInfo>? children})
     : super(LanguageSelectionRoute.name, initialChildren: children);
 
   static const String name = 'LanguageSelectionRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i40.LanguageSelectionScreen();
+      return const _i38.LanguageSelectionScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i41.MainScreen]
-class MainRoute extends _i49.PageRouteInfo<void> {
-  const MainRoute({List<_i49.PageRouteInfo>? children})
+/// [_i39.MainScreen]
+class MainRoute extends _i47.PageRouteInfo<void> {
+  const MainRoute({List<_i47.PageRouteInfo>? children})
     : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i41.MainScreen();
+      return const _i39.MainScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i42.OnboardingConfirmationScreen]
+/// [_i40.OnboardingConfirmationScreen]
 class OnboardingConfirmationRoute
-    extends _i49.PageRouteInfo<OnboardingConfirmationRouteArgs> {
+    extends _i47.PageRouteInfo<OnboardingConfirmationRouteArgs> {
   OnboardingConfirmationRoute({
-    _i50.Key? key,
+    _i48.Key? key,
     required String fullName,
     String? workStatus,
     String? targetRole,
     String? careerGoal,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          OnboardingConfirmationRoute.name,
          args: OnboardingConfirmationRouteArgs(
@@ -860,11 +824,11 @@ class OnboardingConfirmationRoute
 
   static const String name = 'OnboardingConfirmationRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<OnboardingConfirmationRouteArgs>();
-      return _i42.OnboardingConfirmationScreen(
+      return _i40.OnboardingConfirmationScreen(
         key: args.key,
         fullName: args.fullName,
         workStatus: args.workStatus,
@@ -884,7 +848,7 @@ class OnboardingConfirmationRouteArgs {
     this.careerGoal,
   });
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final String fullName;
 
@@ -901,29 +865,29 @@ class OnboardingConfirmationRouteArgs {
 }
 
 /// generated route for
-/// [_i43.OnboardingStep1Screen]
-class OnboardingStep1Route extends _i49.PageRouteInfo<void> {
-  const OnboardingStep1Route({List<_i49.PageRouteInfo>? children})
+/// [_i41.OnboardingStep1Screen]
+class OnboardingStep1Route extends _i47.PageRouteInfo<void> {
+  const OnboardingStep1Route({List<_i47.PageRouteInfo>? children})
     : super(OnboardingStep1Route.name, initialChildren: children);
 
   static const String name = 'OnboardingStep1Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i43.OnboardingStep1Screen();
+      return const _i41.OnboardingStep1Screen();
     },
   );
 }
 
 /// generated route for
-/// [_i44.OnboardingStep2Screen]
+/// [_i42.OnboardingStep2Screen]
 class OnboardingStep2Route
-    extends _i49.PageRouteInfo<OnboardingStep2RouteArgs> {
+    extends _i47.PageRouteInfo<OnboardingStep2RouteArgs> {
   OnboardingStep2Route({
-    _i50.Key? key,
+    _i48.Key? key,
     required String fullName,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          OnboardingStep2Route.name,
          args: OnboardingStep2RouteArgs(key: key, fullName: fullName),
@@ -932,11 +896,11 @@ class OnboardingStep2Route
 
   static const String name = 'OnboardingStep2Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<OnboardingStep2RouteArgs>();
-      return _i44.OnboardingStep2Screen(key: args.key, fullName: args.fullName);
+      return _i42.OnboardingStep2Screen(key: args.key, fullName: args.fullName);
     },
   );
 }
@@ -944,7 +908,7 @@ class OnboardingStep2Route
 class OnboardingStep2RouteArgs {
   const OnboardingStep2RouteArgs({this.key, required this.fullName});
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final String fullName;
 
@@ -955,14 +919,14 @@ class OnboardingStep2RouteArgs {
 }
 
 /// generated route for
-/// [_i45.OnboardingStep3Screen]
+/// [_i43.OnboardingStep3Screen]
 class OnboardingStep3Route
-    extends _i49.PageRouteInfo<OnboardingStep3RouteArgs> {
+    extends _i47.PageRouteInfo<OnboardingStep3RouteArgs> {
   OnboardingStep3Route({
-    _i50.Key? key,
+    _i48.Key? key,
     required String fullName,
     String? workStatus,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          OnboardingStep3Route.name,
          args: OnboardingStep3RouteArgs(
@@ -975,11 +939,11 @@ class OnboardingStep3Route
 
   static const String name = 'OnboardingStep3Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<OnboardingStep3RouteArgs>();
-      return _i45.OnboardingStep3Screen(
+      return _i43.OnboardingStep3Screen(
         key: args.key,
         fullName: args.fullName,
         workStatus: args.workStatus,
@@ -995,7 +959,7 @@ class OnboardingStep3RouteArgs {
     this.workStatus,
   });
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final String fullName;
 
@@ -1008,15 +972,15 @@ class OnboardingStep3RouteArgs {
 }
 
 /// generated route for
-/// [_i46.OnboardingStep4Screen]
+/// [_i44.OnboardingStep4Screen]
 class OnboardingStep4Route
-    extends _i49.PageRouteInfo<OnboardingStep4RouteArgs> {
+    extends _i47.PageRouteInfo<OnboardingStep4RouteArgs> {
   OnboardingStep4Route({
-    _i50.Key? key,
+    _i48.Key? key,
     required String fullName,
     String? workStatus,
     String? targetRole,
-    List<_i49.PageRouteInfo>? children,
+    List<_i47.PageRouteInfo>? children,
   }) : super(
          OnboardingStep4Route.name,
          args: OnboardingStep4RouteArgs(
@@ -1030,11 +994,11 @@ class OnboardingStep4Route
 
   static const String name = 'OnboardingStep4Route';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<OnboardingStep4RouteArgs>();
-      return _i46.OnboardingStep4Screen(
+      return _i44.OnboardingStep4Screen(
         key: args.key,
         fullName: args.fullName,
         workStatus: args.workStatus,
@@ -1052,7 +1016,7 @@ class OnboardingStep4RouteArgs {
     this.targetRole,
   });
 
-  final _i50.Key? key;
+  final _i48.Key? key;
 
   final String fullName;
 
@@ -1067,33 +1031,33 @@ class OnboardingStep4RouteArgs {
 }
 
 /// generated route for
-/// [_i47.ProfileScreen]
-class ProfileRoute extends _i49.PageRouteInfo<void> {
-  const ProfileRoute({List<_i49.PageRouteInfo>? children})
+/// [_i45.ProfileScreen]
+class ProfileRoute extends _i47.PageRouteInfo<void> {
+  const ProfileRoute({List<_i47.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i47.ProfileScreen();
+      return const _i45.ProfileScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i48.SplashScreen]
-class SplashRoute extends _i49.PageRouteInfo<void> {
-  const SplashRoute({List<_i49.PageRouteInfo>? children})
+/// [_i46.SplashScreen]
+class SplashRoute extends _i47.PageRouteInfo<void> {
+  const SplashRoute({List<_i47.PageRouteInfo>? children})
     : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
-  static _i49.PageInfo page = _i49.PageInfo(
+  static _i47.PageInfo page = _i47.PageInfo(
     name,
     builder: (data) {
-      return const _i48.SplashScreen();
+      return const _i46.SplashScreen();
     },
   );
 }

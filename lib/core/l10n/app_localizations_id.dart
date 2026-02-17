@@ -2026,4 +2026,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get invalidYearMin1945 => 'Tahun minimal 1945';
+
+  @override
+  String get stopInterviewTitle => 'Hentikan Analisis?';
+
+  @override
+  String get stopInterviewDesc =>
+      'Jika Anda keluar sekarang, analisis akan dibatalkan dan data wawancara Anda akan hilang.';
 }

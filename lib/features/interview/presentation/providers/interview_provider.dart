@@ -473,6 +473,17 @@ class InterviewProvider extends ChangeNotifier {
     }
   }
   
+  /// Cancel current interview analysis
+  void cancelAnalysis() {
+    debugPrint('--- [InterviewProvider] cancelAnalysis: Analysis cancelled by user ---');
+    _isDisposed = true; // Signals the service to stop
+    // We should also set status to initial or cancelled to update UI immediately if still mounted
+    if (_status == InterviewStatus.analyzing) {
+      _status = InterviewStatus.initial;
+      notifyListeners();
+    }
+  }
+  
   bool _isDisposed = false;
 
   @override

@@ -344,7 +344,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                               if (_showHint) ...[
                                 const SizedBox(height: 12),
                                 Text(
-                                  l10n.hintStarDetail,
+                                  question.starHint ?? l10n.hintStarDetail,
                                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
@@ -597,7 +597,7 @@ class _InterviewSessionQuestionScreenState extends State<InterviewSessionQuestio
                                   onPressed: provider.isTranscribing ? null : () {
                                       provider.nextQuestion();
                                       if (provider.status == InterviewStatus.analyzing) {
-                                        context.router.push(const InterviewSessionFollowupRoute());
+                                        context.router.push(const InterviewSessionClosingRoute());
                                       } else {
                                         // Reset timer for next question
                                         setState(() {
