@@ -147,6 +147,9 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: cv.sections.length,
+                  proxyDecorator: (Widget child, int index, Animation<double> animation) {
+                    return child;
+                  },
                   onReorder: (oldIndex, newIndex) {
                     provider.reorderSections(oldIndex, newIndex);
                   },
