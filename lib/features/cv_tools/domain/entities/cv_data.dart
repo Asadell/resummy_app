@@ -598,6 +598,7 @@ class HeaderSection extends SectionData {
   final String? phone;
   final String? linkedin;
   final String? portfolio;
+  final String? github;
   final String? location;
   
   const HeaderSection({
@@ -607,6 +608,7 @@ class HeaderSection extends SectionData {
     this.phone,
     this.linkedin,
     this.portfolio,
+    this.github,
     this.location,
   }) : super(
     type: SectionType.header,
@@ -619,6 +621,7 @@ class HeaderSection extends SectionData {
     String? phone,
     String? linkedin,
     String? portfolio,
+    String? github,
     String? location,
   }) {
     return HeaderSection(
@@ -628,6 +631,7 @@ class HeaderSection extends SectionData {
       phone: phone ?? this.phone,
       linkedin: linkedin ?? this.linkedin,
       portfolio: portfolio ?? this.portfolio,
+      github: github ?? this.github,
       location: location ?? this.location,
     );
   }
@@ -644,6 +648,7 @@ class HeaderSection extends SectionData {
       'phone': phone,
       'linkedin': linkedin,
       'portfolio': portfolio,
+      'github': github,
       'location': location,
     };
   }
@@ -656,6 +661,7 @@ class HeaderSection extends SectionData {
       phone: json['phone'] as String?,
       linkedin: json['linkedin'] as String?,
       portfolio: json['portfolio'] as String?,
+      github: json['github'] as String?,
       location: json['location'] as String?,
     );
   }

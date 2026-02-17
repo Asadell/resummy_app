@@ -47,6 +47,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CvBuilderStep8Route.page),
         AutoRoute(page: CvBuilderCustomSectionStepRoute.page),
         AutoRoute(page: CvBuilderPreviewRoute.page),
+        AutoRoute(page: CvAtsConverterRoute.page),
 
         // CV Translator (No Bottom Nav)
         AutoRoute(page: CvTranslatorUploadRoute.page),

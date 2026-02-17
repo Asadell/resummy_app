@@ -64,6 +64,14 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
               ),
               const SizedBox(height: 16),
               _FeatureCard(
+                icon: Iconsax.magic_star,
+                title: 'Convert to CV ATS',
+                description: 'Upload old CV, AI converts to ATS Friendly',
+                color: Colors.purple,
+                onTap: () => context.router.push(const CvAtsConverterRoute()),
+              ),
+              const SizedBox(height: 16),
+              _FeatureCard(
                 icon: Iconsax.clock,
                 title: l10n.cvHistory,
                 description: l10n.cvHistoryDesc,

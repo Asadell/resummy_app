@@ -63,4 +63,7 @@ class AppConstants {
 
   @EnviedField(varName: 'GEMINI_API_KEY_20', defaultValue: '')
   static const String geminiApiKey20 = _AppConstants.geminiApiKey20;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_21', defaultValue: '')
+  static const String geminiApiKey21 = _AppConstants.geminiApiKey21;
 }
