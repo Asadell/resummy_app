@@ -212,35 +212,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Tips card
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.blue.shade200),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Iconsax.info_circle, color: Colors.blue.shade700, size: 18),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  isExperienceLike
-                      ? '${l10n.formatExperience}: ${section.titleLabel} (bold) + ${section.subtitleLabel} (italic) + ${l10n.startDate} - ${l10n.endDate} + bullet points'
-                      : '${l10n.formatEducation}: ${section.titleLabel} (bold) + ${section.subtitleLabel} (italic) + ${l10n.startDate} - ${l10n.endDate} + bullets ${l10n.optionalField}',
-                  style: TextStyle(
-                    color: Colors.blue.shade900,
-                    fontSize: 12,
-                    height: 1.4,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
+
 
         // Entry list
         if (section.entries.isEmpty)
@@ -295,33 +267,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Tips card
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.blue.shade200),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Iconsax.info_circle, color: Colors.blue.shade700, size: 18),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  '${l10n.formatSkills}: ${l10n.categoryName}: skill1, skill2, skill3',
-                  style: TextStyle(
-                    color: Colors.blue.shade900,
-                    fontSize: 12,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
+
 
         // Category cards
         if (categories.isEmpty)

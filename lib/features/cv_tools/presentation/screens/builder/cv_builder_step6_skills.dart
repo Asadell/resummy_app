@@ -151,52 +151,6 @@ class _SkillsFormState extends State<_SkillsForm> {
 
               const SizedBox(height: 24),
 
-              // Tips Card
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue.shade200),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Iconsax.info_circle, color: Colors.blue.shade700, size: 20),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.skillsOrganizationTips,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade900,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '• ${l10n.skillsTip1}\n'
-                            '• ${l10n.skillsTip2}\n'
-                            '• ${l10n.skillsTip3}\n'
-                            '• ${l10n.skillsTip4}',
-                            style: TextStyle(
-                              color: Colors.blue.shade800,
-                              fontSize: 12,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
               // Existing Categories List
               if (categories.isNotEmpty) ...[
                  Text(

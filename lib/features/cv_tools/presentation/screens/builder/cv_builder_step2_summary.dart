@@ -107,36 +107,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 32),
 
-            // Tips Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.primaryColor.withOpacity(0.3)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   Icon(Iconsax.info_circle, color: theme.primaryColor, size: 20),
-                   const SizedBox(width: 12),
-                   Expanded(
-                     child: Text(
-                       l10n.summaryTips,
-                       style: TextStyle(
-                         color: isDark ? Colors.white70 : theme.primaryColor.withOpacity(0.8),
-                         fontSize: 12,
-                         height: 1.5,
-                       ),
-                     ),
-                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
 
             // Summary Input
             Text(

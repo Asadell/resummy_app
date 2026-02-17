@@ -142,33 +142,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
 
                 const SizedBox(height: 24),
 
-                // Info Banner
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: theme.primaryColor.withOpacity(0.3)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Iconsax.info_circle, color: theme.primaryColor, size: 20),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          l10n.sectionManagerTips,
-                          style: TextStyle(
-                            color: isDark ? Colors.white70 : theme.primaryColor.withOpacity(0.9),
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
                 // Reorderable Section List
                 ReorderableListView.builder(
                   shrinkWrap: true,
