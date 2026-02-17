@@ -1,157 +1,178 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:resummy_app/core/resources/data_state.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
-import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
-import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis_entity.dart';
-import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
+import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
-  final UserProfileRepository _userProfileRepository;
-  final AnalyzeCvUseCase _analyzeCvUseCase;
+  final _service = CvAnalyzerService();
 
-  CvAnalyzerProvider({
-    required UserProfileRepository userProfileRepository,
-    required AnalyzeCvUseCase analyzeCvUseCase,
-  })  : _userProfileRepository = userProfileRepository,
-        _analyzeCvUseCase = analyzeCvUseCase;
-
+  // ── File state ──
   PlatformFile? _selectedFile;
-  CvAnalysisEntity? _cvAnalysisResult;
   String _extractedText = '';
+  bool _isPickingFile = false;
+
+  // ── Input state ──
   String _jobPosition = '';
-  String _errorMessage = '';
-  bool _isLoading = false;
-  bool _isDataLoaded = false;
+  String _jobDescription = '';
 
+  // ── Analysis state ──
+  bool _isAnalyzing = false;
+  CvAnalysisResult? _result;
+  String? _errorMessage;
+
+  // ── Getters ──
   PlatformFile? get selectedFile => _selectedFile;
-  CvAnalysisEntity? get analysisResult => _cvAnalysisResult;
-  String get jobPosition => _jobPosition;
-  bool get isLoading => _isLoading;
   String get extractedText => _extractedText;
-  String get errorMessage => _errorMessage;
-  FileInfo? get selectedFileInfo {
-    if (_selectedFile != null) {
-      return FileInfo(
-        name: _selectedFile!.name,
-        size: _selectedFile!.size,
-        extension: _selectedFile!.extension!,
-        path: _selectedFile!.path!,
-      );
-    }
+  bool get isPickingFile => _isPickingFile;
+  bool get isAnalyzing => _isAnalyzing;
+  CvAnalysisResult? get result => _result;
+  String? get errorMessage => _errorMessage;
+  String get jobPosition => _jobPosition;
+  String get jobDescription => _jobDescription;
 
-    return null;
+  bool get hasFile => _selectedFile != null && _extractedText.isNotEmpty;
+  bool get hasResult => _result != null;
+
+  String? get fileName => _selectedFile?.name;
+  String? get fileSize {
+    if (_selectedFile == null) return null;
+    final mb = _selectedFile!.size / (1024 * 1024);
+    return '${mb.toStringAsFixed(2)} MB';
   }
 
-  Future<void> loadInitialData(String userId) async {
-    if (_isDataLoaded || _jobPosition.isNotEmpty) return;
+  // ── Setters ──
+  void setJobPosition(String v) {
+    _jobPosition = v;
+    notifyListeners();
+  }
 
-    _isLoading = true;
+  void setJobDescription(String v) {
+    _jobDescription = v;
+    notifyListeners();
+  }
+
+  // ── Pick PDF & extract text (stay on same screen) ──
+  Future<void> pickAndExtract() async {
+    _isPickingFile = true;
+    _errorMessage = null;
     notifyListeners();
 
     try {
-      final result = await _userProfileRepository.getUserProfile(userId);
-
-      _isDataLoaded = true;
-      _jobPosition = result?.targetRole ?? '';
-    } catch (e) {
-      debugPrint('Error loading initial data: $e');
-    }
-
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  void setJobPosition(String newJobPosition) {
-    _jobPosition = newJobPosition;
-    notifyListeners();
-  }
-
-  Future<void> selectFileAndVerify() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
+      final picked = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
         allowMultiple: false,
       );
 
-      _errorMessage = '';
-      _isLoading = true;
-      notifyListeners();
-
-      if (result != null && result.files.isNotEmpty) {
-        final temporarySelectedFile = result.files.first;
-        final temporaryExtractedText =
-            await compute(PdfUtils().extractText, temporarySelectedFile.path!);
-
-        if (isValidCvContent(temporaryExtractedText)) {
-          _selectedFile = temporarySelectedFile;
-          _extractedText = temporaryExtractedText;
-        } else {
-          _errorMessage =
-              'The selected file does not appear to be a valid CV. Please select a different file.';
-        }
+      if (picked == null || picked.files.isEmpty) {
+        _isPickingFile = false;
+        notifyListeners();
+        return;
       }
+
+      final file = picked.files.first;
+      if (file.path == null) {
+        _errorMessage = 'Gagal membaca file. Coba lagi.';
+        _isPickingFile = false;
+        notifyListeners();
+        return;
+      }
+
+      // Extract text di background isolate (max 5 halaman via PdfUtils)
+      final text = await compute(PdfUtils().extractText, file.path!);
+
+      if (!_isValidCv(text)) {
+        _errorMessage =
+            'File tidak terdeteksi sebagai CV. Pastikan PDF berisi teks CV/Resume.';
+        _isPickingFile = false;
+        notifyListeners();
+        return;
+      }
+
+      _selectedFile = file;
+      _extractedText = text;
+      _result = null; // reset saat ganti file
+      _errorMessage = null;
     } catch (e) {
-      debugPrint('Error selecting file: $e');
-      _errorMessage =
-          'An error occurred while selecting the file. Please try again.';
+      _errorMessage = 'Error membaca PDF: $e';
     }
 
-    _isLoading = false;
+    _isPickingFile = false;
     notifyListeners();
   }
 
-  void clearState() {
-    _selectedFile = null;
-    _cvAnalysisResult = null;
-    _extractedText = '';
-    _isLoading = false;
-    _errorMessage = '';
-    _isDataLoaded = false;
+  // ── Analyze ──
+  Future<void> analyze(String languageCode) async {
+    if (!hasFile) return;
 
-    notifyListeners();
-  }
-
-  void clearPdfText() {
-    _extractedText = '';
-    _errorMessage = '';
-    notifyListeners();
-  }
-
-  void clearAnalysisResult() {
-    _cvAnalysisResult = null;
-    _errorMessage = '';
-    notifyListeners();
-  }
-
-  Future<void> analyzeCv(String language) async {
-    if (_extractedText.isEmpty) return;
-
-    _isLoading = true;
-    _errorMessage = '';
+    _isAnalyzing = true;
+    _errorMessage = null;
+    _result = null;
     notifyListeners();
 
-    final result = await _analyzeCvUseCase.call(
-      params: AnalyzeCvParams(
+    try {
+      _result = await _service.analyze(
         cvText: _extractedText,
-        role: _jobPosition,
-        language: language,
-      ),
-    );
-
-    if (result is DataSuccess) {
-      _cvAnalysisResult = result.data;
-    } else if (result is DataFailed) {
-      _errorMessage = result.error?.message ?? '';
+        jobPosition: _jobPosition.isNotEmpty ? _jobPosition : 'General Position',
+        jobDescription: _jobDescription,
+        language: languageCode,
+      );
+    } catch (e) {
+      _errorMessage =
+          'Analisis gagal: ${e.toString().replaceAll('Exception: ', '')}';
     }
 
-    _isLoading = false;
+    _isAnalyzing = false;
     notifyListeners();
   }
 
-  bool isValidCvContent(String text) {
-    final textLower = text.toLowerCase();
+  // ── Suggestion actions ──
+  void applySuggestion(String id) {
+    _findSuggestion(id)
+      ?..isApplied = true
+      ..isDismissed = false;
+    notifyListeners();
+  }
+
+  void dismissSuggestion(String id) {
+    _findSuggestion(id)
+      ?..isDismissed = true
+      ..isApplied = false;
+    notifyListeners();
+  }
+
+  void undoSuggestion(String id) {
+    _findSuggestion(id)
+      ?..isDismissed = false
+      ..isApplied = false;
+    notifyListeners();
+  }
+
+  CvSuggestion? _findSuggestion(String id) =>
+      _result?.suggestions.where((s) => s.id == id).firstOrNull;
+
+  // ── Clear ──
+  void clearFile() {
+    _selectedFile = null;
+    _extractedText = '';
+    _result = null;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  void clearAll() {
+    _selectedFile = null;
+    _extractedText = '';
+    _jobPosition = '';
+    _jobDescription = '';
+    _result = null;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  // ── Helpers ──
+  bool _isValidCv(String text) {
+    final lower = text.toLowerCase();
     final keywords = [
       'experience',
       'pengalaman',
@@ -172,36 +193,10 @@ class CvAnalyzerProvider extends ChangeNotifier {
       'contact',
       'kontak',
     ];
-
-    int matchCount = 0;
-
-    for (final keyword in keywords) {
-      if (textLower.contains(keyword)) {
-        matchCount++;
-      }
+    int count = 0;
+    for (final kw in keywords) {
+      if (lower.contains(kw)) count++;
     }
-
-    return matchCount >= 3;
+    return count >= 2;
   }
-}
-
-class FileInfo {
-  /// The name of the file.
-  late String name;
-
-  /// The size of the file in megabytes.
-  late String size;
-
-  /// The file extension.
-  late String extension;
-
-  /// The file path.
-  late String path;
-
-  FileInfo({
-    required this.name,
-    required int size,
-    required this.extension,
-    required this.path,
-  }) : size = (size / (1024 * 1024)).toStringAsFixed(2);
 }

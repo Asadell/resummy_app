@@ -25,7 +25,7 @@ class HistoryScreen extends StatelessWidget {
                 title: Text(l10n.cvSoftwareEngineer),
                 subtitle: Text(l10n.analyzedOnDate('Oct 24, 2023', 85)),
                 trailing: const Icon(Iconsax.arrow_right_3, size: 16),
-                onTap: () => context.router.push(const CvAnalyzerResultRoute()),
+                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
               ),
             ),
             const SizedBox(height: 12),

@@ -6,12 +6,8 @@ import 'package:resummy_app/app/app.dart';
 import 'package:resummy_app/core/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
-import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
-import 'package:resummy_app/features/cv_tools/data/data_sources/remote/cv_analysis_remote_data_source.dart';
-import 'package:resummy_app/features/cv_tools/data/repositories/cv_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_builder_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
-import 'package:resummy_app/features/cv_tools/domain/usecases/analyze_cv_usecase.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
@@ -54,12 +50,7 @@ void main() async {
         ChangeNotifierProvider.value(value: localeProvider),
         ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider(
-          create: (_) => CvAnalyzerProvider(
-            userProfileRepository: UserProfileRepository(),
-            analyzeCvUseCase: AnalyzeCvUseCase(
-              CvRepositoryImpl(CvAnalysisRemoteDataSourceImpl()),
-            ),
-          ),
+          create: (_) => CvAnalyzerProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => CVBuilderProvider(

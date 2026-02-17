@@ -128,7 +128,7 @@ class HomeScreen extends StatelessWidget {
                 title: l10n.cvAnalysisCompleted,
                 subtitle: l10n.score(85),
                 time: l10n.hoursAgo(2),
-                onTap: () => context.router.push(const CvAnalyzerResultRoute()),
+                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
               ),
               const SizedBox(height: 8),
               _ActivityCard(
