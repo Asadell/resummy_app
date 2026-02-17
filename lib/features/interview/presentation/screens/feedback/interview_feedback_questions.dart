@@ -237,7 +237,11 @@ class _InterviewFeedbackQuestionsScreenState extends State<InterviewFeedbackQues
             child: SafeArea(
               child: ElevatedButton.icon(
                 onPressed: () {
-                   // Implement PDF download
+                   ScaffoldMessenger.of(context).showSnackBar(
+                     SnackBar(
+                       content: Text(l10n.downloadPdfUnavailable),
+                     ),
+                   );
                 },
                 icon: const Icon(Iconsax.document_download),
                  label: Text(l10n.downloadPdf),

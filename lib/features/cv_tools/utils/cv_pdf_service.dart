@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:ui' as ui;
+import 'package:share_plus/share_plus.dart';
 
 /// Professional ATS-friendly PDF Generator
 /// Optimized for Applicant Tracking Systems
@@ -71,59 +72,121 @@ class CvPdfService {
     return file.path;
   }
 
+  /// Save PDF to Downloads folder (Android) or Documents (iOS)
+  Future<String> saveToDownloads(CVData cv) async {
+    final bytes = await generatePDFBytes(cv);
+    
+    final sanitizedName = cv.name
+        .replaceAll(RegExp(r'[^\w\s]+'), '')
+        .replaceAll(' ', '_');
+    final fileName = '${sanitizedName}_CV.pdf';
+    
+    Directory? directory;
+    
+    if (Platform.isAndroid) {
+      // For Android, use Downloads directory
+      directory = Directory('/storage/emulated/0/Download');
+      if (!await directory.exists()) {
+        directory = await getExternalStorageDirectory();
+      }
+    } else {
+      // For iOS, use Documents directory
+      directory = await getApplicationDocumentsDirectory();
+    }
+    
+    final file = File('${directory!.path}/$fileName');
+    await file.writeAsBytes(bytes);
+    
+    return file.path;
+  }
+
+  /// Share PDF using share sheet
+  Future<void> sharePdf(CVData cv) async {
+    final bytes = await generatePDFBytes(cv);
+    
+    final sanitizedName = cv.name
+        .replaceAll(RegExp(r'[^\w\s]+'), '')
+        .replaceAll(' ', '_');
+    final fileName = '${sanitizedName}_CV.pdf';
+    
+    // Save to temp directory
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/$fileName');
+    await file.writeAsBytes(bytes);
+    
+    // Share the file
+    await Share.shareXFiles(
+      [XFile(file.path)],
+      subject: 'CV - ${cv.name}',
+      text: 'Sharing my CV',
+    );
+  }
+
+
+
   Future<Uint8List> generatePDFBytes(CVData cv) async {
-    final PdfDocument document = PdfDocument();
-    document.pageSettings.margins.all = 48; // Professional margins (24mm)
+    try {
+      final PdfDocument document = PdfDocument();
+      document.pageSettings.margins.all = 48; // Professional margins (24mm)
+      
+      PdfPage currentPage = document.pages.add();
+      final ui.Size pageSize = currentPage.getClientSize();
+      double y = 0;
+      
+      // ========================================
+      // HEADER
+      // ========================================
+      try {
+        final headerResult = _drawHeader(currentPage, cv, y, pageSize.width);
+        currentPage = headerResult.page;
+        y = headerResult.y + 24; // Space after header
+      } catch (e) {
+        throw Exception('Error drawing header: $e');
+      }
     
-    PdfPage currentPage = document.pages.add();
-    final ui.Size pageSize = currentPage.getClientSize();
-    double y = 0;
-    
-    // ========================================
-    // HEADER
-    // ========================================
-    final headerResult = _drawHeader(currentPage, cv, y, pageSize.width);
-    currentPage = headerResult.page;
-    y = headerResult.y + 24; // Space after header
     
     // ========================================
     // SECTIONS (in user-defined order)
     // ========================================
     for (final section in cv.sections.where((s) => s.isVisible)) {
-      // Check if we need a new page
-      if (y + 60 > pageSize.height) {
-        currentPage = document.pages.add();
-        y = 0;
-      }
+      try {
+        // Check if we need a new page
+        if (y + 60 > pageSize.height) {
+          currentPage = document.pages.add();
+          y = 0;
+        }
 
-      if (section is SummarySection && section.content.isNotEmpty) {
-        final result = _drawSummarySection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is ExperienceSection && section.entries.isNotEmpty) {
-        final result = _drawExperienceSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is EducationSection && section.entries.isNotEmpty) {
-        final result = _drawEducationSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is OrganizationSection && section.entries.isNotEmpty) {
-        final result = _drawOrganizationSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is SkillsSection && section.skillCategories.isNotEmpty) {
-        final result = _drawSkillsSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is CertificationsSection && section.entries.isNotEmpty) {
-        final result = _drawCertificationsSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
-      } else if (section is CustomSection && section.content.isNotEmpty) {
-        final result = _drawCustomSection(document, currentPage, section, y, pageSize);
-        currentPage = result.page;
-        y = result.y + 20;
+        if (section is SummarySection && section.content.isNotEmpty) {
+          final result = _drawSummarySection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is ExperienceSection && section.entries.isNotEmpty) {
+          final result = _drawExperienceSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is EducationSection && section.entries.isNotEmpty) {
+          final result = _drawEducationSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is OrganizationSection && section.entries.isNotEmpty) {
+          final result = _drawOrganizationSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is SkillsSection && section.skillCategories.isNotEmpty) {
+          final result = _drawSkillsSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is CertificationsSection && section.entries.isNotEmpty) {
+          final result = _drawCertificationsSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        } else if (section is CustomSection && !section.isEmpty) {
+          final result = _drawCustomSection(document, currentPage, section, y, pageSize);
+          currentPage = result.page;
+          y = result.y + 20;
+        }
+      } catch (e) {
+        throw Exception('Error drawing section "${section.title}" (${section.type}): $e');
       }
     }
     
@@ -132,6 +195,9 @@ class CvPdfService {
     document.dispose();
     
     return Uint8List.fromList(bytes);
+    } catch (e) {
+      throw Exception('Failed to generate PDF: $e');
+    }
   }
 
   // ========================================
@@ -256,7 +322,7 @@ class CvPdfService {
       
       final dateFormat = DateFormat('MMM yyyy');
       final startDate = dateFormat.format(exp.startDate);
-      final endDate = exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
+      final endDate = exp.isCurrentlyWorking ? 'Present' : (exp.endDate != null ? dateFormat.format(exp.endDate!) : 'Present');
       
       // Company name (BOLD) - Left aligned
       page.graphics.drawString(
@@ -289,7 +355,7 @@ class CvPdfService {
       // Location (if exists)
       if (exp.location?.isNotEmpty == true) {
         page.graphics.drawString(
-          exp.location!,
+          exp.location ?? '',
           _smallFont,
           bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
           brush: PdfSolidBrush(_lightTextColor),
@@ -383,7 +449,7 @@ class CvPdfService {
       
       // Achievements
       if (edu.achievements?.isNotEmpty == true) {
-        final achievements = edu.achievements!.split('\n').where((a) => a.trim().isNotEmpty).toList();
+        final achievements = (edu.achievements ?? '').split('\n').where((a) => a.trim().isNotEmpty).toList();
         for (final achievement in achievements) {
           if (y + 20 > pageSize.height) {
             page = document.pages.add();
@@ -424,7 +490,7 @@ class CvPdfService {
       
       final dateFormat = DateFormat('MMM yyyy');
       final startDate = dateFormat.format(org.startDate);
-      final endDate = org.isCurrentlyActive ? 'Present' : dateFormat.format(org.endDate!);
+      final endDate = org.isCurrentlyActive ? 'Present' : (org.endDate != null ? dateFormat.format(org.endDate!) : 'Present');
       
       // Organization name (BOLD)
       page.graphics.drawString(
@@ -693,7 +759,7 @@ class CvPdfService {
         // Subtitle
         if (entry.subtitle?.isNotEmpty == true) {
           page.graphics.drawString(
-            entry.subtitle!,
+            entry.subtitle ?? '',
             _entrySubtitleFont,
             bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
             brush: PdfSolidBrush(_textColor),
@@ -704,7 +770,7 @@ class CvPdfService {
         // Meta
         if (entry.meta?.isNotEmpty == true) {
           page.graphics.drawString(
-            entry.meta!,
+            entry.meta ?? '',
             _smallFont,
             bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
             brush: PdfSolidBrush(_lightTextColor),
