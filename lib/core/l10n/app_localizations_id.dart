@@ -2022,5 +2022,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get previewLabel => 'Pratinjau';
 
   @override
-  String get addBulletPoint => 'Tambahkan poin';
+  String get addBulletPoint => 'Tambah poin bullet';
+
+  @override
+  String get invalidYearMin1945 => 'Tahun minimal 1945';
 }

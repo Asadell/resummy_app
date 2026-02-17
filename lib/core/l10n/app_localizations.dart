@@ -3895,6 +3895,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add bullet point'**
   String get addBulletPoint;
+
+  /// No description provided for @invalidYearMin1945.
+  ///
+  /// In en, this message translates to:
+  /// **'Year must be at least 1945'**
+  String get invalidYearMin1945;
 }
 
 class _AppLocalizationsDelegate

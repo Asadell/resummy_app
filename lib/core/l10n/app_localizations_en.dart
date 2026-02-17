@@ -2013,4 +2013,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addBulletPoint => 'Add bullet point';
+
+  @override
+  String get invalidYearMin1945 => 'Year must be at least 1945';
 }

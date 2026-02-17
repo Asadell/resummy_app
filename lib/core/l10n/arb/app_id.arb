@@ -667,5 +667,6 @@
   "templateLabel": "Template",
   "contentLabel": "Konten",
   "previewLabel": "Pratinjau",
-  "addBulletPoint": "Tambahkan poin"
+  "addBulletPoint": "Tambah poin bullet",
+  "invalidYearMin1945": "Tahun minimal 1945"
 }

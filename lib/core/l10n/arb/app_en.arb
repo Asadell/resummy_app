@@ -754,5 +754,6 @@
   "templateLabel": "Template",
   "contentLabel": "Content",
   "previewLabel": "Preview",
-  "addBulletPoint": "Add bullet point"
+  "addBulletPoint": "Add bullet point",
+  "invalidYearMin1945": "Year must be at least 1945"
 }

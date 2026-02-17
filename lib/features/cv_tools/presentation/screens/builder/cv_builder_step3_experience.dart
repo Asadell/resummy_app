@@ -147,6 +147,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                           
                       return Card(
                         key: ValueKey(work.id),
+                        margin: const EdgeInsets.only(bottom: 12),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
                           leading: const Icon(Icons.drag_indicator),

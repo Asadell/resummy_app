@@ -26,6 +26,24 @@ class CvBuilderPreviewScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // Banner - Success
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            color: Colors.green.withOpacity(0.1),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l10n.cvConvertedSuccess,
+                    style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
           // Preview Area
           Expanded(
             child: Consumer<CVBuilderProvider>(
@@ -42,7 +60,7 @@ class CvBuilderPreviewScreen extends StatelessWidget {
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: Colors.black.withOpacity(0.05),
                   offset: const Offset(0, -4),
                   blurRadius: 16,
                 ),
@@ -53,63 +71,77 @@ class CvBuilderPreviewScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Save as Draft Button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      padding: const EdgeInsets.all(16),
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    onPressed: () async {
-                      final provider = context.read<CVBuilderProvider>();
-                      await provider.saveCurrentCV();
-                      
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(l10n.cvSavedSuccess),
-                            backgroundColor: Colors.green,
+                  // Row with Edit and Save
+                  Row(
+                    children: [
+                      // Edit Button
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                        );
-                        // Navigate to hub to see saved CV
-                        context.router.push(const CvToolsHubRoute());
-                      }
-                    },
-                    child: Text(l10n.saveAsDraft),
+                          onPressed: () => context.router.push(const CvBuilderStep1Route()),
+                          child: Text(l10n.edit),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      // Save Button
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                            padding: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final provider = context.read<CVBuilderProvider>();
+                            final success = await provider.saveCurrentCV();
+                            
+                            if (context.mounted) {
+                              if (success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.cvSavedToLibrary),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                                // Navigate to hub to see saved CV
+                                context.router.replaceAll([const HomeRoute()]);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.failedToSaveCv),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Text(l10n.save),
+                        ),
+                      ),
+                    ],
                   ),
                   
                   const SizedBox(height: 12),
                   
                   // Download PDF Button (placeholder)
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.all(16),
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
+                  TextButton.icon(
                     onPressed: () {
-                      // TODO: Implement PDF download
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(l10n.downloadPdfUnavailable),
                         ),
                       );
                     },
-                    child: Text(l10n.downloadPdf),
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Edit Button
-                  TextButton(
-                    onPressed: () => context.router.push(const CvBuilderStep1Route()),
-                    child: Text(l10n.edit),
+                    icon: const Icon(Icons.download, size: 20),
+                    label: Text(l10n.downloadPdf),
                   ),
                 ],
               ),

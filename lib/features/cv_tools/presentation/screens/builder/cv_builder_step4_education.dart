@@ -146,6 +146,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                           
                       return Card(
                         key: ValueKey(edu.id),
+                        margin: const EdgeInsets.only(bottom: 12),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
                           leading: const Icon(Icons.drag_indicator),
@@ -387,6 +388,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       if (v == null || v.isEmpty) return l10n.requiredField;
                       final year = int.tryParse(v);
                       if (year == null) return l10n.requiredField;
+                      if (year < 1945) return l10n.invalidYearMin1945;
                       if (year > DateTime.now().year) return l10n.yearTooHigh;
                       return null;
                     },
