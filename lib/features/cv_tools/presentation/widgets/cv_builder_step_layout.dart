@@ -69,13 +69,34 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
             centerTitle: true,
             actions: [
               Padding(
-                padding: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 8),
                 child: Center(
-                  child: Text(
-                    '${widget.currentStep}/$totalSteps',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                  child: TextButton(
+                    onPressed: () async {
+                      final success = await provider.saveCurrentCV();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              success ? l10n.cvSavedToLibrary : l10n.failedToSaveCv,
+                            ),
+                            backgroundColor: success ? Colors.green : Colors.red,
+                          ),
+                        );
+                        if (success) {
+                          context.router.replaceAll([
+                            const MainRoute(children: [CvToolsHubRoute()]),
+                          ]);
+                        }
+                      }
+                    },
+                    child: Text(
+                      l10n.save,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0EA5E9),
+                          ),
+                    ),
                   ),
                 ),
               ),

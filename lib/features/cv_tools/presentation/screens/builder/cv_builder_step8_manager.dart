@@ -75,10 +75,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
           onBack: () {
             DynamicCvSteps.navigateToPreviousStep(context, totalSteps);
           },
-          onNext: () {
-            provider.saveCurrentCV();
-            final router = context.router;
-            router.push(const CvBuilderPreviewRoute());
+          onNext: () async {
+            await provider.saveCurrentCV();
+            if (context.mounted) {
+              final router = context.router;
+              router.push(const CvBuilderPreviewRoute());
+            }
           },
           nextLabel: l10n.previewCV,
           editContent: _buildContent(context, provider, totalSteps, theme, isDark, l10n),

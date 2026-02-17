@@ -56,6 +56,11 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     _linkedinController.addListener(_updatePreview);
     _portfolioController.addListener(_updatePreview);
     _locationController.addListener(_updatePreview);
+
+    // Force update on load to ensure provider is in sync with controllers
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _updatePreview();
+    });
   }
 
   @override
@@ -91,10 +96,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
       title: l10n.cvBuilder,
       currentStep: 1,
 
-      onBack: () {
-        final currentStep = DynamicCvSteps.getStepForSection(context, 'header');
-        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
-      },
+      onBack: null,
       onNext: () {
         setState(() => _showValidation = true);
         if (_formKey.currentState!.validate()) {

@@ -23,6 +23,41 @@ class CvBuilderPreviewScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.maybePop(),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Center(
+              child: TextButton(
+                onPressed: () async {
+                  final provider = context.read<CVBuilderProvider>();
+                  final success = await provider.saveCurrentCV();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          success ? l10n.cvSavedToLibrary : l10n.failedToSaveCv,
+                        ),
+                        backgroundColor: success ? Colors.green : Colors.red,
+                      ),
+                    );
+                    if (success) {
+                      context.router.replaceAll([
+                        const MainRoute(children: [CvToolsHubRoute()]),
+                      ]);
+                    }
+                  }
+                },
+                child: Text(
+                  l10n.save,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0EA5E9),
+                      ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
