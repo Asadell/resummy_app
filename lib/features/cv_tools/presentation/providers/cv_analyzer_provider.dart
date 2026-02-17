@@ -139,7 +139,9 @@ class CvAnalyzerProvider extends ChangeNotifier {
     if (_result == null) return null;
 
     final applied = _result!.suggestions.where((s) => s.isApplied).toList();
-    if (applied.isEmpty) return null;
+    if (applied.isEmpty) {
+      return null;
+    }
 
     _isConverting = true;
     _errorMessage = null;

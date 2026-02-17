@@ -92,6 +92,7 @@ class AuthScreen extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     

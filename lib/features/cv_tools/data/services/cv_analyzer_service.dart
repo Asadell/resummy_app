@@ -348,15 +348,24 @@ Return JSON ini:
         ],
         'generationConfig': {
           'temperature': 0.1,
-          'maxOutputTokens': 8192,
+          'maxOutputTokens': 16384,
           'responseMimeType': 'application/json',
         },
+        'safetySettings': [
+          {'category': 'HARM_CATEGORY_HARASSMENT', 'threshold': 'BLOCK_NONE'},
+          {'category': 'HARM_CATEGORY_HATE_SPEECH', 'threshold': 'BLOCK_NONE'},
+          {'category': 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'threshold': 'BLOCK_NONE'},
+          {'category': 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold': 'BLOCK_NONE'},
+        ],
       },
     );
 
     try {
       final response = await doRequest(_nextKey());
-      String raw = response.data['candidates'][0]['content']['parts'][0]['text'] as String;
+      
+      final candidate = response.data['candidates'][0];
+      String raw = candidate['content']['parts'][0]['text'] as String;
+      
       raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
       return jsonDecode(raw) as Map<String, dynamic>;
     } on DioException catch (e) {
@@ -366,6 +375,8 @@ Return JSON ini:
         raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
         return jsonDecode(raw) as Map<String, dynamic>;
       }
+      rethrow;
+    } catch (e) {
       rethrow;
     }
   }

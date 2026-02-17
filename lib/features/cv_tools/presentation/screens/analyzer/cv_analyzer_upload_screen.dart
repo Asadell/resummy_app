@@ -7,6 +7,7 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
 class CvAnalyzerUploadScreen extends StatefulWidget {
@@ -20,23 +21,50 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late TextEditingController _jobPositionController;
+  late TextEditingController _jobDescController;
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
   SuggestionPriority? _filterPriority;
+
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     
+    final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
-    _jobPositionController = TextEditingController(text: profile?.targetRole ?? '');
     
-    // Set initial position in provider if auto-filled
-    if (profile?.targetRole != null) {
+    // Initialize with provider state if exists, else fallback to profile
+    _jobPositionController = TextEditingController(text: provider.jobPosition.isNotEmpty 
+        ? provider.jobPosition 
+        : (profile?.targetRole ?? ''));
+    _jobDescController = TextEditingController(text: provider.jobDescription);
+    
+    // Set initial position in provider if from profile
+    if (provider.jobPosition.isEmpty && profile?.targetRole != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<CvAnalyzerProvider>().setJobPosition(profile!.targetRole!);
+        provider.setJobPosition(profile!.targetRole!);
       });
+    }
+
+    // Listener to sync from profile if it loads late
+    // Only sync if the provider/controller is still empty
+    context.read<ProfileProvider>().addListener(_onProfileChanged);
+  }
+
+  void _onProfileChanged() {
+    if (!mounted) return;
+    final profile = context.read<ProfileProvider>().profile;
+    if (profile?.targetRole != null) {
+      final provider = context.read<CvAnalyzerProvider>();
+      if (_jobPositionController.text.isEmpty && provider.jobPosition.isEmpty) {
+        setState(() {
+          _jobPositionController.text = profile!.targetRole!;
+          provider.setJobPosition(profile.targetRole!);
+        });
+      }
     }
   }
 
@@ -44,6 +72,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   void dispose() {
     _tabController.dispose();
     _jobPositionController.dispose();
+    _jobDescController.dispose();
+    context.read<ProfileProvider>().removeListener(_onProfileChanged);
     super.dispose();
   }
 
@@ -152,6 +182,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
+                      controller: _jobDescController,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: l10n.jobDescPasteHint,
@@ -186,16 +217,16 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   ),
                   const SizedBox(height: 12),
                   SegmentedButton<String>(
-                    segments: const [
+                    segments: [
                       ButtonSegment(
                         value: 'id',
                         label: Text(l10n.indonesian),
-                        icon: Icon(Icons.flag, size: 16),
+                        icon: const Icon(Icons.flag, size: 16),
                       ),
                       ButtonSegment(
                         value: 'en',
                         label: Text(l10n.english),
-                        icon: Icon(Icons.flag, size: 16),
+                        icon: const Icon(Icons.flag, size: 16),
                       ),
                     ],
                     selected: {_selectedLanguage},
@@ -357,7 +388,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               color: Theme.of(context).colorScheme.surface,
               child: TabBar(
                 controller: _tabController,
-                tabs: const [
+                tabs: [
                   Tab(text: l10n.report, icon: const Icon(Iconsax.chart_1)),
                   Tab(text: l10n.suggestion, icon: const Icon(Iconsax.message_edit)),
                 ],
@@ -945,16 +976,16 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-          top: 8,
-          left: 24,
-          right: 24,
-        ),
+      builder: (modalContext) => Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.fromLTRB(
+          24,
+          12,
+          24,
+          MediaQuery.of(modalContext).viewInsets.bottom + 24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -966,49 +997,38 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 24),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Theme.of(context).colorScheme.outlineVariant,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Iconsax.magicpen,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    l10n.createNewAtsCvTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ],
+            Icon(
+              Iconsax.document_text,
+              size: 48,
+              color: Theme.of(context).colorScheme.primary,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+            Text(
+              l10n.createNewAtsCvTitle,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
             Text(
               l10n.createCvAtsConfirmationDesc,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.5,
                   ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(modalContext),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -1018,22 +1038,30 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     child: Text(l10n.cancel),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   flex: 2,
                   child: FilledButton(
                     onPressed: () async {
-                      Navigator.pop(context); // Tutup bottom sheet
-                      
+                      Navigator.pop(modalContext); // Tutup bottom sheet
+
                       // Proses convert
                       final cvData = await provider.convertAppliedToCv();
-                      
+
                       if (cvData != null && mounted) {
                         // Masukkan ke CV Builder Provider
                         context.read<CVBuilderProvider>().loadCvData(cvData);
                         
                         // Navigasi ke Step 1 CV Builder
                         context.router.push(const CvBuilderStep1Route());
+                      } else if (mounted) {
+                        // Tampilkan error jika gagal
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(provider.errorMessage ?? l10n.errorSavingProfile),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
                       }
                     },
                     style: FilledButton.styleFrom(

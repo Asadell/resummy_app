@@ -156,6 +156,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
   }
 
   Future<void> _completeOnboarding(BuildContext context, String displayName) async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
     
     final router = context.router;

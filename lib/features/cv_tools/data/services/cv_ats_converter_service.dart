@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
+
 class CvAtsConverterService {
   final Uuid _uuid = const Uuid();
 
@@ -144,7 +145,9 @@ class CvAtsConverterService {
 
     for (final rawSection in rawSections) {
       final section = _parseSection(rawSection as Map<String, dynamic>);
-      if (section != null) sections.add(section);
+      if (section != null) {
+        sections.add(section);
+      }
     }
 
     return CVData(
