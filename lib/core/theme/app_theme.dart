@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -59,6 +60,11 @@ class AppTheme {
         iconTheme: IconThemeData(
           color: AppColors.textPrimaryLight,
         ),
+      ),
+      
+      // Action Icon Theme
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
       
       // Text Theme
@@ -316,6 +322,11 @@ class AppTheme {
         iconTheme: IconThemeData(
           color: AppColors.textPrimaryDark,
         ),
+      ),
+      
+      // Action Icon Theme
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
       
       // Text Theme

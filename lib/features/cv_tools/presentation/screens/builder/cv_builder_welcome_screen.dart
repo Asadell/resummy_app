@@ -51,10 +51,6 @@ class _CvBuilderWelcomeScreenState extends State<CvBuilderWelcomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.cvBuilder),
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.router.push(const CvToolsHubRoute()),
-        ),
       ),
       body: SafeArea(
         child: Padding(

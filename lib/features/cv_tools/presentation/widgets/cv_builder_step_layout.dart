@@ -63,7 +63,7 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left_1),
+              icon: const Icon(Iconsax.arrow_left),
               onPressed: () => _showExitConfirmation(context, l10n),
             ),
             title: Text(stepTitle),
