@@ -131,11 +131,13 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                   
                 // List of Education
                 if (educationList.isNotEmpty) ...[
-                  ListView.separated(
+                  ReorderableListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: educationList.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    onReorder: (oldIndex, newIndex) {
+                      provider.reorderEducation(oldIndex, newIndex);
+                    },
                     itemBuilder: (context, index) {
                       final edu = educationList[index];
                       final period = edu.isCurrentlyStudying 
@@ -143,8 +145,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                           : '${edu.startYear} - ${edu.endYear ?? l10n.present}';
                           
                       return Card(
+                        key: ValueKey(edu.id),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
+                          leading: const Icon(Icons.drag_indicator),
                           title: Text(
                             edu.institution,
                             style: const TextStyle(fontWeight: FontWeight.bold),

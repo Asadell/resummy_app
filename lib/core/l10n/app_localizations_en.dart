@@ -198,6 +198,205 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cvHistoryDesc => 'View and manage all your CVs';
 
   @override
+  String get convertToCvAts => 'Convert to CV ATS';
+
+  @override
+  String get uploadOldCvDesc => 'Upload old CV, AI converts to ATS Friendly';
+
+  @override
+  String get myCvs => 'My CVs';
+
+  @override
+  String get cvAtsConverter => 'CV ATS Converter';
+
+  @override
+  String get step1UploadCv => 'Step 1: Upload CV';
+
+  @override
+  String get uploadCvFormatPdf => 'Upload your CV file in PDF format';
+
+  @override
+  String get step2WaitProcess => 'Step 2: Wait for Process';
+
+  @override
+  String get aiConvertingDesc => 'AI is analyzing and converting your CV';
+
+  @override
+  String get step3ReviewSave => 'Step 3: Review & Save';
+
+  @override
+  String get checkResultDesc =>
+      'Check the result, edit if necessary, then save to Library';
+
+  @override
+  String get startNow => 'Start Now';
+
+  @override
+  String get failedToSaveCv => 'Failed to save CV';
+
+  @override
+  String get cvSavedToLibrary => 'CV successfully saved to Library!';
+
+  @override
+  String get howItWorks => 'How it Works';
+
+  @override
+  String get tapToSelectFile => 'Tap to select file';
+
+  @override
+  String get supportedFormats => 'PDF, JPG, PNG, WEBP';
+
+  @override
+  String get fileSelected => 'File selected';
+
+  @override
+  String get tapToChangeFile => 'Tap to change file';
+
+  @override
+  String get optionalTranslateCv => 'Optional: Translate CV?';
+
+  @override
+  String get startConversion => 'Start Conversion';
+
+  @override
+  String get cvConvertedSuccess =>
+      'CV successfully converted! Please check the preview below.';
+
+  @override
+  String get failedToSelectFile => 'Failed to select file';
+
+  @override
+  String get failedToProcessCv => 'Failed to process CV';
+
+  @override
+  String get extractingText => 'Extracting text from document...';
+
+  @override
+  String get identifyingExperience => 'Identifying work experience sections...';
+
+  @override
+  String get organizingEducation => 'Organizing education history...';
+
+  @override
+  String get groupingSkills => 'Grouping skills...';
+
+  @override
+  String get finishingUp => 'Finishing up...';
+
+  @override
+  String get uploadCvStep => 'Upload CV';
+
+  @override
+  String get photoOrPdf => 'PDF or photo of your CV';
+
+  @override
+  String get geminiAnalysis => 'Gemini Analysis';
+
+  @override
+  String get aiExtractedInfo => 'AI reads & extracts all info';
+
+  @override
+  String get autoPopulate => 'Auto-Populate';
+
+  @override
+  String get dataIntoForms => 'Data directly goes to all forms';
+
+  @override
+  String get editAndExport => 'Edit & Export';
+
+  @override
+  String get reviewEditExport => 'Review, edit, and export ATS PDF';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get namePlaceholder => 'John Doe';
+
+  @override
+  String get emailPlaceholder => 'john@example.com';
+
+  @override
+  String get linkedinPlaceholder => 'linkedin.com/in/yourname';
+
+  @override
+  String get portfolioPlaceholder => 'github.com/yourname';
+
+  @override
+  String get locationPlaceholder => 'New York, USA';
+
+  @override
+  String get jobTitlePlaceholder => 'Software Engineer';
+
+  @override
+  String get companyPlaceholder => 'Google Inc.';
+
+  @override
+  String get institutionPlaceholder => 'Massachusetts Institute of Technology';
+
+  @override
+  String get majorPlaceholder => 'Computer Science';
+
+  @override
+  String get degreePlaceholder => 'Bachelor\'s Degree (S1)';
+
+  @override
+  String get gpaPlaceholder => '3.85';
+
+  @override
+  String get startYearPlaceholder => '2018';
+
+  @override
+  String get endYearPlaceholder => '2022';
+
+  @override
+  String get organizationPlaceholder => 'Student Union';
+
+  @override
+  String get rolePlaceholder => 'Head of Division';
+
+  @override
+  String get categoryNamePlaceholder => 'e.g., Programming Languages';
+
+  @override
+  String get certificationPlaceholder => 'Google Cloud Associate';
+
+  @override
+  String get issuingOrgPlaceholder => 'Google';
+
+  @override
+  String get editSkillCategory => 'Edit Skill Category';
+
+  @override
+  String get skillsPlaceholder => 'Dart, Flutter, Firebase';
+
+  @override
+  String itemsCount(Object count) {
+    return '$count items';
+  }
+
+  @override
+  String get exampleSoftwareEngineer => 'e.g., Software Engineer';
+
+  @override
+  String get exampleBachelor => 'e.g., Bachelor of Science';
+
+  @override
+  String get exampleGoogle => 'e.g., Google';
+
+  @override
+  String get exampleUniversity => 'e.g., MIT';
+
+  @override
+  String get exampleLocation => 'e.g., Mountain View, CA';
+
+  @override
+  String get exampleYear => 'e.g., 2020 or Jan 2020';
+
+  @override
+  String get exampleYearEnd => 'e.g., 2022 or Feb 2022';
+
+  @override
   String get personalInfo => 'Personal Info';
 
   @override
@@ -220,6 +419,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get screenUnderConstruction => 'This screen is under construction';
+
+  @override
+  String get translatingCv => 'Translating CV... ⏳';
+
+  @override
+  String get translationEstimate => 'Estimate: 20-30 seconds';
+
+  @override
+  String get translationTip =>
+      'Tip: Once finished, you can review and edit the translation before downloading.';
+
+  @override
+  String get startTranslation => 'Start Translation';
+
+  @override
+  String get reviewTranslation => 'Review Translation';
+
+  @override
+  String get refreshPreview => 'Refresh Preview';
+
+  @override
+  String get approveAllAndContinue => 'Approve All & Continue';
+
+  @override
+  String get translationComplete => 'Translation Complete!';
+
+  @override
+  String get downloadingPdf => 'Downloading PDF...';
+
+  @override
+  String get backToDashboard => 'Back to Dashboard';
 
   @override
   String get analysisDetail => 'Analysis Detail';
@@ -450,6 +680,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get summaryFeedback => 'Summary Feedback';
+
+  @override
+  String updatedOnDate(Object date) {
+    return 'Updated on $date';
+  }
+
+  @override
+  String get noSavedCvs => 'No saved CVs yet';
+
+  @override
+  String get deleteCvConfirmation => 'Are you sure you want to delete this CV?';
 
   @override
   String get backToHome => 'Back to Home';
@@ -1258,9 +1499,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get characters => 'characters';
 
   @override
-  String get editSkillCategory => 'Edit Skill Category';
-
-  @override
   String get deleteCategory => 'Delete Category';
 
   @override
@@ -1338,6 +1576,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Suitable for: Long narratives, Profile, Statement';
 
   @override
+  String get reorderSectionsDesc =>
+      'Reorder sections by pressing and dragging the menu icon';
+
+  @override
+  String get templateExperienceNameLabel => 'Experience (Project, etc.)';
+
+  @override
+  String get templateEducationNameLabel => 'Education (Course, etc.)';
+
+  @override
+  String get templateSkillsNameLabel => 'Skills (Category: skill 1, 2)';
+
+  @override
+  String get templateBulletNameLabel => 'Bullet List';
+
+  @override
+  String get templateParagraphNameLabel => 'Paragraph (Free Text)';
+
+  @override
   String get noItems => 'No items yet';
 
   @override
@@ -1374,11 +1631,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get employmentTypeInternship => 'Internship';
-
-  @override
-  String itemsCount(Object count) {
-    return '$count items';
-  }
 
   @override
   String entriesCount(Object count) {

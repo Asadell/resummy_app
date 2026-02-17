@@ -206,23 +206,34 @@ class _SkillsFormState extends State<_SkillsForm> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...categories.entries.map((entry) {
-                  return _SkillCategoryCard(
-                    categoryName: entry.key,
-                    skills: entry.value,
-                    onEdit: () => _showEditCategoryDialog(
-                      context,
-                      provider,
-                      entry.key,
-                      entry.value,
-                    ),
-                    onDelete: () => _showDeleteCategoryDialog(
-                      context,
-                      provider,
-                      entry.key,
-                    ),
-                  );
-                }),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  onReorder: (oldIndex, newIndex) {
+                    provider.reorderSkillCategories(oldIndex, newIndex);
+                  },
+                  itemBuilder: (context, index) {
+                    final entry = categories.entries.elementAt(index);
+                    return _SkillCategoryCard(
+                      key: ValueKey(entry.key),
+                      categoryName: entry.key,
+                      skills: entry.value,
+                      onEdit: () => _showEditCategoryDialog(
+                        context,
+                        provider,
+                        entry.key,
+                        entry.value,
+                      ),
+                      onDelete: () => _showDeleteCategoryDialog(
+                        context,
+                        provider,
+                        entry.key,
+                      ),
+                      l10n: l10n,
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
                 const Divider(thickness: 1),
                 const SizedBox(height: 24),
@@ -403,12 +414,15 @@ class _SkillCategoryCard extends StatelessWidget {
   final List<String> skills;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final AppLocalizations l10n;
 
   const _SkillCategoryCard({
+    super.key,
     required this.categoryName,
     required this.skills,
     required this.onEdit,
     required this.onDelete,
+    required this.l10n,
   });
 
   @override
@@ -422,6 +436,8 @@ class _SkillCategoryCard extends StatelessWidget {
           children: [
             Row(
               children: [
+                const Icon(Icons.drag_indicator, size: 20, color: Colors.grey),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     categoryName,

@@ -259,7 +259,6 @@ class CvPdfService {
       final endDate = exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
       
       // Company name (BOLD) - Left aligned
-      final companySize = _entryTitleFont.measureString(exp.companyName);
       page.graphics.drawString(
         exp.companyName,
         _entryTitleFont,

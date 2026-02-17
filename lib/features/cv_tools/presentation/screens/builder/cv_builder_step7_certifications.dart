@@ -132,18 +132,22 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                   
                 // List of Certifications
                 if (certList.isNotEmpty) ...[
-                  ListView.separated(
+                  ReorderableListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: certList.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    onReorder: (oldIndex, newIndex) {
+                      provider.reorderCertifications(oldIndex, newIndex);
+                    },
                     itemBuilder: (context, index) {
                       final cert = certList[index];
                       final date = '${cert.issueDate.month}/${cert.issueDate.year}';
                       
                       return Card(
+                        key: ValueKey(cert.id),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
+                          leading: const Icon(Icons.drag_indicator),
                           title: Text(
                             cert.name,
                             style: const TextStyle(fontWeight: FontWeight.bold),

@@ -464,6 +464,396 @@ abstract class AppLocalizations {
   /// **'View and manage all your CVs'**
   String get cvHistoryDesc;
 
+  /// No description provided for @convertToCvAts.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert to CV ATS'**
+  String get convertToCvAts;
+
+  /// No description provided for @uploadOldCvDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload old CV, AI converts to ATS Friendly'**
+  String get uploadOldCvDesc;
+
+  /// No description provided for @myCvs.
+  ///
+  /// In en, this message translates to:
+  /// **'My CVs'**
+  String get myCvs;
+
+  /// No description provided for @cvAtsConverter.
+  ///
+  /// In en, this message translates to:
+  /// **'CV ATS Converter'**
+  String get cvAtsConverter;
+
+  /// No description provided for @step1UploadCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1: Upload CV'**
+  String get step1UploadCv;
+
+  /// No description provided for @uploadCvFormatPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your CV file in PDF format'**
+  String get uploadCvFormatPdf;
+
+  /// No description provided for @step2WaitProcess.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 2: Wait for Process'**
+  String get step2WaitProcess;
+
+  /// No description provided for @aiConvertingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is analyzing and converting your CV'**
+  String get aiConvertingDesc;
+
+  /// No description provided for @step3ReviewSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 3: Review & Save'**
+  String get step3ReviewSave;
+
+  /// No description provided for @checkResultDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the result, edit if necessary, then save to Library'**
+  String get checkResultDesc;
+
+  /// No description provided for @startNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Now'**
+  String get startNow;
+
+  /// No description provided for @failedToSaveCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save CV'**
+  String get failedToSaveCv;
+
+  /// No description provided for @cvSavedToLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'CV successfully saved to Library!'**
+  String get cvSavedToLibrary;
+
+  /// No description provided for @howItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How it Works'**
+  String get howItWorks;
+
+  /// No description provided for @tapToSelectFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select file'**
+  String get tapToSelectFile;
+
+  /// No description provided for @supportedFormats.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF, JPG, PNG, WEBP'**
+  String get supportedFormats;
+
+  /// No description provided for @fileSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'File selected'**
+  String get fileSelected;
+
+  /// No description provided for @tapToChangeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change file'**
+  String get tapToChangeFile;
+
+  /// No description provided for @optionalTranslateCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: Translate CV?'**
+  String get optionalTranslateCv;
+
+  /// No description provided for @startConversion.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Conversion'**
+  String get startConversion;
+
+  /// No description provided for @cvConvertedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'CV successfully converted! Please check the preview below.'**
+  String get cvConvertedSuccess;
+
+  /// No description provided for @failedToSelectFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to select file'**
+  String get failedToSelectFile;
+
+  /// No description provided for @failedToProcessCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to process CV'**
+  String get failedToProcessCv;
+
+  /// No description provided for @extractingText.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting text from document...'**
+  String get extractingText;
+
+  /// No description provided for @identifyingExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifying work experience sections...'**
+  String get identifyingExperience;
+
+  /// No description provided for @organizingEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Organizing education history...'**
+  String get organizingEducation;
+
+  /// No description provided for @groupingSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Grouping skills...'**
+  String get groupingSkills;
+
+  /// No description provided for @finishingUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Finishing up...'**
+  String get finishingUp;
+
+  /// No description provided for @uploadCvStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload CV'**
+  String get uploadCvStep;
+
+  /// No description provided for @photoOrPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF or photo of your CV'**
+  String get photoOrPdf;
+
+  /// No description provided for @geminiAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Gemini Analysis'**
+  String get geminiAnalysis;
+
+  /// No description provided for @aiExtractedInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'AI reads & extracts all info'**
+  String get aiExtractedInfo;
+
+  /// No description provided for @autoPopulate.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Populate'**
+  String get autoPopulate;
+
+  /// No description provided for @dataIntoForms.
+  ///
+  /// In en, this message translates to:
+  /// **'Data directly goes to all forms'**
+  String get dataIntoForms;
+
+  /// No description provided for @editAndExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit & Export'**
+  String get editAndExport;
+
+  /// No description provided for @reviewEditExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Review, edit, and export ATS PDF'**
+  String get reviewEditExport;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// No description provided for @namePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'John Doe'**
+  String get namePlaceholder;
+
+  /// No description provided for @emailPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'john@example.com'**
+  String get emailPlaceholder;
+
+  /// No description provided for @linkedinPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'linkedin.com/in/yourname'**
+  String get linkedinPlaceholder;
+
+  /// No description provided for @portfolioPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'github.com/yourname'**
+  String get portfolioPlaceholder;
+
+  /// No description provided for @locationPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'New York, USA'**
+  String get locationPlaceholder;
+
+  /// No description provided for @jobTitlePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Software Engineer'**
+  String get jobTitlePlaceholder;
+
+  /// No description provided for @companyPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Inc.'**
+  String get companyPlaceholder;
+
+  /// No description provided for @institutionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Massachusetts Institute of Technology'**
+  String get institutionPlaceholder;
+
+  /// No description provided for @majorPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer Science'**
+  String get majorPlaceholder;
+
+  /// No description provided for @degreePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Bachelor\'s Degree (S1)'**
+  String get degreePlaceholder;
+
+  /// No description provided for @gpaPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'3.85'**
+  String get gpaPlaceholder;
+
+  /// No description provided for @startYearPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'2018'**
+  String get startYearPlaceholder;
+
+  /// No description provided for @endYearPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'2022'**
+  String get endYearPlaceholder;
+
+  /// No description provided for @organizationPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Student Union'**
+  String get organizationPlaceholder;
+
+  /// No description provided for @rolePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Head of Division'**
+  String get rolePlaceholder;
+
+  /// No description provided for @categoryNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Programming Languages'**
+  String get categoryNamePlaceholder;
+
+  /// No description provided for @certificationPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Cloud Associate'**
+  String get certificationPlaceholder;
+
+  /// No description provided for @issuingOrgPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Google'**
+  String get issuingOrgPlaceholder;
+
+  /// No description provided for @editSkillCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Skill Category'**
+  String get editSkillCategory;
+
+  /// No description provided for @skillsPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Dart, Flutter, Firebase'**
+  String get skillsPlaceholder;
+
+  /// No description provided for @itemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String itemsCount(Object count);
+
+  /// No description provided for @exampleSoftwareEngineer.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Software Engineer'**
+  String get exampleSoftwareEngineer;
+
+  /// No description provided for @exampleBachelor.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Bachelor of Science'**
+  String get exampleBachelor;
+
+  /// No description provided for @exampleGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Google'**
+  String get exampleGoogle;
+
+  /// No description provided for @exampleUniversity.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., MIT'**
+  String get exampleUniversity;
+
+  /// No description provided for @exampleLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Mountain View, CA'**
+  String get exampleLocation;
+
+  /// No description provided for @exampleYear.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 2020 or Jan 2020'**
+  String get exampleYear;
+
+  /// No description provided for @exampleYearEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 2022 or Feb 2022'**
+  String get exampleYearEnd;
+
   /// No description provided for @personalInfo.
   ///
   /// In en, this message translates to:
@@ -511,6 +901,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This screen is under construction'**
   String get screenUnderConstruction;
+
+  /// No description provided for @translatingCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Translating CV... ⏳'**
+  String get translatingCv;
+
+  /// No description provided for @translationEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate: 20-30 seconds'**
+  String get translationEstimate;
+
+  /// No description provided for @translationTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: Once finished, you can review and edit the translation before downloading.'**
+  String get translationTip;
+
+  /// No description provided for @startTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Translation'**
+  String get startTranslation;
+
+  /// No description provided for @reviewTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Translation'**
+  String get reviewTranslation;
+
+  /// No description provided for @refreshPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Preview'**
+  String get refreshPreview;
+
+  /// No description provided for @approveAllAndContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve All & Continue'**
+  String get approveAllAndContinue;
+
+  /// No description provided for @translationComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Complete!'**
+  String get translationComplete;
+
+  /// No description provided for @downloadingPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading PDF...'**
+  String get downloadingPdf;
+
+  /// No description provided for @backToDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Dashboard'**
+  String get backToDashboard;
 
   /// No description provided for @analysisDetail.
   ///
@@ -943,6 +1393,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Summary Feedback'**
   String get summaryFeedback;
+
+  /// No description provided for @updatedOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated on {date}'**
+  String updatedOnDate(Object date);
+
+  /// No description provided for @noSavedCvs.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved CVs yet'**
+  String get noSavedCvs;
+
+  /// No description provided for @deleteCvConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this CV?'**
+  String get deleteCvConfirmation;
 
   /// No description provided for @backToHome.
   ///
@@ -2450,12 +2918,6 @@ abstract class AppLocalizations {
   /// **'characters'**
   String get characters;
 
-  /// No description provided for @editSkillCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit Skill Category'**
-  String get editSkillCategory;
-
   /// No description provided for @deleteCategory.
   ///
   /// In en, this message translates to:
@@ -2594,6 +3056,42 @@ abstract class AppLocalizations {
   /// **'Suitable for: Long narratives, Profile, Statement'**
   String get templateParagraphDesc;
 
+  /// No description provided for @reorderSectionsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder sections by pressing and dragging the menu icon'**
+  String get reorderSectionsDesc;
+
+  /// No description provided for @templateExperienceNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience (Project, etc.)'**
+  String get templateExperienceNameLabel;
+
+  /// No description provided for @templateEducationNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Education (Course, etc.)'**
+  String get templateEducationNameLabel;
+
+  /// No description provided for @templateSkillsNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills (Category: skill 1, 2)'**
+  String get templateSkillsNameLabel;
+
+  /// No description provided for @templateBulletNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bullet List'**
+  String get templateBulletNameLabel;
+
+  /// No description provided for @templateParagraphNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paragraph (Free Text)'**
+  String get templateParagraphNameLabel;
+
   /// No description provided for @noItems.
   ///
   /// In en, this message translates to:
@@ -2665,12 +3163,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Internship'**
   String get employmentTypeInternship;
-
-  /// No description provided for @itemsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} items'**
-  String itemsCount(Object count);
 
   /// No description provided for @entriesCount.
   ///

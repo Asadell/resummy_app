@@ -268,7 +268,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
   void _showAddCustomSectionDialog(BuildContext context, CVBuilderProvider provider) {
     final titleController = TextEditingController();
-    SectionTemplate selectedTemplate = SectionTemplate.simpleList;
+    SectionTemplate selectedTemplate = SectionTemplate.bulletList;
 
     showDialog(
       context: context,
@@ -371,14 +371,16 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
   String _templateName(SectionTemplate template) {
     switch (template) {
+      case SectionTemplate.experienceLike:
+        return 'Experience-like';
+      case SectionTemplate.educationLike:
+        return 'Education-like';
+      case SectionTemplate.skillsLike:
+        return 'Skills / Category List';
       case SectionTemplate.bulletList:
         return 'Bullet List';
-      case SectionTemplate.categoryList:
-        return 'Category List';
       case SectionTemplate.paragraph:
         return 'Paragraph';
-      case SectionTemplate.simpleList:
-        return 'Simple List';
     }
   }
 }

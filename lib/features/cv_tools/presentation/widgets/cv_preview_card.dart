@@ -423,7 +423,6 @@ class CvPreviewCard extends StatelessWidget {
                         ],
                       ),
                     ))
-                .toList(),
           ],
         ],
       ),
@@ -440,7 +439,7 @@ class CvPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((org) => _buildOrganizationEntry(org)).toList(),
+        ...section.entries.map((org) => _buildOrganizationEntry(org)),
       ],
     );
   }
@@ -560,7 +559,6 @@ class CvPreviewCard extends StatelessWidget {
                     ),
                   ),
                 ))
-            .toList(),
       ],
     );
   }
@@ -575,7 +573,7 @@ class CvPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((cert) => _buildCertificationEntry(cert)).toList(),
+        ...section.entries.map((cert) => _buildCertificationEntry(cert)),
       ],
     );
   }
@@ -825,11 +823,11 @@ class CvPreviewCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                )).toList(),
+                )),
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

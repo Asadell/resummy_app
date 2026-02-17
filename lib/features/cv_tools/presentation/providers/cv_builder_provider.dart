@@ -268,6 +268,25 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Reorder work experience
+  void reorderWorkExperience(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is ExperienceSection) {
+        final entries = List<WorkExperience>.from(section.entries);
+        if (newIndex > oldIndex) newIndex -= 1;
+        final item = entries.removeAt(oldIndex);
+        entries.insert(newIndex, item);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
   /// Add education
   void addEducation(Education education) {
     if (_currentCV == null) return;
@@ -319,6 +338,25 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Reorder education
+  void reorderEducation(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is EducationSection) {
+        final entries = List<Education>.from(section.entries);
+        if (newIndex > oldIndex) newIndex -= 1;
+        final item = entries.removeAt(oldIndex);
+        entries.insert(newIndex, item);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
   /// Add organization experience
   void addOrganization(OrganizationExperience org) {
     if (_currentCV == null) return;
@@ -361,6 +399,25 @@ class CVBuilderProvider extends ChangeNotifier {
       if (section is OrganizationSection) {
         if (index >= section.entries.length) return section;
         final entries = List<OrganizationExperience>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Reorder organization
+  void reorderOrganization(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is OrganizationSection) {
+        final entries = List<OrganizationExperience>.from(section.entries);
+        if (newIndex > oldIndex) newIndex -= 1;
+        final item = entries.removeAt(oldIndex);
+        entries.insert(newIndex, item);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -461,6 +518,30 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Reorder skill categories
+  void reorderSkillCategories(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final keys = section.skillCategories.keys.toList();
+        if (newIndex > oldIndex) newIndex -= 1;
+        final key = keys.removeAt(oldIndex);
+        keys.insert(newIndex, key);
+        
+        final updatedCategories = <String, List<String>>{};
+        for (var k in keys) {
+          updatedCategories[k] = section.skillCategories[k]!;
+        }
+        return section.copyWith(skillCategories: updatedCategories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
   /// Add certification
   void addCertification(Certification cert) {
     if (_currentCV == null) return;
@@ -503,6 +584,25 @@ class CVBuilderProvider extends ChangeNotifier {
       if (section is CertificationsSection) {
         if (index >= section.entries.length) return section;
         final entries = List<Certification>.from(section.entries)..removeAt(index);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Reorder certifications
+  void reorderCertifications(int oldIndex, int newIndex) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is CertificationsSection) {
+        final entries = List<Certification>.from(section.entries);
+        if (newIndex > oldIndex) newIndex -= 1;
+        final item = entries.removeAt(oldIndex);
+        entries.insert(newIndex, item);
         return section.copyWith(entries: entries);
       }
       return section;

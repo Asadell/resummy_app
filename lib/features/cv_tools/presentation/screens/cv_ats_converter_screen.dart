@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
@@ -47,10 +48,10 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: _isLoading
-            ? _buildLoadingView(theme)
+            ? _buildLoadingView(theme, l10n)
             : _step == 0
-                ? _buildUploadStep(theme)
-                : _buildPreviewStep(theme),
+                ? _buildUploadStep(theme, l10n)
+                : _buildPreviewStep(theme, l10n),
       ),
     );
   }
@@ -58,7 +59,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   // ──────────────────────────────────────────────
   // STEP 0: Upload
   // ──────────────────────────────────────────────
-  Widget _buildUploadStep(ThemeData theme) {
+  Widget _buildUploadStep(ThemeData theme, AppLocalizations l10n) {
     return SingleChildScrollView(
       key: const ValueKey('upload'),
       padding: const EdgeInsets.all(24),
@@ -294,7 +295,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   // ──────────────────────────────────────────────
   // STEP 1: Preview (Mockup of what result might look like)
   // ──────────────────────────────────────────────
-  Widget _buildPreviewStep(ThemeData theme) {
+  Widget _buildPreviewStep(ThemeData theme, AppLocalizations l10n) {
     if (_convertedCv == null) return const SizedBox.shrink();
 
     return Column(
@@ -384,7 +385,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   // ──────────────────────────────────────────────
   // Loading View
   // ──────────────────────────────────────────────
-  Widget _buildLoadingView(ThemeData theme) {
+  Widget _buildLoadingView(ThemeData theme, AppLocalizations l10n) {
     return Center(
       key: const ValueKey('loading'),
       child: Column(
@@ -501,6 +502,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   }
 
   void _saveOnly() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_convertedCv == null) return;
 
     // Debugging info as requested

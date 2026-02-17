@@ -131,11 +131,13 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                   
                 // List of Work Experience
                 if (workList.isNotEmpty) ...[
-                  ListView.separated(
+                  ReorderableListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: workList.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    onReorder: (oldIndex, newIndex) {
+                      provider.reorderWorkExperience(oldIndex, newIndex);
+                    },
                     itemBuilder: (context, index) {
                       final work = workList[index];
                       final start = '${work.startDate.month}/${work.startDate.year}';
@@ -144,8 +146,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                           : '${work.endDate?.month}/${work.endDate?.year}';
                           
                       return Card(
+                        key: ValueKey(work.id),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
+                          leading: const Icon(Icons.drag_indicator),
                           title: Text(
                             work.jobTitle,
                             style: const TextStyle(fontWeight: FontWeight.bold),

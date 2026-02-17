@@ -198,6 +198,208 @@ class AppLocalizationsId extends AppLocalizations {
   String get cvHistoryDesc => 'Lihat dan kelola semua CV kamu';
 
   @override
+  String get convertToCvAts => 'Konversi ke CV ATS';
+
+  @override
+  String get uploadOldCvDesc =>
+      'Unggah CV lama, AI akan mengubahnya menjadi ATS Friendly';
+
+  @override
+  String get myCvs => 'CV Saya';
+
+  @override
+  String get cvAtsConverter => 'Konverter CV ATS';
+
+  @override
+  String get step1UploadCv => 'Langkah 1: Unggah CV';
+
+  @override
+  String get uploadCvFormatPdf => 'Unggah file CV kamu dalam format PDF';
+
+  @override
+  String get step2WaitProcess => 'Langkah 2: Tunggu Proses';
+
+  @override
+  String get aiConvertingDesc =>
+      'AI sedang menganalisis dan mengonversi CV kamu';
+
+  @override
+  String get step3ReviewSave => 'Langkah 3: Review & Simpan';
+
+  @override
+  String get checkResultDesc =>
+      'Cek hasilnya, edit jika perlu, lalu simpan ke Library';
+
+  @override
+  String get startNow => 'Mulai Sekarang';
+
+  @override
+  String get failedToSaveCv => 'Gagal menyimpan CV';
+
+  @override
+  String get cvSavedToLibrary => 'CV berhasil disimpan ke Library!';
+
+  @override
+  String get howItWorks => 'Cara Kerja';
+
+  @override
+  String get tapToSelectFile => 'Tap untuk pilih file';
+
+  @override
+  String get supportedFormats => 'PDF, JPG, PNG, WEBP';
+
+  @override
+  String get fileSelected => 'File dipilih';
+
+  @override
+  String get tapToChangeFile => 'Tap untuk ganti file';
+
+  @override
+  String get optionalTranslateCv => 'Opsional: Terjemahkan CV?';
+
+  @override
+  String get startConversion => 'Mulai Konversi';
+
+  @override
+  String get cvConvertedSuccess =>
+      'CV berhasil dikonversi! Silakan cek pratinjau di bawah.';
+
+  @override
+  String get failedToSelectFile => 'Gagal memilih file';
+
+  @override
+  String get failedToProcessCv => 'Gagal memproses CV';
+
+  @override
+  String get extractingText => 'Mengekstrak teks dari dokumen...';
+
+  @override
+  String get identifyingExperience =>
+      'Mengidentifikasi bagian pengalaman kerja...';
+
+  @override
+  String get organizingEducation => 'Menyusun riwayat pendidikan...';
+
+  @override
+  String get groupingSkills => 'Mengelompokkan keahlian...';
+
+  @override
+  String get finishingUp => 'Menyelesaikan...';
+
+  @override
+  String get uploadCvStep => 'Upload CV';
+
+  @override
+  String get photoOrPdf => 'PDF atau foto CV kamu';
+
+  @override
+  String get geminiAnalysis => 'Analisis Gemini';
+
+  @override
+  String get aiExtractedInfo => 'AI membaca & mengekstrak semua info';
+
+  @override
+  String get autoPopulate => 'Auto-Isi';
+
+  @override
+  String get dataIntoForms => 'Data langsung masuk ke semua formulir';
+
+  @override
+  String get editAndExport => 'Edit & Ekspor';
+
+  @override
+  String get reviewEditExport => 'Review, edit, dan ekspor PDF ATS';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get namePlaceholder => 'John Doe';
+
+  @override
+  String get emailPlaceholder => 'john@example.com';
+
+  @override
+  String get linkedinPlaceholder => 'linkedin.com/in/namaanda';
+
+  @override
+  String get portfolioPlaceholder => 'github.com/namaanda';
+
+  @override
+  String get locationPlaceholder => 'Jakarta, Indonesia';
+
+  @override
+  String get jobTitlePlaceholder => 'Software Engineer';
+
+  @override
+  String get companyPlaceholder => 'Google Inc.';
+
+  @override
+  String get institutionPlaceholder => 'Politeknik Elektronika Negeri Surabaya';
+
+  @override
+  String get majorPlaceholder => 'Teknik Informatika';
+
+  @override
+  String get degreePlaceholder => 'Sarjana (S1)';
+
+  @override
+  String get gpaPlaceholder => '3.85';
+
+  @override
+  String get startYearPlaceholder => '2018';
+
+  @override
+  String get endYearPlaceholder => '2022';
+
+  @override
+  String get organizationPlaceholder => 'BEM PENS';
+
+  @override
+  String get rolePlaceholder => 'Ketua Divisi';
+
+  @override
+  String get categoryNamePlaceholder => 'Misal: Bahasa Pemrograman';
+
+  @override
+  String get certificationPlaceholder => 'Google Cloud Associate';
+
+  @override
+  String get issuingOrgPlaceholder => 'Google';
+
+  @override
+  String get editSkillCategory => 'Edit Kategori Skill';
+
+  @override
+  String get skillsPlaceholder => 'Dart, Flutter, Firebase';
+
+  @override
+  String itemsCount(Object count) {
+    return '$count item';
+  }
+
+  @override
+  String get exampleSoftwareEngineer => 'Misal: Software Engineer';
+
+  @override
+  String get exampleBachelor => 'Misal: Sarjana Teknik';
+
+  @override
+  String get exampleGoogle => 'Misal: Google Inc.';
+
+  @override
+  String get exampleUniversity => 'Misal: Universitas Indonesia';
+
+  @override
+  String get exampleLocation => 'Misal: Jakarta, Indonesia';
+
+  @override
+  String get exampleYear => 'Misal: 2020 atau Jan 2020';
+
+  @override
+  String get exampleYearEnd => 'Misal: 2022 atau Feb 2022';
+
+  @override
   String get personalInfo => 'Info Pribadi';
 
   @override
@@ -220,6 +422,37 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get screenUnderConstruction => 'Halaman ini sedang dalam pengembangan';
+
+  @override
+  String get translatingCv => 'Menerjemahkan CV... ⏳';
+
+  @override
+  String get translationEstimate => 'Estimasi: 20-30 detik';
+
+  @override
+  String get translationTip =>
+      'Tips: Setelah selesai, Anda bisa review dan edit hasil terjemahan sebelum download.';
+
+  @override
+  String get startTranslation => 'Mulai Terjemah';
+
+  @override
+  String get reviewTranslation => 'Review Terjemahan';
+
+  @override
+  String get refreshPreview => 'Segarkan Pratinjau';
+
+  @override
+  String get approveAllAndContinue => 'Setujui Semua & Lanjutkan';
+
+  @override
+  String get translationComplete => 'Terjemahan Selesai!';
+
+  @override
+  String get downloadingPdf => 'Mengunduh PDF...';
+
+  @override
+  String get backToDashboard => 'Kembali ke Dashboard';
 
   @override
   String get analysisDetail => 'Detail Analisis';
@@ -450,6 +683,18 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get summaryFeedback => 'Ringkasan Umpan Balik';
+
+  @override
+  String updatedOnDate(Object date) {
+    return 'Diperbarui pada $date';
+  }
+
+  @override
+  String get noSavedCvs => 'Belum ada CV yang disimpan';
+
+  @override
+  String get deleteCvConfirmation =>
+      'Apakah Anda yakin ingin menghapus CV ini?';
 
   @override
   String get backToHome => 'Kembali ke Beranda';
@@ -1261,9 +1506,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get characters => 'karakter';
 
   @override
-  String get editSkillCategory => 'Edit Kategori Skill';
-
-  @override
   String get deleteCategory => 'Hapus Kategori';
 
   @override
@@ -1342,6 +1584,25 @@ class AppLocalizationsId extends AppLocalizations {
       'Cocok untuk: Narasi panjang, Profil, Pernyataan';
 
   @override
+  String get reorderSectionsDesc =>
+      'Geser urutan bagian CV dengan menekan dan menarik ikon menu';
+
+  @override
+  String get templateExperienceNameLabel => 'Pengalaman (Proyek, dsb)';
+
+  @override
+  String get templateEducationNameLabel => 'Pendidikan (Kursus, dsb)';
+
+  @override
+  String get templateSkillsNameLabel => 'Skills (Kategori: skill 1, 2)';
+
+  @override
+  String get templateBulletNameLabel => 'Daftar Poin (List)';
+
+  @override
+  String get templateParagraphNameLabel => 'Paragraf (Teks Bebas)';
+
+  @override
   String get noItems => 'Belum ada item';
 
   @override
@@ -1378,11 +1639,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get employmentTypeInternship => 'Magang';
-
-  @override
-  String itemsCount(Object count) {
-    return '$count item';
-  }
 
   @override
   String entriesCount(Object count) {

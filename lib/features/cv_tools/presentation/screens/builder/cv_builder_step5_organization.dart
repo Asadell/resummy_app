@@ -246,14 +246,17 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     ),
                   )
                 else
-                  ListView.separated(
+                  ReorderableListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: organizationEntries.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    onReorder: (oldIndex, newIndex) {
+                      provider.reorderOrganization(oldIndex, newIndex);
+                    },
                     itemBuilder: (context, index) {
                       final item = organizationEntries[index];
                       return _OrganizationCard(
+                        key: ValueKey(item.id),
                         entry: item,
                         onEdit: () => _editOrganization(item, index),
                         onDelete: () => provider.removeOrganization(index),
@@ -433,6 +436,7 @@ class _OrganizationCard extends StatelessWidget {
   final VoidCallback onDelete;
 
   const _OrganizationCard({
+    super.key,
     required this.entry,
     required this.onEdit,
     required this.onDelete,
@@ -462,6 +466,8 @@ class _OrganizationCard extends StatelessWidget {
           children: [
             Row(
               children: [
+                const Icon(Icons.drag_indicator, size: 20, color: Colors.grey),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     entry.role,

@@ -558,6 +558,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     CVBuilderProvider provider,
     ThemeData theme,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final section = _getCurrentSection(provider);
     final lines = section.content.split('\n').where((l) => l.trim().isNotEmpty).toList();
 
