@@ -157,7 +157,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
 
       // Parse JSON → CVData (gunakan CvAtsConverterService yang sudah ada)
       final converterService = CvAtsConverterService();
-      final cvData = converterService.parseCvJson(json);
+      final cvData = converterService.parseCvJson(json, source: 'analyzer');
 
       _isConverting = false;
       notifyListeners();

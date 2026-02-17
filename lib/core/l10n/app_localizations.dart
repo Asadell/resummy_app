@@ -4135,6 +4135,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Build Your Career'**
   String get buildYourCareer;
+
+  /// No description provided for @cvSourceBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Builder'**
+  String get cvSourceBuilder;
+
+  /// No description provided for @cvSourceAtsConverter.
+  ///
+  /// In en, this message translates to:
+  /// **'ATS Converter'**
+  String get cvSourceAtsConverter;
+
+  /// No description provided for @cvSourceAnalyzer.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzer'**
+  String get cvSourceAnalyzer;
 }
 
 class _AppLocalizationsDelegate

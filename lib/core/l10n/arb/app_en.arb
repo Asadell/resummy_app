@@ -806,5 +806,8 @@
   "profileInfo": "Profile Info",
   "errorSavingProfile": "Error saving profile. Please try again.",
   "loginError": "Error: {error}",
-  "buildYourCareer": "Build Your Career"
+  "buildYourCareer": "Build Your Career",
+  "cvSourceBuilder": "Builder",
+  "cvSourceAtsConverter": "ATS Converter",
+  "cvSourceAnalyzer": "Analyzer"
 }

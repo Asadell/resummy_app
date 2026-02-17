@@ -137,7 +137,7 @@ class CvAtsConverterService {
   }
 
   // ─── Parse JSON → CVData ─────────────────────────────────────
-  CVData parseCvJson(Map<String, dynamic> data) {
+  CVData parseCvJson(Map<String, dynamic> data, {String source = 'ats_converter'}) {
     
     final now = DateTime.now();
     final List<SectionData> sections = [];
@@ -155,6 +155,7 @@ class CvAtsConverterService {
       createdAt: now,
       updatedAt: now,
       template: 'professional',
+      source: source,
       header: HeaderSection(
         id: _uuid.v4(),
         name: data['name'] as String? ?? '',

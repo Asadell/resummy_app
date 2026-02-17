@@ -2143,4 +2143,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get buildYourCareer => 'Build Your Career';
+
+  @override
+  String get cvSourceBuilder => 'Builder';
+
+  @override
+  String get cvSourceAtsConverter => 'ATS Converter';
+
+  @override
+  String get cvSourceAnalyzer => 'Analyzer';
 }

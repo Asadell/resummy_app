@@ -719,5 +719,8 @@
   "profileInfo": "Informasi Profil",
   "errorSavingProfile": "Gagal menyimpan profil. Silakan coba lagi.",
   "loginError": "Error: {error}",
-  "buildYourCareer": "Bangun Karir Anda"
+  "buildYourCareer": "Bangun Karir Anda",
+  "cvSourceBuilder": "Builder",
+  "cvSourceAtsConverter": "Konverter ATS",
+  "cvSourceAnalyzer": "Analisis"
 }

@@ -35,6 +35,7 @@ class CVBuilderProvider extends ChangeNotifier {
     String? name,
     String? email,
     String? phone,
+    String source = 'builder',
   }) {
     final now = DateTime.now();
     final headerId = _uuid.v4();
@@ -88,6 +89,7 @@ class CVBuilderProvider extends ChangeNotifier {
           isVisible: true,
         ),
       ],
+      source: source,
     );
     _currentStep = 1;
     _errorMessage = null;

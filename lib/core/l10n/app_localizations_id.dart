@@ -2155,4 +2155,13 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get buildYourCareer => 'Bangun Karir Anda';
+
+  @override
+  String get cvSourceBuilder => 'Builder';
+
+  @override
+  String get cvSourceAtsConverter => 'Konverter ATS';
+
+  @override
+  String get cvSourceAnalyzer => 'Analisis';
 }

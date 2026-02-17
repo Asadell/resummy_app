@@ -246,17 +246,17 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           margin: EdgeInsets.zero,
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                              child: Text(
-                                cv.template.substring(0, 1).toUpperCase(),
-                                style: TextStyle(color: Theme.of(context).primaryColor),
+                              backgroundColor: _getSourceColor(context, cv.source).withValues(alpha: 0.1),
+                              child: Icon(
+                                _getSourceIcon(cv.source),
+                                color: _getSourceColor(context, cv.source),
                               ),
                             ),
                             title: Text(
                               cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
                               style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            subtitle: Text('${l10n.updatedOnDate(date)} • ${cv.template}'),
+                            subtitle: Text('${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}'),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.edit),
                               onPressed: () async {
@@ -285,7 +285,47 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
       ),
     );
   }
+
+  IconData _getSourceIcon(String source) {
+    switch (source) {
+      case 'builder':
+        return Iconsax.document_text;
+      case 'ats_converter':
+        return Iconsax.magic_star;
+      case 'analyzer':
+        return Iconsax.chart_2;
+      default:
+        return Iconsax.document_text;
+    }
+  }
+
+  Color _getSourceColor(BuildContext context, String source) {
+    switch (source) {
+      case 'builder':
+        return Theme.of(context).colorScheme.primary;
+      case 'ats_converter':
+        return Colors.purple;
+      case 'analyzer':
+        return Colors.green;
+      default:
+        return Theme.of(context).colorScheme.primary;
+    }
+  }
+
+  String _getSourceLabel(AppLocalizations l10n, String source) {
+    switch (source) {
+      case 'builder':
+        return l10n.cvSourceBuilder;
+      case 'ats_converter':
+        return l10n.cvSourceAtsConverter;
+      case 'analyzer':
+        return l10n.cvSourceAnalyzer;
+      default:
+        return l10n.cvSourceBuilder;
+    }
+  }
 }
+
 
 class _FeatureCard extends StatelessWidget {
   final IconData icon;
@@ -348,4 +388,6 @@ class _FeatureCard extends StatelessWidget {
       ),
     );
   }
+
+
 }
