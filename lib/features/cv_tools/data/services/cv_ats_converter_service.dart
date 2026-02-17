@@ -68,7 +68,7 @@ class CvAtsConverterService {
     }
 
     final rawJson = _extractJsonFromResponse(response.data);
-    return _parseJsonToCvData(rawJson);
+    return parseCvJson(jsonDecode(rawJson) as Map<String, dynamic>);
   }
 
   // ─── Retry logic untuk 503 / 429 ────────────────────────────
@@ -136,16 +136,8 @@ class CvAtsConverterService {
   }
 
   // ─── Parse JSON → CVData ─────────────────────────────────────
-  CVData _parseJsonToCvData(String jsonStr) {
-    final Map<String, dynamic> data;
-    try {
-      data = jsonDecode(jsonStr);
-    } catch (e) {
-      throw Exception(
-        'JSON parsing failed: $e\nRaw: ${jsonStr.length > 200 ? '${jsonStr.substring(0, 200)}...' : jsonStr}',
-      );
-    }
-
+  CVData parseCvJson(Map<String, dynamic> data) {
+    
     final now = DateTime.now();
     final List<SectionData> sections = [];
     final rawSections = data['sections'] as List<dynamic>? ?? [];

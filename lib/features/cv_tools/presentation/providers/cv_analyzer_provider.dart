@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
+import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
   final _service = CvAnalyzerService();
@@ -10,6 +12,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
   PlatformFile? _selectedFile;
   String _extractedText = '';
   bool _isPickingFile = false;
+  bool _isConverting = false;
 
   // ── Input state ──
   String _jobPosition = '';
@@ -24,6 +27,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
   PlatformFile? get selectedFile => _selectedFile;
   String get extractedText => _extractedText;
   bool get isPickingFile => _isPickingFile;
+  bool get isConverting => _isConverting;
   bool get isAnalyzing => _isAnalyzing;
   CvAnalysisResult? get result => _result;
   String? get errorMessage => _errorMessage;
@@ -124,6 +128,41 @@ class CvAnalyzerProvider extends ChangeNotifier {
 
     _isAnalyzing = false;
     notifyListeners();
+  }
+
+  // ── Convert to CV ──
+  Future<CVData?> convertAppliedToCv() async {
+    if (_result == null) return null;
+
+    final applied = _result!.suggestions.where((s) => s.isApplied).toList();
+    if (applied.isEmpty) return null;
+
+    _isConverting = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // Minta Gemini terapkan saran dan return JSON CVData
+      final json = await _service.convertAppliedSuggestionsToCvJson(
+        originalCvText: _extractedText,
+        appliedSuggestions: applied,
+        jobPosition: _jobPosition,
+      );
+
+      // Parse JSON → CVData (gunakan CvAtsConverterService yang sudah ada)
+      final converterService = CvAtsConverterService();
+      final cvData = converterService.parseCvJson(json);
+
+      _isConverting = false;
+      notifyListeners();
+      return cvData;
+    } catch (e) {
+      _errorMessage =
+          'Gagal membuat CV: ${e.toString().replaceAll('Exception: ', '')}';
+      _isConverting = false;
+      notifyListeners();
+      return null;
+    }
   }
 
   // ── Suggestion actions ──

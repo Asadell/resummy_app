@@ -183,6 +183,193 @@ class CvAnalyzerService {
   static int _keyIndex = 0;
   static String _nextKey() => _apiKeys[(_keyIndex++) % _apiKeys.length];
 
+  /// Kirim CV asli + saran yang di-apply ke Gemini,
+  /// minta Gemini return JSON format CVData
+  Future<Map<String, dynamic>> convertAppliedSuggestionsToCvJson({
+    required String originalCvText,
+    required List<CvSuggestion> appliedSuggestions,
+    required String jobPosition,
+  }) async {
+    final suggestionsText = appliedSuggestions.asMap().entries.map((e) {
+      final i = e.key + 1;
+      final s = e.value;
+      return '''
+Saran $i (${s.sectionTitle}):
+  - GANTI: "${s.original}"
+  - DENGAN: "${s.suggestion}"''';
+    }).join('\n');
+
+    final prompt = '''
+Kamu adalah expert CV formatter dan ATS specialist.
+
+Tugas kamu:
+1. Baca CV asli di bawah
+2. Terapkan SEMUA perubahan yang ada di daftar saran
+3. Return seluruh isi CV yang sudah diperbarui dalam format JSON yang diminta
+
+TARGET POSISI: $jobPosition
+
+DAFTAR SARAN YANG HARUS DITERAPKAN:
+$suggestionsText
+
+CV ASLI:
+$originalCvText
+
+PENTING:
+- Terapkan SEMUA saran di atas ke konten CV
+- Pertahankan semua informasi lain yang tidak ada di daftar saran
+- Jangan ubah apapun yang tidak ada di daftar saran
+- Deteksi bahasa CV dan gunakan bahasa yang sama
+- Return ONLY pure JSON, no markdown, no explanation
+
+Return JSON ini:
+{
+  "name": "string",
+  "email": "string|null",
+  "phone": "string|null",
+  "linkedin": "string|null",
+  "portfolio": "string|null",
+  "github": "string|null",
+  "location": "string|null",
+  "sections": [
+    {
+      "type": "summary|experience|education|organization|skills|certifications|custom",
+      "title": "string",
+      "isVisible": true,
+
+      // Untuk type "summary":
+      "content": "string",
+
+      // Untuk type "experience":
+      "entries": [
+        {
+          "companyName": "string",
+          "jobTitle": "string",
+          "location": "string|null",
+          "startDate": "MMM yyyy",
+          "endDate": "MMM yyyy|null",
+          "isPresent": false,
+          "description": "string|null",
+          "bullets": ["bullet 1", "bullet 2"]
+        }
+      ],
+
+      // Untuk type "education":
+      "entries": [
+        {
+          "institution": "string",
+          "degree": "string",
+          "major": "string",
+          "startYear": 2020,
+          "endYear": 2024,
+          "isPresent": false,
+          "gpa": "string|null",
+          "bullets": ["achievement 1"]
+        }
+      ],
+
+      // Untuk type "organization":
+      "entries": [
+        {
+          "organizationName": "string",
+          "role": "string",
+          "location": "string|null",
+          "startDate": "MMM yyyy",
+          "endDate": "MMM yyyy|null",
+          "isPresent": false,
+          "bullets": ["description"]
+        }
+      ],
+
+      // Untuk type "skills":
+      "skillCategories": {
+        "Category Name": ["skill1", "skill2"]
+      },
+
+      // Untuk type "certifications":
+      "entries": [
+        {
+          "name": "string",
+          "issuingOrganization": "string",
+          "issueDate": "MMM yyyy",
+          "credentialId": "string|null",
+          "credentialUrl": "string|null"
+        }
+      ],
+
+      // Untuk type "custom" dengan template "skillsLike":
+      "template": "skillsLike",
+      "skillCategories": { "Category": ["item1"] },
+
+      // Untuk type "custom" dengan template "experienceLike" atau "educationLike":
+      "template": "experienceLike",
+      "titleLabel": "string",
+      "subtitleLabel": "string",
+      "metaLabel": "string",
+      "entries": [
+        {
+          "title": "string",
+          "subtitle": "string|null",
+          "meta": "string|null",
+          "startDate": "MMM yyyy|null",
+          "endDate": "MMM yyyy|null",
+          "isPresent": false,
+          "bullets": ["string"]
+        }
+      ],
+
+      // Untuk type "custom" dengan template "bulletList":
+      "template": "bulletList",
+      "content": "item1\\nitem2\\nitem3",
+
+      // Untuk type "custom" dengan template "paragraph":
+      "template": "paragraph",
+      "content": "free text"
+    }
+  ]
+}
+''';
+
+    Future<Response> doRequest(String key) => Dio().post(
+      'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3-flash-preview:generateContent',
+      options: Options(
+        headers: {
+          'x-goog-api-key': key,
+          'Content-Type': 'application/json',
+        },
+        receiveTimeout: const Duration(seconds: 120),
+        sendTimeout: const Duration(seconds: 30),
+      ),
+      data: {
+        'contents': [
+          {
+            'parts': [{'text': prompt}]
+          }
+        ],
+        'generationConfig': {
+          'temperature': 0.1,
+          'maxOutputTokens': 8192,
+          'responseMimeType': 'application/json',
+        },
+      },
+    );
+
+    try {
+      final response = await doRequest(_nextKey());
+      String raw = response.data['candidates'][0]['content']['parts'][0]['text'] as String;
+      raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
+      return jsonDecode(raw) as Map<String, dynamic>;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 429) {
+        final response = await doRequest(_nextKey());
+        String raw = response.data['candidates'][0]['content']['parts'][0]['text'] as String;
+        raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
+        return jsonDecode(raw) as Map<String, dynamic>;
+      }
+      rethrow;
+    }
+  }
+
   Future<CvAnalysisResult> analyze({
     required String cvText,
     required String jobPosition,

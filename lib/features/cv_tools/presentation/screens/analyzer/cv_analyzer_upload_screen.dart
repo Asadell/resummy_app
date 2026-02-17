@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/features/cv_builder/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 
@@ -57,8 +59,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       ),
       body: Consumer<CvAnalyzerProvider>(
         builder: (context, provider, _) {
-          if (provider.isAnalyzing) {
-            return _buildLoadingState();
+          if (provider.isAnalyzing || provider.isConverting) {
+            return _buildLoadingState(provider);
           }
 
           if (provider.hasResult) {
@@ -300,7 +302,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   // STATE 2: LOADING
   // ═══════════════════════════════════════════════════════════════
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(CvAnalyzerProvider provider) {
+    final isConverting = provider.isConverting;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -308,12 +311,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           const CircularProgressIndicator(),
           const SizedBox(height: 24),
           Text(
-            'Menganalisis CV Anda...',
+            isConverting ? 'Membuat CV ATS...' : 'Menganalisis CV Anda...',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           Text(
-            'Ini mungkin memakan waktu 10-15 detik',
+            isConverting
+                ? 'Menerapkan saran dan memformat ulang CV Anda...'
+                : 'Ini mungkin memakan waktu 10-15 detik',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -330,29 +335,34 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   Widget _buildResultState(CvAnalyzerProvider provider) {
     final result = provider.result!;
 
-    return Column(
+    return Stack(
       children: [
-        // Tab Bar
-        Container(
-          color: Theme.of(context).colorScheme.surface,
-          child: TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'Report', icon: Icon(Iconsax.chart_1)),
-              Tab(text: 'Saran', icon: Icon(Iconsax.message_edit)),
-            ],
-          ),
+        Column(
+          children: [
+            // Tab Bar
+            Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'Report', icon: Icon(Iconsax.chart_1)),
+                  Tab(text: 'Saran', icon: Icon(Iconsax.message_edit)),
+                ],
+              ),
+            ),
+            // Tab Views
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildReportTab(result),
+                  _buildSuggestionsTab(result, provider),
+                ],
+              ),
+            ),
+          ],
         ),
-        // Tab Views
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              _buildReportTab(result),
-              _buildSuggestionsTab(result, provider),
-            ],
-          ),
-        ),
+        _buildCvFab(result, provider),
       ],
     );
   }
@@ -683,6 +693,13 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   itemCount: filteredSuggestions.length,
                   itemBuilder: (context, index) {
                     final suggestion = filteredSuggestions[index];
+                    // Add extra padding for the last item to avoid FAB overlap
+                    if (index == filteredSuggestions.length - 1) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 80),
+                        child: _buildSuggestionCard(suggestion, provider),
+                      );
+                    }
                     return _buildSuggestionCard(suggestion, provider);
                   },
                 ),
@@ -890,6 +907,57 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
           ],
         ),
+      ),
+    );
+  }
+
+
+  Widget _buildCvFab(CvAnalysisResult result, CvAnalyzerProvider provider) {
+    if (result.appliedCount == 0) return const SizedBox.shrink();
+
+    return Positioned(
+      bottom: 16,
+      left: 16,
+      right: 16,
+      child: FloatingActionButton.extended(
+        onPressed: () => _handleBuatCvAts(provider),
+        icon: const Icon(Iconsax.magicpen),
+        label: Text('Buat CV ATS dari ${result.appliedCount} Saran Ini'),
+      ),
+    );
+  }
+
+  void _handleBuatCvAts(CvAnalyzerProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Buat CV ATS Baru?'),
+        content: const Text(
+          'Sistem akan membuat CV baru berdasarkan CV asli kamu ditambah semua saran yang sudah kamu "Terapkan".\n\nCV ini bisa diedit lagi di CV Builder.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              Navigator.pop(context); // Tutup dialog
+
+              // Proses convert
+              final cvData = await provider.convertAppliedToCv();
+
+              if (cvData != null && mounted) {
+                // Masukkan ke CV Builder Provider
+                context.read<CVBuilderProvider>().loadCvData(cvData);
+
+                // Navigasi ke Step 1 CV Builder
+                context.router.push(const CvBuilderStep1Route());
+              }
+            },
+            child: const Text('Buat Sekarang'),
+          ),
+        ],
       ),
     );
   }
