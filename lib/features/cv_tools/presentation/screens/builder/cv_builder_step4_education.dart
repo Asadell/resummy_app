@@ -165,7 +165,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                               if (edu.gpa != null && edu.gpa!.isNotEmpty) ...[
                                 const SizedBox(height: 4),
                                 Text(
-                                  'IPK: ${edu.gpa}',
+                                  '${l10n.gpaLabel}: ${edu.gpa}',
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.w500,

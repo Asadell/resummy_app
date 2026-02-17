@@ -178,7 +178,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '${_summaryController.text.length} characters',
+                '${_summaryController.text.length} ${l10n.characters}',
                 style: TextStyle(
                   fontSize: 12,
                   color: theme.disabledColor,

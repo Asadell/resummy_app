@@ -647,15 +647,16 @@ class CvPreviewCard extends StatelessWidget {
   // ========================================
   // 7. CUSTOM SECTION
   // ========================================
+  // ========================================
+  // 7. CUSTOM SECTION
+  // ========================================
   Widget _buildCustomSection(CustomSection section) {
-    if (section.content.isEmpty) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionHeader(section.title),
-        
-        if (section.template == SectionTemplate.paragraph)
+    if (section.template == CustomSectionTemplate.paragraph) {
+      if (section.content.isEmpty) return const SizedBox.shrink();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader(section.title),
           Text(
             section.content,
             textAlign: TextAlign.justify,
@@ -664,71 +665,171 @@ class CvPreviewCard extends StatelessWidget {
               height: 1.6,
               color: Color(0xFF374151),
             ),
-          )
-        else if (section.template == SectionTemplate.categoryList)
-          // Category: item1, item2 format
-          ...section.content
-              .split('\n')
-              .where((line) => line.trim().isNotEmpty)
-              .map((line) {
-                final parts = line.split(':');
-                if (parts.length >= 2) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: RichText(
-                      text: TextSpan(
+          ),
+        ],
+      );
+    }
+
+    if (section.template == CustomSectionTemplate.bulletList) {
+      final lines = section.content.split('\n').where((l) => l.trim().isNotEmpty).toList();
+      if (lines.isEmpty) return const SizedBox.shrink();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader(section.title),
+          ...lines.map((line) => Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
+                Expanded(
+                  child: Text(
+                    line.trim(),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      height: 1.5,
+                      color: Color(0xFF374151),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+        ],
+      );
+    }
+
+    if (section.template == CustomSectionTemplate.skillsLike) {
+      if (section.skillCategories.isEmpty) return const SizedBox.shrink();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader(section.title),
+          ...section.skillCategories.entries.map((category) => Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontSize: 11,
+                  height: 1.5,
+                  color: Color(0xFF374151),
+                ),
+                children: [
+                  TextSpan(
+                    text: '${category.key}: ',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: category.value.join(', ')),
+                ],
+              ),
+            ),
+          )),
+        ],
+      );
+    }
+
+    // experienceLike & educationLike — render structured entries
+    if (section.entries.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader(section.title),
+        ...section.entries.map((entry) {
+          final dateStr = entry.startDate != null
+              ? '${entry.startDate} - ${entry.isPresent ? "Present" : (entry.endDate ?? "")}'
+              : '';
+              
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title (BOLD) + Date (Right-aligned)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        entry.title,
                         style: const TextStyle(
-                          fontSize: 11,
-                          height: 1.5,
-                          color: Color(0xFF374151),
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          height: 1.3,
+                          color: Colors.black,
                         ),
-                        children: [
-                          TextSpan(
-                            text: '${parts[0].trim()}: ',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text: parts.sublist(1).join(':').trim(),
-                          ),
-                        ],
                       ),
                     ),
-                  );
-                }
-                return Text(
-                  line,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    height: 1.5,
-                    color: Color(0xFF374151),
+                    if (dateStr.isNotEmpty) ...[
+                      const SizedBox(width: 16),
+                      Text(
+                        dateStr,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF6B7280),
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                
+                // Subtitle (Italic)
+                if (entry.subtitle?.isNotEmpty == true) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    entry.subtitle!,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontStyle: FontStyle.italic,
+                      height: 1.3,
+                      color: Color(0xFF374151),
+                    ),
                   ),
-                );
-              }).toList()
-        else
-          // Bullet list
-          ...section.content
-              .split('\n')
-              .where((line) => line.trim().isNotEmpty)
-              .map((line) => Padding(
-                    padding: const EdgeInsets.only(bottom: 3),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
-                        Expanded(
-                          child: Text(
-                            line.trim(),
-                            style: const TextStyle(
-                              fontSize: 11,
-                              height: 1.5,
-                              color: Color(0xFF374151),
-                            ),
+                ],
+
+                // Meta
+                if (entry.meta?.isNotEmpty == true) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    entry.meta!,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Color(0xFF9CA3AF),
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 4),
+
+                // Bullets
+                ...entry.bullets.map((bullet) => Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
+                      Expanded(
+                        child: Text(
+                          bullet,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            height: 1.5,
+                            color: Color(0xFF374151),
                           ),
                         ),
-                      ],
-                    ),
-                  ))
-              .toList(),
+                      ),
+                    ],
+                  ),
+                )).toList(),
+              ],
+            ),
+          );
+        }).toList(),
       ],
     );
   }

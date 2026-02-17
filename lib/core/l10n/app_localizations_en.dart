@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next => 'Next';
 
   @override
+  String get add => 'Add';
+
+  @override
   String get back => 'Back';
 
   @override
@@ -213,7 +216,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summary => 'Summary';
 
   @override
-  String get additionalInfo => 'Additional Info';
+  String get additionalInfo => 'Additional Information';
 
   @override
   String get screenUnderConstruction => 'This screen is under construction';
@@ -1206,6 +1209,244 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goBack => 'Go Back';
 
   @override
+  String get exitBuilderTitle => 'Exit CV Builder?';
+
+  @override
+  String get exitBuilderMessage =>
+      'Your progress is saved automatically. Are you sure you want to leave?';
+
+  @override
+  String get stay => 'Stay';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get gpaLabel => 'GPA';
+
+  @override
+  String get sectionNotFound => 'Section not found';
+
+  @override
+  String get invalidSectionType => 'Invalid section type';
+
+  @override
+  String get addedCategories => 'Added Categories';
+
+  @override
+  String get addNewCategory => 'Add New Category';
+
+  @override
+  String get editCategory => 'Edit Category';
+
+  @override
+  String get categoryName => 'Category Name';
+
+  @override
+  String get skillCategoryAdded => 'Skill category added successfully';
+
+  @override
+  String get categoryRequired => 'Category name is required';
+
+  @override
+  String get skillsRequired => 'Skills are required';
+
+  @override
+  String get skillsHint => 'Separate with commas: Java, Python, C++';
+
+  @override
+  String get characters => 'characters';
+
+  @override
+  String get editSkillCategory => 'Edit Skill Category';
+
+  @override
+  String get deleteCategory => 'Delete Category';
+
+  @override
+  String deleteCategoryConfirmation(Object category) {
+    return 'Are you sure you want to delete \"$category\" category?';
+  }
+
+  @override
+  String get skillsOrganizationTips => 'Skills Organization Tips:';
+
+  @override
+  String get skillsTip1 =>
+      'Group skills by category (Technical, Languages, Tools)';
+
+  @override
+  String get skillsTip2 => 'List most relevant skills first';
+
+  @override
+  String get skillsTip3 => 'Be specific (Node.js instead of just JavaScript)';
+
+  @override
+  String get skillsTip4 => 'Include proficiency levels if relevant';
+
+  @override
+  String get projectExperience => 'Project / Experience';
+
+  @override
+  String get courseCertification => 'Course / Certification';
+
+  @override
+  String get otherSkills => 'Other Skills';
+
+  @override
+  String get briefProfile => 'Brief Profile';
+
+  @override
+  String get selectSectionFormat => 'Select Section Format';
+
+  @override
+  String get createSection => 'Create Section';
+
+  @override
+  String get templateExperienceName => 'Experience Format';
+
+  @override
+  String get templateExperienceDesc =>
+      'Suitable for: Volunteer, Projects, Awards with details';
+
+  @override
+  String get templateEducationName => 'Education Format';
+
+  @override
+  String get templateEducationDesc =>
+      'Suitable for: Courses, Informal certifications, Training';
+
+  @override
+  String get templateSkillsName => 'Skills Format';
+
+  @override
+  String get templateSkillsDesc =>
+      'Suitable for: Category - Tools, Languages, Technical Skills';
+
+  @override
+  String get templateBulletName => 'Bullet List';
+
+  @override
+  String get templateBulletDesc =>
+      'Suitable for: Simple list like Skills, Hobbies';
+
+  @override
+  String get templateParagraphName => 'Paragraph';
+
+  @override
+  String get templateParagraphDesc =>
+      'Suitable for: Long narratives, Profile, Statement';
+
+  @override
+  String get noItems => 'No items yet';
+
+  @override
+  String get addCategory => 'Add Category';
+
+  @override
+  String get noCategories => 'No categories yet';
+
+  @override
+  String get addCategoryPrompt => 'Tap \"Add Category\" to start';
+
+  @override
+  String get deleteItem => 'Delete Item?';
+
+  @override
+  String deleteItemConfirmation(Object title) {
+    return 'Are you sure you want to delete \"$title\"?';
+  }
+
+  @override
+  String get employmentTypeLabel => 'Employment Type';
+
+  @override
+  String get employmentTypeFullTime => 'Full-time';
+
+  @override
+  String get employmentTypePartTime => 'Part-time';
+
+  @override
+  String get employmentTypeContract => 'Contract';
+
+  @override
+  String get employmentTypeFreelance => 'Freelance';
+
+  @override
+  String get employmentTypeInternship => 'Internship';
+
+  @override
+  String itemsCount(Object count) {
+    return '$count items';
+  }
+
+  @override
+  String entriesCount(Object count) {
+    return '$count entries';
+  }
+
+  @override
+  String get startDate => 'Start Date';
+
+  @override
+  String get endDate => 'End Date';
+
+  @override
+  String get currentlyActive => 'Currently Active';
+
+  @override
+  String get bulletPoints => 'Bullet Points';
+
+  @override
+  String get addBulletPointHint => 'Add bullet point...';
+
+  @override
+  String get contentLabel => 'Content';
+
+  @override
+  String get contentHint => 'Write content for this section...';
+
+  @override
+  String get titleRequired => 'Title is required';
+
+  @override
+  String get categoryAndSkillsRequired =>
+      'Category name and skills are required';
+
+  @override
+  String get typeAndAddHint => 'Type item and press Add...';
+
+  @override
+  String get editItem => 'Edit Item';
+
+  @override
+  String get addItem => 'Add Item';
+
+  @override
+  String get formatExperience => 'Format: Experience';
+
+  @override
+  String get formatEducation => 'Format: Education';
+
+  @override
+  String get formatSkills => 'Format: Skills';
+
+  @override
+  String get formatBulletList => 'Format: Bullet List';
+
+  @override
+  String get formatParagraph => 'Format: Paragraph';
+
+  @override
+  String get saveAsDraft => 'Save as Draft';
+
+  @override
+  String get cvSavedSuccess => 'CV saved successfully!';
+
+  @override
+  String get downloadPdfUnavailable => 'Download PDF will be available soon!';
+
+  @override
   String get requiredField => 'Required';
 
   @override
@@ -1335,12 +1576,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get companyName => 'Company Name';
-
-  @override
-  String get startDate => 'Start Date';
-
-  @override
-  String get endDate => 'End Date';
 
   @override
   String get responsibilities => 'Description / Responsibilities';
@@ -1522,8 +1757,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get templateLabel => 'Template';
 
   @override
-  String get contentLabel => 'Content';
+  String get previewLabel => 'Preview';
 
   @override
-  String get previewLabel => 'Preview';
+  String get addBulletPoint => 'Add bullet point';
 }

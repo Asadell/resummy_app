@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get next;
 
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
   /// No description provided for @back.
   ///
   /// In en, this message translates to:
@@ -497,7 +503,7 @@ abstract class AppLocalizations {
   /// No description provided for @additionalInfo.
   ///
   /// In en, this message translates to:
-  /// **'Additional Info'**
+  /// **'Additional Information'**
   String get additionalInfo;
 
   /// No description provided for @screenUnderConstruction.
@@ -2348,6 +2354,450 @@ abstract class AppLocalizations {
   /// **'Go Back'**
   String get goBack;
 
+  /// No description provided for @exitBuilderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit CV Builder?'**
+  String get exitBuilderTitle;
+
+  /// No description provided for @exitBuilderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved automatically. Are you sure you want to leave?'**
+  String get exitBuilderMessage;
+
+  /// No description provided for @stay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get stay;
+
+  /// No description provided for @exit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exit;
+
+  /// No description provided for @gpaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'GPA'**
+  String get gpaLabel;
+
+  /// No description provided for @sectionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Section not found'**
+  String get sectionNotFound;
+
+  /// No description provided for @invalidSectionType.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid section type'**
+  String get invalidSectionType;
+
+  /// No description provided for @addedCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Added Categories'**
+  String get addedCategories;
+
+  /// No description provided for @addNewCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Category'**
+  String get addNewCategory;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name'**
+  String get categoryName;
+
+  /// No description provided for @skillCategoryAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill category added successfully'**
+  String get skillCategoryAdded;
+
+  /// No description provided for @categoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name is required'**
+  String get categoryRequired;
+
+  /// No description provided for @skillsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills are required'**
+  String get skillsRequired;
+
+  /// No description provided for @skillsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate with commas: Java, Python, C++'**
+  String get skillsHint;
+
+  /// No description provided for @characters.
+  ///
+  /// In en, this message translates to:
+  /// **'characters'**
+  String get characters;
+
+  /// No description provided for @editSkillCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Skill Category'**
+  String get editSkillCategory;
+
+  /// No description provided for @deleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Category'**
+  String get deleteCategory;
+
+  /// No description provided for @deleteCategoryConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{category}\" category?'**
+  String deleteCategoryConfirmation(Object category);
+
+  /// No description provided for @skillsOrganizationTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills Organization Tips:'**
+  String get skillsOrganizationTips;
+
+  /// No description provided for @skillsTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Group skills by category (Technical, Languages, Tools)'**
+  String get skillsTip1;
+
+  /// No description provided for @skillsTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'List most relevant skills first'**
+  String get skillsTip2;
+
+  /// No description provided for @skillsTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Be specific (Node.js instead of just JavaScript)'**
+  String get skillsTip3;
+
+  /// No description provided for @skillsTip4.
+  ///
+  /// In en, this message translates to:
+  /// **'Include proficiency levels if relevant'**
+  String get skillsTip4;
+
+  /// No description provided for @projectExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Project / Experience'**
+  String get projectExperience;
+
+  /// No description provided for @courseCertification.
+  ///
+  /// In en, this message translates to:
+  /// **'Course / Certification'**
+  String get courseCertification;
+
+  /// No description provided for @otherSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Skills'**
+  String get otherSkills;
+
+  /// No description provided for @briefProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Brief Profile'**
+  String get briefProfile;
+
+  /// No description provided for @selectSectionFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Section Format'**
+  String get selectSectionFormat;
+
+  /// No description provided for @createSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Section'**
+  String get createSection;
+
+  /// No description provided for @templateExperienceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience Format'**
+  String get templateExperienceName;
+
+  /// No description provided for @templateExperienceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Volunteer, Projects, Awards with details'**
+  String get templateExperienceDesc;
+
+  /// No description provided for @templateEducationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Education Format'**
+  String get templateEducationName;
+
+  /// No description provided for @templateEducationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Courses, Informal certifications, Training'**
+  String get templateEducationDesc;
+
+  /// No description provided for @templateSkillsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills Format'**
+  String get templateSkillsName;
+
+  /// No description provided for @templateSkillsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Category - Tools, Languages, Technical Skills'**
+  String get templateSkillsDesc;
+
+  /// No description provided for @templateBulletName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bullet List'**
+  String get templateBulletName;
+
+  /// No description provided for @templateBulletDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Simple list like Skills, Hobbies'**
+  String get templateBulletDesc;
+
+  /// No description provided for @templateParagraphName.
+  ///
+  /// In en, this message translates to:
+  /// **'Paragraph'**
+  String get templateParagraphName;
+
+  /// No description provided for @templateParagraphDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Long narratives, Profile, Statement'**
+  String get templateParagraphDesc;
+
+  /// No description provided for @noItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No items yet'**
+  String get noItems;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Category'**
+  String get addCategory;
+
+  /// No description provided for @noCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get noCategories;
+
+  /// No description provided for @addCategoryPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Add Category\" to start'**
+  String get addCategoryPrompt;
+
+  /// No description provided for @deleteItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Item?'**
+  String get deleteItem;
+
+  /// No description provided for @deleteItemConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{title}\"?'**
+  String deleteItemConfirmation(Object title);
+
+  /// No description provided for @employmentTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Employment Type'**
+  String get employmentTypeLabel;
+
+  /// No description provided for @employmentTypeFullTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-time'**
+  String get employmentTypeFullTime;
+
+  /// No description provided for @employmentTypePartTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Part-time'**
+  String get employmentTypePartTime;
+
+  /// No description provided for @employmentTypeContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract'**
+  String get employmentTypeContract;
+
+  /// No description provided for @employmentTypeFreelance.
+  ///
+  /// In en, this message translates to:
+  /// **'Freelance'**
+  String get employmentTypeFreelance;
+
+  /// No description provided for @employmentTypeInternship.
+  ///
+  /// In en, this message translates to:
+  /// **'Internship'**
+  String get employmentTypeInternship;
+
+  /// No description provided for @itemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String itemsCount(Object count);
+
+  /// No description provided for @entriesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} entries'**
+  String entriesCount(Object count);
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDate;
+
+  /// No description provided for @currentlyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Active'**
+  String get currentlyActive;
+
+  /// No description provided for @bulletPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Bullet Points'**
+  String get bulletPoints;
+
+  /// No description provided for @addBulletPointHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bullet point...'**
+  String get addBulletPointHint;
+
+  /// No description provided for @contentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get contentLabel;
+
+  /// No description provided for @contentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write content for this section...'**
+  String get contentHint;
+
+  /// No description provided for @titleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Title is required'**
+  String get titleRequired;
+
+  /// No description provided for @categoryAndSkillsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name and skills are required'**
+  String get categoryAndSkillsRequired;
+
+  /// No description provided for @typeAndAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type item and press Add...'**
+  String get typeAndAddHint;
+
+  /// No description provided for @editItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Item'**
+  String get editItem;
+
+  /// No description provided for @addItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Item'**
+  String get addItem;
+
+  /// No description provided for @formatExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Experience'**
+  String get formatExperience;
+
+  /// No description provided for @formatEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Education'**
+  String get formatEducation;
+
+  /// No description provided for @formatSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Skills'**
+  String get formatSkills;
+
+  /// No description provided for @formatBulletList.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Bullet List'**
+  String get formatBulletList;
+
+  /// No description provided for @formatParagraph.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Paragraph'**
+  String get formatParagraph;
+
+  /// No description provided for @saveAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as Draft'**
+  String get saveAsDraft;
+
+  /// No description provided for @cvSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'CV saved successfully!'**
+  String get cvSavedSuccess;
+
+  /// No description provided for @downloadPdfUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Download PDF will be available soon!'**
+  String get downloadPdfUnavailable;
+
   /// No description provided for @requiredField.
   ///
   /// In en, this message translates to:
@@ -2599,18 +3049,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Company Name'**
   String get companyName;
-
-  /// No description provided for @startDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Start Date'**
-  String get startDate;
-
-  /// No description provided for @endDate.
-  ///
-  /// In en, this message translates to:
-  /// **'End Date'**
-  String get endDate;
 
   /// No description provided for @responsibilities.
   ///
@@ -2954,17 +3392,17 @@ abstract class AppLocalizations {
   /// **'Template'**
   String get templateLabel;
 
-  /// No description provided for @contentLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Content'**
-  String get contentLabel;
-
   /// No description provided for @previewLabel.
   ///
   /// In en, this message translates to:
   /// **'Preview'**
   String get previewLabel;
+
+  /// No description provided for @addBulletPoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bullet point'**
+  String get addBulletPoint;
 }
 
 class _AppLocalizationsDelegate

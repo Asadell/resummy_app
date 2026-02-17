@@ -605,65 +605,129 @@ class CvPdfService {
     page = headerResult.page;
     y = headerResult.y;
     
-    if (section.template == SectionTemplate.paragraph) {
+    // 1. Paragraph
+    if (section.template == CustomSectionTemplate.paragraph) {
       final textResult = _drawJustifiedParagraph(document, page, section.content, y, pageSize.width);
       return (page: textResult.page, y: textResult.bounds.bottom);
-    } else if (section.template == SectionTemplate.categoryList) {
-      // Category: items format
-      final lines = section.content.split('\n').where((line) => line.trim().isNotEmpty).toList();
-      for (final line in lines) {
-        if (y + 18 > pageSize.height) {
-          page = document.pages.add();
-          y = 0;
-        }
-        
-        final parts = line.split(':');
-        if (parts.length >= 2) {
-          final categoryText = '${parts[0].trim()}: ';
-          final itemsText = parts.sublist(1).join(':').trim();
-          
-          final categorySize = _bodyFont.measureString(categoryText);
-          final categoryBoldFont = PdfStandardFont(PdfFontFamily.helvetica, 11, style: PdfFontStyle.bold);
-          
-          page.graphics.drawString(
-            categoryText,
-            categoryBoldFont,
-            bounds: ui.Rect.fromLTWH(0, y, categorySize.width, 14),
-            brush: PdfBrushes.black,
-          );
-          
-          page.graphics.drawString(
-            itemsText,
-            _bodyFont,
-            bounds: ui.Rect.fromLTWH(categorySize.width, y, pageSize.width - categorySize.width, 14),
-            brush: PdfSolidBrush(_textColor),
-          );
-        } else {
-          page.graphics.drawString(
-            line,
-            _bodyFont,
-            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 14),
-            brush: PdfSolidBrush(_textColor),
-          );
-        }
-        
-        y += 16;
-      }
-      return (page: page, y: y);
-    } else {
-      // Bullet list
+    } 
+    
+    // 2. Bullet List
+    else if (section.template == CustomSectionTemplate.bulletList) {
       final lines = section.content.split('\n').where((line) => line.trim().isNotEmpty).toList();
       for (final line in lines) {
         if (y + 20 > pageSize.height) {
           page = document.pages.add();
           y = 0;
         }
-        
         final bulletResult = _drawBulletPoint(document, page, line.trim(), y, pageSize.width);
         page = bulletResult.page;
         y = bulletResult.bounds.bottom + 4;
       }
-      
+      return (page: page, y: y);
+    } 
+    
+    // 3. Skills Like
+    else if (section.template == CustomSectionTemplate.skillsLike) {
+      final categoryBoldFont = PdfStandardFont(PdfFontFamily.helvetica, 11, style: PdfFontStyle.bold);
+      for (final category in section.skillCategories.entries) {
+        if (y + 20 > pageSize.height) {
+          page = document.pages.add();
+          y = 0;
+        }
+        
+        final categoryText = '${category.key}: ';
+        final skillsText = category.value.join(', ');
+        
+        // Draw category in bold
+        final categorySize = categoryBoldFont.measureString(categoryText);
+        page.graphics.drawString(
+          categoryText,
+          categoryBoldFont,
+          bounds: ui.Rect.fromLTWH(0, y, categorySize.width, 14),
+          brush: PdfBrushes.black,
+        );
+        
+        // Draw skills
+        page.graphics.drawString(
+          skillsText,
+          _bodyFont,
+          bounds: ui.Rect.fromLTWH(categorySize.width, y, pageSize.width - categorySize.width, 14),
+          brush: PdfSolidBrush(_textColor),
+        );
+        
+        y += 16;
+      }
+      return (page: page, y: y);
+    }
+    else {
+       for (final entry in section.entries) {
+        if (y + 60 > pageSize.height) {
+          page = document.pages.add();
+          y = 0;
+        }
+
+        final dateStr = entry.startDate != null
+            ? '${entry.startDate} - ${entry.isPresent ? "Present" : (entry.endDate ?? "")}'
+            : '';
+
+        // Title + Date
+        final dateSize = _smallFont.measureString(dateStr);
+        final titleWidth = pageSize.width - dateSize.width - 20;
+
+        page.graphics.drawString(
+          entry.title,
+          _entryTitleFont,
+          bounds: ui.Rect.fromLTWH(0, y, titleWidth, 14),
+          brush: PdfBrushes.black,
+        );
+
+        if (dateStr.isNotEmpty) {
+          page.graphics.drawString(
+            dateStr,
+            _smallFont,
+            bounds: ui.Rect.fromLTWH(pageSize.width - dateSize.width, y, dateSize.width, 12),
+            brush: PdfSolidBrush(_lightTextColor),
+          );
+        }
+        y += 16;
+
+        // Subtitle
+        if (entry.subtitle?.isNotEmpty == true) {
+          page.graphics.drawString(
+            entry.subtitle!,
+            _entrySubtitleFont,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
+            brush: PdfSolidBrush(_textColor),
+          );
+          y += 15;
+        }
+
+        // Meta
+        if (entry.meta?.isNotEmpty == true) {
+          page.graphics.drawString(
+            entry.meta!,
+            _smallFont,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
+            brush: PdfSolidBrush(_lightTextColor),
+          );
+          y += 13;
+        }
+
+        y += 4;
+
+        // Bullets
+        for (final bullet in entry.bullets) {
+          if (y + 20 > pageSize.height) {
+            page = document.pages.add();
+            y = 0;
+          }
+          final bulletResult = _drawJustifiedBullet(document, page, bullet, y, pageSize.width);
+          page = bulletResult.page;
+          y = bulletResult.bounds.bottom + 4;
+        }
+        
+        y += 10;
+      }
       return (page: page, y: y);
     }
   }

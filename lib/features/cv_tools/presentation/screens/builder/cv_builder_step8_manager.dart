@@ -7,7 +7,6 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
-import 'package:resummy_app/features/cv_tools/presentation/widgets/custom_section_editor_dialog.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
@@ -208,6 +207,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
   }
 
   Widget _buildSectionCard(SectionData section, CVBuilderProvider provider, int index, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingTitleSectionId == section.id;
     final controller = _getController(section);
     final theme = Theme.of(context);
@@ -343,7 +343,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   Icon(Iconsax.document, size: 14, color: theme.disabledColor),
                   const SizedBox(width: 4),
                   Text(
-                    '${_getEntryCount(section)} entries',
+                    l10n.entriesCount(_getEntryCount(section)),
                     style: TextStyle(
                       fontSize: 12,
                       color: theme.disabledColor,
@@ -391,19 +391,13 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
 
   // ⭐ NEW: Edit Custom Section Dialog
   void _showEditCustomSectionDialog(CVBuilderProvider provider, CustomSection section) {
-    showDialog(
-      context: context,
-      builder: (context) => CustomSectionEditorDialog(
-        provider: provider,
-        section: section,
-      ),
-    );
+    // Navigate to the full screen editor
+    context.router.push(CvBuilderCustomSectionStepRoute(sectionId: section.id));
   }
 
   void _showAddCustomSectionDialog(CVBuilderProvider provider) {
-    final titleController = TextEditingController();
     final l10n = AppLocalizations.of(context)!;
-    SectionTemplate selectedTemplate = SectionTemplate.simpleList;
+    CustomSectionTemplate selectedTemplate = CustomSectionTemplate.experienceLike;
 
     showModalBottomSheet(
       context: context,
@@ -416,10 +410,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: EdgeInsets.only(
-            left: 20, 
-            right: 20, 
-            top: 24, 
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -437,71 +431,111 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               Text(
-                l10n.addCustomSection,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                l10n.selectSectionFormat,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
 
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(
-                  labelText: l10n.sectionLabel,
-                  hintText: l10n.sectionLabelHint,
-                  border: const OutlineInputBorder(),
-                  counterText: '',
-                  prefixIcon: const Icon(Iconsax.text),
-                ),
-                autofocus: true,
-                maxLength: 30,
-              ),
-              const SizedBox(height: 16),
-              
-              const Text(
-                'Template:',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              
-              DropdownButtonFormField<SectionTemplate>(
-                value: selectedTemplate,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                  prefixIcon: Icon(Iconsax.document_text),
-                ),
-                items: SectionTemplate.values.map((template) {
-                  return DropdownMenuItem(
-                    value: template,
-                    child: Text(template.name.toUpperCase()),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedTemplate = value;
-                    });
-                  }
-                },
-              ),
-              
-              const SizedBox(height: 24),
-              
+              // Template Selection
+              ...CustomSectionTemplate.values.map((template) {
+                final isSelected = selectedTemplate == template;
+                return GestureDetector(
+                  onTap: () => setState(() => selectedTemplate = template),
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Theme.of(context).primaryColor.withOpacity(0.08)
+                          : Theme.of(context).cardColor,
+                      border: Border.all(
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey.shade300,
+                        width: isSelected ? 2 : 1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _getTemplateIcon(template),
+                          color: isSelected
+                              ? Theme.of(context).primaryColor
+                              : Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _getTemplateName(template),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColor
+                                      : Theme.of(context).textTheme.bodyLarge?.color,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                _getTemplateDesc(template),
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isSelected)
+                          Icon(
+                            Icons.check_circle,
+                            color: Theme.of(context).primaryColor,
+                            size: 18,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+
+              const SizedBox(height: 20),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (titleController.text.trim().isNotEmpty) {
-                      provider.addCustomSection(
-                        titleController.text.trim(),
-                        template: selectedTemplate,
-                      );
-                      Navigator.pop(context);
+                    // Determine default title
+                    String defaultTitle;
+                    switch (selectedTemplate) {
+                      case CustomSectionTemplate.experienceLike:
+                        defaultTitle = l10n.projectExperience;
+                        break;
+                      case CustomSectionTemplate.educationLike:
+                        defaultTitle = l10n.courseCertification;
+                        break;
+                      case CustomSectionTemplate.skillsLike:
+                        defaultTitle = l10n.otherSkills;
+                        break;
+                      case CustomSectionTemplate.bulletList:
+                        defaultTitle = l10n.additionalInfo;
+                        break;
+                      case CustomSectionTemplate.paragraph:
+                        defaultTitle = l10n.briefProfile;
+                        break;
                     }
+
+                    provider.addCustomSection(
+                      defaultTitle,
+                      template: selectedTemplate,
+                    );
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -509,7 +543,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(l10n.save, style: const TextStyle(fontSize: 16)),
+                  child: Text(l10n.createSection, style: const TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -519,7 +553,24 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     );
   }
 
+  // Helper methods untuk dialog:
+  IconData _getTemplateIcon(CustomSectionTemplate template) {
+    switch (template) {
+      case CustomSectionTemplate.experienceLike:
+        return Iconsax.briefcase;
+      case CustomSectionTemplate.educationLike:
+        return Iconsax.teacher;
+      case CustomSectionTemplate.skillsLike:
+        return Iconsax.code;
+      case CustomSectionTemplate.bulletList:
+        return Iconsax.menu;
+      case CustomSectionTemplate.paragraph:
+        return Iconsax.document_text;
+    }
+  }
+
   void _showDeleteConfirmation(CVBuilderProvider provider, CustomSection section) {
+    if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
@@ -544,29 +595,35 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     );
   }
 
-  String _getTemplateName(SectionTemplate template) {
+  String _getTemplateName(CustomSectionTemplate template) {
+    final l10n = AppLocalizations.of(context)!;
     switch (template) {
-      case SectionTemplate.bulletList:
-        return 'Bullet List';
-      case SectionTemplate.categoryList:
-        return 'Category List';
-      case SectionTemplate.paragraph:
-        return 'Paragraph';
-      case SectionTemplate.simpleList:
-        return 'Simple List';
+      case CustomSectionTemplate.experienceLike:
+        return l10n.templateExperienceName;
+      case CustomSectionTemplate.educationLike:
+        return l10n.templateEducationName;
+      case CustomSectionTemplate.skillsLike:
+        return l10n.templateSkillsName;
+      case CustomSectionTemplate.bulletList:
+        return l10n.templateBulletName;
+      case CustomSectionTemplate.paragraph:
+        return l10n.templateParagraphName;
     }
   }
 
-  String _getTemplateDescription(SectionTemplate template) {
+  String _getTemplateDesc(CustomSectionTemplate template) {
+    final l10n = AppLocalizations.of(context)!;
     switch (template) {
-      case SectionTemplate.bulletList:
-        return 'Best for: Awards, Projects, Achievements\nFormat: • Bullet point entries';
-      case SectionTemplate.categoryList:
-        return 'Best for: Skills by category\nFormat: Category: item1, item2, item3';
-      case SectionTemplate.paragraph:
-        return 'Best for: Summary, Description\nFormat: Continuous paragraph text';
-      case SectionTemplate.simpleList:
-        return 'Best for: Simple lists\nFormat: • Item 1\n• Item 2';
+      case CustomSectionTemplate.experienceLike:
+        return l10n.templateExperienceDesc;
+      case CustomSectionTemplate.educationLike:
+        return l10n.templateEducationDesc;
+      case CustomSectionTemplate.skillsLike:
+        return l10n.templateSkillsDesc;
+      case CustomSectionTemplate.bulletList:
+        return l10n.templateBulletDesc;
+      case CustomSectionTemplate.paragraph:
+        return l10n.templateParagraphDesc;
     }
   }
 }

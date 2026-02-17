@@ -409,16 +409,16 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
             DropdownButtonFormField<String>(
               // ignore: deprecated_member_use
               value: _employmentType,
-              decoration: const InputDecoration(
-                labelText: 'Tipe Pekerjaan',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.employmentTypeLabel,
+                border: const OutlineInputBorder(),
               ),
-              items: const [
-                DropdownMenuItem(value: 'Full-time', child: Text('Full-time')),
-                DropdownMenuItem(value: 'Part-time', child: Text('Part-time')),
-                DropdownMenuItem(value: 'Contract', child: Text('Contract')),
-                DropdownMenuItem(value: 'Freelance', child: Text('Freelance')),
-                DropdownMenuItem(value: 'Internship', child: Text('Internship')),
+              items: [
+                DropdownMenuItem(value: 'Full-time', child: Text(l10n.employmentTypeFullTime)),
+                DropdownMenuItem(value: 'Part-time', child: Text(l10n.employmentTypePartTime)),
+                DropdownMenuItem(value: 'Contract', child: Text(l10n.employmentTypeContract)),
+                DropdownMenuItem(value: 'Freelance', child: Text(l10n.employmentTypeFreelance)),
+                DropdownMenuItem(value: 'Internship', child: Text(l10n.employmentTypeInternship)),
               ],
               onChanged: (val) {
                 if (val != null) setState(() => _employmentType = val);

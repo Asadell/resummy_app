@@ -70,8 +70,8 @@ class CvBuilderPreviewScreen extends StatelessWidget {
                       
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('CV berhasil disimpan!'),
+                          SnackBar(
+                            content: Text(l10n.cvSavedSuccess),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -79,7 +79,7 @@ class CvBuilderPreviewScreen extends StatelessWidget {
                         context.router.push(const CvToolsHubRoute());
                       }
                     },
-                    child: const Text('Simpan sebagai Draft'),
+                    child: Text(l10n.saveAsDraft),
                   ),
                   
                   const SizedBox(height: 12),
@@ -96,12 +96,12 @@ class CvBuilderPreviewScreen extends StatelessWidget {
                     onPressed: () {
                       // TODO: Implement PDF download
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Download PDF akan segera tersedia!'),
+                        SnackBar(
+                          content: Text(l10n.downloadPdfUnavailable),
                         ),
                       );
                     },
-                    child: const Text('Download PDF'),
+                    child: Text(l10n.downloadPdf),
                   ),
                   
                   const SizedBox(height: 12),

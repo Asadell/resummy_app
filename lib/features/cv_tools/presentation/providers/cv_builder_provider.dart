@@ -512,24 +512,54 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add custom section
-  void addCustomSection(String title, {SectionTemplate template = SectionTemplate.simpleList}) {
+  /// Add custom section with proper template
+  void addCustomSection(
+    String title, {
+    CustomSectionTemplate template = CustomSectionTemplate.bulletList,
+  }) {
     if (_currentCV == null) return;
+
+    // Determine field labels based on template
+    String titleLabel = 'Title';
+    String subtitleLabel = 'Subtitle';
+    String metaLabel = 'Detail';
+
+    if (template == CustomSectionTemplate.experienceLike) {
+      titleLabel = 'Nama Organisasi / Perusahaan';
+      subtitleLabel = 'Peran / Posisi';
+      metaLabel = 'Lokasi';
+    } else if (template == CustomSectionTemplate.educationLike) {
+      titleLabel = 'Institusi';
+      subtitleLabel = 'Gelar / Program';
+      metaLabel = 'GPA / Info Tambahan';
+    } else if (template == CustomSectionTemplate.skillsLike) {
+      titleLabel = 'Kategori';
+      subtitleLabel = 'Skills';
+      metaLabel = 'Info Tambahan';
+    }
 
     final newSection = CustomSection(
       id: _uuid.v4(),
       title: title,
-      content: '',
       template: template,
+      entries: const [],
+      content: '',
+      skillCategories: const {},
+      titleLabel: titleLabel,
+      subtitleLabel: subtitleLabel,
+      metaLabel: metaLabel,
     );
 
-    final sections = List<SectionData>.from(_currentCV!.sections)..add(newSection);
+    final List<SectionData> sections = List<SectionData>.from(_currentCV!.sections)..add(newSection);
     _currentCV = _currentCV!.copyWith(sections: sections);
     notifyListeners();
   }
 
-  /// Update custom section
-  void updateCustomSection(String sectionId, String content) {
+  /// Update custom section content (for bulletList & paragraph templates)
+  void updateCustomSectionContent({
+    required String sectionId,
+    required String content,
+  }) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
@@ -543,11 +573,141 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Add entry to custom section (for experienceLike & educationLike templates)
+  void addCustomEntry({
+    required String sectionId,
+    required CustomEntry entry,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        final entries = List<CustomEntry>.from(section.entries)..add(entry);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update entry in custom section
+  void updateCustomEntry({
+    required String sectionId,
+    required int entryIndex,
+    required CustomEntry entry,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        if (entryIndex >= section.entries.length) return section;
+        final entries = List<CustomEntry>.from(section.entries);
+        entries[entryIndex] = entry;
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove entry from custom section
+  void removeCustomEntry({
+    required String sectionId,
+    required int entryIndex,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        if (entryIndex >= section.entries.length) return section;
+        final entries = List<CustomEntry>.from(section.entries)..removeAt(entryIndex);
+        return section.copyWith(entries: entries);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add skill category to custom section (for skillsLike template)
+  void addCustomSkillCategory({
+    required String sectionId,
+    required String categoryName,
+    required List<String> skills,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        categories[categoryName] = skills;
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update skill category in custom section
+  void updateCustomSkillCategory({
+    required String sectionId,
+    required String oldName,
+    required String newName,
+    required List<String> skills,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        categories.remove(oldName);
+        categories[newName] = skills;
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove skill category from custom section
+  void removeCustomSkillCategory({
+    required String sectionId,
+    required String categoryName,
+  }) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section.id == sectionId && section is CustomSection) {
+        final categories = Map<String, List<String>>.from(section.skillCategories);
+        categories.remove(categoryName);
+        return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Legacy updateCustomSection → redirect ke updateCustomSectionContent
+  void updateCustomSection(String sectionId, String content) {
+    updateCustomSectionContent(sectionId: sectionId, content: content);
+  }
+
   /// Delete custom section
   void deleteCustomSection(String sectionId) {
     if (_currentCV == null) return;
 
-    final sections = _currentCV!.sections
+    final List<SectionData> sections = _currentCV!.sections
         .where((section) => section.id != sectionId)
         .toList();
 

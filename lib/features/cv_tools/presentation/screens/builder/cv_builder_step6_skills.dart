@@ -15,18 +15,18 @@ class CvBuilderStep6Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<CVBuilderProvider>(
       builder: (context, provider, _) {
         final cv = provider.currentCV;
         if (cv == null) {
           return Scaffold(
-            body: Center(child: Text('No CV data')),
+            body: Center(child: Text(l10n.noCvData)),
           );
         }
 
         final currentStep = DynamicCvSteps.getStepForSection(context, 'skills');
         final totalSteps = DynamicCvSteps.getTotalSteps(cv);
-        final l10n = AppLocalizations.of(context)!;
 
         return CVBuilderStepLayout(
           title: l10n.cvBuilder,
@@ -63,6 +63,7 @@ class _SkillsFormState extends State<_SkillsForm> {
   }
 
   void _addCategory(CVBuilderProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
       final skills = _skillsController.text
           .split(',')
@@ -78,7 +79,7 @@ class _SkillsFormState extends State<_SkillsForm> {
         _categoryController.clear();
         _skillsController.clear();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Skill category added')),
+          SnackBar(content: Text(l10n.skillCategoryAdded)),
         );
       }
     }
@@ -95,7 +96,7 @@ class _SkillsFormState extends State<_SkillsForm> {
             .firstOrNull;
 
         if (skillsSection == null) {
-          return const Center(child: Text('Skills section not found'));
+          return Center(child: Text(l10n.sectionNotFound));
         }
 
         final categories = skillsSection.skillCategories;
@@ -168,7 +169,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Skills Organization Tips:',
+                            l10n.skillsOrganizationTips,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.blue.shade900,
@@ -177,10 +178,10 @@ class _SkillsFormState extends State<_SkillsForm> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '• Group skills by category (Technical, Languages, Tools)\n'
-                            '• List most relevant skills first\n'
-                            '• Be specific (Node.js instead of just JavaScript)\n'
-                            '• Include proficiency levels if relevant',
+                            '• ${l10n.skillsTip1}\n'
+                            '• ${l10n.skillsTip2}\n'
+                            '• ${l10n.skillsTip3}\n'
+                            '• ${l10n.skillsTip4}',
                             style: TextStyle(
                               color: Colors.blue.shade800,
                               fontSize: 12,
@@ -199,7 +200,7 @@ class _SkillsFormState extends State<_SkillsForm> {
               // Existing Categories List
               if (categories.isNotEmpty) ...[
                  Text(
-                  'Added Categories',
+                  l10n.addedCategories,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -229,7 +230,7 @@ class _SkillsFormState extends State<_SkillsForm> {
 
               // Add New Category Form (Inline)
               Text(
-                'Add New Category',
+                l10n.addNewCategory,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -249,26 +250,26 @@ class _SkillsFormState extends State<_SkillsForm> {
                     children: [
                       TextFormField(
                         controller: _categoryController,
-                        decoration: const InputDecoration(
-                          labelText: 'Category Name',
+                        decoration: InputDecoration(
+                          labelText: l10n.categoryName,
                           hintText: 'e.g., Programming Languages',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Iconsax.tag),
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Iconsax.tag),
                         ),
                         textCapitalization: TextCapitalization.words,
-                        validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+                        validator: (value) => value == null || value.isEmpty ? l10n.categoryRequired : null,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _skillsController,
-                        decoration: const InputDecoration(
-                          labelText: 'Skills',
-                          hintText: 'Separate with commas: Java, Python, C++',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Iconsax.code),
+                        decoration: InputDecoration(
+                          labelText: l10n.skills,
+                          hintText: l10n.skillsHint,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Iconsax.code),
                         ),
                         maxLines: 3,
-                        validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+                        validator: (value) => value == null || value.isEmpty ? l10n.skillsRequired : null,
                       ),
                       const SizedBox(height: 16),
                       SizedBox(
@@ -276,7 +277,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                         child: ElevatedButton.icon(
                           onPressed: () => _addCategory(provider),
                           icon: const Icon(Iconsax.add),
-                          label: const Text('Add Category'),
+                          label: Text(l10n.addCategory),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
@@ -301,6 +302,7 @@ class _SkillsFormState extends State<_SkillsForm> {
     String oldCategory,
     List<String> currentSkills,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final categoryController = TextEditingController(text: oldCategory);
     final skillsController = TextEditingController(text: currentSkills.join(', '));
 
@@ -313,19 +315,19 @@ class _SkillsFormState extends State<_SkillsForm> {
           children: [
             TextField(
               controller: categoryController,
-              decoration: const InputDecoration(
-                labelText: 'Category Name *',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: '${l10n.categoryName} *',
+                border: const OutlineInputBorder(),
               ),
               textCapitalization: TextCapitalization.words,
             ),
             const SizedBox(height: 16),
             TextField(
               controller: skillsController,
-              decoration: const InputDecoration(
-                labelText: 'Skills *',
-                hintText: 'Separate with commas',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: '${l10n.skills} *',
+                hintText: l10n.skillsHint,
+                border: const OutlineInputBorder(),
               ),
               maxLines: 3,
             ),
@@ -334,7 +336,7 @@ class _SkillsFormState extends State<_SkillsForm> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -356,7 +358,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                 }
               }
             },
-            child: const Text('Save'),
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -368,15 +370,16 @@ class _SkillsFormState extends State<_SkillsForm> {
     CVBuilderProvider provider,
     String category,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Category'),
-        content: Text('Are you sure you want to delete "$category" category?'),
+        title: Text(l10n.deleteCategory),
+        content: Text(l10n.deleteCategoryConfirmation(category)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -387,7 +390,7 @@ class _SkillsFormState extends State<_SkillsForm> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Delete'),
+            child: Text(l10n.delete),
           ),
         ],
       ),

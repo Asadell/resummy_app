@@ -42,6 +42,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get next => 'Selanjutnya';
 
   @override
+  String get add => 'Tambah';
+
+  @override
   String get back => 'Kembali';
 
   @override
@@ -213,7 +216,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get summary => 'Ringkasan';
 
   @override
-  String get additionalInfo => 'Info Tambahan';
+  String get additionalInfo => 'Informasi Tambahan';
 
   @override
   String get screenUnderConstruction => 'Halaman ini sedang dalam pengembangan';
@@ -1209,6 +1212,245 @@ class AppLocalizationsId extends AppLocalizations {
   String get goBack => 'Kembali';
 
   @override
+  String get exitBuilderTitle => 'Keluar dari Pembuat CV?';
+
+  @override
+  String get exitBuilderMessage =>
+      'Progress Anda disimpan otomatis. Yakin ingin keluar?';
+
+  @override
+  String get stay => 'Tetap di sini';
+
+  @override
+  String get exit => 'Keluar';
+
+  @override
+  String get gpaLabel => 'IPK';
+
+  @override
+  String get sectionNotFound => 'Bagian tidak ditemukan';
+
+  @override
+  String get invalidSectionType => 'Tipe bagian tidak valid';
+
+  @override
+  String get addedCategories => 'Kategori yang Ditambahkan';
+
+  @override
+  String get addNewCategory => 'Tambah Kategori Baru';
+
+  @override
+  String get editCategory => 'Ubah Kategori';
+
+  @override
+  String get categoryName => 'Nama Kategori';
+
+  @override
+  String get skillCategoryAdded => 'Kategori keahlian berhasil ditambahkan';
+
+  @override
+  String get categoryRequired => 'Nama kategori wajib diisi';
+
+  @override
+  String get skillsRequired => 'Skills wajib diisi';
+
+  @override
+  String get skillsHint => 'Pisahkan dengan koma: Java, Python, C++';
+
+  @override
+  String get characters => 'karakter';
+
+  @override
+  String get editSkillCategory => 'Edit Kategori Skill';
+
+  @override
+  String get deleteCategory => 'Hapus Kategori';
+
+  @override
+  String deleteCategoryConfirmation(Object category) {
+    return 'Yakin ingin menghapus kategori \"$category\"?';
+  }
+
+  @override
+  String get skillsOrganizationTips => 'Tips Organisasi Skill:';
+
+  @override
+  String get skillsTip1 =>
+      'Grupkan skill berdasarkan kategori (Teknis, Bahasa, Tools)';
+
+  @override
+  String get skillsTip2 => 'Urutkan skill yang paling relevan di awal';
+
+  @override
+  String get skillsTip3 =>
+      'Gunakan nama yang spesifik (Node.js daripada hanya JavaScript)';
+
+  @override
+  String get skillsTip4 => 'Sertakan level kemahiran jika perlu';
+
+  @override
+  String get projectExperience => 'Project / Pengalaman';
+
+  @override
+  String get courseCertification => 'Kursus / Sertifikasi';
+
+  @override
+  String get otherSkills => 'Keahlian Lainnya';
+
+  @override
+  String get briefProfile => 'Profil Singkat';
+
+  @override
+  String get selectSectionFormat => 'Pilih Format Bagian';
+
+  @override
+  String get createSection => 'Buat Bagian';
+
+  @override
+  String get templateExperienceName => 'Format Pengalaman';
+
+  @override
+  String get templateExperienceDesc =>
+      'Cocok untuk: Volunteer, Proyek, Penghargaan dengan detail';
+
+  @override
+  String get templateEducationName => 'Format Pendidikan';
+
+  @override
+  String get templateEducationDesc =>
+      'Cocok untuk: Kursus, Sertifikasi informal, Training';
+
+  @override
+  String get templateSkillsName => 'Format Skills';
+
+  @override
+  String get templateSkillsDesc =>
+      'Cocok untuk: Kategori - Tools, Bahasa, Keahlian Teknis';
+
+  @override
+  String get templateBulletName => 'Bullet List';
+
+  @override
+  String get templateBulletDesc =>
+      'Cocok untuk: List sederhana seperti Kemampuan, Hobi';
+
+  @override
+  String get templateParagraphName => 'Paragraf';
+
+  @override
+  String get templateParagraphDesc =>
+      'Cocok untuk: Narasi panjang, Profil, Pernyataan';
+
+  @override
+  String get noItems => 'Belum ada item';
+
+  @override
+  String get addCategory => 'Tambah Kategori';
+
+  @override
+  String get noCategories => 'Belum ada kategori';
+
+  @override
+  String get addCategoryPrompt => 'Tekan \"Tambah Kategori\" untuk mulai';
+
+  @override
+  String get deleteItem => 'Hapus Item?';
+
+  @override
+  String deleteItemConfirmation(Object title) {
+    return 'Yakin ingin menghapus \"$title\"?';
+  }
+
+  @override
+  String get employmentTypeLabel => 'Tipe Pekerjaan';
+
+  @override
+  String get employmentTypeFullTime => 'Penuh Waktu';
+
+  @override
+  String get employmentTypePartTime => 'Paruh Waktu';
+
+  @override
+  String get employmentTypeContract => 'Kontrak';
+
+  @override
+  String get employmentTypeFreelance => 'Freelance';
+
+  @override
+  String get employmentTypeInternship => 'Magang';
+
+  @override
+  String itemsCount(Object count) {
+    return '$count item';
+  }
+
+  @override
+  String entriesCount(Object count) {
+    return '$count entri';
+  }
+
+  @override
+  String get startDate => 'Tanggal Mulai';
+
+  @override
+  String get endDate => 'Tanggal Selesai';
+
+  @override
+  String get currentlyActive => 'Saat ini masih berlangsung';
+
+  @override
+  String get bulletPoints => 'Bullet Points';
+
+  @override
+  String get addBulletPointHint => 'Tambah bullet point...';
+
+  @override
+  String get contentLabel => 'Konten';
+
+  @override
+  String get contentHint => 'Tulis konten untuk section ini...';
+
+  @override
+  String get titleRequired => 'Judul wajib diisi';
+
+  @override
+  String get categoryAndSkillsRequired =>
+      'Nama kategori dan skills harus diisi';
+
+  @override
+  String get typeAndAddHint => 'Ketik item dan tekan Tambah...';
+
+  @override
+  String get editItem => 'Edit Item';
+
+  @override
+  String get addItem => 'Tambah Item';
+
+  @override
+  String get formatExperience => 'Format: Pengalaman';
+
+  @override
+  String get formatEducation => 'Format: Pendidikan';
+
+  @override
+  String get formatSkills => 'Format: Skills';
+
+  @override
+  String get formatBulletList => 'Format: Bullet List';
+
+  @override
+  String get formatParagraph => 'Format: Paragraf';
+
+  @override
+  String get saveAsDraft => 'Simpan sebagai Draft';
+
+  @override
+  String get cvSavedSuccess => 'CV berhasil disimpan!';
+
+  @override
+  String get downloadPdfUnavailable => 'Download PDF akan segera tersedia!';
+
+  @override
   String get requiredField => 'Wajib diisi';
 
   @override
@@ -1338,12 +1580,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get companyName => 'Nama Perusahaan';
-
-  @override
-  String get startDate => 'Tanggal Mulai';
-
-  @override
-  String get endDate => 'Tanggal Selesai';
 
   @override
   String get responsibilities => 'Deskripsi / Tanggung Jawab';
@@ -1527,8 +1763,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get templateLabel => 'Template';
 
   @override
-  String get contentLabel => 'Konten';
+  String get previewLabel => 'Pratinjau';
 
   @override
-  String get previewLabel => 'Pratinjau';
+  String get addBulletPoint => 'Tambahkan poin';
 }

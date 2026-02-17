@@ -13,11 +13,218 @@ enum SectionType {
 }
 
 /// Template types for sections
-enum SectionTemplate {
-  bulletList,       // For experience, education, organization
-  categoryList,     // For skills (grouped by category)
-  paragraph,        // For summary
-  simpleList,       // For simple bullet points
+/// Template types for sections
+enum CustomSectionTemplate {
+  experienceLike, // Mirip Work Experience / Organization — ada title, subtitle, date, bullets
+  educationLike,  // Mirip Education — ada institution, degree, date, bullets
+  skillsLike,     // Mirip Skills — Category: item1, item2, item3
+  bulletList,     // Simple bullet list — hanya bullet points
+  paragraph,      // Paragraph — satu paragraf panjang
+}
+
+// Backward compatibility alias
+typedef SectionTemplate = CustomSectionTemplate;
+
+/// Custom entry for structured custom sections
+class CustomEntry extends Equatable {
+  final String id;
+  final String title; // Bold (Company / Organization / etc)
+  final String? subtitle; // Italic (Role / Degree / etc)
+  final String? meta; // Meta info (Location, GPA, Issuer, etc)
+  final String? startDate;
+  final String? endDate;
+  final bool isPresent;
+  final List<String> bullets;
+
+  const CustomEntry({
+    required this.id,
+    required this.title,
+    this.subtitle,
+    this.meta,
+    this.startDate,
+    this.endDate,
+    this.isPresent = false,
+    this.bullets = const [],
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        subtitle,
+        meta,
+        startDate,
+        endDate,
+        isPresent,
+        bullets,
+      ];
+
+  CustomEntry copyWith({
+    String? id,
+    String? title,
+    String? subtitle,
+    String? meta,
+    String? startDate,
+    String? endDate,
+    bool? isPresent,
+    List<String>? bullets,
+  }) {
+    return CustomEntry(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      meta: meta ?? this.meta,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isPresent: isPresent ?? this.isPresent,
+      bullets: bullets ?? this.bullets,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'subtitle': subtitle,
+        'meta': meta,
+        'startDate': startDate,
+        'endDate': endDate,
+        'isPresent': isPresent,
+        'bullets': bullets,
+      };
+
+  factory CustomEntry.fromJson(Map<String, dynamic> json) => CustomEntry(
+        id: json['id'] as String,
+        title: json['title'] as String,
+        subtitle: json['subtitle'] as String?,
+        meta: json['meta'] as String?,
+        startDate: json['startDate'] as String?,
+        endDate: json['endDate'] as String?,
+        isPresent: json['isPresent'] as bool? ?? false,
+        bullets: List<String>.from(json['bullets'] as List? ?? []),
+      );
+}
+
+/// Custom Section
+class CustomSection extends SectionData {
+  final CustomSectionTemplate template;
+  final List<CustomEntry> entries;
+  final String content; // For bulletList and paragraph
+  final Map<String, List<String>> skillCategories; // Map<CategoryName, List<SkillItem>>
+  
+  // Label hints
+  final String titleLabel;
+  final String subtitleLabel;
+  final String metaLabel;
+
+  const CustomSection({
+    required super.id,
+    required super.title,
+    super.isVisible = true,
+    this.template = CustomSectionTemplate.bulletList,
+    this.entries = const [],
+    this.content = '',
+    this.skillCategories = const {},
+    this.titleLabel = 'Title',
+    this.subtitleLabel = 'Subtitle',
+    this.metaLabel = 'Details',
+  }) : super(type: SectionType.custom);
+
+  bool get isEmpty {
+    switch (template) {
+      case CustomSectionTemplate.experienceLike:
+      case CustomSectionTemplate.educationLike:
+        return entries.isEmpty;
+      case CustomSectionTemplate.skillsLike:
+        return skillCategories.isEmpty ||
+            skillCategories.values.every((v) => v.isEmpty);
+      case CustomSectionTemplate.bulletList:
+      case CustomSectionTemplate.paragraph:
+        return content.trim().isEmpty;
+    }
+  }
+  
+  CustomSection copyWith({
+    String? id,
+    String? title,
+    bool? isVisible,
+    CustomSectionTemplate? template,
+    List<CustomEntry>? entries,
+    String? content,
+    Map<String, List<String>>? skillCategories,
+    String? titleLabel,
+    String? subtitleLabel,
+    String? metaLabel,
+  }) {
+    return CustomSection(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      isVisible: isVisible ?? this.isVisible,
+      template: template ?? this.template,
+      entries: entries ?? this.entries,
+      content: content ?? this.content,
+      skillCategories: skillCategories ?? this.skillCategories,
+      titleLabel: titleLabel ?? this.titleLabel,
+      subtitleLabel: subtitleLabel ?? this.subtitleLabel,
+      metaLabel: metaLabel ?? this.metaLabel,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': 'custom',
+      'title': title,
+      'isVisible': isVisible,
+      'template': template.name,
+      'entries': entries.map((e) => e.toJson()).toList(),
+      'content': content,
+      'skillCategories': skillCategories.map((k, v) => MapEntry(k, v)),
+      'titleLabel': titleLabel,
+      'subtitleLabel': subtitleLabel,
+      'metaLabel': metaLabel,
+    };
+  }
+
+  factory CustomSection.fromJson(Map<String, dynamic> json) {
+    final templateStr = json['template'] as String? ?? 'bulletList';
+    CustomSectionTemplate template;
+    try {
+      template = CustomSectionTemplate.values.firstWhere(
+        (e) => e.name == templateStr,
+        orElse: () => CustomSectionTemplate.bulletList,
+      );
+    } catch (_) {
+      template = CustomSectionTemplate.bulletList;
+    }
+
+    // Parse skillCategories
+    Map<String, List<String>> skillCategories = {};
+    final rawCategories = json['skillCategories'];
+    if (rawCategories is Map) {
+      skillCategories = rawCategories.map(
+        (k, v) => MapEntry(
+          k.toString(),
+          (v as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+        ),
+      );
+    }
+
+    return CustomSection(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      isVisible: json['isVisible'] as bool? ?? true,
+      template: template,
+      entries: (json['entries'] as List<dynamic>?)
+              ?.map((e) => CustomEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ?? [],
+      content: json['content'] as String? ?? '',
+      skillCategories: skillCategories,
+      titleLabel: json['titleLabel'] as String? ?? 'Title',
+      subtitleLabel: json['subtitleLabel'] as String? ?? 'Subtitle',
+      metaLabel: json['metaLabel'] as String? ?? 'Details',
+    );
+  }
 }
 
 /// Base class for section data
@@ -742,59 +949,7 @@ class CertificationsSection extends SectionData {
   }
 }
 
-/// Custom Section
-class CustomSection extends SectionData {
-  final String content;
-  final SectionTemplate template;
-  
-  const CustomSection({
-    required super.id,
-    required super.title,
-    required this.content,
-    this.template = SectionTemplate.simpleList,
-    super.isVisible,
-  }) : super(type: SectionType.custom);
-  
-  CustomSection copyWith({
-    String? title,
-    String? content,
-    SectionTemplate? template,
-    bool? isVisible,
-  }) {
-    return CustomSection(
-      id: id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      template: template ?? this.template,
-      isVisible: isVisible ?? this.isVisible,
-    );
-  }
 
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': 'custom',
-      'title': title,
-      'isVisible': isVisible,
-      'content': content,
-      'template': template.name,
-    };
-  }
-
-  factory CustomSection.fromJson(Map<String, dynamic> json) {
-    return CustomSection(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      template: SectionTemplate.values.firstWhere(
-        (e) => e.name == json['template'],
-        orElse: () => SectionTemplate.simpleList,
-      ),
-      isVisible: json['isVisible'] as bool? ?? true,
-    );
-  }
-}
 
 /// Main CV Data with ordered sections
 class CVData extends Equatable {
