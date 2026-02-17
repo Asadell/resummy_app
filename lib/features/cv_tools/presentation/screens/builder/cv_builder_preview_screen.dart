@@ -170,7 +170,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         title: Text(l10n.previewCV),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => context.router.maybePop(),
         ),
         actions: [

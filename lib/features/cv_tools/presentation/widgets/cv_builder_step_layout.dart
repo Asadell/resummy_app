@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
@@ -62,7 +63,7 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Iconsax.arrow_left_1),
               onPressed: () => _showExitConfirmation(context, l10n),
             ),
             title: Text(stepTitle),

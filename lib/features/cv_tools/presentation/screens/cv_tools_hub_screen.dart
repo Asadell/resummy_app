@@ -30,6 +30,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.cvTools),
       ),
       body: SafeArea(

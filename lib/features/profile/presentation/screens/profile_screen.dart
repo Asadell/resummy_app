@@ -56,6 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text(l10n.profile),
           ),
           body: SafeArea(

@@ -19,6 +19,7 @@ class InterviewPrepScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.interviewPrep),
       ),
       body: SafeArea(

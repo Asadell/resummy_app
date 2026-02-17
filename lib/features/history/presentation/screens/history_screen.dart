@@ -17,6 +17,7 @@ class HistoryScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.history),
       ),
       body: SafeArea(
