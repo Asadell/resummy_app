@@ -1559,7 +1559,7 @@ abstract class AppLocalizations {
   /// No description provided for @extractedRequirements.
   ///
   /// In en, this message translates to:
-  /// **'Extracted Requirements:'**
+  /// **'Extracted Requirements'**
   String get extractedRequirements;
 
   /// No description provided for @noJdQuestion.
@@ -2543,7 +2543,7 @@ abstract class AppLocalizations {
   /// No description provided for @readyToStartDesc.
   ///
   /// In en, this message translates to:
-  /// **'You\'re ready to start the interview simulation.'**
+  /// **'You are ready to start the AI interview simulation.'**
   String get readyToStartDesc;
 
   /// No description provided for @uploadedFromDevice.
@@ -3901,6 +3901,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Year must be at least 1945'**
   String get invalidYearMin1945;
+
+  /// No description provided for @stopInterviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Analysis?'**
+  String get stopInterviewTitle;
+
+  /// No description provided for @stopInterviewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If you leave now, the analysis will be cancelled and you will lose your interview data.'**
+  String get stopInterviewDesc;
+
+  /// No description provided for @recentInterviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Interviews'**
+  String get recentInterviews;
+
+  /// No description provided for @noInterviewHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No interview history yet.'**
+  String get noInterviewHistory;
+
+  /// No description provided for @sectionOrderVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Section Order & Visibility'**
+  String get sectionOrderVisibility;
+
+  /// No description provided for @sectionOrderTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag sections to reorder, toggle visibility, or edit titles'**
+  String get sectionOrderTip;
+
+  /// No description provided for @jobDescSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For more accurate keyword analysis'**
+  String get jobDescSubtitle;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get filterHigh;
+
+  /// No description provided for @filterMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get filterMedium;
+
+  /// No description provided for @filterLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get filterLow;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @cobaLagi.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get cobaLagi;
+
+  /// No description provided for @uploadYourCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Your CV'**
+  String get uploadYourCv;
+
+  /// No description provided for @cvAnalyzerSetupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get in-depth analysis and improvement suggestions for your CV'**
+  String get cvAnalyzerSetupDesc;
+
+  /// No description provided for @jobDescPasteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste job description here for better keyword matching...'**
+  String get jobDescPasteHint;
+
+  /// No description provided for @max5Pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Max 5 pages'**
+  String get max5Pages;
+
+  /// No description provided for @applyingSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying suggestions and reformatting your CV...'**
+  String get applyingSuggestions;
+
+  /// No description provided for @overallAtsScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall ATS Score'**
+  String get overallAtsScore;
+
+  /// No description provided for @noSuggestionsForFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'No suggestions for this filter'**
+  String get noSuggestionsForFilter;
+
+  /// No description provided for @originalText.
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get originalText;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @undoApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo Apply'**
+  String get undoApply;
+
+  /// No description provided for @undoDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo Dismiss'**
+  String get undoDismiss;
+
+  /// No description provided for @createCvFromSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Create CV ATS from these {count} suggestions'**
+  String createCvFromSuggestions(Object count);
+
+  /// No description provided for @createNewAtsCvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New CV ATS?'**
+  String get createNewAtsCvTitle;
+
+  /// No description provided for @createCvAtsConfirmationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The system will create a new CV based on your original CV plus all the suggestions you have \"Applied\".\n\nThis CV can be edited again in the CV Builder.'**
+  String get createCvAtsConfirmationDesc;
+
+  /// No description provided for @createNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Now'**
+  String get createNow;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @replayQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay Question'**
+  String get replayQuestion;
+
+  /// No description provided for @processingAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing answer...'**
+  String get processingAnswer;
+
+  /// No description provided for @processing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get processing;
+
+  /// No description provided for @companyNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Google, Microsoft'**
+  String get companyNameHint;
+
+  /// No description provided for @max5PagesInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Max 5 pages for interview simulation.'**
+  String get max5PagesInterview;
+
+  /// No description provided for @profileInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Info'**
+  String get profileInfo;
+
+  /// No description provided for @errorSavingProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving profile. Please try again.'**
+  String get errorSavingProfile;
+
+  /// No description provided for @loginError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String loginError(Object error);
+
+  /// No description provided for @buildYourCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'Build Your Career'**
+  String get buildYourCareer;
+
+  /// No description provided for @cvSourceBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Builder'**
+  String get cvSourceBuilder;
+
+  /// No description provided for @cvSourceAtsConverter.
+  ///
+  /// In en, this message translates to:
+  /// **'ATS Converter'**
+  String get cvSourceAtsConverter;
+
+  /// No description provided for @cvSourceAnalyzer.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzer'**
+  String get cvSourceAnalyzer;
 }
 
 class _AppLocalizationsDelegate

@@ -8,6 +8,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -36,9 +37,18 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     super.initState();
     final provider = context.read<CVBuilderProvider>();
     final cv = provider.currentCV;
+    final profile = context.read<ProfileProvider>().profile;
     
-    _nameController = TextEditingController(text: cv?.name);
-    _emailController = TextEditingController(text: cv?.email);
+    _nameController = TextEditingController(
+      text: (cv?.name?.isNotEmpty == true) 
+          ? cv!.name 
+          : (profile?.fullName ?? ''),
+    );
+    _emailController = TextEditingController(
+      text: (cv?.email?.isNotEmpty == true) 
+          ? cv!.email 
+          : (profile?.email ?? ''),
+    );
     // For phone, we might want to try to strip country code if possible, 
     // but for now let's just use it as is. The user can correct it.
      // If we really want to be smart, we could try to parse, but let's leave it simple.

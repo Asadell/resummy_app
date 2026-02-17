@@ -28,7 +28,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.confirmation),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => context.router.back(),
         ),
         actions: [
@@ -82,7 +82,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                l10n.readyToStartDesc, // Localization needed
+                l10n.readyToStartDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

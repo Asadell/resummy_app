@@ -100,7 +100,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                         else
                           ...report.strengths.map((s) => Column(
                             children: [
-                              _buildListItem(context, '✓ $s', Theme.of(context).colorScheme.onSurface),
+                              _buildListItem(context, s, Theme.of(context).colorScheme.onSurface, Iconsax.tick_circle),
                               const SizedBox(height: 10),
                             ],
                           )),
@@ -138,7 +138,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                         else
                           ...report.improvements.map((s) => Column(
                             children: [
-                              _buildListItem(context, '⚠️ $s', Theme.of(context).colorScheme.onSurface),
+                              _buildListItem(context, s, Theme.of(context).colorScheme.onSurface, Iconsax.info_circle),
                               const SizedBox(height: 10),
                             ],
                           )),
@@ -187,7 +187,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                    // Dashboard button
                    OutlinedButton.icon(
                     onPressed: () => context.router.push(const InterviewPrepRoute()), // Or HomeRoute
-                    icon: const Icon(Icons.home),
+                    icon: const Icon(Iconsax.home),
                     label: Text(l10n.dashboard),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.gray600,
@@ -204,10 +204,12 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildListItem(BuildContext context, String text, Color color) {
+  Widget _buildListItem(BuildContext context, String text, Color color, IconData icon) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Icon(icon, size: 16, color: icon == Iconsax.tick_circle ? AppColors.secondary : AppColors.warning),
+        const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,

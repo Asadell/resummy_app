@@ -7,6 +7,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'dart:math' as math;
+import 'package:intl/intl.dart';
 
 @RoutePage()
 class InterviewFeedbackOverviewScreen extends StatelessWidget {
@@ -79,7 +80,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '29 Jan 2026 | ${l10n.durationLabel}: 14:32', // TODO: Add timing to provider
+                          '${report.questionFeedbacks.length} ${l10n.questions} | ${DateFormat('d MMM yyyy • HH:mm').format(report.createdAt)}',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                           ),

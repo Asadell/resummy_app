@@ -35,6 +35,7 @@ class CVBuilderProvider extends ChangeNotifier {
     String? name,
     String? email,
     String? phone,
+    String source = 'builder',
   }) {
     final now = DateTime.now();
     final headerId = _uuid.v4();
@@ -88,6 +89,7 @@ class CVBuilderProvider extends ChangeNotifier {
           isVisible: true,
         ),
       ],
+      source: source,
     );
     _currentStep = 1;
     _errorMessage = null;
@@ -97,6 +99,14 @@ class CVBuilderProvider extends ChangeNotifier {
   /// Update entire CV (for template changes or reordering)
   void updateCV(CVData updatedCV) {
     _currentCV = updatedCV;
+    notifyListeners();
+  }
+
+  /// Load existing CVData for editing (e.g. from CV Analyzer)
+  void loadCvData(CVData cvData) {
+    _currentCV = cvData;
+    _currentStep = 1;
+    _errorMessage = null;
     notifyListeners();
   }
 

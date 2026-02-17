@@ -12,12 +12,15 @@ import 'package:resummy_app/features/interview/domain/entities/interview_questio
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 
+import 'package:resummy_app/features/interview/data/repositories/interview_history_repository.dart';
+
 enum InterviewStatus { initial, loading, inProgress, analyzing, completed, error }
 enum InterviewFocus { behavioral, technical, mixed }
 
 class InterviewProvider extends ChangeNotifier {
   final GeminiSpeechService _geminiService;
   final GeminiInterviewService _interviewService;
+  final InterviewHistoryRepository _repository;
   
   // State
   InterviewStatus _status = InterviewStatus.initial;
@@ -25,6 +28,10 @@ class InterviewProvider extends ChangeNotifier {
   List<InterviewQuestion> _questions = [];
   int _currentQuestionIndex = 0;
   
+  // History
+  List<InterviewReport> _history = [];
+  List<InterviewReport> get history => _history;
+
   // Interview Data
   String? _cvText;
   String? _jdText;
@@ -67,10 +74,18 @@ class InterviewProvider extends ChangeNotifier {
   InterviewProvider({
     required GeminiSpeechService geminiService,
     required GeminiInterviewService interviewService,
+    required InterviewHistoryRepository repository,
   }) : _geminiService = geminiService,
-       _interviewService = interviewService {
+       _interviewService = interviewService,
+       _repository = repository {
     // Suppress verbose audio logs
     AudioLogger.logLevel = AudioLogLevel.none;
+    loadHistory();
+  }
+
+  Future<void> loadHistory() async {
+    _history = await _repository.getInterviews();
+    notifyListeners();
   }
 
   // Getters
@@ -97,6 +112,11 @@ class InterviewProvider extends ChangeNotifier {
   
   InterviewReport? _report;
   InterviewReport? get report => _report;
+
+  void setReport(InterviewReport report) {
+    _report = report;
+    notifyListeners();
+  }
 
   // Setup Setters
   void updateCvText(String text) {
@@ -234,6 +254,8 @@ class InterviewProvider extends ChangeNotifier {
       const InterviewQuestion(id: '1', text: 'Tell me about a time you faced a challenge.', difficulty: 'Medium', userAnswerTranscript: "I once faced a tight deadline where the backend API wasn't ready. I mocked the data using JSON files to continue frontend development, which allowed us to meet the deadline.", audioDurationSeconds: 15),
       const InterviewQuestion(id: '2', text: 'Describe a project where you demonstrated leadership.', difficulty: 'Medium', userAnswerTranscript: "In my final year project, I led a team of 4. I organized daily standups and used Trello to track progress. We finished the project 2 weeks early.", audioDurationSeconds: 20),
       const InterviewQuestion(id: '3', text: 'How do you prioritize tasks under pressure?', difficulty: 'Medium', userAnswerTranscript: "I use the Eisenhower Matrix to categorize tasks by urgency and importance. This helps me focus on what really matters.", audioDurationSeconds: 12),
+      const InterviewQuestion(id: '4', text: 'What are your strengths and weaknesses?', difficulty: 'Medium', userAnswerTranscript: "My strengths are persistence and attention to detail. My weakness is sometimes taking on too much at once, but I am learning to delegate better.", audioDurationSeconds: 18),
+      const InterviewQuestion(id: '5', text: 'Where do you see yourself in five years?', difficulty: 'Medium', userAnswerTranscript: "I see myself as a senior developer leading impact projects and mentoring junior devs to grow the team's technical excellence.", audioDurationSeconds: 10),
     ];
     
     _currentQuestionIndex = _questions.length - 1; // Set to last
@@ -444,22 +466,46 @@ class InterviewProvider extends ChangeNotifier {
     }
     
     try {
-      if (kDebugMode) print('Starting report generation...');
+      debugPrint('--- [InterviewProvider] generateReport: STARTING analysis ---');
+      final startTime = DateTime.now();
       
       final report = await _interviewService.analyzeSession(
         _questions,
         language: _locale.startsWith('id') ? 'id' : 'en',
+        shouldStop: () => _isDisposed,
       );
       
+      if (_isDisposed) {
+         debugPrint('--- [InterviewProvider] generateReport: Disposed during analysis. Discarding result. ---');
+         return;
+      }
+
       _report = report;
       _status = InterviewStatus.completed;
       
-      if (kDebugMode) print('Report generated successfully!');
+      // Save persistence
+      await _repository.saveInterview(report);
+      await loadHistory();
+      
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime).inSeconds;
+      debugPrint('--- [InterviewProvider] generateReport: SUCCESS in ${duration}s ---');
     } catch (e) {
-      if (kDebugMode) print('Error generating report: $e');
+      debugPrint('--- [InterviewProvider] generateReport: FAILED with error: $e ---');
       _status = InterviewStatus.error;
       _errorMessage = 'Failed to generate feedback: $e';
     } finally {
+      notifyListeners();
+    }
+  }
+  
+  /// Cancel current interview analysis
+  void cancelAnalysis() {
+    debugPrint('--- [InterviewProvider] cancelAnalysis: Analysis cancelled by user ---');
+    _isDisposed = true; // Signals the service to stop
+    // We should also set status to initial or cancelled to update UI immediately if still mounted
+    if (_status == InterviewStatus.analyzing) {
+      _status = InterviewStatus.initial;
       notifyListeners();
     }
   }

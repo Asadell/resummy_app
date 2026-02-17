@@ -156,6 +156,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
   }
 
   Future<void> _completeOnboarding(BuildContext context, String displayName) async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
     
     final router = context.router;
@@ -180,7 +181,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
       setState(() => _isLoading = false);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error saving profile. Please try again.')),
+          SnackBar(content: Text(l10n.errorSavingProfile)),
         );
       }
     }

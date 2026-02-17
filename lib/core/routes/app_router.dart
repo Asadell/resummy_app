@@ -32,8 +32,6 @@ class AppRouter extends RootStackRouter {
 
         // CV Analyzer (No Bottom Nav)
         AutoRoute(page: CvAnalyzerUploadRoute.page),
-        AutoRoute(page: CvAnalyzerInputRoute.page),
-        AutoRoute(page: CvAnalyzerResultRoute.page),
 
         // CV Builder (No Bottom Nav)
         AutoRoute(page: CvBuilderWelcomeRoute.page),
@@ -49,13 +47,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CvBuilderPreviewRoute.page),
         AutoRoute(page: CvAtsConverterRoute.page),
 
-        // CV Translator (No Bottom Nav)
-        AutoRoute(page: CvTranslatorUploadRoute.page),
-        AutoRoute(page: CvTranslatorLanguageRoute.page),
-        AutoRoute(page: CvTranslatorLoadingRoute.page),
-        AutoRoute(page: CvTranslatorReviewRoute.page),
-        AutoRoute(page: CvTranslatorDownloadRoute.page),
-
         // CV History (No Bottom Nav)
         AutoRoute(page: CvHistoryRoute.page),
 
@@ -69,8 +60,7 @@ class AppRouter extends RootStackRouter {
         // Interview Session (No Bottom Nav)
         AutoRoute(page: InterviewSessionOpeningRoute.page),
         AutoRoute(page: InterviewSessionQuestionRoute.page),
-        AutoRoute(page: InterviewSessionFollowupRoute.page),
-        AutoRoute(page: InterviewSessionUserQuestionsRoute.page),
+
         AutoRoute(page: InterviewSessionClosingRoute.page),
 
         // Interview Feedback (No Bottom Nav)

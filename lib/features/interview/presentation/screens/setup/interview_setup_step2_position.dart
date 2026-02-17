@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
@@ -15,10 +16,26 @@ class InterviewSetupStep2Screen extends StatefulWidget {
 }
 
 class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
-  final _positionController = TextEditingController(text: 'Software Engineer');
-  final _companyController = TextEditingController(text: 'PT Tech Startup Indonesia');
+  late TextEditingController _positionController;
+  final _companyController = TextEditingController();
   int _selectedLevel = 1; // 0: Junior, 1: Mid, 2: Senior
   String _selectedIndustry = 'Technology';
+
+  @override
+  void initState() {
+    super.initState();
+    final profile = context.read<ProfileProvider>().profile;
+    _positionController = TextEditingController(
+      text: profile?.targetRole ?? 'Software Engineer',
+    );
+  }
+
+  @override
+  void dispose() {
+    _positionController.dispose();
+    _companyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +46,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
       appBar: AppBar(
         title: Text(l10n.setupInterview),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => context.router.push(const InterviewSetupStep1Route()),
         ),
         actions: [
@@ -126,7 +143,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     TextField(
                       controller: _companyController,
                       decoration: InputDecoration(
-                        hintText: 'e.g. Google, Microsoft',
+                        hintText: l10n.companyNameHint,
                         prefixIcon: const Icon(Iconsax.building_3),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -165,7 +182,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      initialValue: _selectedIndustry,
+                      value: _selectedIndustry,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -311,12 +328,5 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _positionController.dispose();
-    _companyController.dispose();
-    super.dispose();
   }
 }

@@ -92,6 +92,7 @@ class AuthScreen extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     
@@ -109,7 +110,7 @@ class AuthScreen extends StatelessWidget {
     } else if (authProvider.error != null) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${authProvider.error}')),
+          SnackBar(content: Text(l10n.loginError(authProvider.error!))),
         );
       }
     }

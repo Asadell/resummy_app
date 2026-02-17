@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:resummy_app/core/utils/pdf_utils.dart';
 
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
@@ -36,14 +36,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       if (result != null) {
         final path = result.files.single.path;
         if (path != null) {
-          final file = File(path);
-          final bytes = await file.readAsBytes();
-          
-          // Load the PDF document
-          final PdfDocument document = PdfDocument(inputBytes: bytes);
-          // Extract text
-          String text = PdfTextExtractor(document).extractText();
-          document.dispose();
+          // Extract text using centralized PdfUtils (enforces 5-page limit)
+          final text = await PdfUtils().extractText(path);
 
           setState(() {
             _uploadedCvName = result.files.single.name;
@@ -53,8 +47,13 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         }
       }
     } catch (e) {
+      String message = '${l10n.errorTitle}: $e';
+      if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
+        message = l10n.max5PagesInterview;
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${l10n.errorTitle}: $e')),
+        SnackBar(content: Text(message)),
       );
     }
   }
@@ -73,7 +72,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           ],
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => context.router.push(const InterviewPrepRoute()),
         ),
       ),
@@ -253,10 +252,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                 cvText = _uploadedCvText!;
                 cvName = _uploadedCvName ?? "Uploaded CV.pdf";
               } else if (_selectedCvIndex == 0) {
-                 cvText = "Experienced Flutter Developer with 5 years of experience in mobile app development. Proficient in Dart, BLoC pattern, and Clean Architecture. Strong background in integrating REST APIs and Firebase."; // Mock for CV 1
+                 cvText = "Experienced Flutter Developer with 5 years of experience in mobile app development. Proficient in Dart, BLoC pattern, and Clean Architecture. Strong background in integrating REST APIs and Firebase."; // Keep mock text as is, or localize if needed
                  cvName = "CV_Software_Engineer.pdf";
               } else {
-                 cvText = "Product Manager with 3 years experience in Fintech. Skilled in Agile methodology, user research, and roadmap planning. Experience leading cross-functional teams."; // Mock for CV 2
+                 cvText = "Product Manager with 3 years experience in Fintech. Skilled in Agile methodology, user research, and roadmap planning. Experience leading cross-functional teams."; // Keep mock text
                  cvName = "CV_Product_Manager.pdf";
               }
               

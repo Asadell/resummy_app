@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
+
 class CvAtsConverterService {
   final Uuid _uuid = const Uuid();
 
@@ -68,7 +69,7 @@ class CvAtsConverterService {
     }
 
     final rawJson = _extractJsonFromResponse(response.data);
-    return _parseJsonToCvData(rawJson);
+    return parseCvJson(jsonDecode(rawJson) as Map<String, dynamic>);
   }
 
   // ─── Retry logic untuk 503 / 429 ────────────────────────────
@@ -136,23 +137,17 @@ class CvAtsConverterService {
   }
 
   // ─── Parse JSON → CVData ─────────────────────────────────────
-  CVData _parseJsonToCvData(String jsonStr) {
-    final Map<String, dynamic> data;
-    try {
-      data = jsonDecode(jsonStr);
-    } catch (e) {
-      throw Exception(
-        'JSON parsing failed: $e\nRaw: ${jsonStr.length > 200 ? '${jsonStr.substring(0, 200)}...' : jsonStr}',
-      );
-    }
-
+  CVData parseCvJson(Map<String, dynamic> data, {String source = 'ats_converter'}) {
+    
     final now = DateTime.now();
     final List<SectionData> sections = [];
     final rawSections = data['sections'] as List<dynamic>? ?? [];
 
     for (final rawSection in rawSections) {
       final section = _parseSection(rawSection as Map<String, dynamic>);
-      if (section != null) sections.add(section);
+      if (section != null) {
+        sections.add(section);
+      }
     }
 
     return CVData(
@@ -160,6 +155,7 @@ class CvAtsConverterService {
       createdAt: now,
       updatedAt: now,
       template: 'professional',
+      source: source,
       header: HeaderSection(
         id: _uuid.v4(),
         name: data['name'] as String? ?? '',

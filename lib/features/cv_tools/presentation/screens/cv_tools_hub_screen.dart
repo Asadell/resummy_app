@@ -30,6 +30,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.cvTools),
       ),
       body: SafeArea(
@@ -53,14 +54,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 description: l10n.cvAnalyzerDesc,
                 color: Theme.of(context).colorScheme.secondary,
                 onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
-              ),
-              const SizedBox(height: 16),
-              _FeatureCard(
-                icon: Iconsax.translate,
-                title: l10n.cvTranslator,
-                description: l10n.cvTranslatorDesc,
-                color: Colors.orange,
-                onTap: () => context.router.push(const CvTranslatorUploadRoute()),
               ),
               const SizedBox(height: 16),
               _FeatureCard(
@@ -145,25 +138,103 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           child: const Icon(Iconsax.trash, color: Colors.white),
                         ),
                         confirmDismiss: (direction) async {
-                             return await showDialog(
+                          return await showModalBottomSheet<bool>(
                             context: context,
+                            backgroundColor: Colors.transparent,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(l10n.confirmation),
-                                content: Text(l10n.deleteCvConfirmation),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: Text(l10n.cancel.toUpperCase()),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(true),
-                                    child: Text(
-                                      l10n.delete.toUpperCase(),
-                                      style: const TextStyle(color: Colors.red),
+                              return Container(
+                                padding: const EdgeInsets.only(
+                                  bottom: 32,
+                                  top: 8,
+                                  left: 24,
+                                  right: 24,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: 40,
+                                        height: 4,
+                                        margin: const EdgeInsets.only(bottom: 24),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius: BorderRadius.circular(2),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.errorContainer,
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Icon(
+                                            Iconsax.trash,
+                                            color: Theme.of(context).colorScheme.error,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: Text(
+                                            l10n.confirmation,
+                                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      l10n.deleteCvConfirmation,
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                            height: 1.5,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 32),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton(
+                                            onPressed: () => Navigator.of(context).pop(false),
+                                            style: OutlinedButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(l10n.cancel.toUpperCase()),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          flex: 2,
+                                          child: FilledButton(
+                                            onPressed: () => Navigator.of(context).pop(true),
+                                            style: FilledButton.styleFrom(
+                                              backgroundColor: Theme.of(context).colorScheme.error,
+                                              foregroundColor: Theme.of(context).colorScheme.onError,
+                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(l10n.delete.toUpperCase()),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -175,17 +246,17 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           margin: EdgeInsets.zero,
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                              child: Text(
-                                cv.template.substring(0, 1).toUpperCase(),
-                                style: TextStyle(color: Theme.of(context).primaryColor),
+                              backgroundColor: _getSourceColor(context, cv.source).withValues(alpha: 0.1),
+                              child: Icon(
+                                _getSourceIcon(cv.source),
+                                color: _getSourceColor(context, cv.source),
                               ),
                             ),
                             title: Text(
                               cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
                               style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            subtitle: Text('${l10n.updatedOnDate(date)} • ${cv.template}'),
+                            subtitle: Text('${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}'),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.edit),
                               onPressed: () async {
@@ -214,7 +285,47 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
       ),
     );
   }
+
+  IconData _getSourceIcon(String source) {
+    switch (source) {
+      case 'builder':
+        return Iconsax.document_text;
+      case 'ats_converter':
+        return Iconsax.magic_star;
+      case 'analyzer':
+        return Iconsax.chart_2;
+      default:
+        return Iconsax.document_text;
+    }
+  }
+
+  Color _getSourceColor(BuildContext context, String source) {
+    switch (source) {
+      case 'builder':
+        return Theme.of(context).colorScheme.primary;
+      case 'ats_converter':
+        return Colors.purple;
+      case 'analyzer':
+        return Colors.green;
+      default:
+        return Theme.of(context).colorScheme.primary;
+    }
+  }
+
+  String _getSourceLabel(AppLocalizations l10n, String source) {
+    switch (source) {
+      case 'builder':
+        return l10n.cvSourceBuilder;
+      case 'ats_converter':
+        return l10n.cvSourceAtsConverter;
+      case 'analyzer':
+        return l10n.cvSourceAnalyzer;
+      default:
+        return l10n.cvSourceBuilder;
+    }
+  }
 }
+
 
 class _FeatureCard extends StatelessWidget {
   final IconData icon;
@@ -277,4 +388,6 @@ class _FeatureCard extends StatelessWidget {
       ),
     );
   }
+
+
 }

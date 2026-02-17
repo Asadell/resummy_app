@@ -53,7 +53,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     setState(() => _isGenerating = true);
     try {
       final service = CvPdfService();
-      final path = await service.generateAndSavePDF(cv);
+      final path = await service.saveToDownloads(cv);
       
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
@@ -80,6 +80,107 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         setState(() => _isGenerating = false);
       }
     }
+  }
+
+  Future<void> _sharePdf(CVData cv) async {
+    setState(() => _isGenerating = true);
+    try {
+      final service = CvPdfService();
+      await service.sharePdf(cv);
+    } catch (e) {
+      if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to share PDF: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isGenerating = false);
+      }
+    }
+  }
+
+  void _showPdfOptions(CVData cv) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            // Title
+            Text(
+              'Export CV',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            // Download option
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Iconsax.document_download,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              title: Text(l10n.downloadPdf),
+              subtitle: const Text('Save to Downloads folder'),
+              onTap: () {
+                Navigator.pop(context);
+                _downloadPdf(cv);
+              },
+            ),
+            const SizedBox(height: 8),
+            
+            // Share option
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Iconsax.share,
+                  color: Colors.green,
+                ),
+              ),
+              title: const Text('Share'),
+              subtitle: const Text('Share via WhatsApp, Email, etc.'),
+              onTap: () {
+                Navigator.pop(context);
+                _sharePdf(cv);
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -123,9 +224,9 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                     )
                   : Center(child: Text(l10n.noCvData)),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: _isGenerating ? null : () => _downloadPdf(cv),
-            icon: const Icon(Iconsax.document_download),
-            label: Text(l10n.downloadPdf),
+            onPressed: _isGenerating ? null : () => _showPdfOptions(cv),
+            icon: const Icon(Iconsax.export_1),
+            label: const Text('Export'),
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );

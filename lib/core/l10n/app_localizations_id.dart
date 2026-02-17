@@ -772,7 +772,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get extractKeyRequirements => 'Ekstrak Persyaratan Utama';
 
   @override
-  String get extractedRequirements => 'Persyaratan yang Diekstrak:';
+  String get extractedRequirements => 'Persyaratan yang Diekstrak';
 
   @override
   String get noJdQuestion => 'Tidak punya JD?';
@@ -1302,7 +1302,8 @@ class AppLocalizationsId extends AppLocalizations {
       'Kombinasi seimbang antara pertanyaan teknis dan behavioral.';
 
   @override
-  String get readyToStartDesc => 'Anda siap memulai simulasi interview.';
+  String get readyToStartDesc =>
+      'Anda siap memulai simulasi wawancara dengan AI.';
 
   @override
   String get uploadedFromDevice => 'Diunggah dari perangkat';
@@ -2026,4 +2027,141 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get invalidYearMin1945 => 'Tahun minimal 1945';
+
+  @override
+  String get stopInterviewTitle => 'Hentikan Analisis?';
+
+  @override
+  String get stopInterviewDesc =>
+      'Jika Anda keluar sekarang, analisis akan dibatalkan dan data wawancara Anda akan hilang.';
+
+  @override
+  String get recentInterviews => 'Wawancara Terakhir';
+
+  @override
+  String get noInterviewHistory => 'Belum ada riwayat wawancara.';
+
+  @override
+  String get sectionOrderVisibility => 'Urutan & Visibilitas Bagian';
+
+  @override
+  String get sectionOrderTip =>
+      'Geser bagian untuk urutkan, tekan untuk visibilitas, atau ubah judul';
+
+  @override
+  String get jobDescSubtitle => 'Untuk analisis kata kunci yang lebih akurat';
+
+  @override
+  String get filterAll => 'Semua';
+
+  @override
+  String get filterHigh => 'Tinggi';
+
+  @override
+  String get filterMedium => 'Sedang';
+
+  @override
+  String get filterLow => 'Rendah';
+
+  @override
+  String get retry => 'Coba Lagi';
+
+  @override
+  String get cobaLagi => 'Coba Lagi';
+
+  @override
+  String get uploadYourCv => 'Unggah CV Anda';
+
+  @override
+  String get cvAnalyzerSetupDesc =>
+      'Dapatkan analisis mendalam dan saran perbaikan untuk CV Anda';
+
+  @override
+  String get jobDescPasteHint =>
+      'Paste job description di sini untuk keyword matching yang lebih baik...';
+
+  @override
+  String get max5Pages => 'Maksimal 5 halaman';
+
+  @override
+  String get applyingSuggestions =>
+      'Menerapkan saran dan memformat ulang CV Anda...';
+
+  @override
+  String get overallAtsScore => 'Skor ATS Keseluruhan';
+
+  @override
+  String get noSuggestionsForFilter => 'Tidak ada saran untuk filter ini';
+
+  @override
+  String get originalText => 'Asli';
+
+  @override
+  String get dismiss => 'Abaikan';
+
+  @override
+  String get apply => 'Terapkan';
+
+  @override
+  String get undoApply => 'Batalkan Terapkan';
+
+  @override
+  String get undoDismiss => 'Batalkan Abaikan';
+
+  @override
+  String createCvFromSuggestions(Object count) {
+    return 'Buat CV ATS dari $count Saran Ini';
+  }
+
+  @override
+  String get createNewAtsCvTitle => 'Buat CV ATS Baru?';
+
+  @override
+  String get createCvAtsConfirmationDesc =>
+      'Sistem akan membuat CV baru berdasarkan CV asli kamu ditambah semua saran yang sudah kamu \"Terapkan\".\n\nCV ini bisa diedit lagi di CV Builder.';
+
+  @override
+  String get createNow => 'Buat Sekarang';
+
+  @override
+  String get report => 'Laporan';
+
+  @override
+  String get replayQuestion => 'Putar Ulang Pertanyaan';
+
+  @override
+  String get processingAnswer => 'Memproses jawaban...';
+
+  @override
+  String get processing => 'Memproses...';
+
+  @override
+  String get companyNameHint => 'e.g. Google, Microsoft';
+
+  @override
+  String get max5PagesInterview =>
+      'Maksimal 5 halaman untuk simulasi interview.';
+
+  @override
+  String get profileInfo => 'Informasi Profil';
+
+  @override
+  String get errorSavingProfile => 'Gagal menyimpan profil. Silakan coba lagi.';
+
+  @override
+  String loginError(Object error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get buildYourCareer => 'Bangun Karir Anda';
+
+  @override
+  String get cvSourceBuilder => 'Builder';
+
+  @override
+  String get cvSourceAtsConverter => 'Konverter ATS';
+
+  @override
+  String get cvSourceAnalyzer => 'Analisis';
 }

@@ -70,7 +70,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Section Order & Visibility'),
+        title: Text(l10n.sectionOrderVisibility),
         centerTitle: true,
       ),
       body: Column(
@@ -85,7 +85,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Drag sections to reorder, toggle visibility, or edit titles',
+                    l10n.sectionOrderTip,
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey.shade700,
@@ -117,7 +117,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
             child: OutlinedButton.icon(
               onPressed: () => _showAddCustomSectionDialog(context, provider),
               icon: const Icon(Iconsax.add),
-              label: const Text('Add Custom Section'),
+              label: Text(l10n.addCustomSection),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
                 shape: RoundedRectangleBorder(
@@ -214,7 +214,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         _editingTitleSectionId = section.id;
                       });
                     },
-                    tooltip: 'Edit title',
+                    tooltip: l10n.edit,
                   ),
 
                 // Save button when editing
@@ -230,7 +230,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                         _editingTitleSectionId = null;
                       });
                     },
-                    tooltip: 'Save',
+                    tooltip: l10n.save,
                   ),
 
                 const SizedBox(width: 8),
@@ -254,9 +254,9 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                   _showDeleteConfirmation(context, provider, section);
                 },
                 icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
-                label: const Text(
-                  'Delete Section',
-                  style: TextStyle(color: Colors.red),
+                label: Text(
+                  l10n.deleteSection,
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
             ],
@@ -268,72 +268,141 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
   void _showAddCustomSectionDialog(BuildContext context, CVBuilderProvider provider) {
     final titleController = TextEditingController();
-    SectionTemplate selectedTemplate = SectionTemplate.bulletList;
+    CustomSectionTemplate selectedTemplate = CustomSectionTemplate.bulletList;
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: const Text('Add Custom Section'),
-          content: Column(
+        builder: (context, setModalState) => Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+            top: 8,
+            left: 24,
+            right: 24,
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Iconsax.add_square,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      l10n.addCustomSection,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Section Title',
-                  hintText: 'e.g., Publications, Awards, Projects',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.categoryName,
+                  hintText: l10n.sectionLabelHint,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Iconsax.edit_2),
                 ),
                 autofocus: true,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Template:',
-                style: TextStyle(fontWeight: FontWeight.w600),
+              Text(
+                '${l10n.templateLabel}:',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
               const SizedBox(height: 8),
-              DropdownButtonFormField<SectionTemplate>(
-                initialValue: selectedTemplate,
+              DropdownButtonFormField<CustomSectionTemplate>(
+                value: selectedTemplate,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
-                items: SectionTemplate.values.map((template) {
+                items: CustomSectionTemplate.values.map((template) {
                   return DropdownMenuItem(
                     value: template,
-                    child: Text(_templateName(template)),
+                    child: Text(_getTemplateName(template)),
                   );
                 }).toList(),
                 onChanged: (value) {
                   if (value != null) {
-                    setState(() {
+                    setModalState(() {
                       selectedTemplate = value;
                     });
                   }
                 },
               ),
+              const SizedBox(height: 32),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(l10n.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    flex: 2,
+                    child: FilledButton(
+                      onPressed: () {
+                        if (titleController.text.trim().isNotEmpty) {
+                          provider.addCustomSection(
+                            titleController.text.trim(),
+                            template: selectedTemplate,
+                          );
+                          Navigator.pop(context);
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(l10n.add),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (titleController.text.trim().isNotEmpty) {
-                  provider.addCustomSection(
-                    titleController.text.trim(),
-                    template: selectedTemplate,
-                  );
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Add'),
-            ),
-          ],
         ),
       ),
     );
@@ -344,43 +413,121 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     CVBuilderProvider provider,
     CustomSection section,
   ) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Section'),
-        content: Text('Are you sure you want to delete "${section.title}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              provider.deleteCustomSection(section.id);
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.only(
+          bottom: 32,
+          top: 8,
+          left: 24,
+          right: 24,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
             ),
-            child: const Text('Delete'),
-          ),
-        ],
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.errorContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Iconsax.trash,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    l10n.deleteSection,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.deleteItemConfirmation(section.title),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.cancel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton(
+                    onPressed: () {
+                      provider.deleteCustomSection(section.id);
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.delete),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  String _templateName(SectionTemplate template) {
+  String _getTemplateName(CustomSectionTemplate template) {
     switch (template) {
-      case SectionTemplate.experienceLike:
-        return 'Experience-like';
-      case SectionTemplate.educationLike:
-        return 'Education-like';
-      case SectionTemplate.skillsLike:
-        return 'Skills / Category List';
-      case SectionTemplate.bulletList:
-        return 'Bullet List';
-      case SectionTemplate.paragraph:
-        return 'Paragraph';
+      case CustomSectionTemplate.experienceLike:
+        return l10n.templateExperienceNameLabel;
+      case CustomSectionTemplate.educationLike:
+        return l10n.templateEducationNameLabel;
+      case CustomSectionTemplate.skillsLike:
+        return l10n.templateSkillsNameLabel;
+      case CustomSectionTemplate.bulletList:
+        return l10n.templateBulletNameLabel;
+      case CustomSectionTemplate.paragraph:
+        return l10n.templateParagraphNameLabel;
     }
   }
 }

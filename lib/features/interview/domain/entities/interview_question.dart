@@ -4,6 +4,7 @@ class InterviewQuestion extends Equatable {
   final String id;
   final String text;
   final String difficulty;
+  final String? starHint; // Dynamic hint from Gemini
   final String? userAnswerTranscript;
   final String? audioPath;
   final int? audioDurationSeconds; // For fluency analysis WPM calculation
@@ -12,6 +13,7 @@ class InterviewQuestion extends Equatable {
     required this.id,
     required this.text,
     required this.difficulty,
+    this.starHint,
     this.userAnswerTranscript,
     this.audioPath,
     this.audioDurationSeconds,
@@ -21,6 +23,7 @@ class InterviewQuestion extends Equatable {
     String? id,
     String? text,
     String? difficulty,
+    String? starHint,
     String? userAnswerTranscript,
     String? audioPath,
     int? audioDurationSeconds,
@@ -29,6 +32,7 @@ class InterviewQuestion extends Equatable {
       id: id ?? this.id,
       text: text ?? this.text,
       difficulty: difficulty ?? this.difficulty,
+      starHint: starHint ?? this.starHint,
       userAnswerTranscript: userAnswerTranscript ?? this.userAnswerTranscript,
       audioPath: audioPath ?? this.audioPath,
       audioDurationSeconds: audioDurationSeconds ?? this.audioDurationSeconds,
@@ -36,6 +40,6 @@ class InterviewQuestion extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, text, difficulty, userAnswerTranscript, audioPath, audioDurationSeconds];
+  List<Object?> get props => [id, text, difficulty, starHint, userAnswerTranscript, audioPath, audioDurationSeconds];
 }
 

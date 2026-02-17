@@ -971,6 +971,9 @@ class CVData extends Equatable {
 
   // Template selection
   final String template; // 'classic', 'modern', 'minimalist'
+  
+  // Source feature that created this CV
+  final String source; // 'builder', 'ats_converter', 'analyzer'
 
   const CVData({
     required this.id,
@@ -979,6 +982,7 @@ class CVData extends Equatable {
     required this.header,
     required this.sections,
     this.template = 'classic',
+    this.source = 'builder',
   });
 
   // Validation
@@ -1031,13 +1035,14 @@ class CVData extends Equatable {
   String? get professionalSummary => summary;
 
   @override
-  List<Object?> get props => [id, createdAt, updatedAt, header, sections, template];
+  List<Object?> get props => [id, createdAt, updatedAt, header, sections, template, source];
 
   CVData copyWith({
     DateTime? updatedAt,
     HeaderSection? header,
     List<SectionData>? sections,
     String? template,
+    String? source,
   }) {
     return CVData(
       id: id,
@@ -1046,6 +1051,7 @@ class CVData extends Equatable {
       header: header ?? this.header,
       sections: sections ?? this.sections,
       template: template ?? this.template,
+      source: source ?? this.source,
     );
   }
 
@@ -1057,6 +1063,7 @@ class CVData extends Equatable {
       'header': header.toJson(),
       'sections': sections.map((s) => s.toJson()).toList(),
       'template': template,
+      'source': source,
     };
   }
 
@@ -1100,6 +1107,7 @@ class CVData extends Equatable {
       header: HeaderSection.fromJson(json['header'] as Map<String, dynamic>),
       sections: sections,
       template: json['template'] as String? ?? 'classic',
+      source: json['source'] as String? ?? 'builder', // Default to builder for backwards compatibility
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -48,6 +49,7 @@ class AppTheme {
         backgroundColor: AppColors.surfaceLight,
         foregroundColor: AppColors.textPrimaryLight,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 20,
@@ -58,6 +60,11 @@ class AppTheme {
         iconTheme: IconThemeData(
           color: AppColors.textPrimaryLight,
         ),
+      ),
+      
+      // Action Icon Theme
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
       
       // Text Theme
@@ -304,6 +311,7 @@ class AppTheme {
         backgroundColor: AppColors.surfaceDark,
         foregroundColor: AppColors.textPrimaryDark,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 20,
@@ -314,6 +322,11 @@ class AppTheme {
         iconTheme: IconThemeData(
           color: AppColors.textPrimaryDark,
         ),
+      ),
+      
+      // Action Icon Theme
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
       
       // Text Theme

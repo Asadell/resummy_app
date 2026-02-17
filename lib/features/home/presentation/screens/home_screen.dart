@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.home),
         actions: [
           IconButton(
@@ -95,10 +96,10 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Iconsax.translate,
-                      title: l10n.translateCv,
-                      color: Colors.orange,
-                      onTap: () => context.router.push(const CvTranslatorUploadRoute()),
+                      icon: Iconsax.magic_star,
+                      title: l10n.convertToCvAts,
+                      color: Colors.purple,
+                      onTap: () => context.router.push(const CvAtsConverterRoute()),
                     ),
                   ),
                 ],
@@ -128,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                 title: l10n.cvAnalysisCompleted,
                 subtitle: l10n.score(85),
                 time: l10n.hoursAgo(2),
-                onTap: () => context.router.push(const CvAnalyzerResultRoute()),
+                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
               ),
               const SizedBox(height: 8),
               _ActivityCard(
