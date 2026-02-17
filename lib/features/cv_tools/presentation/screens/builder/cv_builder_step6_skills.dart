@@ -317,18 +317,67 @@ class _SkillsFormState extends State<_SkillsForm> {
     final categoryController = TextEditingController(text: oldCategory);
     final skillsController = TextEditingController(text: currentSkills.join(', '));
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.editSkillCategory),
-        content: Column(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+          top: 8,
+          left: 24,
+          right: 24,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Iconsax.edit_2,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    l10n.editSkillCategory,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
             TextField(
               controller: categoryController,
               decoration: InputDecoration(
                 labelText: '${l10n.categoryName} *',
                 border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Iconsax.tag),
               ),
               textCapitalization: TextCapitalization.words,
             ),
@@ -339,39 +388,61 @@ class _SkillsFormState extends State<_SkillsForm> {
                 labelText: '${l10n.skills} *',
                 hintText: l10n.skillsHint,
                 border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Iconsax.code),
               ),
               maxLines: 3,
             ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.cancel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton(
+                    onPressed: () {
+                      if (categoryController.text.trim().isNotEmpty &&
+                          skillsController.text.trim().isNotEmpty) {
+                        final skills = skillsController.text
+                            .split(',')
+                            .map((s) => s.trim())
+                            .where((s) => s.isNotEmpty)
+                            .toList();
+
+                        if (skills.isNotEmpty) {
+                          provider.updateSkillCategory(
+                            oldCategory,
+                            categoryController.text.trim(),
+                            skills,
+                          );
+                          Navigator.pop(context);
+                        }
+                      }
+                    },
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.save),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (categoryController.text.trim().isNotEmpty &&
-                  skillsController.text.trim().isNotEmpty) {
-                final skills = skillsController.text
-                    .split(',')
-                    .map((s) => s.trim())
-                    .where((s) => s.isNotEmpty)
-                    .toList();
-
-                if (skills.isNotEmpty) {
-                  provider.updateSkillCategory(
-                    oldCategory,
-                    categoryController.text.trim(),
-                    skills,
-                  );
-                  Navigator.pop(context);
-                }
-              }
-            },
-            child: Text(l10n.save),
-          ),
-        ],
       ),
     );
   }
@@ -382,28 +453,105 @@ class _SkillsFormState extends State<_SkillsForm> {
     String category,
   ) {
     final l10n = AppLocalizations.of(context)!;
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.deleteCategory),
-        content: Text(l10n.deleteCategoryConfirmation(category)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              provider.removeSkillCategory(category);
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.only(
+          bottom: 32,
+          top: 8,
+          left: 24,
+          right: 24,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
             ),
-            child: Text(l10n.delete),
-          ),
-        ],
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.errorContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Iconsax.trash,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    l10n.deleteCategory,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.deleteCategoryConfirmation(category),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.cancel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton(
+                    onPressed: () {
+                      provider.removeSkillCategory(category);
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(l10n.delete),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

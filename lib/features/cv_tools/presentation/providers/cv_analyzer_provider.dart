@@ -98,7 +98,11 @@ class CvAnalyzerProvider extends ChangeNotifier {
       _result = null; // reset saat ganti file
       _errorMessage = null;
     } catch (e) {
-      _errorMessage = 'Error membaca PDF: $e';
+      if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
+        _errorMessage = 'Maksimal 5 halaman untuk analisis CV.';
+      } else {
+        _errorMessage = 'Error membaca PDF: $e';
+      }
     }
 
     _isPickingFile = false;

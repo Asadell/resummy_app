@@ -371,32 +371,110 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                       ),
                       IconButton(
                         icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
-                        onPressed: () => showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: Text(l10n.deleteItem),
-                            content: Text(l10n.deleteItemConfirmation(entry.key)),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx),
-                                child: Text(l10n.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  provider.removeCustomSkillCategory(
-                                    sectionId: section.id,
-                                    categoryName: entry.key,
-                                  );
-                                  Navigator.pop(ctx);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
+                      onPressed: () => showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (ctx) => Container(
+                          padding: const EdgeInsets.only(
+                            bottom: 32,
+                            top: 8,
+                            left: 24,
+                            right: 24,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: Container(
+                                  width: 40,
+                                  height: 4,
+                                  margin: const EdgeInsets.only(bottom: 24),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
                                 ),
-                                child: Text(l10n.delete),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.errorContainer,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      Iconsax.trash,
+                                      color: Theme.of(context).colorScheme.error,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.deleteItem,
+                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                l10n.deleteItemConfirmation(entry.key),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      height: 1.5,
+                                    ),
+                              ),
+                              const SizedBox(height: 32),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () => Navigator.pop(ctx),
+                                      style: OutlinedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      child: Text(l10n.cancel),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    flex: 2,
+                                    child: FilledButton(
+                                      onPressed: () {
+                                        provider.removeCustomSkillCategory(
+                                          sectionId: section.id,
+                                          categoryName: entry.key,
+                                        );
+                                        Navigator.pop(ctx);
+                                      },
+                                      style: FilledButton.styleFrom(
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        foregroundColor: Theme.of(context).colorScheme.onError,
+                                        padding: const EdgeInsets.symmetric(vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      child: Text(l10n.delete),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
+                      ),
                         tooltip: l10n.delete,
                       ),
                     ],
@@ -1066,25 +1144,105 @@ class _EntryCard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
                   onPressed: () {
-                    showDialog(
+                    showModalBottomSheet(
                       context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text(l10n.deleteItem),
-                        content: Text(l10n.deleteItemConfirmation(entry.title)),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: Text(l10n.cancel),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              onDelete();
-                              Navigator.pop(ctx);
-                            },
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                            child: Text(l10n.delete),
-                          ),
-                        ],
+                      backgroundColor: Colors.transparent,
+                      builder: (ctx) => Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 32,
+                          top: 8,
+                          left: 24,
+                          right: 24,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Center(
+                              child: Container(
+                                width: 40,
+                                height: 4,
+                                margin: const EdgeInsets.only(bottom: 24),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Iconsax.trash,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Text(
+                                    l10n.deleteItem,
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              l10n.deleteItemConfirmation(entry.title),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    height: 1.5,
+                                  ),
+                            ),
+                            const SizedBox(height: 32),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () => Navigator.pop(ctx),
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Text(l10n.cancel),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  flex: 2,
+                                  child: FilledButton(
+                                    onPressed: () {
+                                      onDelete();
+                                      Navigator.pop(ctx);
+                                    },
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: Theme.of(context).colorScheme.error,
+                                      foregroundColor: Theme.of(context).colorScheme.onError,
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Text(l10n.delete),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

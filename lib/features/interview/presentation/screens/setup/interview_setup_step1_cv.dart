@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:resummy_app/core/utils/pdf_utils.dart';
 
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
@@ -36,14 +36,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       if (result != null) {
         final path = result.files.single.path;
         if (path != null) {
-          final file = File(path);
-          final bytes = await file.readAsBytes();
-          
-          // Load the PDF document
-          final PdfDocument document = PdfDocument(inputBytes: bytes);
-          // Extract text
-          String text = PdfTextExtractor(document).extractText();
-          document.dispose();
+          // Extract text using centralized PdfUtils (enforces 5-page limit)
+          final text = await PdfUtils().extractText(path);
 
           setState(() {
             _uploadedCvName = result.files.single.name;
@@ -53,8 +47,13 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         }
       }
     } catch (e) {
+      String message = '${l10n.errorTitle}: $e';
+      if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
+        message = 'Maksimal 5 halaman untuk simulasi interview.';
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${l10n.errorTitle}: $e')),
+        SnackBar(content: Text(message)),
       );
     }
   }

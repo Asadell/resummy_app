@@ -52,23 +52,23 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('CV Analyzer'),
-        actions: [
-          Consumer<CvAnalyzerProvider>(
-            builder: (context, provider, _) {
-              if (provider.hasResult) {
-                return IconButton(
-                  icon: const Icon(Iconsax.refresh),
-                  onPressed: () {
-                    provider.clearAll();
-                    setState(() => _tabController.index = 0);
-                  },
-                  tooltip: 'Analisis CV Baru',
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
+        // actions: [
+        //   Consumer<CvAnalyzerProvider>(
+        //     builder: (context, provider, _) {
+        //       if (provider.hasResult) {
+        //         return IconButton(
+        //           icon: const Icon(Iconsax.refresh),
+        //           onPressed: () {
+        //             provider.clearAll();
+        //             setState(() => _tabController.index = 0);
+        //           },
+        //           tooltip: 'Analisis CV Baru',
+        //         );
+        //       }
+        //       return const SizedBox.shrink();
+        //     },
+        //   ),
+        // ],
       ),
       body: Consumer<CvAnalyzerProvider>(
         builder: (context, provider, _) {
@@ -942,36 +942,114 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   }
 
   void _handleBuatCvAts(CvAnalyzerProvider provider) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Buat CV ATS Baru?'),
-        content: const Text(
-          'Sistem akan membuat CV baru berdasarkan CV asli kamu ditambah semua saran yang sudah kamu "Terapkan".\n\nCV ini bisa diedit lagi di CV Builder.',
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+          top: 8,
+          left: 24,
+          right: 24,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
-          FilledButton(
-            onPressed: () async {
-              Navigator.pop(context); // Tutup dialog
-
-              // Proses convert
-              final cvData = await provider.convertAppliedToCv();
-
-              if (cvData != null && mounted) {
-                // Masukkan ke CV Builder Provider
-                context.read<CVBuilderProvider>().loadCvData(cvData);
-
-                // Navigasi ke Step 1 CV Builder
-                context.router.push(const CvBuilderStep1Route());
-              }
-            },
-            child: const Text('Buat Sekarang'),
-          ),
-        ],
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Iconsax.magicpen,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Buat CV ATS Baru?',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Sistem akan membuat CV baru berdasarkan CV asli kamu ditambah semua saran yang sudah kamu "Terapkan".\n\nCV ini bisa diedit lagi di CV Builder.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Batal'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton(
+                    onPressed: () async {
+                      Navigator.pop(context); // Tutup bottom sheet
+                      
+                      // Proses convert
+                      final cvData = await provider.convertAppliedToCv();
+                      
+                      if (cvData != null && mounted) {
+                        // Masukkan ke CV Builder Provider
+                        context.read<CVBuilderProvider>().loadCvData(cvData);
+                        
+                        // Navigasi ke Step 1 CV Builder
+                        context.router.push(const CvBuilderStep1Route());
+                      }
+                    },
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Buat Sekarang'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
