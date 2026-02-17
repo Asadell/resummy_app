@@ -7,10 +7,10 @@ class CvTranslatorLanguageScreen extends StatelessWidget {
   const CvTranslatorLanguageScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pilih Bahasa'),
+        title: Text(l10n.selectLanguage),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const CvTranslatorUploadRoute()),
@@ -28,12 +28,12 @@ class CvTranslatorLanguageScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'Select Language',
+              l10n.selectLanguage,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 16),
             Text(
-              'This screen is under construction',
+              l10n.screenUnderConstruction,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Spacer(),
@@ -45,7 +45,7 @@ class CvTranslatorLanguageScreen extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () => context.router.push(const CvTranslatorLoadingRoute()),
-                child: const Text('Mulai Translate'),
+                child: Text(l10n.startTranslation),
               ),
             ),
         ],

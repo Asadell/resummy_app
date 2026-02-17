@@ -367,7 +367,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                       IconButton(
                         icon: const Icon(Iconsax.edit_2, size: 18),
                         onPressed: () => _editSkillCategory(entry.key, entry.value),
-                        tooltip: 'Edit',
+                        tooltip: l10n.edit,
                       ),
                       IconButton(
                         icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
@@ -518,7 +518,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controller: _categoryNameCtrl,
             decoration: InputDecoration(
               labelText: l10n.categoryName,
-              hintText: 'e.g., Programming Languages',
+              hintText: l10n.categoryNamePlaceholder,
               border: const OutlineInputBorder(),
             ),
              autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -529,7 +529,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controller: _categorySkillsCtrl,
             decoration: InputDecoration(
               labelText: l10n.skills,
-              hintText: 'e.g., Dart, Flutter, Firebase',
+              hintText: l10n.skillsPlaceholder,
               border: const OutlineInputBorder(),
             ),
              autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -567,7 +567,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         // Existing items
         if (lines.isNotEmpty) ...[
           Text(
-            'Items (${lines.length})',
+            l10n.itemsCount(lines.length),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
           const SizedBox(height: 8),
@@ -827,7 +827,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controller: _titleCtrl,
             decoration: InputDecoration(
               labelText: '${section.titleLabel} *',
-              hintText: isExperienceLike ? 'e.g., Software Engineer' : 'e.g., Bachelor of Science',
+              hintText: isExperienceLike ? l10n.exampleSoftwareEngineer : l10n.exampleBachelor,
               border: const OutlineInputBorder(),
             ),
             autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -840,7 +840,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controller: _subtitleCtrl,
             decoration: InputDecoration(
               labelText: section.subtitleLabel,
-              hintText: isExperienceLike ? 'e.g., Google' : 'e.g., MIT',
+              hintText: isExperienceLike ? l10n.exampleGoogle : l10n.exampleUniversity,
               border: const OutlineInputBorder(),
             ),
           ),
@@ -851,7 +851,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controller: _metaCtrl,
             decoration: InputDecoration(
               labelText: l10n.location, // Assuming meta is location based on context usually
-              hintText: 'e.g., Mountain View, CA',
+              hintText: l10n.exampleLocation,
               border: const OutlineInputBorder(),
             ),
           ),
@@ -865,7 +865,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   controller: _startDateCtrl,
                   decoration: InputDecoration(
                     labelText: l10n.startDate,
-                    hintText: 'e.g., 2020 or Jan 2020',
+                    hintText: l10n.exampleYear,
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -877,7 +877,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   enabled: !_isPresent,
                    decoration: InputDecoration(
                     labelText: _isPresent ? l10n.present : l10n.endDate,
-                    hintText: 'e.g., 2022 or Feb 2022',
+                    hintText: l10n.exampleYearEnd,
                     border: const OutlineInputBorder(),
                   ),
                 ),

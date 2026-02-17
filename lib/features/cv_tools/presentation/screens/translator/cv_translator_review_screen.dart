@@ -8,9 +8,10 @@ class CvTranslatorReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review Translation'),
+        title: Text(l10n.reviewTranslation),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.router.push(const CvTranslatorLanguageRoute()),
@@ -28,12 +29,12 @@ class CvTranslatorReviewScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'Review Translation',
+              l10n.reviewTranslation,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 16),
             Text(
-              'This screen is under construction',
+              l10n.screenUnderConstruction,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const Spacer(),
@@ -45,7 +46,7 @@ class CvTranslatorReviewScreen extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () => context.router.push(const CvTranslatorDownloadRoute()),
-                child: const Text('Approve All & Continue'),
+                child: Text(l10n.approveAllAndContinue),
               ),
             ),
         ],

@@ -330,7 +330,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               controller: _institutionController,
               decoration: InputDecoration(
                 labelText: '${l10n.institutionName} *',
-                hintText: 'Politeknik Elektronika Negeri Surabaya',
+                hintText: l10n.institutionPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -344,7 +344,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               controller: _majorController,
               decoration: InputDecoration(
                 labelText: '${l10n.major} *',
-                hintText: 'Teknik Informatika',
+                hintText: l10n.majorPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -358,7 +358,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               controller: _degreeController,
               decoration: InputDecoration(
                 labelText: '${l10n.degree} ${l10n.optionalField}',
-                hintText: 'Sarjana (S1)',
+                hintText: l10n.degreePlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -375,7 +375,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: '${l10n.startYear} *',
-                      hintText: '2018',
+                      hintText: l10n.startYearPlaceholder,
                       border: const OutlineInputBorder(),
                       counterText: '',
                     ),
@@ -399,7 +399,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       labelText: _isCurrentlyStudying 
                           ? l10n.endYear 
                           : '${l10n.endYear} *',
-                      hintText: '2022',
+                      hintText: l10n.endYearPlaceholder,
                       border: const OutlineInputBorder(),
                       counterText: '',
                     ),
@@ -447,7 +447,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: l10n.gpaOptional,
-                hintText: '3.85',
+                hintText: l10n.gpaPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),

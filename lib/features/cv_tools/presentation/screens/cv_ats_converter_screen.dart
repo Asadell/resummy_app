@@ -36,10 +36,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Convert CV ke ATS'),
+        title: Text(AppLocalizations.of(context)!.convertToCvAts),
         centerTitle: true,
         actions: const [],
       ),
@@ -92,7 +93,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Convert CV ke ATS',
+                  l10n.convertToCvAts,
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -100,7 +101,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Upload CV kamu (PDF atau gambar), Gemini AI akan menganalisis dan mengkonversi ke format ATS-friendly yang bisa langsung diedit.',
+                  l10n.aiConvertingDesc,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
                   ),
@@ -114,15 +115,15 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
 
           // How it works
           Text(
-            'Cara Kerja',
+            l10n.howItWorks,
             style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           ...[
-            ('1', Iconsax.document_upload, 'Upload CV', 'PDF atau foto CV kamu'),
-            ('2', Iconsax.magic_star, 'Gemini Analisis', 'AI membaca & mengekstrak semua info'),
-            ('3', Iconsax.document_text, 'Auto-Populate', 'Data langsung masuk ke semua form'),
-            ('4', Iconsax.edit, 'Edit & Export', 'Review, edit, dan export PDF ATS'),
+            ('1', Iconsax.document_upload, l10n.uploadCvStep, l10n.photoOrPdf),
+            ('2', Iconsax.magic_star, l10n.geminiAnalysis, l10n.aiExtractedInfo),
+            ('3', Iconsax.document_text, l10n.autoPopulate, l10n.dataIntoForms),
+            ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
           ].map((item) => Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: Row(
@@ -178,7 +179,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                         Icon(Iconsax.document_upload, size: 48, color: Colors.grey[400]),
                         const SizedBox(height: 12),
                         Text(
-                          'Tap untuk pilih file',
+                          l10n.tapToSelectFile,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.grey[600],
@@ -187,7 +188,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'PDF, JPG, PNG, WEBP',
+                          l10n.supportedFormats,
                           style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                         ),
                       ],
@@ -214,7 +215,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _selectedFileName ?? 'File dipilih',
+                                _selectedFileName ?? l10n.fileSelected,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -224,7 +225,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Tap untuk ganti file',
+                                l10n.tapToChangeFile,
                                 style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                               ),
                             ],
@@ -240,7 +241,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
 
           // Scale effect or simple label
           Text(
-            'Opsional: Terjemahkan CV?',
+            l10n.optionalTranslateCv,
             style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -279,9 +280,9 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'Mulai Konversi',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              child: Text(
+                l10n.startConversion,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ),
@@ -355,7 +356,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Edit CV'),
+                  child: Text(l10n.edit),
                 ),
               ),
               const SizedBox(width: 16),
@@ -370,7 +371,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Simpan CV'),
+                  child: Text(l10n.save),
                 ),
               ),
             ],
@@ -428,7 +429,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
         });
       }
     } catch (e) {
-      setState(() => _errorMessage = 'Gagal memilih file: $e');
+      setState(() => _errorMessage = '${AppLocalizations.of(context)!.failedToSelectFile}: $e');
     }
   }
 
@@ -437,7 +438,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
 
     setState(() {
       _isLoading = true;
-      _loadingMessage = 'Mengirim file ke Gemini...';
+      _loadingMessage = AppLocalizations.of(context)!.analyzingCv;
     });
 
     try {
@@ -468,12 +469,13 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   }
 
   void _updateLoadingMessages() async {
+    final l10n = AppLocalizations.of(context)!;
     final messages = [
-      'Mengekstrak teks dari dokumen...',
-      'Mengidentifikasi bagian pengalaman kerja...',
-      'Menyusun riwayat pendidikan...',
-      'Mengelompokkan skill...',
-      'Finishing up...',
+      l10n.extractingText,
+      l10n.identifyingExperience,
+      l10n.organizingEducation,
+      l10n.groupingSkills,
+      l10n.finishingUp,
     ];
 
     for (var msg in messages) {
@@ -532,8 +534,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
 
     // Show success and go back to library/home
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('CV berhasil disimpan ke Library!'),
+      SnackBar(
+        content: Text(l10n.cvSavedToLibrary),
         backgroundColor: Colors.green,
       ),
     );

@@ -252,7 +252,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                         controller: _categoryController,
                         decoration: InputDecoration(
                           labelText: l10n.categoryName,
-                          hintText: 'e.g., Programming Languages',
+                          hintText: l10n.categoryNamePlaceholder,
                           border: const OutlineInputBorder(),
                           prefixIcon: const Icon(Iconsax.tag),
                         ),
@@ -309,7 +309,7 @@ class _SkillsFormState extends State<_SkillsForm> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit Skill Category'),
+        title: Text(l10n.editSkillCategory),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -434,12 +434,12 @@ class _SkillCategoryCard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Iconsax.edit_2, size: 20),
                   onPressed: onEdit,
-                  tooltip: 'Edit',
+                  tooltip: l10n.edit,
                 ),
                 IconButton(
                   icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
                   onPressed: onDelete,
-                  tooltip: 'Delete',
+                  tooltip: l10n.delete,
                 ),
               ],
             ),

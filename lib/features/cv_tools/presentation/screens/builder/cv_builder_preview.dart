@@ -103,7 +103,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
-                tooltip: 'Refresh Preview',
+                tooltip: l10n.refreshPreview,
                 onPressed: _loadPdf,
               ),
               IconButton(

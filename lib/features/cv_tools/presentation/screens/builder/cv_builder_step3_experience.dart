@@ -382,7 +382,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               controller: _jobTitleController,
               decoration: InputDecoration(
                 labelText: '${l10n.jobTitle} *',
-                hintText: 'Software Engineer',
+                hintText: l10n.jobTitlePlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -396,7 +396,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               controller: _companyController,
               decoration: InputDecoration(
                 labelText: '${l10n.companyName} *',
-                hintText: 'Google Inc.',
+                hintText: l10n.companyPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -431,7 +431,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               controller: _locationController,
               decoration: InputDecoration(
                 labelText: '${l10n.location} ${l10n.optionalField}',
-                hintText: 'Surabaya, Indonesia',
+                hintText: l10n.locationPlaceholder,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Iconsax.location),
                 counterText: '',

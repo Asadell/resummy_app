@@ -65,8 +65,8 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
               const SizedBox(height: 16),
               _FeatureCard(
                 icon: Iconsax.magic_star,
-                title: 'Convert to CV ATS',
-                description: 'Upload old CV, AI converts to ATS Friendly',
+                title: l10n.convertToCvAts,
+                description: l10n.uploadOldCvDesc,
                 color: Colors.purple,
                 onTap: () => context.router.push(const CvAtsConverterRoute()),
               ),
@@ -83,7 +83,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
               
               // Saved CVs Section
               Text(
-                'My CVs',
+                l10n.myCvs,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -109,7 +109,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           Icon(Iconsax.folder_open, size: 48, color: Colors.grey[400]),
                           const SizedBox(height: 12),
                           Text(
-                            'No saved CVs yet',
+                            l10n.noSavedCvs,
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Colors.grey[600],
                             ),
@@ -118,7 +118,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           OutlinedButton.icon(
                             onPressed: () => context.router.push(const CvBuilderWelcomeRoute()),
                             icon: const Icon(Iconsax.add),
-                            label: const Text('Create New CV'),
+                            label: Text(l10n.startCreatingCv),
                           ),
                         ],
                       ),
@@ -145,20 +145,23 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           child: const Icon(Iconsax.trash, color: Colors.white),
                         ),
                         confirmDismiss: (direction) async {
-                           return await showDialog(
+                             return await showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text("Confirm"),
-                                content: const Text("Are you sure you want to delete this CV?"),
+                                title: Text(l10n.confirmation),
+                                content: Text(l10n.deleteCvConfirmation),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text("CANCEL"),
+                                    child: Text(l10n.cancel.toUpperCase()),
                                   ),
                                   TextButton(
                                     onPressed: () => Navigator.of(context).pop(true),
-                                    child: const Text("DELETE", style: TextStyle(color: Colors.red)),
+                                    child: Text(
+                                      l10n.delete.toUpperCase(),
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 ],
                               );
@@ -179,10 +182,10 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                               ),
                             ),
                             title: Text(
-                              cv.name.isNotEmpty ? cv.name : 'Untitled CV',
+                              cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
                               style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            subtitle: Text('Updated: $date • ${cv.template}'),
+                            subtitle: Text('${l10n.updatedOnDate(date)} • ${cv.template}'),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.edit),
                               onPressed: () async {

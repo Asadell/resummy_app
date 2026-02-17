@@ -8,9 +8,10 @@ class CvTranslatorDownloadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Download CV'),
+        title: Text(l10n.downloadCv),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.router.push(const CvToolsHubRoute()),
@@ -22,14 +23,14 @@ class CvTranslatorDownloadScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Expanded(
+               Expanded(
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
-                      SizedBox(height: 16),
-                      Text('Translation Complete!'),
+                      const Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+                      const SizedBox(height: 16),
+                      Text(l10n.translationComplete),
                     ],
                   ),
                 ),
@@ -42,10 +43,10 @@ class CvTranslatorDownloadScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                    ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Downloading PDF...')),
+                    SnackBar(content: Text(l10n.downloadingPdf)),
                   );
                 },
-                child: const Text('Download PDF'),
+                child: Text(l10n.downloadPdf),
               ),
               const SizedBox(height: 12),
               OutlinedButton(
@@ -53,13 +54,13 @@ class CvTranslatorDownloadScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: () => context.router.push(const CvTranslatorLoadingRoute()),
-                child: const Text('Analisis CV'),
+                onPressed: () => context.router.push(const CvAnalyzerUploadRoute()),
+                child: Text(l10n.analyzeCv),
               ),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () => context.router.push(const HomeRoute()),
-                child: const Text('Kembali ke Dashboard'),
+                child: Text(l10n.backToDashboard),
               ),
             ],
           ),

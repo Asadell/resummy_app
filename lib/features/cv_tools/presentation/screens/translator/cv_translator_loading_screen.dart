@@ -28,6 +28,7 @@ class _CvTranslatorLoadingScreenState extends State<CvTranslatorLoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -45,7 +46,7 @@ class _CvTranslatorLoadingScreenState extends State<CvTranslatorLoadingScreen> {
                 
                 // Title
                 Text(
-                  'Menerjemahkan CV... ⏳',
+                  l10n.translatingCv,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -70,7 +71,7 @@ class _CvTranslatorLoadingScreenState extends State<CvTranslatorLoadingScreen> {
                 
                 // Estimate
                 Text(
-                  'Estimasi: 20-30 detik',
+                  l10n.translationEstimate,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.outline,
                   ),
@@ -90,7 +91,7 @@ class _CvTranslatorLoadingScreenState extends State<CvTranslatorLoadingScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Tips: Setelah selesai, Anda bisa review dan edit hasil terjemahan sebelum download.',
+                          l10n.translationTip,
                           style: Theme.of(context).textTheme.bodyMedium,
                           textAlign: TextAlign.center,
                         ),

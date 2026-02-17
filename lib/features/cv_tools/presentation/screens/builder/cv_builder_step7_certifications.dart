@@ -357,7 +357,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: '${l10n.certificationName} *',
-                hintText: 'Google Cloud Associate',
+                hintText: l10n.certificationPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -371,7 +371,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               controller: _organizationController,
               decoration: InputDecoration(
                 labelText: '${l10n.issuingOrganization} *',
-                hintText: 'Google',
+                hintText: l10n.issuingOrgPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),

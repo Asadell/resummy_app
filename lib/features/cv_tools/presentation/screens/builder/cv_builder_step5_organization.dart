@@ -317,7 +317,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: '${l10n.organizationName} *',
-                hintText: 'BEM PENS',
+                hintText: l10n.organizationPlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
@@ -330,7 +330,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               controller: _roleController,
               decoration: InputDecoration(
                 labelText: '${l10n.organizationRole} *',
-                hintText: 'Ketua Divisi',
+                hintText: l10n.rolePlaceholder,
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
