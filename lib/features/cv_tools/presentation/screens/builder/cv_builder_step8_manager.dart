@@ -8,6 +8,7 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/custom_section_editor_dialog.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -64,47 +65,58 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return CVBuilderStepLayout(
-      title: l10n.cvBuilder,
-      currentStep: 8,
-      totalSteps: 8,
-      onBack: () => context.router.maybePop(),
-      onNext: () {
-        context.read<CVBuilderProvider>().saveCurrentCV();
-        final router = context.router;
-        router.push(const CvBuilderPreviewRoute());
-      },
-      nextLabel: l10n.previewCV,
-      editContent: Consumer<CVBuilderProvider>(
-        builder: (context, provider, child) {
-          final cv = provider.currentCV;
-          if (cv == null) {
-            return Center(child: Text(l10n.noCvData));
-          }
+    return Consumer<CVBuilderProvider>(
+      builder: (context, provider, _) {
+        final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+        
+        return CVBuilderStepLayout(
+          title: l10n.cvBuilder,
+          currentStep: totalSteps,
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      border: Border.all(color: theme.primaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(8, 8),
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+          onBack: () {
+            DynamicCvSteps.navigateToPreviousStep(context, totalSteps);
+          },
+          onNext: () {
+            provider.saveCurrentCV();
+            final router = context.router;
+            router.push(const CvBuilderPreviewRoute());
+          },
+          nextLabel: l10n.previewCV,
+          editContent: _buildContent(context, provider, totalSteps, theme, isDark, l10n),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context, CVBuilderProvider provider, int totalSteps, ThemeData theme, bool isDark, AppLocalizations l10n) {
+    final cv = provider.currentCV;
+    if (cv == null) {
+      return Center(child: Text(l10n.noCvData));
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: theme.cardColor,
+                border: Border.all(color: theme.primaryColor),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                l10n.stepHeader(totalSteps, totalSteps),
+                style: TextStyle(
+                  color: theme.primaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                 ),
+              ),
+            ),
+          ),
                 const SizedBox(height: 12),
                 
                 Center(
@@ -193,9 +205,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               ],
             ),
           );
-        },
-      ),
-    );
   }
 
   Widget _buildSectionCard(SectionData section, CVBuilderProvider provider, int index, BuildContext context) {
@@ -344,29 +353,13 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               ),
             ],
 
-            // ⭐ CUSTOM SECTION ACTIONS (BARU!)
+            // Custom Section Actions - Simplified
             if (section is CustomSection) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Row(
                 children: [
-                  const SizedBox(width: 44),
-                  
-                  // Edit Content Button
-                  TextButton.icon(
-                    onPressed: () => _showEditCustomSectionDialog(provider, section),
-                    icon: const Icon(Iconsax.edit, size: 16),
-                    label: Text(AppLocalizations.of(context)!.editContent ?? 'Edit Content'),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
-                  
-                  const SizedBox(width: 16),
-                  
-                  // Delete Button
-                  TextButton.icon(
+                   const SizedBox(width: 44),
+                   TextButton.icon(
                     onPressed: () => _showDeleteConfirmation(provider, section),
                     icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
                     label: Text(
@@ -381,63 +374,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   ),
                 ],
               ),
-              
-              // Content Preview
-              if (section.content.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(left: 44),
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: theme.primaryColor.withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: Text(
-                    section.content.length > 100
-                        ? '${section.content.substring(0, 100)}...'
-                        : section.content,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ] else ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(left: 44),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.orange.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Iconsax.info_circle,
-                        size: 14,
-                        color: Colors.orange.shade700,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        AppLocalizations.of(context)!.emptyCustomSection ?? 'No content yet. Click "Edit Content" to add.',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.orange.shade700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ],
           ],
         ),
@@ -469,15 +405,48 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     final l10n = AppLocalizations.of(context)!;
     SectionTemplate selectedTemplate = SectionTemplate.simpleList;
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: Text(l10n.addCustomSection),
-          content: Column(
+        builder: (context, setState) => Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: EdgeInsets.only(
+            left: 20, 
+            right: 20, 
+            top: 24, 
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              Text(
+                l10n.addCustomSection,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(
@@ -485,6 +454,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   hintText: l10n.sectionLabelHint,
                   border: const OutlineInputBorder(),
                   counterText: '',
+                  prefixIcon: const Icon(Iconsax.text),
                 ),
                 autofocus: true,
                 maxLength: 30,
@@ -502,11 +472,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   isDense: true,
+                  prefixIcon: Icon(Iconsax.document_text),
                 ),
                 items: SectionTemplate.values.map((template) {
                   return DropdownMenuItem(
                     value: template,
-                    child: Text(template.name.toUpperCase()), // Simplified for now
+                    child: Text(template.name.toUpperCase()),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -517,26 +488,32 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   }
                 },
               ),
+              
+              const SizedBox(height: 24),
+              
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (titleController.text.trim().isNotEmpty) {
+                      provider.addCustomSection(
+                        titleController.text.trim(),
+                        template: selectedTemplate,
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(l10n.save, style: const TextStyle(fontSize: 16)),
+                ),
+              ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (titleController.text.trim().isNotEmpty) {
-                  provider.addCustomSection(
-                    titleController.text.trim(),
-                    template: selectedTemplate,
-                  );
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(l10n.save),
-            ),
-          ],
         ),
       ),
     );

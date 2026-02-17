@@ -3,8 +3,8 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-/// Reusable CV Preview Card Widget with ATS-friendly formatting
-/// Displays CV data in A4 format with professional layout
+/// Professional ATS-friendly CV Preview
+/// Optimized for Applicant Tracking Systems with clean, scannable layout
 class CvPreviewCard extends StatelessWidget {
   final CVData? cvData;
 
@@ -29,124 +29,133 @@ class CvPreviewCard extends StatelessWidget {
       );
     }
 
-    return Center(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: AspectRatio(
-            aspectRatio: 210 / 297, // A4 aspect ratio
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(40.0), // CV margins (approx 20mm)
-                  child: _buildCVContent(context, cvData!, l10n),
+    return Container(
+      color: const Color(0xFFF5F5F5), // Light gray background
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 800),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
                 ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(48.0), // Professional margins
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(cvData!),
+                  const SizedBox(height: 24),
+                  ...cvData!.sections
+                      .where((s) => s.isVisible)
+                      .map((section) => Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: _buildSection(section),
+                          ))
+                      .toList(),
+                ],
               ),
             ),
           ),
-        ),
-      ), 
-    );
-  }
-
-  Widget _buildCVContent(BuildContext context, CVData cv, AppLocalizations l10n) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header (Personal Info) - Always shown
-        _buildHeader(cv, l10n),
-        
-        const SizedBox(height: 16),
-        
-        // Render sections in user-defined order
-        ...cv.sections.where((s) => s.isVisible).map((section) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _buildSection(section, l10n),
-          );
-        }).toList(),
-      ],
-    );
-  }
-
-  // ATS-friendly header
-  Widget _buildHeader(CVData cv, AppLocalizations l10n) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Name - ATS prefers left-aligned, simple formatting
-        Text(
-          cv.name.isNotEmpty ? cv.name.toUpperCase() : l10n.yourNamePlaceholder,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-            height: 1.2,
-            color: cv.name.isNotEmpty ? Colors.black : const Color(0xFF9CA3AF),
-          ),
-        ),
-        const SizedBox(height: 8),
-
-        // Contact Info - Simple, scannable format
-        if (cv.email?.isNotEmpty == true)
-          _buildContactLine('Email', cv.email!),
-        if (cv.phone?.isNotEmpty == true)
-          _buildContactLine('Phone', cv.phone!),
-        if (cv.location?.isNotEmpty == true)
-          _buildContactLine('Location', cv.location!),
-        if (cv.linkedin?.isNotEmpty == true)
-          _buildContactLine('LinkedIn', cv.linkedin!),
-        if (cv.portfolio?.isNotEmpty == true)
-          _buildContactLine('Portfolio', cv.portfolio!),
-      ],
-    );
-  }
-
-  Widget _buildContactLine(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Text(
-        '$label: $value',
-        style: const TextStyle(
-          fontSize: 10,
-          height: 1.4,
-          color: Colors.black87,
         ),
       ),
     );
   }
 
-  // Build section based on type
-  Widget _buildSection(SectionData section, AppLocalizations l10n) {
-    if (section is SummarySection) {
-      return _buildSummarySection(section);
-    } else if (section is ExperienceSection) {
-      return _buildExperienceSection(section);
-    } else if (section is EducationSection) {
-      return _buildEducationSection(section);
-    } else if (section is OrganizationSection) {
-      return _buildOrganizationSection(section);
-    } else if (section is SkillsSection) {
-      return _buildSkillsSection(section);
-    } else if (section is CertificationsSection) {
-      return _buildCertificationsSection(section);
-    } else if (section is CustomSection) {
-      return _buildCustomSection(section);
-    }
+  // ========================================
+  // HEADER - Name + Contact (ATS Format)
+  // ========================================
+  Widget _buildHeader(CVData cv) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // NAME - Large, Bold, ALL CAPS
+        Text(
+          cv.name.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+            height: 1.2,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // CONTACT LINE - Single line with pipe separators
+        _buildContactLine(cv),
+
+        // LINKS - LinkedIn, Portfolio
+        if (cv.linkedin?.isNotEmpty == true || cv.portfolio?.isNotEmpty == true) ...[
+          const SizedBox(height: 4),
+          _buildLinksLine(cv),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildContactLine(CVData cv) {
+    final List<String> contacts = [];
+    
+    if (cv.email?.isNotEmpty == true) contacts.add(cv.email!);
+    if (cv.phone?.isNotEmpty == true) contacts.add(cv.phone!);
+    if (cv.location?.isNotEmpty == true) contacts.add(cv.location!);
+    
+    if (contacts.isEmpty) return const SizedBox.shrink();
+
+    return Text(
+      contacts.join(' | '),
+      style: const TextStyle(
+        fontSize: 11,
+        height: 1.5,
+        color: Color(0xFF374151), // Dark gray
+        letterSpacing: 0.2,
+      ),
+    );
+  }
+
+  Widget _buildLinksLine(CVData cv) {
+    final List<String> links = [];
+    
+    if (cv.linkedin?.isNotEmpty == true) links.add('LinkedIn: ${cv.linkedin}');
+    if (cv.portfolio?.isNotEmpty == true) links.add('Portfolio: ${cv.portfolio}');
+    
+    if (links.isEmpty) return const SizedBox.shrink();
+
+    return Text(
+      links.join(' | '),
+      style: const TextStyle(
+        fontSize: 10,
+        height: 1.5,
+        color: Color(0xFF6B7280), // Medium gray
+      ),
+    );
+  }
+
+  // ========================================
+  // SECTION BUILDER
+  // ========================================
+  Widget _buildSection(SectionData section) {
+    if (section is SummarySection) return _buildSummarySection(section);
+    if (section is ExperienceSection) return _buildExperienceSection(section);
+    if (section is EducationSection) return _buildEducationSection(section);
+    if (section is OrganizationSection) return _buildOrganizationSection(section);
+    if (section is SkillsSection) return _buildSkillsSection(section);
+    if (section is CertificationsSection) return _buildCertificationsSection(section);
+    if (section is CustomSection) return _buildCustomSection(section);
     return const SizedBox.shrink();
   }
 
-  // ATS-friendly section header
+  // ========================================
+  // SECTION HEADER - Clean, Professional
+  // ========================================
   Widget _buildSectionHeader(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,44 +163,61 @@ class CvPreviewCard extends StatelessWidget {
         Text(
           title.toUpperCase(),
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
+            letterSpacing: 1.0,
+            color: Color(0xFF0EA5E9), // Cyan
             height: 1.2,
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         Container(
-          height: 1,
-          color: Colors.black,
+          height: 1.5,
+          width: 50,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF0EA5E9),
+                const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
       ],
     );
   }
 
+  // ========================================
+  // 1. PROFESSIONAL SUMMARY
+  // ========================================
   Widget _buildSummarySection(SummarySection section) {
     if (section.content.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
         Text(
           section.content,
+          textAlign: TextAlign.justify,
           style: const TextStyle(
-            fontSize: 10,
-            height: 1.5,
-            color: Colors.black87,
+            fontSize: 11,
+            height: 1.6,
+            color: Color(0xFF374151),
+            letterSpacing: 0.1,
           ),
         ),
       ],
     );
   }
 
+  // ========================================
+  // 2. WORK EXPERIENCE
+  // ========================================
   Widget _buildExperienceSection(ExperienceSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,77 +231,105 @@ class CvPreviewCard extends StatelessWidget {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(exp.startDate);
     final endDate = exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
-    
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Job Title
+          // Company Name (BOLD) + Date (Right-aligned)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  exp.companyName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                '$startDate - $endDate',
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0xFF6B7280),
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+
+          // Job Title (Italic)
           Text(
             exp.jobTitle,
             style: const TextStyle(
               fontSize: 11,
-              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
               height: 1.3,
+              color: Color(0xFF374151),
             ),
           ),
-          const SizedBox(height: 2),
-          
-          // Company & Date
-          Text(
-            '${exp.companyName} | $startDate - $endDate',
-            style: const TextStyle(
-              fontSize: 10,
-              height: 1.3,
-              color: Colors.black87,
-            ),
-          ),
-          
+
           if (exp.location?.isNotEmpty == true) ...[
-            const SizedBox(height: 1),
+            const SizedBox(height: 2),
             Text(
               exp.location!,
               style: const TextStyle(
-                fontSize: 9,
+                fontSize: 10,
+                color: Color(0xFF9CA3AF),
                 height: 1.3,
-                color: Colors.black54,
               ),
             ),
           ],
-          
-          const SizedBox(height: 4),
-          
-          // Responsibilities
-          ...exp.responsibilities.split('\n').where((r) => r.trim().isNotEmpty).map((resp) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 12, bottom: 2),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('• ', style: TextStyle(fontSize: 10)),
-                  Expanded(
-                    child: Text(
-                      resp.trim(),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.4,
-                        color: Colors.black87,
-                      ),
+
+          const SizedBox(height: 6),
+
+          // Responsibilities - Justified bullets
+          ...exp.responsibilities
+              .split('\n')
+              .where((r) => r.trim().isNotEmpty)
+              .map((resp) => Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '• ',
+                          style: TextStyle(fontSize: 11, height: 1.5),
+                        ),
+                        Expanded(
+                          child: Text(
+                            resp.trim(),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              height: 1.5,
+                              color: Color(0xFF374151),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
+  // ========================================
+  // 3. EDUCATION
+  // ========================================
   Widget _buildEducationSection(EducationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,77 +341,101 @@ class CvPreviewCard extends StatelessWidget {
 
   Widget _buildEducationEntry(Education edu) {
     final endYear = edu.isCurrentlyStudying ? 'Present' : edu.endYear?.toString() ?? '';
-    
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Degree & Major
+          // Institution (BOLD) + Year (Right-aligned)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  edu.institution,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                '${edu.startYear} - $endYear',
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0xFF6B7280),
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+
+          // Degree (Italic)
           Text(
             '${edu.degree} in ${edu.major}',
             style: const TextStyle(
               fontSize: 11,
-              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
               height: 1.3,
+              color: Color(0xFF374151),
             ),
           ),
-          const SizedBox(height: 2),
-          
-          // Institution & Year
-          Text(
-            '${edu.institution} | ${edu.startYear} - $endYear',
-            style: const TextStyle(
-              fontSize: 10,
-              height: 1.3,
-              color: Colors.black87,
-            ),
-          ),
-          
+
           if (edu.gpa?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
               'GPA: ${edu.gpa}',
               style: const TextStyle(
                 fontSize: 10,
+                color: Color(0xFF6B7280),
                 height: 1.3,
-                color: Colors.black87,
               ),
             ),
           ],
-          
+
           if (edu.achievements?.isNotEmpty == true) ...[
-            const SizedBox(height: 3),
-            ...edu.achievements!.split('\n').where((a) => a.trim().isNotEmpty).map((achievement) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 12, bottom: 2),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('• ', style: TextStyle(fontSize: 10)),
-                    Expanded(
-                      child: Text(
-                        achievement.trim(),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          height: 1.4,
-                          color: Colors.black87,
-                        ),
+            const SizedBox(height: 6),
+            ...edu.achievements!
+                .split('\n')
+                .where((a) => a.trim().isNotEmpty)
+                .map((achievement) => Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('• ', style: TextStyle(fontSize: 11, height: 1.4)),
+                          Expanded(
+                            child: Text(
+                              achievement.trim(),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                height: 1.4,
+                                color: Color(0xFF374151),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+                    ))
+                .toList(),
           ],
         ],
       ),
     );
   }
 
+  // ========================================
+  // 4. ORGANIZATION EXPERIENCE
+  // ========================================
   Widget _buildOrganizationSection(OrganizationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -371,119 +449,128 @@ class CvPreviewCard extends StatelessWidget {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(org.startDate);
     final endDate = org.isCurrentlyActive ? 'Present' : dateFormat.format(org.endDate!);
-    
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Role
+          // Organization Name (BOLD) + Date (Right-aligned)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  org.organizationName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                '$startDate - $endDate',
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0xFF6B7280),
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+
+          // Role (Italic)
           Text(
             org.role,
             style: const TextStyle(
               fontSize: 11,
-              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
               height: 1.3,
+              color: Color(0xFF374151),
             ),
           ),
-          const SizedBox(height: 2),
-          
-          // Organization & Date
-          Text(
-            '${org.organizationName} | $startDate - $endDate',
-            style: const TextStyle(
-              fontSize: 10,
-              height: 1.3,
-              color: Colors.black87,
-            ),
-          ),
-          
-          if (org.location?.isNotEmpty == true) ...[
-            const SizedBox(height: 1),
-            Text(
-              org.location!,
-              style: const TextStyle(
-                fontSize: 9,
-                height: 1.3,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-          
-          const SizedBox(height: 3),
-          
+
+          const SizedBox(height: 6),
+
           // Description
-          ...org.description.split('\n').where((d) => d.trim().isNotEmpty).map((desc) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 12, bottom: 2),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('• ', style: TextStyle(fontSize: 10)),
-                  Expanded(
-                    child: Text(
-                      desc.trim(),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.4,
-                        color: Colors.black87,
-                      ),
+          ...org.description
+              .split('\n')
+              .where((d) => d.trim().isNotEmpty)
+              .map((desc) => Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
+                        Expanded(
+                          child: Text(
+                            desc.trim(),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              height: 1.5,
+                              color: Color(0xFF374151),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
+  // ========================================
+  // 5. SKILLS (Category-based)
+  // ========================================
   Widget _buildSkillsSection(SkillsSection section) {
     if (section.skillCategories.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.skillCategories.entries.where((e) => e.value.isNotEmpty).map((entry) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 80,
-                  child: Text(
-                    '${entry.key}:',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      height: 1.4,
+        ...section.skillCategories.entries
+            .where((e) => e.value.isNotEmpty)
+            .map((entry) => Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 11,
+                        height: 1.5,
+                        color: Color(0xFF374151),
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '${entry.key}: ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: entry.value.join(', '),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Text(
-                    entry.value.join(', '),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      height: 1.4,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
+                ))
+            .toList(),
       ],
     );
   }
 
+  // ========================================
+  // 6. CERTIFICATIONS
+  // ========================================
   Widget _buildCertificationsSection(CertificationsSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -496,58 +583,59 @@ class CvPreviewCard extends StatelessWidget {
   Widget _buildCertificationEntry(Certification cert) {
     final dateFormat = DateFormat('MMM yyyy');
     final issueDate = dateFormat.format(cert.issueDate);
-    final expiryInfo = cert.doesNotExpire 
-        ? 'No Expiration' 
-        : cert.expirationDate != null 
-            ? 'Expires: ${dateFormat.format(cert.expirationDate!)}'
-            : '';
-    
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Certification Name
-          Text(
-            cert.name,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              height: 1.3,
-            ),
+          // Certification Name (BOLD) + Date (Right-aligned)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  cert.name,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                issueDate,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0xFF6B7280),
+                  height: 1.3,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 2),
-          
-          // Issuing Organization & Date
+
+          // Issuing Organization
           Text(
-            '${cert.issuingOrganization} | Issued: $issueDate',
+            cert.issuingOrganization,
             style: const TextStyle(
               fontSize: 10,
+              color: Color(0xFF6B7280),
               height: 1.3,
-              color: Colors.black87,
             ),
           ),
-          
-          if (expiryInfo.isNotEmpty) ...[
-            const SizedBox(height: 1),
-            Text(
-              expiryInfo,
-              style: const TextStyle(
-                fontSize: 9,
-                height: 1.3,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-          
+
           if (cert.credentialId?.isNotEmpty == true) ...[
-            const SizedBox(height: 1),
+            const SizedBox(height: 2),
             Text(
-              'Credential ID: ${cert.credentialId}',
+              'ID: ${cert.credentialId}',
               style: const TextStyle(
                 fontSize: 9,
+                color: Color(0xFF9CA3AF),
                 height: 1.3,
-                color: Colors.black54,
               ),
             ),
           ],
@@ -556,47 +644,91 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
+  // ========================================
+  // 7. CUSTOM SECTION
+  // ========================================
   Widget _buildCustomSection(CustomSection section) {
     if (section.content.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
         
-        // Render based on template
         if (section.template == SectionTemplate.paragraph)
           Text(
             section.content,
+            textAlign: TextAlign.justify,
             style: const TextStyle(
-              fontSize: 10,
-              height: 1.5,
-              color: Colors.black87,
+              fontSize: 11,
+              height: 1.6,
+              color: Color(0xFF374151),
             ),
           )
-        else
-          // Bullet list or simple list
-          ...section.content.split('\n').where((line) => line.trim().isNotEmpty).map((line) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 12, bottom: 2),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('• ', style: TextStyle(fontSize: 10)),
-                  Expanded(
-                    child: Text(
-                      line.trim(),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.4,
-                        color: Colors.black87,
+        else if (section.template == SectionTemplate.categoryList)
+          // Category: item1, item2 format
+          ...section.content
+              .split('\n')
+              .where((line) => line.trim().isNotEmpty)
+              .map((line) {
+                final parts = line.split(':');
+                if (parts.length >= 2) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 11,
+                          height: 1.5,
+                          color: Color(0xFF374151),
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '${parts[0].trim()}: ',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: parts.sublist(1).join(':').trim(),
+                          ),
+                        ],
                       ),
                     ),
+                  );
+                }
+                return Text(
+                  line,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    height: 1.5,
+                    color: Color(0xFF374151),
                   ),
-                ],
-              ),
-            );
-          }).toList(),
+                );
+              }).toList()
+        else
+          // Bullet list
+          ...section.content
+              .split('\n')
+              .where((line) => line.trim().isNotEmpty)
+              .map((line) => Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
+                        Expanded(
+                          child: Text(
+                            line.trim(),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              height: 1.5,
+                              color: Color(0xFF374151),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ))
+              .toList(),
       ],
     );
   }

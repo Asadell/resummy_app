@@ -7,6 +7,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -80,37 +81,40 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     );
   }
 
-  void _saveAndNext() {
-    setState(() => _showValidation = true);
-    if (_formKey.currentState!.validate()) {
-      final provider = context.read<CVBuilderProvider>();
-      
-      provider.updatePersonalInfo(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        phone: _fullPhoneNumber ?? _phoneController.text.trim(),
-        linkedin: _linkedinController.text.trim(),
-        portfolio: _portfolioController.text.trim(),
-        location: _locationController.text.trim(),
-      );
-      
-      // Auto-save progress
-      provider.saveCurrentCV();
-      
-      // Navigate to next step
-      context.router.push(const CvBuilderStep2Route());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: 1,
-      totalSteps: 8,
-      onNext: _saveAndNext,
+
+      onBack: () {
+        final currentStep = DynamicCvSteps.getStepForSection(context, 'header');
+        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
+      },
+      onNext: () {
+        setState(() => _showValidation = true);
+        if (_formKey.currentState!.validate()) {
+          final provider = context.read<CVBuilderProvider>();
+          
+          provider.updatePersonalInfo(
+            name: _nameController.text.trim(),
+            email: _emailController.text.trim(),
+            phone: _fullPhoneNumber ?? _phoneController.text.trim(),
+            linkedin: _linkedinController.text.trim(),
+            portfolio: _portfolioController.text.trim(),
+            location: _locationController.text.trim(),
+          );
+          
+          // Auto-save progress
+          provider.saveCurrentCV();
+          final currentStep = DynamicCvSteps.getStepForSection(context, 'header');
+          DynamicCvSteps.navigateToNextStep(context, currentStep);
+        }
+      },
       editContent: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -125,13 +129,18 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                   border: Border.all(color: Theme.of(context).primaryColor),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  l10n.stepHeader(1, 8),
-                  style: const TextStyle(
-                    color: Color(0xFF0EA5E9),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Consumer<CVBuilderProvider>(
+                  builder: (context, provider, _) {
+                    final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                    return Text(
+                      l10n.stepHeader(1, totalSteps),
+                      style: const TextStyle(
+                        color: Color(0xFF0EA5E9),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -199,12 +208,12 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
-                              children: const [
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ],
+                              // children: const [
+                              //   TextSpan(
+                              //     text: ' *',
+                              //     style: TextStyle(color: Colors.red),
+                              //   ),
+                              // ],
                             ),
                           ),
                           const SizedBox(height: 8),

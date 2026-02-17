@@ -6,6 +6,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,14 +23,19 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    final currentStep = DynamicCvSteps.getStepForSection(context, 'experience');
+
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 3,
-      totalSteps: 8,
-      onBack: () => context.router.maybePop(),
+      currentStep: currentStep,
+
+      onBack: () {
+        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
+      },
       onNext: () {
-        context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep4Route());
+        final provider = context.read<CVBuilderProvider>();
+        provider.saveCurrentCV();
+        DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -42,21 +48,27 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               children: [
                 // Step Header
                 Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(3, 8),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  child: Consumer<CVBuilderProvider>(
+                    builder: (context, provider, _) {
+                      final currentStep = DynamicCvSteps.getStepForSection(context, 'experience');
+                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          border: Border.all(color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          l10n.stepHeader(currentStep, totalSteps),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -224,11 +236,11 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
 
   String? _validateEndDate(AppLocalizations l10n) {
     if (_isCurrentlyWorking) return null;
-    if (_endDate == null) return l10n.requiredField;
-    if (_endDate!.isAfter(DateTime.now())) {
+    // Removed required check to allow implicit "Currently Working"
+    if (_endDate != null && _endDate!.isAfter(DateTime.now())) {
       return l10n.yearTooHigh;
     }
-    if (_endDate!.isBefore(_startDate)) {
+    if (_endDate != null && _endDate!.isBefore(_startDate)) {
       return l10n.dateStartAfterEnd;
     }
     return null;
@@ -275,22 +287,17 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
   void _saveForm(CVBuilderProvider provider) {
     setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
-      if (!_isCurrentlyWorking && (_endDate == null || _endDate!.isBefore(_startDate))) {
+      if (!_isCurrentlyWorking && _endDate != null && _endDate!.isBefore(_startDate)) {
         // Validation failed for dates
         return;
       }
-      if (!_isCurrentlyWorking && _endDate!.isAfter(DateTime.now())) {
+      if (!_isCurrentlyWorking && _endDate != null && _endDate!.isAfter(DateTime.now())) {
          return;
       }
       if (_startDate.isAfter(DateTime.now())) {
          return;
       }
-      if (_endDate == null && !_isCurrentlyWorking) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(AppLocalizations.of(context)!.endDateError)),
-        );
-        return;
-      }
+      // Removed check for null end date as it now implies "Currently Working"
 
       final work = WorkExperience(
         id: _editingIndex != null 
@@ -301,8 +308,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
         location: _locationController.text.trim().isNotEmpty ? _locationController.text.trim() : null,
         employmentType: _employmentType,
         startDate: _startDate,
-        endDate: _isCurrentlyWorking ? null : _endDate,
-        isCurrentlyWorking: _isCurrentlyWorking,
+        endDate: _isCurrentlyWorking || _endDate == null ? null : _endDate,
+        isCurrentlyWorking: _isCurrentlyWorking || _endDate == null,
         responsibilities: _descriptionController.text.trim(),
       );
 

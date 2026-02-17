@@ -78,10 +78,7 @@ class CVBuilderProvider extends ChangeNotifier {
         SkillsSection(
           id: _uuid.v4(),
           title: 'Skills',
-          skillCategories: {
-            'Technical': [],
-            'Soft Skills': [],
-          },
+          skillCategories: {},
           isVisible: true,
         ),
         CertificationsSection(
@@ -399,6 +396,63 @@ class CVBuilderProvider extends ChangeNotifier {
         final categories = Map<String, List<String>>.from(section.skillCategories);
         categories[category] = List.from(categories[category] ?? [])..remove(skill);
         return section.copyWith(skillCategories: categories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Add new skill category
+  void addSkillCategory(String categoryName, List<String> skills) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
+        updatedCategories[categoryName] = skills;
+        return section.copyWith(skillCategories: updatedCategories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Update skill category (rename and/or update skills)
+  void updateSkillCategory(String oldCategory, String newCategory, List<String> skills) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
+        
+        // Remove old category if name changed
+        if (oldCategory != newCategory) {
+          updatedCategories.remove(oldCategory);
+        }
+        
+        updatedCategories[newCategory] = skills;
+        return section.copyWith(skillCategories: updatedCategories);
+      }
+      return section;
+    }).toList();
+
+    _currentCV = _currentCV!.copyWith(sections: sections);
+    notifyListeners();
+  }
+
+  /// Remove skill category
+  void removeSkillCategory(String categoryName) {
+    if (_currentCV == null) return;
+
+    final sections = _currentCV!.sections.map((section) {
+      if (section is SkillsSection) {
+        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
+        updatedCategories.remove(categoryName);
+        return section.copyWith(skillCategories: updatedCategories);
       }
       return section;
     }).toList();

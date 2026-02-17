@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
@@ -7,6 +8,7 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -21,15 +23,20 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 7,
-      totalSteps: 8,
-      onBack: () => context.router.maybePop(),
+      currentStep: currentStep,
+
+      onBack: () {
+        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
+      },
       onNext: () {
-        context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep8Route());
+        final provider = context.read<CVBuilderProvider>();
+        provider.saveCurrentCV();
+        final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
+        DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -42,21 +49,27 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               children: [
                 // Step Header
                 Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(7, 8),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  child: Consumer<CVBuilderProvider>(
+                    builder: (context, provider, _) {
+                      final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
+                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          border: Border.all(color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          l10n.stepHeader(currentStep, totalSteps),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -451,6 +464,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                 prefixIcon: const Icon(Iconsax.link_1),
                 counterText: '',
               ),
+              keyboardType: TextInputType.url,
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'\s')), // No spaces allowed
+              ],
               maxLength: 100,
             ),
             

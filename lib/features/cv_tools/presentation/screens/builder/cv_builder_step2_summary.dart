@@ -6,6 +6,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -38,7 +39,8 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
     final provider = context.read<CVBuilderProvider>();
     provider.updateSummary(_summaryController.text.trim());
     provider.saveCurrentCV();
-    context.router.push(const CvBuilderStep3Route());
+    final currentStep = DynamicCvSteps.getStepForSection(context, 'summary');
+    DynamicCvSteps.navigateToNextStep(context, currentStep);
   }
 
   @override
@@ -46,12 +48,15 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final currentStep = DynamicCvSteps.getStepForSection(context, 'summary');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 2,
-      totalSteps: 8,
-      onBack: () => context.router.maybePop(),
+      currentStep: currentStep,
+
+      onBack: () {
+        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
+      },
       onNext: _saveAndNext,
       editContent: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -60,21 +65,27 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
           children: [
             // Step Header
             Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  border: Border.all(color: theme.primaryColor),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  l10n.stepHeader(2, 8),
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+              child: Consumer<CVBuilderProvider>(
+                builder: (context, provider, _) {
+                  final currentStep = DynamicCvSteps.getStepForSection(context, 'summary');
+                  final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      border: Border.all(color: theme.primaryColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l10n.stepHeader(currentStep, totalSteps),
+                      style: TextStyle(
+                        color: theme.primaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 12),
@@ -155,6 +166,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               ),
               style: const TextStyle(fontSize: 14, height: 1.6),
               onChanged: (value) {
+                setState(() {});
                 context.read<CVBuilderProvider>().updateSummary(value.trim());
               },
               maxLength: 2000,

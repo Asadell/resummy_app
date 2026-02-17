@@ -7,6 +7,7 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -21,15 +22,20 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final currentStep = DynamicCvSteps.getStepForSection(context, 'education');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
-      currentStep: 4,
-      totalSteps: 8,
-      onBack: () => context.router.maybePop(),
+      currentStep: currentStep,
+
+      onBack: () {
+        DynamicCvSteps.navigateToPreviousStep(context, currentStep);
+      },
       onNext: () {
-        context.read<CVBuilderProvider>().saveCurrentCV();
-        context.router.push(const CvBuilderStep5Route());
+        final provider = context.read<CVBuilderProvider>();
+        provider.saveCurrentCV();
+        final currentStep = DynamicCvSteps.getStepForSection(context, 'education');
+        DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
@@ -42,21 +48,27 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               children: [
                 // Step Header
                 Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(4, 8),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  child: Consumer<CVBuilderProvider>(
+                    builder: (context, provider, _) {
+                      final currentStep = DynamicCvSteps.getStepForSection(context, 'education');
+                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          border: Border.all(color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          l10n.stepHeader(currentStep, totalSteps),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -263,8 +275,8 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
         degree: _degreeController.text.trim(),
         gpa: _gpaController.text.trim(),
         startYear: int.tryParse(_startYearController.text) ?? DateTime.now().year,
-        endYear: _isCurrentlyStudying ? null : int.tryParse(_endYearController.text),
-        isCurrentlyStudying: _isCurrentlyStudying,
+        endYear: _isCurrentlyStudying || _endYearController.text.isEmpty ? null : int.tryParse(_endYearController.text),
+        isCurrentlyStudying: _isCurrentlyStudying || _endYearController.text.isEmpty,
       );
 
       if (_editingIndex != null) {
@@ -392,7 +404,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       counterText: '',
                     ),
                     validator: _isCurrentlyStudying ? null : (v) {
-                      if (v == null || v.isEmpty) return l10n.requiredField;
+                      // Allow empty end year to imply "Currently Studying"
+                      if (v == null || v.isEmpty) return null;
+                      
                       final endYear = int.tryParse(v);
                       if (endYear == null) return l10n.requiredField;
                       

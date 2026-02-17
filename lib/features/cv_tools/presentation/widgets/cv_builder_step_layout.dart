@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
+import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 
 class CVBuilderStepLayout extends StatefulWidget {
   final String title;
   final int currentStep;
-  final int totalSteps;
   final Widget editContent;
   final VoidCallback? onNext;
   final VoidCallback? onBack;
@@ -19,7 +19,6 @@ class CVBuilderStepLayout extends StatefulWidget {
     super.key,
     required this.title,
     required this.currentStep,
-    required this.totalSteps,
     required this.editContent,
     this.onNext,
     this.onBack,
@@ -52,34 +51,39 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                '${widget.currentStep}/${widget.totalSteps}',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+    return Consumer<CVBuilderProvider>(
+      builder: (context, provider, _) {
+        final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+        final stepTitle = DynamicCvSteps.getStepTitle(widget.currentStep, provider.currentCV);
+
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Text(stepTitle),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Center(
+                  child: Text(
+                    '${widget.currentStep}/$totalSteps',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Progress Bar
-           LinearProgressIndicator(
-            value: widget.currentStep / widget.totalSteps,
-            backgroundColor: const Color(0xFFE5E7EB),
-            color: const Color(0xFF0EA5E9),
-            minHeight: 4,
-          ),
+          body: Column(
+            children: [
+              // Progress Bar (Dynamic)
+              LinearProgressIndicator(
+                value: widget.currentStep / totalSteps,
+                backgroundColor: const Color(0xFFE5E7EB),
+                color: const Color(0xFF0EA5E9),
+                minHeight: 4,
+              ),
 
           // Tab Bar
           Container(
@@ -116,28 +120,21 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
             ),
           ),
 
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Edit Tab
-                widget.editContent,
-                
-                // Preview Tab
-                Consumer<CVBuilderProvider>(
-                  builder: (context, provider, child) {
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: CvPreviewCard(cvData: provider.currentCV),
-                    );
-                  },
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Edit Tab
+                    widget.editContent,
+                    
+                    // Preview Tab
+                    CvPreviewCard(cvData: provider.currentCV),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-      bottomNavigationBar: Container(
+          bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
@@ -183,9 +180,11 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                   ),
                 ),
             ],
+            ),
           ),
         ),
-      ),
+        );
+      },
     );
   }
 }
