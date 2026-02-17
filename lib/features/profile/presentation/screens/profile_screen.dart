@@ -9,8 +9,8 @@ import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
-import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -21,27 +21,25 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _repository = UserProfileRepository();
-  UserProfile? _profile;
-  bool _isLoading = true;
-
   @override
   void initState() {
     super.initState();
-    _loadProfile();
+    // Profile is auto-loaded by ProxyProvider in main.dart
   }
 
-  Future<void> _loadProfile() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (authProvider.user != null) {
-      final profile = await _repository.getUserProfile(authProvider.user!.uid);
-      setState(() {
-        _profile = profile;
-        _isLoading = false;
-      });
-    } else {
-      setState(() => _isLoading = false);
-    }
+  Future<void> _updateProfile(BuildContext context, {
+    String? fullName,
+    String? workStatus,
+    String? targetRole,
+    String? careerGoal,
+  }) async {
+    final provider = context.read<ProfileProvider>();
+    await provider.updateProfile(
+      fullName: fullName,
+      workStatus: workStatus,
+      targetRole: targetRole,
+      careerGoal: careerGoal,
+    );
   }
 
   @override
@@ -51,155 +49,162 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final l10n = AppLocalizations.of(context)!;
     
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.profile),
-      ),
-      body: SafeArea(
-        child: _isLoading 
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // User Info Card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                              backgroundImage: authProvider.photoUrl != null
-                                  ? NetworkImage(authProvider.photoUrl!)
-                                  : null,
-                              child: authProvider.photoUrl == null
-                                  ? Icon(
-                                      Iconsax.user,
-                                      size: 48,
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                    )
-                                  : null,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              _profile?.fullName ?? authProvider.displayName,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            Text(
-                              _profile?.email ?? authProvider.email,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    
-                    // Profile Info Card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+    return Consumer<ProfileProvider>(
+      builder: (context, profileProvider, child) {
+        final profile = profileProvider.profile;
+        final isLoading = profileProvider.isLoading;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(l10n.profile),
+          ),
+          body: SafeArea(
+            child: isLoading 
+                ? const Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // User Info Card
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
                               children: [
-                                Text(
-                                  'Profile Info',
-                                  style: Theme.of(context).textTheme.titleMedium,
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  backgroundImage: authProvider.photoUrl != null
+                                      ? NetworkImage(authProvider.photoUrl!)
+                                      : null,
+                                  child: authProvider.photoUrl == null
+                                      ? Icon(
+                                          Iconsax.user,
+                                          size: 48,
+                                          color: Theme.of(context).colorScheme.onPrimary,
+                                        )
+                                      : null,
                                 ),
-                                const Spacer(),
-                                IconButton(
-                                  icon: const Icon(Iconsax.edit),
-                                  onPressed: () => _showEditDialog(context),
+                                const SizedBox(height: 16),
+                                Text(
+                                  profile?.fullName ?? authProvider.displayName,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                Text(
+                                  profile?.email ?? authProvider.email,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ],
                             ),
-                            const Divider(),
-                            _buildProfileRow(context, l10n.status, _getStatusLabel(context, _profile?.workStatus)),
-                            _buildProfileRow(context, l10n.targetRole, _profile?.targetRole ?? '-'),
-                            _buildProfileRow(context, l10n.goal, _profile?.careerGoal ?? '-'),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    
-                    // Settings Section
-                    Text(
-                      l10n.settings,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 12),
-                    
-                    // Theme Toggle
-                    Card(
-                      child: SwitchListTile(
-                        title: Text(l10n.darkMode),
-                        subtitle: Text(
-                          themeProvider.isDarkMode ? l10n.darkThemeEnabled : l10n.lightThemeEnabled
+                        const SizedBox(height: 16),
+                        
+                        // Profile Info Card
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Profile Info',
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                      icon: const Icon(Iconsax.edit),
+                                      onPressed: () => _showEditBottomSheet(context, profile),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(),
+                                _buildProfileRow(context, l10n.status, _getStatusLabel(context, profile?.workStatus)),
+                                _buildProfileRow(context, l10n.targetRole, profile?.targetRole ?? '-'),
+                                _buildProfileRow(context, l10n.goal, profile?.careerGoal ?? '-'),
+                              ],
+                            ),
+                          ),
                         ),
-                        secondary: Icon(
-                          themeProvider.isDarkMode ? Iconsax.moon : Iconsax.sun_1,
-                          color: Theme.of(context).colorScheme.primary,
+                        const SizedBox(height: 24),
+                        
+                        // Settings Section
+                        Text(
+                          l10n.settings,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        value: themeProvider.isDarkMode,
-                        onChanged: (_) => themeProvider.toggleTheme(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    
-                    // Language Toggle  
-                    Card(
-                      child: SwitchListTile(
-                        title: Text(l10n.language),
-                        subtitle: Text(
-                          localeProvider.isIndonesian ? l10n.bahasaIndonesia : l10n.english
+                        const SizedBox(height: 12),
+                        
+                        // Theme Toggle
+                        Card(
+                          child: SwitchListTile(
+                            title: Text(l10n.darkMode),
+                            subtitle: Text(
+                              themeProvider.isDarkMode ? l10n.darkThemeEnabled : l10n.lightThemeEnabled
+                            ),
+                            secondary: Icon(
+                              themeProvider.isDarkMode ? Iconsax.moon : Iconsax.sun_1,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            value: themeProvider.isDarkMode,
+                            onChanged: (_) => themeProvider.toggleTheme(),
+                          ),
                         ),
-                        secondary: Icon(
-                          Iconsax.global,
-                          color: Theme.of(context).colorScheme.primary,
+                        const SizedBox(height: 8),
+                        
+                        // Language Toggle  
+                        Card(
+                          child: SwitchListTile(
+                            title: Text(l10n.language),
+                            subtitle: Text(
+                              localeProvider.isIndonesian ? l10n.bahasaIndonesia : l10n.english
+                            ),
+                            secondary: Icon(
+                              Iconsax.global,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            value: localeProvider.isIndonesian,
+                            onChanged: (_) => localeProvider.toggleLocale(),
+                          ),
                         ),
-                        value: localeProvider.isIndonesian,
-                        onChanged: (_) => localeProvider.toggleLocale(),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    
-                    // Logout Button
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.error,
-                        padding: const EdgeInsets.all(16),
-                      ),
-                      icon: const Icon(Iconsax.logout),
-                      label: Text(l10n.logout),
-                      onPressed: () => _showLogoutDialog(context),
-                    ),
+                        const SizedBox(height: 24),
+                        
+                        // Logout Button
+                        OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Theme.of(context).colorScheme.error,
+                            padding: const EdgeInsets.all(16),
+                          ),
+                          icon: const Icon(Iconsax.logout),
+                          label: Text(l10n.logout),
+                          onPressed: () => _showLogoutDialog(context),
+                        ),
 
-                    if (kDebugMode) ...[
-                      const SizedBox(height: 50),
-                      OutlinedButton(
-                        onPressed: () {
-                          context.read<InterviewProvider>().startInterviewWithDummyData();
-                          context.router.push(const InterviewSessionClosingRoute());
-                        },
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                          side: BorderSide(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
-                        ),
-                        child: const Text('DEBUG: Skip with 5 Questions'),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-      ),
+                        if (kDebugMode) ...[
+                          const SizedBox(height: 50),
+                          OutlinedButton(
+                            onPressed: () {
+                              context.read<InterviewProvider>().startInterviewWithDummyData();
+                              context.router.push(const InterviewSessionClosingRoute());
+                            },
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.all(16),
+                              side: BorderSide(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+                            ),
+                            child: const Text('DEBUG: Skip with 5 Questions'),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 
@@ -245,94 +250,144 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _showEditDialog(BuildContext context) {
+  void _showEditBottomSheet(BuildContext context, UserProfile? profile) {
     final l10n = AppLocalizations.of(context)!;
-    final nameController = TextEditingController(text: _profile?.fullName ?? '');
-    final roleController = TextEditingController(text: _profile?.targetRole ?? '');
-    final goalController = TextEditingController(text: _profile?.careerGoal ?? '');
-    String? selectedStatus = _profile?.workStatus;
+    final nameController = TextEditingController(text: profile?.fullName ?? '');
+    final roleController = TextEditingController(text: profile?.targetRole ?? '');
+    final goalController = TextEditingController(text: profile?.careerGoal ?? '');
+    String? selectedStatus = profile?.workStatus;
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(l10n.edit),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: l10n.fullName),
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  initialValue: selectedStatus,
-                  decoration: InputDecoration(labelText: l10n.status),
-                  items: [
-                    DropdownMenuItem(value: 'fresh_grad', child: Text(l10n.freshGraduate)),
-                    DropdownMenuItem(value: 'working', child: Text(l10n.currentlyWorking)),
-                    DropdownMenuItem(value: 'job_seeking', child: Text(l10n.lookingForJob)),
-                    DropdownMenuItem(value: 'freelancer', child: Text(l10n.freelancer)),
-                  ],
-                  onChanged: (value) {
-                    setDialogState(() => selectedStatus = value);
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: roleController,
-                  decoration: InputDecoration(labelText: l10n.targetRole),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: goalController,
-                  decoration: InputDecoration(labelText: l10n.goal),
-                  maxLines: 3,
-                ),
-              ],
-            ),
+        builder: (context, setBottomSheetState) => Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await _updateProfile(
-                  fullName: nameController.text.trim(),
-                  workStatus: selectedStatus,
-                  targetRole: roleController.text.trim(),
-                  careerGoal: goalController.text.trim(),
-                );
-              },
-              child: Text(l10n.save),
-            ),
-          ],
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 12,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Handle Bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 24),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              
+              Text(
+                l10n.edit,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: l10n.fullName,
+                  prefixIcon: const Icon(Iconsax.user),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<String>(
+                value: selectedStatus,
+                decoration: InputDecoration(
+                  labelText: l10n.status,
+                  prefixIcon: const Icon(Iconsax.status),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                items: [
+                  DropdownMenuItem(value: 'fresh_grad', child: Text(l10n.freshGraduate)),
+                  DropdownMenuItem(value: 'working', child: Text(l10n.currentlyWorking)),
+                  DropdownMenuItem(value: 'job_seeking', child: Text(l10n.lookingForJob)),
+                  DropdownMenuItem(value: 'freelancer', child: Text(l10n.freelancer)),
+                ],
+                onChanged: (value) {
+                  setBottomSheetState(() => selectedStatus = value);
+                },
+              ),
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: roleController,
+                decoration: InputDecoration(
+                  labelText: l10n.targetRole,
+                  prefixIcon: const Icon(Iconsax.briefcase),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: goalController,
+                decoration: InputDecoration(
+                  labelText: l10n.goal,
+                  prefixIcon: const Icon(Iconsax.direct_up),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                maxLines: 3,
+              ),
+              const SizedBox(height: 32),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text(l10n.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await _updateProfile(
+                          context,
+                          fullName: nameController.text.trim(),
+                          workStatus: selectedStatus,
+                          targetRole: roleController.text.trim(),
+                          careerGoal: goalController.text.trim(),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text(l10n.save),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Future<void> _updateProfile({
-    required String fullName,
-    String? workStatus,
-    String? targetRole,
-    String? careerGoal,
-  }) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (authProvider.user == null) return;
-
-    await _repository.updateUserProfile(authProvider.user!.uid, {
-      'fullName': fullName.isNotEmpty ? fullName : authProvider.displayName,
-      'workStatus': workStatus,
-      'targetRole': targetRole?.isNotEmpty == true ? targetRole : null,
-      'careerGoal': careerGoal?.isNotEmpty == true ? careerGoal : null,
-    });
-
-    await _loadProfile();
   }
 
   void _showLogoutDialog(BuildContext context) {

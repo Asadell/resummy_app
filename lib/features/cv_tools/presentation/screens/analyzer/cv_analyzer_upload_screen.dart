@@ -6,6 +6,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 
 @RoutePage()
 class CvAnalyzerUploadScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class CvAnalyzerUploadScreen extends StatefulWidget {
 class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late TextEditingController _jobPositionController;
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
   SuggestionPriority? _filterPriority;
@@ -26,11 +28,22 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    
+    final profile = context.read<ProfileProvider>().profile;
+    _jobPositionController = TextEditingController(text: profile?.targetRole ?? '');
+    
+    // Set initial position in provider if auto-filled
+    if (profile?.targetRole != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<CvAnalyzerProvider>().setJobPosition(profile!.targetRole!);
+      });
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _jobPositionController.dispose();
     super.dispose();
   }
 
@@ -105,6 +118,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
           // Job Position
           TextField(
+            controller: _jobPositionController,
             decoration: InputDecoration(
               labelText: 'Posisi yang Dilamar *',
               hintText: 'e.g., Software Engineer',

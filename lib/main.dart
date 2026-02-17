@@ -13,6 +13,7 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/core/services/gemini_speech_service.dart';
 import 'package:resummy_app/core/services/gemini_interview_service.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
@@ -52,6 +53,15 @@ void main() async {
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
         ChangeNotifierProvider.value(value: authProvider),
+        ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
+          create: (_) => ProfileProvider(),
+          update: (_, auth, profile) {
+            if (profile != null) {
+              profile.loadProfile(auth.user?.uid);
+            }
+            return profile ?? ProfileProvider();
+          },
+        ),
         ChangeNotifierProvider(
           create: (_) => CvAnalyzerProvider(),
         ),
