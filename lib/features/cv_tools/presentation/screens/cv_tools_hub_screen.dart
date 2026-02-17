@@ -56,14 +56,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
               ),
               const SizedBox(height: 16),
               _FeatureCard(
-                icon: Iconsax.translate,
-                title: l10n.cvTranslator,
-                description: l10n.cvTranslatorDesc,
-                color: Colors.orange,
-                onTap: () => context.router.push(const CvTranslatorUploadRoute()),
-              ),
-              const SizedBox(height: 16),
-              _FeatureCard(
                 icon: Iconsax.magic_star,
                 title: l10n.convertToCvAts,
                 description: l10n.uploadOldCvDesc,

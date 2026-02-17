@@ -95,10 +95,10 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Iconsax.translate,
-                      title: l10n.translateCv,
-                      color: Colors.orange,
-                      onTap: () => context.router.push(const CvTranslatorUploadRoute()),
+                      icon: Iconsax.magic_star,
+                      title: l10n.convertToCvAts,
+                      color: Colors.purple,
+                      onTap: () => context.router.push(const CvAtsConverterRoute()),
                     ),
                   ),
                 ],

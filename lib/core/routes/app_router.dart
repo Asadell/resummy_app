@@ -47,13 +47,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CvBuilderPreviewRoute.page),
         AutoRoute(page: CvAtsConverterRoute.page),
 
-        // CV Translator (No Bottom Nav)
-        AutoRoute(page: CvTranslatorUploadRoute.page),
-        AutoRoute(page: CvTranslatorLanguageRoute.page),
-        AutoRoute(page: CvTranslatorLoadingRoute.page),
-        AutoRoute(page: CvTranslatorReviewRoute.page),
-        AutoRoute(page: CvTranslatorDownloadRoute.page),
-
         // CV History (No Bottom Nav)
         AutoRoute(page: CvHistoryRoute.page),
 
