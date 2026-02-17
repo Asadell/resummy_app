@@ -100,6 +100,14 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Load existing CVData for editing (e.g. from CV Analyzer)
+  void loadCvData(CVData cvData) {
+    _currentCV = cvData;
+    _currentStep = 1;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
   /// Update header (personal info)
   void updateHeader({
     String? name,

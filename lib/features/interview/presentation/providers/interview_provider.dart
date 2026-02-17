@@ -444,19 +444,28 @@ class InterviewProvider extends ChangeNotifier {
     }
     
     try {
-      if (kDebugMode) print('Starting report generation...');
+      debugPrint('--- [InterviewProvider] generateReport: STARTING analysis ---');
+      final startTime = DateTime.now();
       
       final report = await _interviewService.analyzeSession(
         _questions,
         language: _locale.startsWith('id') ? 'id' : 'en',
+        shouldStop: () => _isDisposed,
       );
       
+      if (_isDisposed) {
+         debugPrint('--- [InterviewProvider] generateReport: Disposed during analysis. Discarding result. ---');
+         return;
+      }
+
       _report = report;
       _status = InterviewStatus.completed;
       
-      if (kDebugMode) print('Report generated successfully!');
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime).inSeconds;
+      debugPrint('--- [InterviewProvider] generateReport: SUCCESS in ${duration}s ---');
     } catch (e) {
-      if (kDebugMode) print('Error generating report: $e');
+      debugPrint('--- [InterviewProvider] generateReport: FAILED with error: $e ---');
       _status = InterviewStatus.error;
       _errorMessage = 'Failed to generate feedback: $e';
     } finally {

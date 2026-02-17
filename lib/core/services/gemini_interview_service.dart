@@ -505,88 +505,141 @@ Return JSON:
   // ========================================================================
   Future<InterviewReport> analyzeSession(
     List<InterviewQuestion> questions, 
-    {String language = 'en'}
+    {String language = 'en', bool Function()? shouldStop}
   ) async {
-    final questionFeedbacks = <QuestionFeedback>[];
-    
-    // Process each question with 5 API calls
-    for (final question in questions) {
-      final transcript = question.userAnswerTranscript ?? '';
-      final duration = question.audioDurationSeconds ?? 60;
-      
-      if (transcript.isEmpty) {
-        // Skip questions without answers
-        continue;
-      }
+    // 1. Filter valid questions first
+    final validQuestions = questions.where((q) {
+      final transcript = q.userAnswerTranscript ?? '';
+      return transcript.isNotEmpty;
+    }).toList();
 
-      try {
-        // API Call #1: STAR Analysis
-        final starAnalysis = await analyzeSTARStructure(
-          question: question.text,
-          transcript: transcript,
-          jobContext: 'Interview candidate assessment',
-          language: language,
+    if (validQuestions.isEmpty) {
+        return const InterviewReport(
+          overallScore: 0,
+          starAverageScore: 0,
+          contentQualityAverageScore: 0,
+          fluencyAverageScore: 0,
+          confidenceAverageScore: 0,
+          overallFeedback: 'No valid answers to analyze',
+          strengths: [],
+          improvements: [],
+          questionFeedbacks: [],
         );
-
-        // API Call #2: Content Quality
-        final contentAnalysis = await analyzeContentQuality(
-          question: question.text,
-          transcript: transcript,
-          jobContext: 'Interview candidate assessment',
-          language: language,
-        );
-
-        // API Call #3: Fluency Analysis
-        final fluencyAnalysis = await analyzeFluency(
-          transcript: transcript,
-          audioDurationSeconds: duration,
-          language: language,
-        );
-
-        // API Call #4: Confidence Assessment
-        final confidenceAnalysis = await analyzeConfidence(
-          transcript: transcript,
-          questionContext: question.text,
-          language: language,
-        );
-
-        // API Call #5: Generate Improved Speech
-        final improvedSpeech = await generateImprovedSpeech(
-          transcript: transcript,
-          detectedFillers: fluencyAnalysis.fillerWords,
-          originalWpm: fluencyAnalysis.wpm,
-          language: language,
-        );
-
-        questionFeedbacks.add(QuestionFeedback(
-          questionId: question.id,
-          starAnalysis: starAnalysis,
-          contentAnalysis: contentAnalysis,
-          fluencyAnalysis: fluencyAnalysis,
-          confidenceAnalysis: confidenceAnalysis,
-          improvedSpeech: improvedSpeech,
-        ));
-      } catch (e) {
-        debugPrint('Error analyzing question ${question.id}: $e');
-        // Continue with other questions even if one fails
-      }
     }
+    
+    // 2. process questions in parallel
+    // We map each question to a Future<QuestionFeedback?>
+    final futures = validQuestions.asMap().entries.map((entry) async {
+       final index = entry.key;
+       final question = entry.value;
+       
+       // Check for cancellation at the start of each task
+       if (shouldStop?.call() ?? false) {
+          debugPrint('--- [Analyze Session] Question ${index + 1}: Cancelled by user ---');
+          return null;
+       }
 
-    // Calculate category averages
+       try {
+         debugPrint('--- [Analyze Session] Question ${index + 1}/${validQuestions.length}: Starting analysis... ---');
+         final startTime = DateTime.now();
+         
+         final transcript = question.userAnswerTranscript!;
+         final duration = question.audioDurationSeconds ?? 60;
+
+         // Run sub-analyses in parallel
+         final results = await Future.wait([
+            analyzeSTARStructure(
+              question: question.text,
+              transcript: transcript,
+              jobContext: 'Interview candidate assessment',
+              language: language,
+            ),
+            analyzeContentQuality(
+              question: question.text,
+              transcript: transcript,
+              jobContext: 'Interview candidate assessment',
+              language: language,
+            ),
+            analyzeFluency(
+              transcript: transcript,
+              audioDurationSeconds: duration,
+              language: language,
+            ),
+            analyzeConfidence(
+              transcript: transcript,
+              questionContext: question.text,
+              language: language,
+            ),
+         ]);
+
+         final starAnalysis = results[0] as STARAnalysis;
+         final contentAnalysis = results[1] as ContentQualityAnalysis;
+         final fluencyAnalysis = results[2] as FluencyAnalysis;
+         final confidenceAnalysis = results[3] as ConfidenceAnalysis;
+
+         // Improved Speech depends on Fluency
+         debugPrint('--- [Analyze Session] Question ${index + 1}: Generating improved speech... ---');
+         final improvedSpeech = await generateImprovedSpeech(
+            transcript: transcript,
+            detectedFillers: fluencyAnalysis.fillerWords,
+            originalWpm: fluencyAnalysis.wpm,
+            language: language,
+         );
+
+         final endTime = DateTime.now();
+         final elapsed = endTime.difference(startTime).inMilliseconds;
+         debugPrint('--- [Analyze Session] Question ${index + 1}: Completed in ${elapsed}ms ---');
+
+         return QuestionFeedback(
+            questionId: question.id,
+            starAnalysis: starAnalysis,
+            contentAnalysis: contentAnalysis,
+            fluencyAnalysis: fluencyAnalysis,
+            confidenceAnalysis: confidenceAnalysis,
+            improvedSpeech: improvedSpeech,
+         );
+
+       } catch (e) {
+         debugPrint('--- [Analyze Session] Question ${index + 1}: FAILED with error: $e ---');
+         return null; // Return null on failure so we can filter it out later
+       }
+    }).toList(); // Use .toList() to force parallel execution immediately
+
+    // 3. Wait for all to complete
+    final results = await Future.wait(futures);
+    
+    // 4. Filter out nulls (failed or cancelled)
+    final questionFeedbacks = results.whereType<QuestionFeedback>().toList();
+
+    // 5. Check if we have enough data
     if (questionFeedbacks.isEmpty) {
+      if (shouldStop?.call() ?? false) {
+         return const InterviewReport(
+            overallScore: 0,
+            starAverageScore: 0,
+            contentQualityAverageScore: 0,
+            fluencyAverageScore: 0,
+            confidenceAverageScore: 0,
+            overallFeedback: 'Analysis cancelled',
+            strengths: [],
+            improvements: [],
+            questionFeedbacks: [],
+         );
+      }
       return const InterviewReport(
         overallScore: 0,
         starAverageScore: 0,
         contentQualityAverageScore: 0,
         fluencyAverageScore: 0,
         confidenceAverageScore: 0,
-        overallFeedback: 'No valid answers to analyze',
+        overallFeedback: 'All analyses failed. Please check your connection and try again.',
         strengths: [],
         improvements: [],
         questionFeedbacks: [],
       );
     }
 
+    // 6. Calculate Aggregates (same logic as before)
     final starAvg = questionFeedbacks
         .map((q) => q.starAnalysis.score)
         .reduce((a, b) => a + b) / questionFeedbacks.length;
@@ -637,7 +690,11 @@ Return JSON:
 
     while (attempts < maxAttempts) {
       try {
-        return await action();
+        // Wrap API call in a timeout to prevent hanging forever
+        return await action().timeout(
+          const Duration(seconds: 180),
+          onTimeout: () => throw Exception('Gemini API request timed out after 3 minutes'),
+        );
       } catch (e) {
         attempts++;
         debugPrint('Error with Model $_currentModelIndex: $e');
