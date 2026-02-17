@@ -19,7 +19,16 @@ class CVLocalDataSource {
 
       final List<dynamic> cvsList = jsonDecode(cvsJson) as List<dynamic>;
       return cvsList
-          .map((json) => CVData.fromJson(json as Map<String, dynamic>))
+          .where((json) => json != null && json is Map<String, dynamic>)
+          .map((json) {
+            try {
+              return CVData.fromJson(json as Map<String, dynamic>);
+            } catch (e) {
+              // Ignore corrupt CV data
+              return null;
+            }
+          })
+          .whereType<CVData>()
           .toList();
     } catch (e) {
       throw Exception('Failed to load CVs: $e');

@@ -41,14 +41,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       appBar: AppBar(
         title: const Text('Convert CV ke ATS'),
         centerTitle: true,
-        actions: [
-          if (_step == 1 && _convertedCv != null)
-            TextButton.icon(
-              onPressed: _saveAndEdit,
-              icon: const Icon(Iconsax.edit, size: 16),
-              label: const Text('Edit & Simpan'),
-            ),
-        ],
+        actions: const [],
       ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
@@ -355,26 +348,20 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      _step = 0;
-                      _convertedCv = null;
-                      _selectedFile = null;
-                    });
-                  },
+                  onPressed: _saveAndEdit,
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Ulangi'),
+                  child: const Text('Edit CV'),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _saveAndEdit,
+                  onPressed: _saveOnly,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: theme.primaryColor,
@@ -383,7 +370,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Edit CV'),
+                  child: const Text('Simpan CV'),
                 ),
               ),
             ],
@@ -509,6 +496,50 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
 
     // Navigate to step 1 (Personal Info) to start editing
     context.router.push(const CvBuilderStep1Route());
+  }
+
+  void _saveOnly() async {
+    if (_convertedCv == null) return;
+
+    // Debugging info as requested
+    debugPrint('CV name: "${_convertedCv?.header.name}"');
+    debugPrint('CV isValid: ${_convertedCv?.isValid}');
+
+    final provider = context.read<CVBuilderProvider>();
+
+    // Save to provider
+    provider.updateCV(_convertedCv!);
+    
+    final success = await provider.saveCurrentCV();
+
+    if (!mounted) return;
+
+    if (!success) {
+      // Tampilkan error jika gagal (misal name kosong)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(provider.errorMessage ?? 'Gagal menyimpan CV'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Load updated list
+    await provider.loadAllCVs();
+
+    if (!mounted) return;
+
+    // Show success and go back to library/home
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('CV berhasil disimpan ke Library!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+    
+    // Navigate back to home or library
+    context.router.replaceAll([const HomeRoute()]);
   }
 
   Widget _buildLangChip(String label, ThemeData theme) {
