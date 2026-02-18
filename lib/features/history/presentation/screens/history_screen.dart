@@ -60,12 +60,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       horizontal: AppSizes.lg,
                       vertical: AppSizes.md,
                     ),
-                    color: Colors.grey[100],
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                     child: Center(
                       child: Text(
                         l10n.historySubtitle,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                       ),
                     ),
@@ -130,14 +130,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (item is CvActivityItem) {
       return Container(
         decoration: BoxDecoration(
-          border: Border(left: BorderSide(color: Colors.blue.shade500, width: 4)),
+          border: Border(
+            left: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 4,
+            ),
+          ),
         ),
         child: CvHistoryCard(cv: item.cvData, index: index),
       );
     } else if (item is InterviewActivityItem) {
       return Container(
         decoration: BoxDecoration(
-          border: Border(left: BorderSide(color: Colors.green.shade500, width: 4)),
+          border: Border(
+            left: BorderSide(
+              color: Theme.of(context).colorScheme.tertiary,
+              width: 4,
+            ),
+          ),
         ),
         child: InterviewHistoryCard(interview: item.interview),
       );

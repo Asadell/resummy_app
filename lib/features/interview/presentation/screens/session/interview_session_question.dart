@@ -7,6 +7,7 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'dart:async';
 
 @RoutePage()
@@ -269,11 +270,11 @@ class _InterviewSessionQuestionScreenState
               children: [
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(12),
+                      const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
+                  padding: const EdgeInsets.all(AppSizes.sm),
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
                   ),
                   child: Row(
                     children: [
@@ -287,7 +288,7 @@ class _InterviewSessionQuestionScreenState
                       ),
                       const Spacer(),
                       _buildToggleButton(true, l10n.on),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSizes.sm),
                       _buildToggleButton(false, l10n.off),
                     ],
                   ),
@@ -307,12 +308,12 @@ class _InterviewSessionQuestionScreenState
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
+                            spacing: AppSizes.sm,
                             children: [
                               Icon(Iconsax.cpu_charge,
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
                                   size: 16),
-                              const SizedBox(width: 8),
                               Text(
                                 l10n.behavioralStar,
                                 style: Theme.of(context)
@@ -330,13 +331,14 @@ class _InterviewSessionQuestionScreenState
                         ),
                         const SizedBox(height: 16),
                         Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(AppSizes.lg),
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardTheme.color,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(AppSizes.md),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: AppSizes.md,
                             children: [
                               Row(
                                 children: [
@@ -344,7 +346,7 @@ class _InterviewSessionQuestionScreenState
                                       color:
                                           Theme.of(context).colorScheme.primary,
                                       size: 24),
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: AppSizes.sm),
                                   Expanded(
                                     child: Text(
                                       l10n.aiInterviewer,
@@ -378,7 +380,6 @@ class _InterviewSessionQuestionScreenState
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
                               if (provider.isQuestionTextVisible)
                                 Text(
                                   question.text,
@@ -396,13 +397,13 @@ class _InterviewSessionQuestionScreenState
                         const SizedBox(height: 16),
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(AppSizes.md),
                           decoration: BoxDecoration(
                             color: Theme.of(context)
                                 .colorScheme
                                 .primaryContainer
                                 .withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppSizes.md),
                             border: Border.all(
                               color: Theme.of(context)
                                   .colorScheme
@@ -411,6 +412,7 @@ class _InterviewSessionQuestionScreenState
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: AppSizes.md,
                             children: [
                               InkWell(
                                 onTap: () =>
@@ -422,7 +424,7 @@ class _InterviewSessionQuestionScreenState
                                             .colorScheme
                                             .primary,
                                         size: 20),
-                                    const SizedBox(width: 12),
+                                    const SizedBox(width: AppSizes.md),
                                     Text(
                                       l10n.hintStarMethod,
                                       style: Theme.of(context)
@@ -445,8 +447,7 @@ class _InterviewSessionQuestionScreenState
                                   ],
                                 ),
                               ),
-                              if (_showHint) ...[
-                                const SizedBox(height: 12),
+                              if (_showHint)
                                 Text(
                                   question.starHint ?? l10n.hintStarDetail,
                                   style: Theme.of(context)
@@ -458,7 +459,6 @@ class _InterviewSessionQuestionScreenState
                                             .onSurfaceVariant,
                                       ),
                                 ),
-                              ],
                             ],
                           ),
                         ),

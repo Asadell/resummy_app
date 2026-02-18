@@ -11,6 +11,7 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvAtsConverterScreen extends StatefulWidget {
@@ -61,10 +62,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       child: AppSection(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: AppSizes.md,
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(AppSizes.lg),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -74,14 +76,15 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSizes.md),
                 border: Border.all(
                     color: theme.primaryColor.withValues(alpha: 0.2)),
               ),
               child: Column(
+                spacing: AppSizes.md,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppSizes.md),
                     decoration: BoxDecoration(
                       color: theme.primaryColor.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
@@ -89,7 +92,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                     child: Icon(Iconsax.magic_star,
                         size: 40, color: theme.primaryColor),
                   ),
-                  const SizedBox(height: 16),
                   Text(
                     l10n.convertToCvAts,
                     style: theme.textTheme.headlineMedium?.copyWith(
@@ -97,7 +99,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
                   Text(
                     l10n.aiConvertingDesc,
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -109,66 +110,67 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
             Text(
               l10n.howItWorks,
               style: theme.textTheme.titleMedium
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 12),
-            ...[
-              (
-                '1',
-                Iconsax.document_upload,
-                l10n.uploadCvStep,
-                l10n.photoOrPdf
-              ),
-              (
-                '2',
-                Iconsax.magic_star,
-                l10n.geminiAnalysis,
-                l10n.aiExtractedInfo
-              ),
-              (
-                '3',
-                Iconsax.document_text,
-                l10n.autoPopulate,
-                l10n.dataIntoForms
-              ),
-              ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
-            ].map((item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color:
-                              theme.primaryColor.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
+            Column(
+              spacing: AppSizes.sm,
+              children: [
+                (
+                  '1',
+                  Iconsax.document_upload,
+                  l10n.uploadCvStep,
+                  l10n.photoOrPdf
+                ),
+                (
+                  '2',
+                  Iconsax.magic_star,
+                  l10n.geminiAnalysis,
+                  l10n.aiExtractedInfo
+                ),
+                (
+                  '3',
+                  Iconsax.document_text,
+                  l10n.autoPopulate,
+                  l10n.dataIntoForms
+                ),
+                ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
+              ].map((item) => Padding(
+                    padding: const EdgeInsets.only(bottom: 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color:
+                                theme.primaryColor.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(item.$2,
+                              size: 18, color: theme.primaryColor),
                         ),
-                        child: Icon(item.$2,
-                            size: 18, color: theme.primaryColor),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.$3,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14)),
-                            Text(item.$4,
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey[600])),
-                          ],
+                        const SizedBox(width: AppSizes.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item.$3,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14)),
+                              Text(item.$4,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey[600])),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )),
+                      ],
+                    ),
+                  )).toList(),
+            ),
             const SizedBox(height: 32),
             GestureDetector(
               onTap: _pickFile,
@@ -176,28 +178,25 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 duration: const Duration(milliseconds: 200),
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                    vertical: 40, horizontal: 24),
+                    vertical: AppSizes.xxl, horizontal: AppSizes.lg),
                 decoration: BoxDecoration(
                   color: _selectedFile != null
                       ? theme.primaryColor.withValues(alpha: 0.05)
                       : theme.cardColor,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppSizes.md),
                   border: Border.all(
                     color: _selectedFile != null
                         ? theme.primaryColor
                         : theme.dividerColor,
                     width: _selectedFile != null ? 2 : 1.5,
-                    style: _selectedFile != null
-                        ? BorderStyle.solid
-                        : BorderStyle.solid,
                   ),
                 ),
                 child: _selectedFile == null
                     ? Column(
+                        spacing: AppSizes.sm,
                         children: [
                           Icon(Iconsax.document_upload,
                               size: 48, color: Colors.grey[400]),
-                          const SizedBox(height: 12),
                           Text(
                             l10n.tapToSelectFile,
                             style: TextStyle(
@@ -206,7 +205,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                               fontSize: 16,
                             ),
                           ),
-                          const SizedBox(height: 4),
                           Text(
                             l10n.supportedFormats,
                             style: TextStyle(
@@ -217,11 +215,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                     : Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(AppSizes.md),
                             decoration: BoxDecoration(
                               color: theme.primaryColor
                                   .withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppSizes.sm),
                             ),
                             child: Icon(
                               _selectedFileName?.endsWith('.pdf') == true
@@ -231,10 +229,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                               size: 28,
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: AppSizes.md),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              spacing: AppSizes.xs,
                               children: [
                                 Text(
                                   _selectedFileName ?? l10n.fileSelected,
@@ -245,7 +244,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 4),
                                 Text(
                                   l10n.tapToChangeFile,
                                   style: TextStyle(
@@ -261,22 +259,25 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                       ),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.optionalTranslateCv,
-              style: theme.textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSizes.sm,
               children: [
-                _buildLangChip(l10n.originalLanguage, theme,
-                    value: 'Original'),
-                const SizedBox(width: 8),
-                _buildLangChip(l10n.english, theme, value: 'English'),
-                const SizedBox(width: 8),
-                _buildLangChip(l10n.indonesian, theme,
-                    value: 'Indonesian'),
+                Text(
+                  l10n.optionalTranslateCv,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  spacing: AppSizes.sm,
+                  children: [
+                    _buildLangChip(l10n.originalLanguage, theme,
+                        value: 'Original'),
+                    _buildLangChip(l10n.english, theme, value: 'English'),
+                    _buildLangChip(l10n.indonesian, theme,
+                        value: 'Indonesian'),
+                  ],
+                ),
               ],
             ),
             if (_errorMessage != null)

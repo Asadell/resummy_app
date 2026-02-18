@@ -6,6 +6,7 @@ import 'package:resummy_app/features/auth/presentation/providers/auth_provider.d
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -62,27 +63,31 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            spacing: AppSizes.md,
             children: [
               Image.asset(
                 'assets/icon/icon.png',
                 width: 120,
                 height: 120,
               ),
-              const SizedBox(height: 24),
-              Text(
-                l10n.appTitle,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+              Column(
+                spacing: AppSizes.xs,
+                children: [
+                  Text(
+                    l10n.appTitle,
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    l10n.buildYourCareer,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.buildYourCareer,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-              const SizedBox(height: 48),
+              const SizedBox(height: AppSizes.xl),
               const CircularProgressIndicator(),
             ],
           ),

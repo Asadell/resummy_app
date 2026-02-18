@@ -116,187 +116,173 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
         }
       },
       editContent: SingleChildScrollView(
-        child: AppSection(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    border: Border.all(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppSection(
+              child: Column(
+                spacing: AppSizes.sm,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Consumer<CVBuilderProvider>(
+                      builder: (context, provider, _) {
+                        final totalSteps =
+                            DynamicCvSteps.getTotalSteps(provider.currentCV);
+                        return Text(
+                          l10n.stepHeader(1, totalSteps),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  child: Consumer<CVBuilderProvider>(
-                    builder: (context, provider, _) {
-                      final totalSteps =
-                          DynamicCvSteps.getTotalSteps(provider.currentCV);
-                      return Text(
-                        l10n.stepHeader(1, totalSteps),
-                        style: const TextStyle(
-                          color: Color(0xFF0EA5E9),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                  Text(
+                    l10n.personalInfoHeader,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
+                    textAlign: TextAlign.center,
                   ),
-                ),
+                  Text(
+                    l10n.personalInfoDesc,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              const SizedBox(height: AppSizes.md),
-              Center(
-                child: Text(
-                  l10n.personalInfoHeader,
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-              const SizedBox(height: AppSizes.xs),
-              Center(
-                child: Text(
-                  l10n.personalInfoDesc,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.color
-                            ?.withValues(alpha: 0.7),
-                      ),
-                ),
-              ),
-              const SizedBox(height: AppSizes.xl),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSizes.lg),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
+            ),
+            const SizedBox(height: AppSizes.sm),
+            AppSection(
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  spacing: AppSizes.md,
+                  children: [
+                    _buildTextField(
+                      controller: _nameController,
+                      label: l10n.fullName,
+                      isRequired: true,
+                      hint: l10n.namePlaceholder,
+                      context: context,
+                    ),
+                    _buildTextField(
+                      controller: _emailController,
+                      label: l10n.emailLabel,
+                      isRequired: true,
+                      hint: l10n.emailPlaceholder,
+                      keyboardType: TextInputType.emailAddress,
+                      context: context,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.xs,
                       children: [
-                        _buildTextField(
-                          controller: _nameController,
-                          label: l10n.fullName,
-                          isRequired: true,
-                          hint: l10n.namePlaceholder,
-                          context: context,
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        _buildTextField(
-                          controller: _emailController,
-                          label: l10n.emailLabel,
-                          isRequired: true,
-                          hint: l10n.emailPlaceholder,
-                          keyboardType: TextInputType.emailAddress,
-                          context: context,
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: l10n.phoneNumber,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ),
-                            const SizedBox(height: AppSizes.sm),
-                            IntlPhoneField(
-                              controller: _phoneController,
-                              decoration: InputDecoration(
-                                labelText: l10n.phoneNumber,
-                                border: const OutlineInputBorder(
-                                  borderSide: BorderSide(),
+                        RichText(
+                          text: TextSpan(
+                            text: l10n.phoneNumber,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                counterText: '',
-                              ),
-                              initialCountryCode: 'ID',
-                              disableLengthCheck: true,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              onChanged: (phone) {
-                                _fullPhoneNumber = phone.completeNumber;
-
-                                final provider =
-                                    context.read<CVBuilderProvider>();
-                                provider.updatePersonalInfo(
-                                  phone: _fullPhoneNumber!,
-                                  name: _nameController.text.trim(),
-                                  email: _emailController.text.trim(),
-                                  linkedin: _linkedinController.text.trim(),
-                                  portfolio: _portfolioController.text.trim(),
-                                  location: _locationController.text.trim(),
-                                );
-                              },
-                              onCountryChanged: (country) {},
-                              validator: (value) {
-                                if (value == null || value.number.isEmpty) {
-                                  return l10n.requiredField;
-                                }
-
-                                if (value.number.startsWith('0')) {
-                                  return l10n.phoneNoLeadingZero;
-                                }
-
-                                if (value.number.length < 8) {
-                                  return l10n.phoneTooShort;
-                                }
-                                return null;
-                              },
+                          ),
+                        ),
+                        IntlPhoneField(
+                          controller: _phoneController,
+                          decoration: InputDecoration(
+                            labelText: l10n.phoneNumber,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        _buildTextField(
-                          controller: _linkedinController,
-                          label: l10n.linkedin,
-                          isOptional: true,
-                          hint: l10n.linkedinPlaceholder,
-                          prefixIcon: Iconsax.link_1,
-                          context: context,
-                          maxLength: 100,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                          ],
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        _buildTextField(
-                          controller: _portfolioController,
-                          label: l10n.portfolio,
-                          isOptional: true,
-                          hint: l10n.portfolioPlaceholder,
-                          prefixIcon: Iconsax.global,
-                          context: context,
-                          maxLength: 100,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                          ],
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        _buildTextField(
-                          controller: _locationController,
-                          label: l10n.location,
-                          isRequired: true,
-                          hint: l10n.locationPlaceholder,
-                          prefixIcon: Iconsax.location,
-                          context: context,
-                          maxLength: 50,
+                            counterText: '',
+                          ),
+                          initialCountryCode: 'ID',
+                          disableLengthCheck: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          onChanged: (phone) {
+                            _fullPhoneNumber = phone.completeNumber;
+
+                            final provider = context.read<CVBuilderProvider>();
+                            provider.updatePersonalInfo(
+                              phone: _fullPhoneNumber!,
+                              name: _nameController.text.trim(),
+                              email: _emailController.text.trim(),
+                              linkedin: _linkedinController.text.trim(),
+                              portfolio: _portfolioController.text.trim(),
+                              location: _locationController.text.trim(),
+                            );
+                          },
+                          onCountryChanged: (country) {},
+                          validator: (value) {
+                            if (value == null || value.number.isEmpty) {
+                              return l10n.requiredField;
+                            }
+
+                            if (value.number.startsWith('0')) {
+                              return l10n.phoneNoLeadingZero;
+                            }
+
+                            if (value.number.length < 8) {
+                              return l10n.phoneTooShort;
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
-                  ),
+                    _buildTextField(
+                      controller: _linkedinController,
+                      label: l10n.linkedin,
+                      isOptional: true,
+                      hint: l10n.linkedinPlaceholder,
+                      prefixIcon: Iconsax.link_1,
+                      context: context,
+                      maxLength: 100,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                      ],
+                    ),
+                    _buildTextField(
+                      controller: _portfolioController,
+                      label: l10n.portfolio,
+                      isOptional: true,
+                      hint: l10n.portfolioPlaceholder,
+                      prefixIcon: Iconsax.global,
+                      context: context,
+                      maxLength: 100,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                      ],
+                    ),
+                    _buildTextField(
+                      controller: _locationController,
+                      label: l10n.location,
+                      isRequired: true,
+                      hint: l10n.locationPlaceholder,
+                      prefixIcon: Iconsax.location,
+                      context: context,
+                      maxLength: 50,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 80),
-            ],
-          ),
+            ),
+            const SizedBox(height: 80),
+          ],
         ),
       ),
     );
@@ -318,6 +304,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppSizes.sm,
       children: [
         RichText(
           text: TextSpan(
@@ -334,15 +321,13 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
               if (isOptional)
                 TextSpan(
                   text: ' ${l10n.optionalField}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Color(0xFF6B7280),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                 ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
@@ -359,26 +344,29 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
               : null,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
             helperText: helperText,
-            helperStyle: const TextStyle(color: Color(0xFF0EA5E9)),
+            helperStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
             prefixIcon: prefixIcon != null
-                ? Icon(prefixIcon, size: 20, color: const Color(0xFF6B7280))
+                ? Icon(prefixIcon,
+                    size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant)
                 : null,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+              borderRadius: BorderRadius.circular(AppSizes.sm),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+              borderRadius: BorderRadius.circular(AppSizes.sm),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF0EA5E9)),
+              borderRadius: BorderRadius.circular(AppSizes.sm),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
             counterText: '',
           ),
         ),

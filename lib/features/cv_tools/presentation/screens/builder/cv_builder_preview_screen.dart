@@ -175,7 +175,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Center(
-              child: TextButton(
+              child: IconButton(
                 onPressed: () async {
                   final provider = context.read<CVBuilderProvider>();
                   final success = await provider.saveCurrentCV();
@@ -195,12 +195,9 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                     }
                   }
                 },
-                child: Text(
-                  l10n.save,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF0EA5E9),
-                      ),
+                icon: Icon(
+                  Iconsax.save_2,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),

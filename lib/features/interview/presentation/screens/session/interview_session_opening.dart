@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
@@ -157,15 +159,7 @@ class _InterviewSessionOpeningScreenState
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color,
-                border:
-                    Border.all(color: Theme.of(context).dividerTheme.color!),
-                borderRadius: BorderRadius.circular(8),
-              ),
+            AppSection(
               child: Row(
                 children: [
                   Text(
@@ -176,15 +170,16 @@ class _InterviewSessionOpeningScreenState
                   ),
                   const Spacer(),
                   _buildToggleButton(true, l10n.on),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSizes.sm),
                   _buildToggleButton(false, l10n.off),
                 ],
               ),
             ),
+            const SizedBox(height: AppSizes.sm),
             Expanded(
               child: Center(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -203,7 +198,7 @@ class _InterviewSessionOpeningScreenState
                             ],
                           ),
                           border: Border.all(
-                              color: Theme.of(context).colorScheme.surface,
+                               color: Theme.of(context).colorScheme.surface,
                               width: 4),
                           boxShadow: [
                             BoxShadow(
@@ -220,24 +215,10 @@ class _InterviewSessionOpeningScreenState
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardTheme.color,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? Colors.black.withValues(alpha: 0.05)
-                                  : Colors.transparent,
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
+                      AppSection(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: AppSizes.sm,
                           children: [
                             Row(
                               children: [
@@ -245,7 +226,7 @@ class _InterviewSessionOpeningScreenState
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                     size: 18),
-                                const SizedBox(width: 8),
+                                const SizedBox(width: AppSizes.sm),
                                 Text(
                                   l10n.aiInterviewer,
                                   style: Theme.of(context)
@@ -260,7 +241,6 @@ class _InterviewSessionOpeningScreenState
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
                             Text(
                               l10n.aiMessageOpening,
                               style: Theme.of(context).textTheme.bodyLarge,

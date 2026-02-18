@@ -103,23 +103,27 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       child: AppSection(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: AppSizes.md,
           children: [
-            Text(
-              l10n.uploadYourCv,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSizes.sm,
+              children: [
+                Text(
+                  l10n.uploadYourCv,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Text(
+                  l10n.cvAnalyzerSetupDesc,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                ),
+              ],
             ),
-            const SizedBox(height: AppSizes.sm),
-            Text(
-              l10n.cvAnalyzerSetupDesc,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
-            ),
-            const SizedBox(height: AppSizes.xl),
             _buildUploadCard(provider),
-            const SizedBox(height: AppSizes.md),
             TextField(
               controller: _jobPositionController,
               decoration: InputDecoration(
@@ -132,7 +136,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
               onChanged: provider.setJobPosition,
             ),
-            const SizedBox(height: AppSizes.md),
             Card(
               child: Column(
                 children: [
@@ -167,12 +170,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ],
               ),
             ),
-            const SizedBox(height: AppSizes.md),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(AppSizes.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: AppSizes.sm,
                   children: [
                     Row(
                       children: [
@@ -184,7 +187,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSizes.sm),
                     SegmentedButton<String>(
                       segments: [
                         ButtonSegment(
@@ -207,7 +209,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ),
             ),
-            const SizedBox(height: AppSizes.xl),
             if (provider.errorMessage != null)
               Container(
                 padding: const EdgeInsets.all(AppSizes.sm),
@@ -230,8 +231,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   ],
                 ),
               ),
-            if (provider.errorMessage != null)
-              const SizedBox(height: AppSizes.md),
             FilledButton.icon(
               onPressed: provider.hasFile && provider.jobPosition.isNotEmpty
                   ? () => provider.analyze(_selectedLanguage)

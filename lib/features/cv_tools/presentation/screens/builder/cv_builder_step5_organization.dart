@@ -166,92 +166,89 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               provider.currentCV?.organizationSection?.entries ?? [];
 
           return SingleChildScrollView(
-            child: AppSection(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Consumer<CVBuilderProvider>(
-                      builder: (context, provider, _) {
-                        final currentStep = DynamicCvSteps.getStepForSection(
-                            context, 'organization');
-                        final totalSteps =
-                            DynamicCvSteps.getTotalSteps(provider.currentCV);
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: theme.cardColor,
-                            border: Border.all(color: theme.primaryColor),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            l10n.stepHeader(currentStep, totalSteps),
-                            style: TextStyle(
-                              color: theme.primaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AppSection(
+                  child: Column(
+                    spacing: AppSizes.sm,
+                    children: [
+                      Consumer<CVBuilderProvider>(
+                        builder: (context, provider, _) {
+                          final currentStep = DynamicCvSteps.getStepForSection(
+                              context, 'organization');
+                          final totalSteps =
+                              DynamicCvSteps.getTotalSteps(provider.currentCV);
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: theme.cardColor,
+                              border: Border.all(color: theme.primaryColor),
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.md),
-                  Center(
-                    child: Text(
-                      l10n.organizationHistoryHeader,
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.xs),
-                  Center(
-                    child: Text(
-                      l10n.organizationHistoryDesc,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.7),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.xl),
-                  if (organizationEntries.isEmpty)
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: theme.cardColor,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: theme.dividerColor),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Iconsax.people,
-                              size: 48,
-                              color: theme.disabledColor,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              l10n.noOrganizationData,
-                              style: TextStyle(color: theme.disabledColor),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.addOrganization,
-                              textAlign: TextAlign.center,
+                            child: Text(
+                              l10n.stepHeader(currentStep, totalSteps),
                               style: TextStyle(
-                                color: theme.disabledColor,
+                                color: theme.primaryColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    )
-                  else
-                    ReorderableListView.builder(
+                      Text(
+                        l10n.organizationHistoryHeader,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        l10n.organizationHistoryDesc,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSizes.sm),
+                if (organizationEntries.isEmpty)
+                  AppSection(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.xl),
+                      child: Column(
+                        spacing: AppSizes.sm,
+                        children: [
+                          Icon(
+                            Iconsax.people,
+                            size: 48,
+                            color: theme.colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.5),
+                          ),
+                          Text(
+                            l10n.noOrganizationData,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                          Text(
+                            l10n.addOrganization,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  AppSection(
+                    child: ReorderableListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: organizationEntries.length,
@@ -264,17 +261,18 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                           key: ValueKey(item.id),
                           entry: item,
                           onEdit: () => _editOrganization(item, index),
-                          onDelete: () => provider.removeOrganization(index),
+                          onDelete: () =>
+                              _showDeleteConfirmation(context, provider, index),
                         );
                       },
                     ),
-                  const SizedBox(height: AppSizes.xl),
-                  const Divider(),
-                  const SizedBox(height: AppSizes.xl),
-                  _buildInlineForm(context, provider),
-                  const SizedBox(height: 80),
-                ],
-              ),
+                  ),
+                const SizedBox(height: AppSizes.sm),
+                AppSection(
+                  child: _buildInlineForm(context, provider),
+                ),
+                const SizedBox(height: 80),
+              ],
             ),
           );
         },
@@ -319,7 +317,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                   ),
               ],
             ),
-            const SizedBox(height: 24),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -332,7 +329,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                   v?.trim().isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
-            const SizedBox(height: 16),
             TextFormField(
               controller: _roleController,
               decoration: InputDecoration(
@@ -345,8 +341,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                   v?.trim().isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
-            const SizedBox(height: 16),
             Row(
+              spacing: AppSizes.md,
               children: [
                 Expanded(
                   child: InkWell(
@@ -363,7 +359,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
                 Expanded(
                   child: InkWell(
                     onTap: _isCurrentlyActive
@@ -435,6 +430,97 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
         ),
       ),
     );
+  }
+
+  Future<void> _showDeleteConfirmation(
+      BuildContext context, CVBuilderProvider provider, int index) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shouldDelete = await showModalBottomSheet<bool>(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(AppSizes.lg),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSizes.md,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                Icon(
+                  Iconsax.trash,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                Column(
+                  spacing: AppSizes.xs,
+                  children: [
+                    Text(
+                      l10n.deleteItem,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      l10n.deleteItemConfirmation(
+                          provider.currentCV!.organizationSection!
+                              .entries[index].role),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: AppSizes.md,
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                        ),
+                        child: Text(l10n.cancel),
+                      ),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          elevation: 0,
+                        ),
+                        child: Text(l10n.delete),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ) ??
+        false;
+
+    if (shouldDelete && context.mounted) {
+      provider.removeOrganization(index);
+    }
   }
 }
 

@@ -103,158 +103,154 @@ class _SkillsFormState extends State<_SkillsForm> {
         final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
 
         return SingleChildScrollView(
-          child: AppSection(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.sm, vertical: AppSizes.xs),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(AppSizes.xl),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(currentStep, totalSteps),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AppSection(
+                child: Column(
+                  spacing: AppSizes.sm,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        border:
+                            Border.all(color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(AppSizes.xl),
+                      ),
+                      child: Text(
+                        l10n.stepHeader(currentStep, totalSteps),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: AppSizes.sm),
-                Center(
-                  child: Text(
-                    l10n.skillsHeader,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                const SizedBox(height: AppSizes.xs),
-                Center(
-                  child: Text(
-                    l10n.skillsDesc,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.color
-                              ?.withValues(alpha: 0.7),
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: AppSizes.lg),
-                if (categories.isNotEmpty) ...[
-                  Text(
-                    l10n.addedCategories,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: AppSizes.sm),
-                  ReorderableListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: categories.length,
-                    onReorder: (oldIndex, newIndex) {
-                      provider.reorderSkillCategories(oldIndex, newIndex);
-                    },
-                    itemBuilder: (context, index) {
-                      final entry = categories.entries.elementAt(index);
-                      return _SkillCategoryCard(
-                        key: ValueKey(entry.key),
-                        categoryName: entry.key,
-                        skills: entry.value,
-                        onEdit: () => _showEditCategoryDialog(
-                          context,
-                          provider,
-                          entry.key,
-                          entry.value,
-                        ),
-                        onDelete: () => _showDeleteCategoryDialog(
-                          context,
-                          provider,
-                          entry.key,
-                        ),
-                        l10n: l10n,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: AppSizes.lg),
-                  const Divider(thickness: 1),
-                  const SizedBox(height: AppSizes.lg),
-                ],
-                Text(
-                  l10n.addNewCategory,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: AppSizes.md),
-                Form(
-                  key: _formKey,
-                  child: Container(
-                    padding: const EdgeInsets.all(AppSizes.md),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(AppSizes.md),
-                      border: Border.all(color: Theme.of(context).dividerColor),
+                    Text(
+                      l10n.skillsHeader,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                      textAlign: TextAlign.center,
                     ),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _categoryController,
-                          decoration: InputDecoration(
-                            labelText: l10n.categoryName,
-                            hintText: l10n.categoryNamePlaceholder,
-                            border: const OutlineInputBorder(),
-                            prefixIcon: const Icon(Iconsax.tag),
+                    Text(
+                      l10n.skillsDesc,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                          textCapitalization: TextCapitalization.words,
-                          validator: (value) => value == null || value.isEmpty
-                              ? l10n.categoryRequired
-                              : null,
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        TextFormField(
-                          controller: _skillsController,
-                          decoration: InputDecoration(
-                            labelText: l10n.skills,
-                            hintText: l10n.skillsHint,
-                            border: const OutlineInputBorder(),
-                            prefixIcon: const Icon(Iconsax.code),
-                          ),
-                          maxLines: 3,
-                          validator: (value) => value == null || value.isEmpty
-                              ? l10n.skillsRequired
-                              : null,
-                        ),
-                        const SizedBox(height: AppSizes.md),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () => _addCategory(provider),
-                            icon: const Icon(Iconsax.add),
-                            label: Text(l10n.addCategory),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: AppSizes.sm),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSizes.sm),
+              if (categories.isNotEmpty)
+                AppSection(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.addedCategories,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                      const SizedBox(height: AppSizes.md),
+                      ReorderableListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: categories.length,
+                        onReorder: (oldIndex, newIndex) {
+                          provider.reorderSkillCategories(oldIndex, newIndex);
+                        },
+                        itemBuilder: (context, index) {
+                          final entry = categories.entries.elementAt(index);
+                          return _SkillCategoryCard(
+                            key: ValueKey(entry.key),
+                            categoryName: entry.key,
+                            skills: entry.value,
+                            onEdit: () => _showEditCategoryDialog(
+                              context,
+                              provider,
+                              entry.key,
+                              entry.value,
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
+                            onDelete: () => _showDeleteCategoryDialog(
+                              context,
+                              provider,
+                              entry.key,
+                            ),
+                            l10n: l10n,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 80),
-              ],
-            ),
+              const SizedBox(height: AppSizes.sm),
+              AppSection(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: AppSizes.md,
+                    children: [
+                      Text(
+                        l10n.addNewCategory,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                      TextFormField(
+                        controller: _categoryController,
+                        decoration: InputDecoration(
+                          labelText: l10n.categoryName,
+                          hintText: l10n.categoryNamePlaceholder,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Iconsax.tag),
+                        ),
+                        textCapitalization: TextCapitalization.words,
+                        validator: (value) => value == null || value.isEmpty
+                            ? l10n.categoryRequired
+                            : null,
+                      ),
+                      TextFormField(
+                        controller: _skillsController,
+                        decoration: InputDecoration(
+                          labelText: l10n.skills,
+                          hintText: l10n.skillsHint,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Iconsax.code),
+                        ),
+                        maxLines: 3,
+                        validator: (value) => value == null || value.isEmpty
+                            ? l10n.skillsRequired
+                            : null,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _addCategory(provider),
+                          icon: const Icon(Iconsax.add),
+                          label: Text(l10n.addCategory),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: AppSizes.md),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
+            ],
           ),
         );
       },

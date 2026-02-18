@@ -42,6 +42,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
             children: [
               AppSection(
                 child: Column(
+                  spacing: AppSizes.md,
                   children: [
                     _FeatureCard(
                       icon: Iconsax.document_text,
@@ -51,7 +52,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       onTap: () => context.router
                           .push(const CvBuilderWelcomeRoute()),
                     ),
-                    const SizedBox(height: AppSizes.md),
                     _FeatureCard(
                       icon: Iconsax.chart_2,
                       title: l10n.cvAnalyzer,
@@ -60,7 +60,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       onTap: () => context.router
                           .push(const CvAnalyzerUploadRoute()),
                     ),
-                    const SizedBox(height: AppSizes.md),
                     _FeatureCard(
                       icon: Iconsax.magic_star,
                       title: l10n.convertToCvAts,
@@ -69,7 +68,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       onTap: () =>
                           context.router.push(const CvAtsConverterRoute()),
                     ),
-                    const SizedBox(height: AppSizes.md),
                     _FeatureCard(
                       icon: Iconsax.clock,
                       title: l10n.cvHistory,
@@ -84,6 +82,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: AppSizes.md,
                   children: [
                     Text(
                       l10n.myCvs,
@@ -91,7 +90,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    const SizedBox(height: AppSizes.md),
                     Consumer<CVBuilderProvider>(
                       builder: (context, provider, child) {
                         if (provider.isLoading &&

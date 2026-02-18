@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class LanguageSelectionScreen extends StatefulWidget {
@@ -28,43 +29,50 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 48),
+              const SizedBox(height: AppSizes.xxl),
               Icon(
                 Iconsax.language_square,
                 size: 64,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              const SizedBox(height: 24),
-              Text(
-                _selectedLanguage == 'en'
-                    ? 'Choose Your Language'
-                    : 'Pilih Bahasa Anda',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
+              Column(
+                spacing: AppSizes.xs,
+                children: [
+                  Text(
+                    _selectedLanguage == 'en'
+                        ? 'Choose Your Language'
+                        : 'Pilih Bahasa Anda',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    _selectedLanguage == 'en'
+                        ? 'Please select your preferred language'
+                        : 'Silakan pilih bahasa yang Anda inginkan',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                _selectedLanguage == 'en'
-                    ? 'Please select your preferred language'
-                    : 'Silakan pilih bahasa yang Anda inginkan',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 48),
-              _buildLanguageOption(
-                '🇬🇧',
-                l10n.english,
-                'en',
-              ),
-              const SizedBox(height: 16),
-              _buildLanguageOption(
-                '🇮🇩',
-                l10n.bahasaIndonesia,
-                'id',
+              const SizedBox(height: AppSizes.xl),
+              Column(
+                spacing: AppSizes.md,
+                children: [
+                  _buildLanguageOption(
+                    '🇬🇧',
+                    l10n.english,
+                    'en',
+                  ),
+                  _buildLanguageOption(
+                    '🇮🇩',
+                    l10n.bahasaIndonesia,
+                    'id',
+                  ),
+                ],
               ),
               const Spacer(),
               ElevatedButton(
@@ -83,9 +91,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: AppSizes.sm,
                   children: [
                     Text(_selectedLanguage == 'en' ? 'Continue' : 'Lanjutkan'),
-                    const SizedBox(width: 8),
                     const Icon(Iconsax.arrow_right),
                   ],
                 ),
@@ -124,9 +132,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               : null,
         ),
         child: Row(
+          spacing: AppSizes.md,
           children: [
             Text(flag, style: const TextStyle(fontSize: 40)),
-            const SizedBox(width: 16),
             Text(
               language,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(

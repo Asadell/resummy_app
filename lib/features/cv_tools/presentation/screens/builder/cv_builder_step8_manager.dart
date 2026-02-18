@@ -99,82 +99,86 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     }
 
     return SingleChildScrollView(
-      child: AppSection(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.sm, vertical: AppSizes.xs),
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  border: Border.all(color: theme.primaryColor),
-                  borderRadius: BorderRadius.circular(AppSizes.xl),
-                ),
-                child: Text(
-                  l10n.stepHeader(totalSteps, totalSteps),
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppSection(
+            child: Column(
+              spacing: AppSizes.sm,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                  decoration: BoxDecoration(
+                    color: theme.cardColor,
+                    border: Border.all(color: theme.primaryColor),
+                    borderRadius: BorderRadius.circular(AppSizes.xl),
+                  ),
+                  child: Text(
+                    l10n.stepHeader(totalSteps, totalSteps),
+                    style: TextStyle(
+                      color: theme.primaryColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: AppSizes.sm),
-            Center(
-              child: Text(
-                l10n.sectionManagerTitle,
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                Text(
+                  l10n.sectionManagerTitle,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            ),
-            const SizedBox(height: AppSizes.xs),
-            Center(
-              child: Text(
-                l10n.sectionManagerDesc,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color:
-                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                Text(
+                  l10n.sectionManagerDesc,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
+              ],
             ),
-            const SizedBox(height: AppSizes.lg),
-            ReorderableListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: cv.sections.length,
-              proxyDecorator:
-                  (Widget child, int index, Animation<double> animation) {
-                return child;
-              },
-              onReorder: (oldIndex, newIndex) {
-                provider.reorderSections(oldIndex, newIndex);
-              },
-              itemBuilder: (context, index) {
-                final section = cv.sections[index];
+          ),
+          const SizedBox(height: AppSizes.sm),
+          AppSection(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cv.sections.length,
+                  proxyDecorator:
+                      (Widget child, int index, Animation<double> animation) {
+                    return child;
+                  },
+                  onReorder: (oldIndex, newIndex) {
+                    provider.reorderSections(oldIndex, newIndex);
+                  },
+                  itemBuilder: (context, index) {
+                    final section = cv.sections[index];
 
-                return _buildSectionCard(section, provider, index, context);
-              },
-            ),
-            const SizedBox(height: AppSizes.lg),
-            OutlinedButton.icon(
-              onPressed: () => _showAddCustomSectionDialog(provider),
-              icon: const Icon(Iconsax.add),
-              label: Text(l10n.addCustomSection),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.sm),
+                    return _buildSectionCard(section, provider, index, context);
+                  },
                 ),
-              ),
+                const SizedBox(height: AppSizes.md),
+                OutlinedButton.icon(
+                  onPressed: () => _showAddCustomSectionDialog(provider),
+                  icon: const Icon(Iconsax.add),
+                  label: Text(l10n.addCustomSection),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.sm),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 80),
-          ],
-        ),
+          ),
+          const SizedBox(height: 80),
+        ],
       ),
     );
   }
@@ -394,17 +398,15 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               const SizedBox(height: 24),
               Text(
                 l10n.selectSectionFormat,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 24),
               ...CustomSectionTemplate.values.map((template) {
                 final isSelected = selectedTemplate == template;
                 return GestureDetector(
                   onTap: () => setState(() => selectedTemplate = template),
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: AppSizes.sm),
+                    padding: const EdgeInsets.all(AppSizes.md),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? Theme.of(context)
@@ -414,10 +416,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                       border: Border.all(
                         color: isSelected
                             ? Theme.of(context).primaryColor
-                            : Colors.grey.shade300,
+                            : Theme.of(context).dividerColor,
                         width: isSelected ? 2 : 1,
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppSizes.sm),
                     ),
                     child: Row(
                       children: [
@@ -425,10 +427,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                           _getTemplateIcon(template),
                           color: isSelected
                               ? Theme.of(context).primaryColor
-                              : Colors.grey,
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                           size: 20,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppSizes.md),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,10 +451,9 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                               const SizedBox(height: 2),
                               Text(
                                 _getTemplateDesc(template),
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.grey.shade600,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
                               ),
                             ],
                           ),

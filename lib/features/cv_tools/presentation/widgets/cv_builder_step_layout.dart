@@ -72,36 +72,32 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      final success = await provider.saveCurrentCV();
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              success
-                                  ? l10n.cvSavedToLibrary
-                                  : l10n.failedToSaveCv,
-                            ),
-                            backgroundColor:
-                                success ? Colors.green : Colors.red,
+                child: IconButton(
+                  onPressed: () async {
+                    final success = await provider.saveCurrentCV();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            success
+                                ? l10n.cvSavedToLibrary
+                                : (provider.errorMessage ??
+                                    l10n.failedToSaveCv),
                           ),
-                        );
-                        if (success) {
-                          context.router.replaceAll([
-                            const MainRoute(children: [CvToolsHubRoute()]),
-                          ]);
-                        }
+                          backgroundColor:
+                              success ? Colors.green : Colors.red,
+                        ),
+                      );
+                      if (success) {
+                        context.router.replaceAll([
+                          const MainRoute(children: [CvToolsHubRoute()]),
+                        ]);
                       }
-                    },
-                    child: Text(
-                      l10n.save,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0EA5E9),
-                          ),
-                    ),
+                    }
+                  },
+                  icon: Icon(
+                    Iconsax.save_2,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -174,7 +170,7 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
             child: SafeArea(
               child: Row(
                 children: [
-                  if (widget.onBack != null) ...[
+                  if (widget.currentStep > 1 && widget.onBack != null) ...[
                     Expanded(
                       child: OutlinedButton(
                         onPressed: widget.onBack,

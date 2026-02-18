@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
 @RoutePage()
@@ -139,144 +141,161 @@ class _InterviewSessionClosingScreenState
             ),
             body: SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.all(AppSizes.lg),
                 child: Column(
+                  spacing: AppSizes.md,
                   children: [
-                    TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0.8, end: 1.2),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.elasticOut,
-                      builder: (context, double scale, child) {
-                        return Transform.scale(
-                          scale: scale,
-                          child: Icon(Iconsax.award,
-                              size: 100,
-                              color: Theme.of(context).colorScheme.secondary),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      l10n.interviewCompleted,
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.goodJobUser(''),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 40),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                    AppSection(
                       child: Column(
+                        spacing: AppSizes.md,
                         children: [
-                          Row(
+                          TweenAnimationBuilder(
+                            tween: Tween<double>(begin: 0.8, end: 1.2),
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.elasticOut,
+                            builder: (context, double scale, child) {
+                              return Transform.scale(
+                                scale: scale,
+                                child: Icon(Iconsax.award,
+                                    size: 100,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              );
+                            },
+                          ),
+                          Column(
+                            spacing: AppSizes.sm,
                             children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Theme.of(context).colorScheme.primary,
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withAlpha(200)
-                                    ],
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Iconsax.profile_circle,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  size: 24,
-                                ),
+                              Text(
+                                l10n.interviewCompleted,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                textAlign: TextAlign.center,
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  l10n.aiClosingMessage(''),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
+                              Text(
+                                l10n.goodJobUser(''),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.generatingFeedbackProgress,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
+                    const SizedBox(height: AppSizes.sm),
+                    AppSection(
+                      child: Row(
+                        spacing: AppSizes.md,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withAlpha(200)
+                                ],
                               ),
-                        ),
-                        const SizedBox(width: 8),
-                        Icon(Iconsax.timer_1,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 24),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        value: _progress,
-                        minHeight: 8,
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '${(_progress * 100).toInt()}%',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Iconsax.profile_circle,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              size: 24,
+                            ),
                           ),
-                    ),
-                    const SizedBox(height: 24),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: BorderRadius.circular(12),
+                          Expanded(
+                            child: Text(
+                              l10n.aiClosingMessage(''),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                    AppSection(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: AppSizes.sm,
+                            children: [
+                              Text(
+                                l10n.generatingFeedbackProgress,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                              Icon(Iconsax.timer_1,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 24),
+                            ],
+                          ),
+                          const SizedBox(height: AppSizes.sm),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(AppSizes.xs),
+                            child: LinearProgressIndicator(
+                              value: _progress,
+                              minHeight: 8,
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.xs),
+                          Text(
+                            '${(_progress * 100).toInt()}%',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                    AppSection(
                       child: Column(
                         children: List.generate(_steps(l10n).length, (index) {
                           final currentStepIndex = (_progress * 4).floor();
 
                           final isDone =
                               _analysisComplete || index < currentStepIndex;
-                          final isInProgress =
-                              !_analysisComplete && index == currentStepIndex;
+                          final isInProgress = !_analysisComplete &&
+                              index == currentStepIndex;
 
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: AppSizes.xs),
                             child: Row(
+                              spacing: AppSizes.md,
                               children: [
                                 if (isDone)
                                   Icon(Iconsax.tick_circle,
@@ -290,10 +309,11 @@ class _InterviewSessionClosingScreenState
                                     height: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Theme.of(context)
-                                              .colorScheme
-                                              .primary),
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                     ),
                                   )
                                 else
@@ -303,7 +323,6 @@ class _InterviewSessionClosingScreenState
                                           .onSurfaceVariant
                                           .withValues(alpha: 0.3),
                                       size: 20),
-                                const SizedBox(width: 12),
                                 Text(
                                   _steps(l10n)[index],
                                   style: TextStyle(
@@ -330,7 +349,6 @@ class _InterviewSessionClosingScreenState
                         }),
                       ),
                     ),
-                    const SizedBox(height: 20),
                     Text(
                       l10n.estimateTime,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(

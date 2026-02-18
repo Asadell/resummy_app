@@ -350,65 +350,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               Text(
-                l10n.edit,
+                l10n.profile,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: l10n.fullName,
-                  prefixIcon: const Icon(Iconsax.user),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                initialValue: selectedStatus,
-                decoration: InputDecoration(
-                  labelText: l10n.status,
-                  prefixIcon: const Icon(Iconsax.status),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                items: [
-                  DropdownMenuItem(
-                      value: 'fresh_grad', child: Text(l10n.freshGraduate)),
-                  DropdownMenuItem(
-                      value: 'working', child: Text(l10n.currentlyWorking)),
-                  DropdownMenuItem(
-                      value: 'job_seeking', child: Text(l10n.lookingForJob)),
-                  DropdownMenuItem(
-                      value: 'freelancer', child: Text(l10n.freelancer)),
+              Column(
+                spacing: AppSizes.md,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: l10n.fullName,
+                      prefixIcon: const Icon(Iconsax.user),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.sm)),
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    initialValue: selectedStatus,
+                    decoration: InputDecoration(
+                      labelText: l10n.status,
+                      prefixIcon: const Icon(Iconsax.status),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.sm)),
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                          value: 'fresh_grad', child: Text(l10n.freshGraduate)),
+                      DropdownMenuItem(
+                          value: 'working', child: Text(l10n.currentlyWorking)),
+                      DropdownMenuItem(
+                          value: 'job_seeking', child: Text(l10n.lookingForJob)),
+                      DropdownMenuItem(
+                          value: 'freelancer', child: Text(l10n.freelancer)),
+                    ],
+                    onChanged: (value) {
+                      setBottomSheetState(() => selectedStatus = value);
+                    },
+                  ),
+                  TextField(
+                    controller: roleController,
+                    decoration: InputDecoration(
+                      labelText: l10n.targetRole,
+                      prefixIcon: const Icon(Iconsax.briefcase),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.sm)),
+                    ),
+                  ),
+                  TextField(
+                    controller: goalController,
+                    decoration: InputDecoration(
+                      labelText: l10n.goal,
+                      prefixIcon: const Icon(Iconsax.direct_up),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.sm)),
+                    ),
+                    maxLines: 3,
+                  ),
                 ],
-                onChanged: (value) {
-                  setBottomSheetState(() => selectedStatus = value);
-                },
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: roleController,
-                decoration: InputDecoration(
-                  labelText: l10n.targetRole,
-                  prefixIcon: const Icon(Iconsax.briefcase),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: goalController,
-                decoration: InputDecoration(
-                  labelText: l10n.goal,
-                  prefixIcon: const Icon(Iconsax.direct_up),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                maxLines: 3,
               ),
               const SizedBox(height: 32),
               Row(
@@ -419,12 +420,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(AppSizes.sm)),
                       ),
                       child: Text(l10n.cancel),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppSizes.md),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -440,7 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(AppSizes.sm)),
                       ),
                       child: Text(l10n.save),
                     ),

@@ -29,7 +29,7 @@ class CvPreviewCard extends StatelessWidget {
 
     return Container(
       color: const Color(0xFFF5F5F5),
-      child: Center(
+      child: Center( 
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Container(
@@ -49,7 +49,7 @@ class CvPreviewCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(context, cvData!),
+                  _buildHeader(context, l10n, cvData!),
                   const SizedBox(height: 24),
                   ...cvData!.sections
                       .where((s) => s.isVisible)
@@ -66,12 +66,12 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, CVData cv) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n, CVData cv) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          cv.name.toUpperCase(),
+          (cv.name.isNotEmpty ? cv.name : l10n.fullName).toUpperCase(),
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
