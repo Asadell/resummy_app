@@ -38,7 +38,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
     // Use Google displayName as fallback if fullName is empty
     final displayName = widget.fullName.isNotEmpty 
         ? widget.fullName 
-        : authProvider.displayName;
+        : authProvider.currentUser?.displayName ?? '';
     
     return Scaffold(
       appBar: AppBar(
@@ -162,13 +162,13 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     
-    if (authProvider.user == null) {
+    if (authProvider.currentUser == null) {
       setState(() => _isLoading = false);
       return;
     }
     
     final success = await _repository.completeOnboarding(
-      authProvider.user!.uid,
+      authProvider.currentUser!.id,
       fullName: displayName,
       workStatus: widget.workStatus,
       targetRole: widget.targetRole,

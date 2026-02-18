@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
 
 import 'package:resummy_app/core/routes/app_router.gr.dart';

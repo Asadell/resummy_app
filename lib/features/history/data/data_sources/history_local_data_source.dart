@@ -85,6 +85,26 @@ class HistoryLocalDataSource {
           metadata: {'status': status},
         ));
       }
+      
+      // 4. Fetch Translations (ATS Conversions)
+      final translations = await _dbHelper.query(
+        DatabaseHelper.tableTranslations,
+        where: 'userId = ?',
+        whereArgs: [userId],
+      );
+
+      for (final translation in translations) {
+        activities.add(ActivityEntity(
+          id: translation['id'] as String,
+          userId: userId,
+          type: ActivityType.cvTranslated, // Treated as ATS Converter in UI
+          title: 'CV to ATS', // Generic title as per user request
+          subtitle: 'Converted to ${translation['toLang'] ?? 'English'}',
+          timestamp: DateTime.fromMillisecondsSinceEpoch(translation['createdAt'] as int),
+          relatedId: translation['id'] as String,
+          metadata: {'from': translation['fromLang'], 'to': translation['toLang']},
+        ));
+      }
 
       // Sort by timestamp descending
       activities.sort((a, b) => b.timestamp.compareTo(a.timestamp));

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -124,26 +127,84 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              _ActivityCard(
-                icon: Iconsax.tick_circle,
-                title: l10n.cvAnalysisCompleted,
-                subtitle: l10n.score(85),
-                time: l10n.hoursAgo(2),
-                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
-              ),
-              const SizedBox(height: 8),
-              _ActivityCard(
-                icon: Iconsax.microphone,
-                title: l10n.interviewPractice,
-                subtitle: l10n.softwareEngineer,
-                time: l10n.daysAgo(1),
-                onTap: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+              
+              Consumer<HistoryProvider>(
+                builder: (context, provider, child) {
+                  final activities = provider.activities.take(3).toList();
+                  
+                  if (activities.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24.0),
+                        child: Text(
+                          l10n.noInterviewHistory, // Reuse or add new string "No recent activity"
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: activities.map((activity) {
+                      return _ActivityCard(
+                        icon: _getActivityIcon(activity.type),
+                        title: activity.title,
+                        subtitle: activity.subtitle,
+                        time: _formatTimeAgo(context, activity.timestamp),
+                        onTap: () {
+                           // For now, simpler navigation. 
+                           // Ideally we'd deep link to specific CV or Interview
+                           if (activity.type == ActivityType.interviewPrep) {
+                             context.router.navigate(const HistoryRoute());
+                           } else if (activity.type == ActivityType.cvCreated) {
+                             context.router.navigate(const CvBuilderWelcomeRoute());
+                           } else if (activity.type == ActivityType.cvAnalyzed) {
+                             context.router.navigate(const CvAnalyzerUploadRoute());
+                           } else if (activity.type == ActivityType.cvTranslated) {
+                             context.router.navigate(const CvAtsConverterRoute());
+                           }
+                        },
+                      );
+                    }).toList(),
+                  );
+                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+  IconData _getActivityIcon(ActivityType type) {
+    switch (type) {
+      case ActivityType.cvCreated:
+        return Iconsax.document_text;
+      case ActivityType.cvAnalyzed:
+        return Iconsax.chart_2;
+      case ActivityType.interviewPrep:
+        return Iconsax.microphone;
+      case ActivityType.cvTranslated:
+        return Iconsax.translate;
+      default:
+        return Iconsax.activity;
+    }
+  }
+
+  String _formatTimeAgo(BuildContext context, DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m';
+    } else {
+      return 'Just now';
+    }
   }
 }
 

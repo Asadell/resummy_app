@@ -4,12 +4,28 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:intl/intl.dart';
 
 @RoutePage()
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Refresh history when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HistoryProvider>().refresh();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +37,23 @@ class HistoryScreen extends StatelessWidget {
         title: Text(l10n.history),
       ),
       body: SafeArea(
-        child: Consumer<InterviewProvider>(
+        child: Consumer<HistoryProvider>(
           builder: (context, provider, child) {
-            final history = provider.history;
+            final history = provider.activities;
             
+            if (provider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             if (history.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Iconsax.document_text, size: 64, color: Colors.grey[300]),
+                    Icon(Iconsax.clock, size: 64, color: Colors.grey[300]),
                     const SizedBox(height: 16),
                     Text(
-                      l10n.noInterviewHistory,
+                      l10n.noInterviewHistory, // Use generic "No history" if available
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.grey,
                       ),
@@ -48,35 +68,29 @@ class HistoryScreen extends StatelessWidget {
               itemCount: history.length,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final report = history[index];
+                final activity = history[index];
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
-                       backgroundColor: _getScoreColor(context, report.overallScore).withValues(alpha: 0.1),
-                       child: Icon(Iconsax.microphone, color: _getScoreColor(context, report.overallScore)),
+                       backgroundColor: _getActivityColor(context, activity.type).withValues(alpha: 0.1),
+                       child: Icon(
+                         _getActivityIcon(activity.type), 
+                         color: _getActivityColor(context, activity.type)
+                       ),
                     ),
-                    title: Text(l10n.interviewResults), // TODO: Add Role to InterviewReport so we can show it here
-                    subtitle: Text(
-                      DateFormat('MMM d, y • HH:mm').format(report.createdAt),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                    title: Text(activity.title),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(activity.subtitle),
                         Text(
-                          '${report.overallScore}/100',
-                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: _getScoreColor(context, report.overallScore),
-                           ),
+                          DateFormat('MMM d, y • HH:mm').format(activity.timestamp),
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(Iconsax.arrow_right_3, size: 16),
                       ],
                     ),
-                    onTap: () {
-                      provider.setReport(report);
-                      context.router.push(const InterviewFeedbackOverviewRoute());
-                    },
+                    trailing: const Icon(Iconsax.arrow_right_3, size: 16),
+                    onTap: () => _handleActivityTap(context, activity),
                   ),
                 );
               },
@@ -87,9 +101,74 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  Color _getScoreColor(BuildContext context, int score) {
-    if (score >= 80) return Theme.of(context).colorScheme.primary;
-    if (score >= 60) return Colors.orange;
-    return Theme.of(context).colorScheme.error;
+  void _handleActivityTap(BuildContext context, ActivityEntity activity) {
+    switch (activity.type) {
+      case ActivityType.interviewPrep:
+        _navigateToInterview(context, activity);
+        break;
+      case ActivityType.cvCreated:
+        context.router.navigate(const CvBuilderWelcomeRoute());
+        break;
+      case ActivityType.cvAnalyzed:
+        context.router.navigate(const CvAnalyzerUploadRoute()); 
+        break;
+      case ActivityType.cvTranslated:
+        context.router.navigate(const CvAtsConverterRoute());
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _navigateToInterview(BuildContext context, ActivityEntity activity) {
+    final interviewProvider = context.read<InterviewProvider>();
+    final interviewId = activity.relatedId;
+    
+    if (interviewId != null) {
+      // Try to find the interview in the loaded history
+      try {
+        final interview = interviewProvider.history.firstWhere(
+          (i) => i.id == interviewId,
+          orElse: () => throw Exception('Not found'),
+        );
+        
+        if (interview.report != null) {
+          interviewProvider.setReport(interview.report!);
+          context.router.push(const InterviewFeedbackOverviewRoute());
+          return;
+        }
+      } catch (_) {
+        // If not found in loaded history, we could fetch it, but for now navigate to prep screen
+      }
+    }
+    context.router.navigate(const InterviewPrepRoute());
+  }
+
+  IconData _getActivityIcon(ActivityType type) {
+    switch (type) {
+      case ActivityType.cvCreated:
+        return Iconsax.document_text;
+      case ActivityType.cvAnalyzed:
+        return Iconsax.chart_2;
+      case ActivityType.interviewPrep:
+        return Iconsax.microphone;
+      case ActivityType.cvTranslated:
+        return Iconsax.translate;
+      default:
+        return Iconsax.activity;
+    }
+  }
+
+  Color _getActivityColor(BuildContext context, ActivityType type) {
+    switch (type) {
+      case ActivityType.cvCreated:
+        return Theme.of(context).colorScheme.primary;
+      case ActivityType.cvAnalyzed:
+        return Theme.of(context).colorScheme.secondary;
+      case ActivityType.interviewPrep:
+        return Theme.of(context).colorScheme.tertiary;
+      default:
+        return Colors.grey;
+    }
   }
 }

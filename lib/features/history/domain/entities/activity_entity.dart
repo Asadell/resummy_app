@@ -4,6 +4,7 @@ enum ActivityType {
   cvCreated,
   cvUpdated,
   cvAnalyzed,
+  cvTranslated,
   interviewPrep,
   unknown,
 }

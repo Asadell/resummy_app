@@ -78,4 +78,31 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createProfileIfNotExists(String uid, {
+    required String email,
+    String? fullName,
+    String? photoUrl,
+  }) async {
+    try {
+      final existing = await _repository.getUserProfile(uid);
+      if (existing != null) {
+        _profile = existing;
+      } else {
+        final newProfile = UserProfile(
+          uid: uid,
+          email: email,
+          fullName: fullName ?? '',
+          photoUrl: photoUrl,
+          onboardingDone: false,
+        );
+        await _repository.createUserProfile(newProfile);
+        _profile = newProfile;
+      }
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
 }

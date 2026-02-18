@@ -4,7 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 @RoutePage()
 class OnboardingStep1Screen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
     // Pre-fill with Google display name
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      _nameController.text = authProvider.displayName;
+      _nameController.text = authProvider.currentUser?.displayName ?? '';
     });
   }
 
@@ -113,7 +113,7 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
     // Use Google display name as fallback
     final fullName = _nameController.text.trim().isNotEmpty 
         ? _nameController.text.trim()
-        : authProvider.displayName;
+        : authProvider.currentUser?.displayName ?? '';
     
     // Skip to confirmation with just the name
     router.push(OnboardingConfirmationRoute(

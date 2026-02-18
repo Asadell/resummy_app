@@ -30,8 +30,8 @@ class _CvBuilderWelcomeScreenState extends State<CvBuilderWelcomeScreen> {
 
   Future<void> _loadProfile() async {
     final authProvider = context.read<AuthProvider>();
-    if (authProvider.user != null) {
-      final profile = await _profileRepository.getUserProfile(authProvider.user!.uid);
+    if (authProvider.currentUser != null) {
+      final profile = await _profileRepository.getUserProfile(authProvider.currentUser!.id);
       if (mounted) {
         setState(() {
           _profile = profile;
@@ -86,9 +86,9 @@ class _CvBuilderWelcomeScreenState extends State<CvBuilderWelcomeScreen> {
                   ),
                   onPressed: () {
                     // Pre-fill from profile (prioritize Firestore fullName)
-                    final name = _profile?.fullName ?? authProvider.displayName;
-                    final email = _profile?.email ?? authProvider.email;
-                    final phone = authProvider.phoneNumber;
+                    final name = _profile?.fullName ?? authProvider.currentUser?.displayName ?? '';
+                    final email = _profile?.email ?? authProvider.currentUser?.email ?? '';
+                    final phone = null; // Profile does not store phone number
 
                     // Initialize new CV before navigating
                     context.read<CVBuilderProvider>().startNewCV(

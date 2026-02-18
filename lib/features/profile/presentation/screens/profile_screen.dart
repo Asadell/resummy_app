@@ -4,7 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -76,10 +76,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 CircleAvatar(
                                   radius: 40,
                                   backgroundColor: Theme.of(context).colorScheme.primary,
-                                  backgroundImage: authProvider.photoUrl != null
-                                      ? NetworkImage(authProvider.photoUrl!)
+                                  backgroundImage: authProvider.currentUser?.photoUrl != null
+                                      ? NetworkImage(authProvider.currentUser!.photoUrl!)
                                       : null,
-                                  child: authProvider.photoUrl == null
+                                  child: authProvider.currentUser?.photoUrl == null
                                       ? Icon(
                                           Iconsax.user,
                                           size: 48,
@@ -89,11 +89,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  profile?.fullName ?? authProvider.displayName,
+                                  profile?.fullName ?? authProvider.currentUser?.displayName ?? '',
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  profile?.email ?? authProvider.email,
+                                  profile?.email ?? authProvider.currentUser?.email ?? '',
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),

@@ -107,29 +107,32 @@ class InterviewPrepScreen extends StatelessWidget {
                   final recent = provider.history.take(3).toList();
                   
                   return Column(
-                    children: recent.map((report) {
+                    children: recent.map((interview) {
+                      final score = interview.report?.overallScore ?? 0;
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: _getScoreColor(context, report.overallScore).withValues(alpha: 0.1),
+                            backgroundColor: _getScoreColor(context, score).withValues(alpha: 0.1),
                             child: Text(
-                              report.overallScore.toString(),
+                              score.toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: _getScoreColor(context, report.overallScore),
+                                color: _getScoreColor(context, score),
                               ),
                             ),
                           ),
                           title: Text(l10n.interviewResults), // Context? Position?
                           subtitle: Text(
-                            DateFormat.yMMMd().format(report.createdAt),
+                            DateFormat.yMMMd().format(interview.createdAt),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           trailing: const Icon(Iconsax.arrow_right_3, size: 16),
                           onTap: () {
-                            provider.setReport(report);
-                            context.router.push(const InterviewFeedbackOverviewRoute());
+                            if (interview.report != null) {
+                              provider.setReport(interview.report!);
+                              context.router.push(const InterviewFeedbackOverviewRoute());
+                            }
                           },
                         ),
                       );

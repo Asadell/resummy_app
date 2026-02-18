@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/app/app.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart'; // New AuthProvider
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:resummy_app/core/di/injection.dart';
@@ -12,13 +12,17 @@ import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_so
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
-import 'package:resummy_app/core/services/gemini_speech_service.dart';
-import 'package:resummy_app/core/services/gemini_interview_service.dart';
+import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart'; // Added
+import 'package:resummy_app/features/history/domain/repositories/history_repository.dart'; // Added
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:resummy_app/core/services/database_helper.dart'; // Added
+import 'package:resummy_app/features/cv_tools/data/data_sources/cv_remote_data_source.dart'; // Added
+import 'package:cloud_firestore/cloud_firestore.dart'; // Added
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider; // Added
 
 import 'firebase_options.dart';
-import 'package:resummy_app/features/interview/data/repositories/interview_history_repository.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -37,18 +41,11 @@ void main() async {
 
   final themeProvider = ThemeProvider();
   final localeProvider = LocaleProvider();
-  final authProvider = AuthProvider();
-
-  // Initialize SharedPreferences for CV Builder
-  final prefs = await SharedPreferences.getInstance();
+ 
   
-  // Repositories
-  final interviewHistoryRepository = InterviewHistoryRepository(prefs);
-
   await Future.wait([
     themeProvider.init(),
     localeProvider.init(),
-    authProvider.init(),
   ]);
 
   runApp(
@@ -56,32 +53,68 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
-        ChangeNotifierProvider.value(value: authProvider),
+        
+        // New AuthProvider using GetIt
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(
+            getUserStreamUseCase: getIt(),
+            signInWithGoogleUseCase: getIt(),
+            signOutUseCase: getIt(),
+          ),
+        ),
+
+        // ProfileProvider depends on AuthProvider
         ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
           create: (_) => ProfileProvider(),
           update: (_, auth, profile) {
-            if (profile != null) {
-              profile.loadProfile(auth.user?.uid);
+            final p = profile ?? ProfileProvider();
+            final user = auth.currentUser;
+            if (user != null) {
+              p.loadProfile(user.id);
             }
-            return profile ?? ProfileProvider();
+            return p;
           },
         ),
+
         ChangeNotifierProvider(
           create: (_) => CvAnalyzerProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => CVBuilderProvider(
             CVBuilderRepositoryImpl(
-              CVLocalDataSource(prefs),
+              CVLocalDataSource(getIt<DatabaseHelper>()),
+              CVRemoteDataSource(FirebaseFirestore.instance),
+              FirebaseAuth.instance,
             ),
           ),
         ),
-        ChangeNotifierProvider(
+        
+        // InterviewProvider depends on AuthProvider for userId
+        ChangeNotifierProxyProvider<AuthProvider, InterviewProvider>(
           create: (_) => InterviewProvider(
-            geminiService: GeminiSpeechService(),
-            interviewService: GeminiInterviewService(),
-            repository: interviewHistoryRepository,
+            getIt<InterviewRepository>(),
           ),
+          update: (_, auth, interview) {
+             final provider = interview ?? InterviewProvider(getIt<InterviewRepository>());
+             final user = auth.currentUser;
+             provider.updateUserId(user?.id);
+             return provider;
+          },
+        ),
+        
+        // HistoryProvider depends on AuthProvider for userId
+        ChangeNotifierProxyProvider<AuthProvider, HistoryProvider>(
+          create: (_) => HistoryProvider(getIt<HistoryRepository>()),
+          update: (_, auth, history) {
+             final provider = history ?? HistoryProvider(getIt<HistoryRepository>());
+             final user = auth.currentUser;
+             if (user != null) {
+               provider.loadActivities(user.id);
+             } else {
+               provider.clear();
+             }
+             return provider;
+          },
         ),
       ],
       child: ResummyApp(),

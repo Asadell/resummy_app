@@ -4,7 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 
 @RoutePage()
 class AuthScreen extends StatelessWidget {
@@ -95,24 +96,33 @@ class AuthScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     
-    final success = await authProvider.signInWithGoogle();
+    await authProvider.signInWithGoogle();
     
-    if (success) {
-      // Check if onboarding is done
-      final onboardingDone = await authProvider.isOnboardingDone();
-      
-      if (onboardingDone) {
-        router.replace(const MainRoute());
-      } else {
-        router.replace(const OnboardingStep1Route());
-      }
-    } else if (authProvider.error != null) {
-      if (context.mounted) {
+    if (authProvider.isAuthenticated && context.mounted) {
+       final user = authProvider.currentUser!;
+       
+       // Ensure profile exists
+       await profileProvider.createProfileIfNotExists(
+         user.id, 
+         email: user.email, 
+         fullName: user.displayName, 
+         photoUrl: user.photoUrl
+       );
+       
+       if (context.mounted) {
+          // Check onboarding
+          if (profileProvider.profile?.onboardingDone ?? false) {
+             router.replace(const MainRoute());
+          } else {
+             router.replace(const OnboardingStep1Route());
+          }
+       }
+    } else if (authProvider.errorMessage != null && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.loginError(authProvider.error!))),
+          SnackBar(content: Text(l10n.loginError(authProvider.errorMessage!))),
         );
-      }
     }
   }
 }

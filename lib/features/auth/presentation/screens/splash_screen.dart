@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
@@ -36,13 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     // Check if user is logged in
-    if (!authProvider.isLoggedIn) {
+    if (!authProvider.isAuthenticated) {
       router.replace(const AuthRoute());
       return;
     }
 
-    // Check if onboarding is done
-    final onboardingDone = await authProvider.isOnboardingDone();
+    // Check if onboarding is done via ProfileProvider
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    await profileProvider.loadProfile(authProvider.currentUser!.id);
+    
+    // Check onboarding logic
+    final onboardingDone = profileProvider.profile?.onboardingDone ?? false;
+    
     if (!onboardingDone) {
       router.replace(const OnboardingStep1Route());
       return;

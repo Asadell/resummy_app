@@ -203,6 +203,325 @@ Return JSON:
     }
   }
 
+  // ========================================================================
+  // Granular Analysis Methods (Ported from GeminiInterviewService)
+  // ========================================================================
+
+  /// Analyze content quality
+  Future<ContentQualityAnalysis> analyzeContentQuality({
+    required String question,
+    required String transcript,
+    required String jobContext,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final prompt = '''
+Evaluate the quality and relevance of this interview answer.
+
+**Question:** $question
+**Answer:** $transcript
+**Job Context:** $jobContext
+
+Assess:
+1. **Relevance** (0-10): Does it answer the question directly?
+2. **Depth** (0-10): Level of detail and specificity
+3. **Professional Impact** (0-10): Would this impress an interviewer?
+
+Analyze:
+- Key strengths mentioned
+- Missing elements
+- Specificity of examples
+- Use of metrics/numbers
+- Demonstration of skills
+
+Calculate overall content quality score (0-10) as average of the 3 sub-scores.
+
+Language: Respond entirely in $langPrompt.
+
+Return JSON:
+{
+  "score": 8,
+  "relevanceScore": 9,
+  "depthScore": 7,
+  "professionalImpact": 8,
+  "strengths": ["...", "..."],
+  "weaknesses": ["...", "..."],
+  "suggestions": ["...", "..."]
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final json = jsonDecode(responseText);
+      
+      return ContentQualityAnalysis(
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        relevanceScore: (json['relevanceScore'] is int) ? json['relevanceScore'] : (json['relevanceScore'] ?? 0).toInt(),
+        depthScore: (json['depthScore'] is int) ? json['depthScore'] : (json['depthScore'] ?? 0).toInt(),
+        professionalImpact: (json['professionalImpact'] is int) ? json['professionalImpact'] : (json['professionalImpact'] ?? 0).toInt(),
+        strengths: List<String>.from(json['strengths'] ?? []),
+        weaknesses: List<String>.from(json['weaknesses'] ?? []),
+        suggestions: List<String>.from(json['suggestions'] ?? []),
+      );
+    } catch (e) {
+      debugPrint('❌ Error analyzing content quality: $e');
+      return const ContentQualityAnalysis(
+        score: 0,
+        relevanceScore: 0,
+        depthScore: 0,
+        professionalImpact: 0,
+        strengths: [],
+        weaknesses: [],
+        suggestions: [],
+      );
+    }
+  }
+
+  /// Analyze fluency
+  Future<FluencyAnalysis> analyzeFluency({
+    required String transcript,
+    required int audioDurationSeconds,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final prompt = '''
+Analyze speech fluency from this transcript.
+
+**Transcript:** $transcript
+**Duration:** $audioDurationSeconds seconds
+
+Perform:
+1. Count total words
+2. Calculate WPM = (words / seconds) × 60
+3. Detect filler words: um, uh, eh, jadi, seperti, ya, soalnya, gitu, kayak, like, you know
+4. Calculate filler percentage = (filler count / total words) × 100
+5. Assess pace (ideal: 130-150 WPM)
+
+Calculate fluency score (0-10) based on WPM, low filler %, and pace.
+
+Language: Respond entirely in $langPrompt.
+
+Return JSON:
+{
+  "score": 8,
+  "wordCount": 150,
+  "wpm": 142.5,
+  "fillerWords": [
+    {"word": "um", "count": 3, "percentage": 2.0}
+  ],
+  "fillerPercentage": 3.33,
+  "paceAssessment": "good pace",
+  "suggestions": ["...", "..."]
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final json = jsonDecode(responseText);
+      
+      return FluencyAnalysis(
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        wordCount: (json['wordCount'] is int) ? json['wordCount'] : (json['wordCount'] ?? 0).toInt(),
+        wpm: (json['wpm'] ?? 0).toDouble(),
+        fillerWords: (json['fillerWords'] as List? ?? []).map((fw) {
+          return FillerWord(
+            word: fw['word'] ?? '',
+            count: (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
+            percentage: (fw['percentage'] ?? 0).toDouble(),
+          );
+        }).toList(),
+        fillerPercentage: (json['fillerPercentage'] ?? 0).toDouble(),
+        paceAssessment: json['paceAssessment'] ?? 'unknown',
+        suggestions: List<String>.from(json['suggestions'] ?? []),
+      );
+    } catch (e) {
+      debugPrint('❌ Error analyzing fluency: $e');
+      return const FluencyAnalysis(
+        score: 0,
+        wordCount: 0,
+        wpm: 0,
+        fillerWords: [],
+        fillerPercentage: 0,
+        paceAssessment: 'unknown',
+        suggestions: [],
+      );
+    }
+  }
+
+  /// Analyze confidence
+  Future<ConfidenceAnalysis> analyzeConfidence({
+    required String transcript,
+    required String questionContext,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final prompt = '''
+Evaluate the confidence and presence in this interview answer.
+
+**Question Context:** $questionContext
+**Transcript:** $transcript
+
+Analyze:
+1. **Tone & Energy**
+2. **Conviction**
+3. **Language strength**
+4. **Certainty** (Hedge words)
+
+Calculate confidence score (0-10).
+
+Language: Respond entirely in $langPrompt.
+
+Return JSON:
+{
+  "score": 7,
+  "toneAssessment": "positive",
+  "energyLevel": "medium",
+  "convictionLevel": "strong",
+  "strengthIndicators": ["...", "..."],
+  "weaknessIndicators": ["...", "..."],
+  "tips": ["...", "..."]
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final json = jsonDecode(responseText);
+      
+      return ConfidenceAnalysis(
+        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        toneAssessment: json['toneAssessment'] ?? 'neutral',
+        energyLevel: json['energyLevel'] ?? 'low',
+        convictionLevel: json['convictionLevel'] ?? 'weak',
+        strengthIndicators: List<String>.from(json['strengthIndicators'] ?? []),
+        weaknessIndicators: List<String>.from(json['weaknessIndicators'] ?? []),
+        tips: List<String>.from(json['tips'] ?? []),
+      );
+    } catch (e) {
+      debugPrint('❌ Error analyzing confidence: $e');
+      return const ConfidenceAnalysis(
+        score: 0,
+        toneAssessment: 'neutral',
+        energyLevel: 'low',
+        convictionLevel: 'weak',
+        strengthIndicators: [],
+        weaknessIndicators: [],
+        tips: [],
+      );
+    }
+  }
+
+  /// Generate improved speech
+  Future<ImprovedSpeechData> generateImprovedSpeech({
+    required String transcript,
+    required List<FillerWord> detectedFillers,
+    required double originalWpm,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final fillersList = detectedFillers.map((f) => f.word).join(', ');
+    
+    final prompt = '''
+Rewrite this interview answer by removing filler words and improving clarity.
+
+**Original:** $transcript
+**Detected Fillers:** $fillersList
+**Original WPM:** $originalWpm
+
+Guidelines:
+- Remove ALL filler words
+- Maintain natural flow
+- Don't add new information
+
+Language: Keep the answer in $langPrompt.
+
+Return JSON:
+{
+  "originalText": "...",
+  "improvedText": "...",
+  "fillerWordsRemoved": 5,
+  "keyChanges": ["...", "..."],
+  "wpmBefore": 142.5,
+  "wpmAfter": 155.0
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final json = jsonDecode(responseText);
+      
+      return ImprovedSpeechData(
+        originalText: json['originalText'] ?? transcript,
+        improvedText: json['improvedText'] ?? transcript,
+        fillerWordsRemoved: (json['fillerWordsRemoved'] is int) ? json['fillerWordsRemoved'] : (json['fillerWordsRemoved'] ?? 0).toInt(),
+        keyChanges: List<String>.from(json['keyChanges'] ?? []),
+        wpmBefore: (json['wpmBefore'] ?? originalWpm).toDouble(),
+        wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
+      );
+    } catch (e) {
+      debugPrint('❌ Error generating improved speech: $e');
+      return ImprovedSpeechData(
+        originalText: transcript,
+        improvedText: transcript,
+        fillerWordsRemoved: 0,
+        keyChanges: [],
+        wpmBefore: originalWpm,
+        wpmAfter: originalWpm,
+      );
+    }
+  }
+
   List<InterviewQuestion> _getFallbackQuestions() {
     return const [
       InterviewQuestion(
