@@ -35,7 +35,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
           SnackBar(
             content: Text(l10n.cvSavedTo(path)),
             action: SnackBarAction(
-              label: 'OK',
+              label: l10n.ok,
               onPressed: () {},
             ),
             duration: const Duration(seconds: 5),
@@ -101,7 +101,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Export CV',
+              l10n.exportCv,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -123,7 +123,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 ),
               ),
               title: Text(l10n.downloadPdf),
-              subtitle: const Text('Save to Downloads folder'),
+              subtitle: Text(l10n.saveToDownloads),
               onTap: () {
                 Navigator.pop(context);
                 _downloadPdf();
@@ -142,8 +142,8 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                   color: Colors.green,
                 ),
               ),
-              title: const Text('Share'),
-              subtitle: const Text('Share via WhatsApp, Email, etc.'),
+              title: Text(l10n.share),
+              subtitle: Text(l10n.shareDesc),
               onTap: () {
                 Navigator.pop(context);
                 _sharePdf();
@@ -309,7 +309,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                   TextButton.icon(
                     onPressed: _isGenerating ? null : _showPdfOptions,
                     icon: const Icon(Iconsax.export_1, size: 20),
-                    label: const Text('Export PDF'),
+                    label: Text(l10n.exportPdf),
                   ),
                 ],
               ),

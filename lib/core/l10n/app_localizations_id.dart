@@ -2164,4 +2164,70 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get cvSourceAnalyzer => 'Analisis';
+
+  @override
+  String get timeJustNow => 'Baru saja';
+
+  @override
+  String get timeDaysSuffix => 'h';
+
+  @override
+  String get timeHoursSuffix => 'j';
+
+  @override
+  String get timeMinutesSuffix => 'm';
+
+  @override
+  String get debugSkipQuestions => 'DEBUG: Lewati dengan 5 Pertanyaan';
+
+  @override
+  String get priorityLow => 'Rendah';
+
+  @override
+  String get priorityMedium => 'Sedang';
+
+  @override
+  String get priorityHigh => 'Tinggi';
+
+  @override
+  String get pendingStatus => 'Menunggu';
+
+  @override
+  String get appliedStatus => 'Diterapkan';
+
+  @override
+  String get dismissedStatus => 'Diabaikan';
+
+  @override
+  String get originalLanguage => 'Asli';
+
+  @override
+  String get linkedinLabel => 'LinkedIn';
+
+  @override
+  String get portfolioLabel => 'Portfolio';
+
+  @override
+  String get credentialIdLabel => 'ID';
+
+  @override
+  String get educationDegreesConnector => 'di';
+
+  @override
+  String get exportCv => 'Ekspor CV';
+
+  @override
+  String get share => 'Bagikan';
+
+  @override
+  String get shareDesc => 'Bagikan via WhatsApp, Email, dsb.';
+
+  @override
+  String get exportPdf => 'Ekspor PDF';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get saveToDownloads => 'Simpan ke folder Downloads';
 }

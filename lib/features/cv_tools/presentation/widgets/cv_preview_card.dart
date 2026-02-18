@@ -49,13 +49,13 @@ class CvPreviewCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(cvData!),
+                  _buildHeader(context, cvData!),
                   const SizedBox(height: 24),
                   ...cvData!.sections
                       .where((s) => s.isVisible)
                       .map((section) => Padding(
                             padding: const EdgeInsets.only(bottom: 20),
-                            child: _buildSection(section),
+                            child: _buildSection(context, section),
                           )),
                 ],
               ),
@@ -66,7 +66,7 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(CVData cv) {
+  Widget _buildHeader(BuildContext context, CVData cv) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -85,7 +85,7 @@ class CvPreviewCard extends StatelessWidget {
         if (cv.linkedin?.isNotEmpty == true ||
             cv.portfolio?.isNotEmpty == true) ...[
           const SizedBox(height: 4),
-          _buildLinksLine(cv),
+          _buildLinksLine(context, cv),
         ],
       ],
     );
@@ -111,12 +111,15 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLinksLine(CVData cv) {
+  Widget _buildLinksLine(BuildContext context, CVData cv) {
+    final l10n = AppLocalizations.of(context)!;
     final List<String> links = [];
 
-    if (cv.linkedin?.isNotEmpty == true) links.add('LinkedIn: ${cv.linkedin}');
+    if (cv.linkedin?.isNotEmpty == true) {
+      links.add('${l10n.linkedinLabel}: ${cv.linkedin}');
+    }
     if (cv.portfolio?.isNotEmpty == true) {
-      links.add('Portfolio: ${cv.portfolio}');
+      links.add('${l10n.portfolioLabel}: ${cv.portfolio}');
     }
 
     if (links.isEmpty) return const SizedBox.shrink();
@@ -131,18 +134,22 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(SectionData section) {
+  Widget _buildSection(BuildContext context, SectionData section) {
     if (section is SummarySection) return _buildSummarySection(section);
-    if (section is ExperienceSection) return _buildExperienceSection(section);
-    if (section is EducationSection) return _buildEducationSection(section);
+    if (section is ExperienceSection) {
+      return _buildExperienceSection(context, section);
+    }
+    if (section is EducationSection) {
+      return _buildEducationSection(context, section);
+    }
     if (section is OrganizationSection) {
-      return _buildOrganizationSection(section);
+      return _buildOrganizationSection(context, section);
     }
     if (section is SkillsSection) return _buildSkillsSection(section);
     if (section is CertificationsSection) {
-      return _buildCertificationsSection(section);
+      return _buildCertificationsSection(context, section);
     }
-    if (section is CustomSection) return _buildCustomSection(section);
+    if (section is CustomSection) return _buildCustomSection(context, section);
     return const SizedBox.shrink();
   }
 
@@ -199,23 +206,24 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceSection(ExperienceSection section) {
+  Widget _buildExperienceSection(BuildContext context, ExperienceSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((exp) => _buildExperienceEntry(exp)),
+        ...section.entries.map((exp) => _buildExperienceEntry(l10n, exp)),
       ],
     );
   }
 
-  Widget _buildExperienceEntry(WorkExperience exp) {
+  Widget _buildExperienceEntry(AppLocalizations l10n, WorkExperience exp) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(exp.startDate);
     final endDate =
-        exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
+        exp.isCurrentlyWorking ? l10n.present : dateFormat.format(exp.endDate!);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -301,21 +309,22 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEducationSection(EducationSection section) {
+  Widget _buildEducationSection(BuildContext context, EducationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((edu) => _buildEducationEntry(edu)),
+        ...section.entries.map((edu) => _buildEducationEntry(l10n, edu)),
       ],
     );
   }
 
-  Widget _buildEducationEntry(Education edu) {
+  Widget _buildEducationEntry(AppLocalizations l10n, Education edu) {
     final endYear =
-        edu.isCurrentlyStudying ? 'Present' : edu.endYear?.toString() ?? '';
+        edu.isCurrentlyStudying ? l10n.present : edu.endYear?.toString() ?? '';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -350,7 +359,7 @@ class CvPreviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            '${edu.degree} in ${edu.major}',
+            '${edu.degree} ${l10n.educationDegreesConnector} ${edu.major}',
             style: const TextStyle(
               fontSize: 11,
               fontStyle: FontStyle.italic,
@@ -361,7 +370,7 @@ class CvPreviewCard extends StatelessWidget {
           if (edu.gpa?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
-              'GPA: ${edu.gpa}',
+              '${l10n.gpaLabel}: ${edu.gpa}',
               style: const TextStyle(
                 fontSize: 10,
                 color: Color(0xFF6B7280),
@@ -400,23 +409,25 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrganizationSection(OrganizationSection section) {
+  Widget _buildOrganizationSection(
+      BuildContext context, OrganizationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((org) => _buildOrganizationEntry(org)),
+        ...section.entries.map((org) => _buildOrganizationEntry(l10n, org)),
       ],
     );
   }
 
-  Widget _buildOrganizationEntry(OrganizationExperience org) {
+  Widget _buildOrganizationEntry(AppLocalizations l10n, OrganizationExperience org) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(org.startDate);
     final endDate =
-        org.isCurrentlyActive ? 'Present' : dateFormat.format(org.endDate!);
+        org.isCurrentlyActive ? l10n.present : dateFormat.format(org.endDate!);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -523,19 +534,21 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCertificationsSection(CertificationsSection section) {
+  Widget _buildCertificationsSection(
+      BuildContext context, CertificationsSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((cert) => _buildCertificationEntry(cert)),
+        ...section.entries.map((cert) => _buildCertificationEntry(l10n, cert)),
       ],
     );
   }
 
-  Widget _buildCertificationEntry(Certification cert) {
+  Widget _buildCertificationEntry(AppLocalizations l10n, Certification cert) {
     final dateFormat = DateFormat('MMM yyyy');
     final issueDate = dateFormat.format(cert.issueDate);
 
@@ -582,7 +595,7 @@ class CvPreviewCard extends StatelessWidget {
           if (cert.credentialId?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
-              'ID: ${cert.credentialId}',
+              '${l10n.credentialIdLabel}: ${cert.credentialId}',
               style: const TextStyle(
                 fontSize: 9,
                 color: Color(0xFF9CA3AF),
@@ -595,7 +608,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomSection(CustomSection section) {
+  Widget _buildCustomSection(BuildContext context, CustomSection section) {
+    final l10n = AppLocalizations.of(context)!;
     if (section.template == CustomSectionTemplate.paragraph) {
       if (section.content.isEmpty) return const SizedBox.shrink();
       return Column(
@@ -686,7 +700,7 @@ class CvPreviewCard extends StatelessWidget {
         _buildSectionHeader(section.title),
         ...section.entries.map((entry) {
           final dateStr = entry.startDate != null
-              ? '${entry.startDate} - ${entry.isPresent ? "Present" : (entry.endDate ?? "")}'
+              ? '${entry.startDate} - ${entry.isPresent ? l10n.present : (entry.endDate ?? "")}'
               : '';
 
           return Padding(

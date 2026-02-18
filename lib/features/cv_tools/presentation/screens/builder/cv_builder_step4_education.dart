@@ -163,7 +163,8 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                              Text('${edu.degree} - ${edu.major}'),
+                              Text(
+                                  '${edu.degree} ${l10n.educationDegreesConnector} ${edu.major}'),
                               const SizedBox(height: 4),
                               Text(
                                 period,

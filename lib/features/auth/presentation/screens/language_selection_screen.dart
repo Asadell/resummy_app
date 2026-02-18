@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 
 @RoutePage()
@@ -19,6 +20,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -34,7 +36,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
               const SizedBox(height: 24),
               Text(
-                'Choose Your Language',
+                _selectedLanguage == 'en'
+                    ? 'Choose Your Language'
+                    : 'Pilih Bahasa Anda',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -42,7 +46,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Pilih Bahasa Anda',
+                _selectedLanguage == 'en'
+                    ? 'Please select your preferred language'
+                    : 'Silakan pilih bahasa yang Anda inginkan',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -51,13 +57,13 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               const SizedBox(height: 48),
               _buildLanguageOption(
                 '🇬🇧',
-                'English',
+                l10n.english,
                 'en',
               ),
               const SizedBox(height: 16),
               _buildLanguageOption(
                 '🇮🇩',
-                'Bahasa Indonesia',
+                l10n.bahasaIndonesia,
                 'id',
               ),
               const Spacer(),

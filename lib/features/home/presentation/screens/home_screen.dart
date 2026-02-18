@@ -196,17 +196,18 @@ class HomeScreen extends StatelessWidget {
   }
 
   String _formatTimeAgo(BuildContext context, DateTime dateTime) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays}d';
+      return '${difference.inDays}${l10n.timeDaysSuffix}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h';
+      return '${difference.inHours}${l10n.timeHoursSuffix}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m';
+      return '${difference.inMinutes}${l10n.timeMinutesSuffix}';
     } else {
-      return 'Just now';
+      return l10n.timeJustNow;
     }
   }
 }

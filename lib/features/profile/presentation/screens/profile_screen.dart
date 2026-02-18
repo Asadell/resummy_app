@@ -220,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .primary
                                       .withValues(alpha: 0.5)),
                             ),
-                            child: const Text('DEBUG: Skip with 5 Questions'),
+                            child: Text(l10n.debugSkipQuestions),
                           ),
                         ],
                       ],

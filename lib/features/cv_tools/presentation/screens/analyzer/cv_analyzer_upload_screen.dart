@@ -615,10 +615,10 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatChip('Pending', result.pendingCount, Colors.blue),
-                  _buildStatChip('Applied', result.appliedCount, Colors.green),
+                  _buildStatChip(l10n.pendingStatus, result.pendingCount, Colors.blue),
+                  _buildStatChip(l10n.appliedStatus, result.appliedCount, Colors.green),
                   _buildStatChip(
-                      'Dismissed', result.dismissedCount, Colors.grey),
+                      l10n.dismissedStatus, result.dismissedCount, Colors.grey),
                 ],
               ),
               const SizedBox(height: 12),
@@ -732,7 +732,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     border: Border.all(color: priorityColor),
                   ),
                   child: Text(
-                    suggestion.priority.name.toUpperCase(),
+                    _getPriorityLabel(suggestion.priority).toUpperCase(),
                     style: TextStyle(
                       color: priorityColor,
                       fontSize: 10,
@@ -1003,5 +1003,15 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         ),
       ),
     );
+  }
+  String _getPriorityLabel(SuggestionPriority priority) {
+    switch (priority) {
+      case SuggestionPriority.high:
+        return l10n.priorityHigh;
+      case SuggestionPriority.medium:
+        return l10n.priorityMedium;
+      case SuggestionPriority.low:
+        return l10n.priorityLow;
+    }
   }
 }

@@ -168,8 +168,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                               if (cert.credentialId != null &&
                                   cert.credentialId!.isNotEmpty) ...[
                                 const SizedBox(height: 4),
-                                Text(
-                                  'ID: ${cert.credentialId}',
+                                  Text(
+                                    '${l10n.credentialIdLabel}: ${cert.credentialId}',
                                   style: const TextStyle(
                                     fontSize: 12,
                                   ),

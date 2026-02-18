@@ -165,7 +165,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             children: [
                               const SizedBox(height: 4),
                               Text(
-                                  '${work.companyName} • ${work.employmentType}'),
+                                  '${work.companyName} • ${_getEmploymentTypeLabel(context, work.employmentType)}'),
                               const SizedBox(height: 4),
                               Text(
                                 '$start - $end',
@@ -565,5 +565,22 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
         ),
       ),
     );
+  }
+  String _getEmploymentTypeLabel(BuildContext context, String type) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (type) {
+      case 'Full-time':
+        return l10n.employmentTypeFullTime;
+      case 'Part-time':
+        return l10n.employmentTypePartTime;
+      case 'Contract':
+        return l10n.employmentTypeContract;
+      case 'Freelance':
+        return l10n.employmentTypeFreelance;
+      case 'Internship':
+        return l10n.employmentTypeInternship;
+      default:
+        return type;
+    }
   }
 }

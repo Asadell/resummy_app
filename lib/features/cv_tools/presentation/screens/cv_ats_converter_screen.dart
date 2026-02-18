@@ -252,11 +252,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           const SizedBox(height: 8),
           Row(
             children: [
-              _buildLangChip('Original', theme),
+              _buildLangChip(l10n.originalLanguage, theme, value: 'Original'),
               const SizedBox(width: 8),
-              _buildLangChip('English', theme),
+              _buildLangChip(l10n.english, theme, value: 'English'),
               const SizedBox(width: 8),
-              _buildLangChip('Indonesian', theme),
+              _buildLangChip(l10n.indonesian, theme, value: 'Indonesian'),
             ],
           ),
           if (_errorMessage != null)
@@ -306,10 +306,10 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
             children: [
               const Icon(Icons.check_circle, color: Colors.green, size: 20),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'CV berhasil dikonversi! Silakan cek preview di bawah.',
-                  style: TextStyle(
+                  l10n.cvConvertedSuccess,
+                  style: const TextStyle(
                       color: Colors.green, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -382,7 +382,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           const CircularProgressIndicator(),
           const SizedBox(height: 24),
           Text(
-            'Sedang Menganalisis CV...',
+            l10n.analyzingCv,
             style: theme.textTheme.titleLarge
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
@@ -446,7 +446,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Gagal memproses CV: $e';
+          final currentL10n = AppLocalizations.of(context)!;
+          _errorMessage = '${currentL10n.failedToProcessCv}: $e';
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
@@ -503,7 +504,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal menyimpan CV'),
+          content: Text(provider.errorMessage ?? l10n.failedToSaveCv),
           backgroundColor: Colors.red,
         ),
       );
@@ -524,13 +525,14 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     context.router.replaceAll([const HomeRoute()]);
   }
 
-  Widget _buildLangChip(String label, ThemeData theme) {
-    final isSelected = _targetLanguage == label;
+  Widget _buildLangChip(String label, ThemeData theme, {String? value}) {
+    final chipValue = value ?? label;
+    final isSelected = _targetLanguage == chipValue;
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
       onSelected: (val) {
-        if (val) setState(() => _targetLanguage = label);
+        if (val) setState(() => _targetLanguage = chipValue);
       },
       selectedColor: theme.primaryColor.withValues(alpha: 0.2),
       labelStyle: TextStyle(

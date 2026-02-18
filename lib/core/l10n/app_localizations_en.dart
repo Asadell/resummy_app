@@ -2152,4 +2152,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cvSourceAnalyzer => 'Analyzer';
+
+  @override
+  String get timeJustNow => 'Just now';
+
+  @override
+  String get timeDaysSuffix => 'd';
+
+  @override
+  String get timeHoursSuffix => 'h';
+
+  @override
+  String get timeMinutesSuffix => 'm';
+
+  @override
+  String get debugSkipQuestions => 'DEBUG: Skip with 5 Questions';
+
+  @override
+  String get priorityLow => 'Low';
+
+  @override
+  String get priorityMedium => 'Medium';
+
+  @override
+  String get priorityHigh => 'High';
+
+  @override
+  String get pendingStatus => 'Pending';
+
+  @override
+  String get appliedStatus => 'Applied';
+
+  @override
+  String get dismissedStatus => 'Dismissed';
+
+  @override
+  String get originalLanguage => 'Original';
+
+  @override
+  String get linkedinLabel => 'LinkedIn';
+
+  @override
+  String get portfolioLabel => 'Portfolio';
+
+  @override
+  String get credentialIdLabel => 'ID';
+
+  @override
+  String get educationDegreesConnector => 'in';
+
+  @override
+  String get exportCv => 'Export CV';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get shareDesc => 'Share via WhatsApp, Email, etc.';
+
+  @override
+  String get exportPdf => 'Export PDF';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get saveToDownloads => 'Save to Downloads folder';
 }
