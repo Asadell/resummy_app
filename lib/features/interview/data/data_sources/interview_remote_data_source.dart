@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_feedback_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class InterviewRemoteDataSource {
   final GeminiPoolManager _geminiPool;
@@ -50,7 +50,6 @@ class InterviewRemoteDataSource {
 
       final responseText = (response as GenerateContentResponse).text;
       if (responseText == null) {
-        debugPrint('⚠️ Empty response, using fallback questions');
         return _getFallbackQuestions();
       }
 
@@ -64,7 +63,6 @@ class InterviewRemoteDataSource {
         );
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error generating questions: $e');
       return _getFallbackQuestions();
     }
   }
@@ -121,7 +119,117 @@ Return JSON:
       final data = jsonDecode(responseText);
       return STARAnalysis.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error analyzing STAR structure: $e');
+      rethrow;
+    }
+  }
+
+  Future<ComprehensiveAnalysis> analyzeComprehensivePerformance({
+    required String question,
+    required String transcript,
+    required String jobContext,
+    required int audioDurationSeconds,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final prompt = '''
+You are an expert HR interview coach. Analyze this interview answer comprehensively.
+
+**Question:** $question
+**Candidate's Answer:** $transcript
+**Job Context:** $jobContext
+**Audio Duration:** $audioDurationSeconds seconds
+
+Perform ALL of the following analyses in ONE response:
+
+### 1. STAR Structure Analysis
+Identify which STAR components are present and their quality.
+
+### 2. Content Quality Analysis
+Assess relevance (0-10), depth (0-10), and professional impact (0-10).
+
+### 3. Fluency Analysis
+- Count total words
+- Calculate WPM = (words / seconds) x 60
+- Detect filler words: um, uh, eh, jadi, seperti, ya, soalnya, gitu, kayak, like, you know
+- Assess pace (ideal: 130-150 WPM)
+- Calculate fluency score (0-10)
+
+### 4. Confidence Analysis
+Assess tone, energy, conviction, and language strength. Score 0-10.
+
+Language: Respond entirely in $langPrompt.
+
+Return a single JSON object:
+{
+  "star": {
+    "score": 0-10,
+    "situation": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "task": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "action": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "result": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "overallFeedback": "...",
+    "suggestions": ["...", "..."]
+  },
+  "content": {
+    "score": 0-10,
+    "relevanceScore": 0-10,
+    "depthScore": 0-10,
+    "professionalImpact": 0-10,
+    "strengths": ["...", "..."],
+    "weaknesses": ["...", "..."],
+    "suggestions": ["...", "..."]
+  },
+  "fluency": {
+    "score": 0-10,
+    "wordCount": 150,
+    "wpm": 142.5,
+    "fillerWords": [{"word": "um", "count": 3, "percentage": 2.0}],
+    "fillerPercentage": 3.33,
+    "paceAssessment": "good pace",
+    "suggestions": ["...", "..."]
+  },
+  "confidence": {
+    "score": 0-10,
+    "toneAssessment": "positive",
+    "energyLevel": "medium",
+    "convictionLevel": "strong",
+    "strengthIndicators": ["...", "..."],
+    "weaknessIndicators": ["...", "..."],
+    "tips": ["...", "..."]
+  }
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+              maxOutputTokens: 4096,
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final data = jsonDecode(responseText) as Map<String, dynamic>;
+      return ComprehensiveAnalysis(
+        starAnalysis:
+            STARAnalysis.fromJson(data['star'] as Map<String, dynamic>? ?? {}),
+        contentAnalysis: ContentQualityAnalysis.fromJson(
+            data['content'] as Map<String, dynamic>? ?? {}),
+        fluencyAnalysis: FluencyAnalysis.fromJson(
+            data['fluency'] as Map<String, dynamic>? ?? {}),
+        confidenceAnalysis: ConfidenceAnalysis.fromJson(
+            data['confidence'] as Map<String, dynamic>? ?? {}),
+      );
+    } catch (e) {
+      debugPrint('Error in analyzeComprehensivePerformance: $e');
       rethrow;
     }
   }
@@ -197,7 +305,6 @@ Return JSON:
       final data = jsonDecode(responseText);
       return InterviewFeedback.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error generating feedback: $e');
       rethrow;
     }
   }
@@ -261,26 +368,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ContentQualityAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        relevanceScore: (json['relevanceScore'] is int)
-            ? json['relevanceScore']
-            : (json['relevanceScore'] ?? 0).toInt(),
-        depthScore: (json['depthScore'] is int)
-            ? json['depthScore']
-            : (json['depthScore'] ?? 0).toInt(),
-        professionalImpact: (json['professionalImpact'] is int)
-            ? json['professionalImpact']
-            : (json['professionalImpact'] ?? 0).toInt(),
-        strengths: List<String>.from(json['strengths'] ?? []),
-        weaknesses: List<String>.from(json['weaknesses'] ?? []),
-        suggestions: List<String>.from(json['suggestions'] ?? []),
-      );
+      return ContentQualityAnalysis.fromJson(json);
     } catch (e) {
-      debugPrint('❌ Error analyzing content quality: $e');
+      debugPrint('Error in analyzeContentQuality: $e');
       return const ContentQualityAnalysis(
         score: 0,
         relevanceScore: 0,
@@ -347,29 +437,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return FluencyAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        wordCount: (json['wordCount'] is int)
-            ? json['wordCount']
-            : (json['wordCount'] ?? 0).toInt(),
-        wpm: (json['wpm'] ?? 0).toDouble(),
-        fillerWords: (json['fillerWords'] as List? ?? []).map((fw) {
-          return FillerWord(
-            word: fw['word'] ?? '',
-            count:
-                (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
-            percentage: (fw['percentage'] ?? 0).toDouble(),
-          );
-        }).toList(),
-        fillerPercentage: (json['fillerPercentage'] ?? 0).toDouble(),
-        paceAssessment: json['paceAssessment'] ?? 'unknown',
-        suggestions: List<String>.from(json['suggestions'] ?? []),
-      );
+      return FluencyAnalysis.fromJson(json);
     } catch (e) {
-      debugPrint('❌ Error analyzing fluency: $e');
+      debugPrint('Error in analyzeFluency: $e');
       return const FluencyAnalysis(
         score: 0,
         wordCount: 0,
@@ -433,20 +503,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ConfidenceAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        toneAssessment: json['toneAssessment'] ?? 'neutral',
-        energyLevel: json['energyLevel'] ?? 'low',
-        convictionLevel: json['convictionLevel'] ?? 'weak',
-        strengthIndicators: List<String>.from(json['strengthIndicators'] ?? []),
-        weaknessIndicators: List<String>.from(json['weaknessIndicators'] ?? []),
-        tips: List<String>.from(json['tips'] ?? []),
-      );
+      return ConfidenceAnalysis.fromJson(json);
     } catch (e) {
-      debugPrint('❌ Error analyzing confidence: $e');
+      debugPrint('Error in analyzeConfidence: $e');
       return const ConfidenceAnalysis(
         score: 0,
         toneAssessment: 'neutral',
@@ -510,19 +569,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ImprovedSpeechData(
-        originalText: json['originalText'] ?? transcript,
-        improvedText: json['improvedText'] ?? transcript,
-        fillerWordsRemoved: (json['fillerWordsRemoved'] is int)
-            ? json['fillerWordsRemoved']
-            : (json['fillerWordsRemoved'] ?? 0).toInt(),
-        keyChanges: List<String>.from(json['keyChanges'] ?? []),
-        wpmBefore: (json['wpmBefore'] ?? originalWpm).toDouble(),
-        wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
-      );
+      return ImprovedSpeechData.fromJson(json);
     } catch (e) {
-      debugPrint('❌ Error generating improved speech: $e');
+      debugPrint('Error in generateImprovedSpeech: $e');
       return ImprovedSpeechData(
         originalText: transcript,
         improvedText: transcript,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class HistoryLocalDataSource {
   final DatabaseHelper _dbHelper;
@@ -67,9 +66,7 @@ class HistoryLocalDataSource {
         try {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
 
         activities.add(ActivityEntity(
           id: interview['id'] as String,
@@ -115,13 +112,9 @@ class HistoryLocalDataSource {
           : activities.length;
       return activities.sublist(offset, end);
     } catch (e) {
-      debugPrint('❌ Error aggregating history: $e');
       return [];
     }
   }
 
-  Future<void> clearHistory(String userId) async {
-    debugPrint(
-        '⚠️ Clear history requested but not implemented to prevent data loss.');
-  }
+  Future<void> clearHistory(String userId) async {}
 }

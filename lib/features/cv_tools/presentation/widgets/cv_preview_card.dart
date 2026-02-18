@@ -49,7 +49,7 @@ class CvPreviewCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(context, cvData!),
+                  _buildHeader(context, l10n, cvData!),
                   const SizedBox(height: 24),
                   ...cvData!.sections
                       .where((s) => s.isVisible)
@@ -66,12 +66,12 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, CVData cv) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n, CVData cv) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          cv.name.toUpperCase(),
+          (cv.name.isNotEmpty ? cv.name : l10n.fullName).toUpperCase(),
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -206,7 +206,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceSection(BuildContext context, ExperienceSection section) {
+  Widget _buildExperienceSection(
+      BuildContext context, ExperienceSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
 
@@ -309,7 +310,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEducationSection(BuildContext context, EducationSection section) {
+  Widget _buildEducationSection(
+      BuildContext context, EducationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
 
@@ -423,7 +425,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrganizationEntry(AppLocalizations l10n, OrganizationExperience org) {
+  Widget _buildOrganizationEntry(
+      AppLocalizations l10n, OrganizationExperience org) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(org.startDate);
     final endDate =

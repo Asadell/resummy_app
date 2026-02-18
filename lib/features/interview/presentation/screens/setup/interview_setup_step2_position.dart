@@ -6,6 +6,8 @@ import 'package:resummy_app/features/interview/presentation/providers/interview_
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class InterviewSetupStep2Screen extends StatefulWidget {
@@ -47,13 +49,13 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
       appBar: AppBar(
         title: Text(l10n.setupInterview),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () =>
               context.router.push(const InterviewSetupStep1Route()),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: AppSizes.md),
             child: Center(
               child: Text(
                 l10n.stepProgress(2, 5),
@@ -67,191 +69,180 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.sm,
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Iconsax.tick_circle,
-                        color: Theme.of(context).colorScheme.secondary,
-                        size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '${l10n.cvLabel} ${provider.cvFileName ?? l10n.cvDefaultLabel}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              fontWeight: FontWeight.w500,
-                            ),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.sm),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Iconsax.tick_circle,
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 20),
+                      const SizedBox(width: AppSizes.sm),
+                      Expanded(
+                        child: Text(
+                          '${l10n.cvLabel} ${provider.cvFileName ?? l10n.cvDefaultLabel}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: AppSizes.md,
                   children: [
-                    Text(
-                      l10n.appliedPositionLabel,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _positionController,
-                      decoration: InputDecoration(
-                        hintText: l10n.targetRoleHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10n.autoFillFromProfile,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      l10n.companyNameLabel,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _companyController,
-                      decoration: InputDecoration(
-                        hintText: l10n.companyNameHint,
-                        prefixIcon: const Icon(Iconsax.building_3),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      l10n.positionLevelLabel,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 12),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
                       children: [
+                        Text(
+                          l10n.appliedPositionLabel,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        TextField(
+                          controller: _positionController,
+                          decoration: InputDecoration(
+                            hintText: l10n.targetRoleHint,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(AppSizes.sm),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          l10n.autoFillFromProfile,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
+                      children: [
+                        Text(
+                          l10n.companyNameLabel,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        TextField(
+                          controller: _companyController,
+                          decoration: InputDecoration(
+                            hintText: l10n.companyNameHint,
+                            prefixIcon: const Icon(Iconsax.building_3),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(AppSizes.sm),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
+                      children: [
+                        Text(
+                          l10n.positionLevelLabel,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                         _buildLevelOption(0, l10n.juniorLevel),
-                        const SizedBox(height: 8),
                         _buildLevelOption(1, l10n.midLevel),
-                        const SizedBox(height: 8),
                         _buildLevelOption(2, l10n.seniorLevel),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      l10n.industryLabel,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
-                      initialValue: _selectedIndustry,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
+                      children: [
+                        Text(
+                          l10n.industryLabel,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
-                      ),
-                      items: [
-                        'Technology',
-                        'Finance',
-                        'Healthcare',
-                        'Education',
-                        'Other'
-                      ].map((industry) {
-                        String label = industry;
-                        switch (industry) {
-                          case 'Technology':
-                            label = l10n.industryTechnology;
-                            break;
-                          case 'Finance':
-                            label = l10n.industryFinance;
-                            break;
-                          case 'Healthcare':
-                            label = l10n.industryHealthcare;
-                            break;
-                          case 'Education':
-                            label = l10n.industryEducation;
-                            break;
-                          case 'Other':
-                            label = l10n.industryOther;
-                            break;
-                        }
-                        return DropdownMenuItem(
-                          value: industry,
-                          child: Text(label),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() => _selectedIndustry = value);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Iconsax.lamp_on,
-                        color: Theme.of(context).colorScheme.primary, size: 20),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        l10n.dataHelpsAiTailor,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
+                        DropdownButtonFormField<String>(
+                          initialValue: _selectedIndustry,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(AppSizes.sm),
                             ),
-                      ),
+                          ),
+                          items: [
+                            'Technology',
+                            'Finance',
+                            'Healthcare',
+                            'Education',
+                            'Other'
+                          ].map((industry) {
+                            String label = industry;
+                            switch (industry) {
+                              case 'Technology':
+                                label = l10n.industryTechnology;
+                                break;
+                              case 'Finance':
+                                label = l10n.industryFinance;
+                                break;
+                              case 'Healthcare':
+                                label = l10n.industryHealthcare;
+                                break;
+                              case 'Education':
+                                label = l10n.industryEducation;
+                                break;
+                              case 'Other':
+                                label = l10n.industryOther;
+                                break;
+                            }
+                            return DropdownMenuItem(
+                              value: industry,
+                              child: Text(label),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() => _selectedIndustry = value);
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 80),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
@@ -272,12 +263,12 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   onPressed: () =>
                       context.router.push(const InterviewSetupStep1Route()),
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
+                    minimumSize: const Size.fromHeight(52),
                   ),
                   child: Text('← ${l10n.back}'),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSizes.sm),
               Expanded(
                 flex: 2,
                 child: ElevatedButton(
@@ -296,7 +287,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     context.router.push(const InterviewSetupStep3Route());
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
+                    minimumSize: const Size.fromHeight(52),
                   ),
                   child: Text('${l10n.continueText} →'),
                 ),
@@ -312,8 +303,9 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
     final isSelected = _selectedLevel == index;
     return InkWell(
       onTap: () => setState(() => _selectedLevel = index),
+      borderRadius: BorderRadius.circular(AppSizes.sm),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer
@@ -321,10 +313,11 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).dividerTheme.color!,
+                : Theme.of(context).dividerTheme.color ??
+                    Theme.of(context).dividerColor,
             width: isSelected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSizes.sm),
         ),
         child: Row(
           children: [
@@ -334,7 +327,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSizes.md),
             Text(
               label,
               style: TextStyle(

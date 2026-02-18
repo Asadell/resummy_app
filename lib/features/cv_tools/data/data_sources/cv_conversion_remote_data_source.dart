@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
-import 'package:flutter/foundation.dart';
 
 class CVConversionRemoteDataSource {
   final GeminiPoolManager _geminiPool;
@@ -19,8 +19,6 @@ class CVConversionRemoteDataSource {
     try {
       final bytes = await file.readAsBytes();
       final mimeType = _getMimeType(file.path);
-
-      debugPrint('📄 Converting file: ${file.path} ($mimeType)');
 
       final prompt = _buildConversionPrompt(targetLanguage: targetLanguage);
 
@@ -56,10 +54,8 @@ class CVConversionRemoteDataSource {
       final cvData =
           _converterService.parseCvJson(data, source: 'ats_converter');
 
-      debugPrint('✅ CV converted successfully: ${cvData.name}');
       return cvData;
     } catch (e) {
-      debugPrint('❌ Error converting CV file: $e');
       rethrow;
     }
   }

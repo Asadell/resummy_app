@@ -97,7 +97,6 @@ class ProfileProvider extends ChangeNotifier {
             onboardingDone: true,
           );
         } else {
-          // If profile was null (unlikely but safe), reload it
           await loadProfile(_authProvider.currentUser!.id);
         }
         notifyListeners();

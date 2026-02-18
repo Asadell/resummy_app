@@ -8,6 +8,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderCustomSectionStepScreen extends StatelessWidget {
@@ -126,46 +128,46 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                border: Border.all(color: theme.primaryColor),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                l10n.stepHeader(widget.currentStep, totalSteps),
-                style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+          AppSection(
+            child: Column(
+              spacing: AppSizes.sm,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                  decoration: BoxDecoration(
+                    color: theme.cardColor,
+                    border: Border.all(color: theme.primaryColor),
+                    borderRadius: BorderRadius.circular(AppSizes.xl),
+                  ),
+                  child: Text(
+                    l10n.stepHeader(widget.currentStep, totalSteps),
+                    style: TextStyle(
+                      color: theme.primaryColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
+                Text(
+                  widget.section.title,
+                  style: theme.textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  _getTemplateDisplayName(context, widget.section.template),
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
-          Center(
-            child: Text(
-              widget.section.title,
-              style: theme.textTheme.headlineLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Center(
-            child: Text(
-              _getTemplateDisplayName(context, widget.section.template),
-              style:
-                  theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
-            ),
-          ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSizes.sm),
           if (widget.section.template == CustomSectionTemplate.experienceLike ||
               widget.section.template == CustomSectionTemplate.educationLike)
             _buildEntryListTemplate(context, provider, theme)
@@ -174,7 +176,9 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           else if (widget.section.template == CustomSectionTemplate.bulletList)
             _buildBulletListTemplate(context, provider, theme)
           else
-            _buildParagraphTemplate(context, provider, theme),
+            AppSection(
+              child: _buildParagraphTemplate(context, provider, theme),
+            ),
           const SizedBox(height: 80),
         ],
       ),
@@ -193,14 +197,14 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (section.entries.isEmpty)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40),
+          AppSection(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xxl),
               child: Column(
+                spacing: AppSizes.md,
                 children: [
                   Icon(Iconsax.document_text,
                       size: 56, color: Colors.grey[300]),
-                  const SizedBox(height: 16),
                   Text(
                     l10n.noItems,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
@@ -210,21 +214,30 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ),
           )
         else
-          ...section.entries.asMap().entries.map((e) {
-            final index = e.key;
-            final entry = e.value;
-            return _EntryCard(
-              entry: entry,
-              section: section,
-              onEdit: () => _editEntry(index, entry),
-              onDelete: () => provider.removeCustomEntry(
-                  sectionId: section.id, entryIndex: index),
-            );
-          }),
-        const SizedBox(height: 16),
-        const Divider(),
-        const SizedBox(height: 16),
-        _buildInlineEntryForm(context, provider, section),
+          AppSection(
+            child: Column(
+              children: section.entries.asMap().entries.map((e) {
+                final index = e.key;
+                final entry = e.value;
+                return _EntryCard(
+                  entry: entry,
+                  section: section,
+                  onEdit: () => _editEntry(index, entry),
+                  onDelete: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    () => provider.removeCustomEntry(
+                        sectionId: section.id, entryIndex: index),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        const SizedBox(height: AppSizes.sm),
+        AppSection(
+          child: _buildInlineEntryForm(context, provider, section),
+        ),
       ],
     );
   }
@@ -242,18 +255,17 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (categories.isEmpty)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
+          AppSection(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xl),
               child: Column(
+                spacing: AppSizes.sm,
                 children: [
                   Icon(Iconsax.code, size: 56, color: Colors.grey[300]),
-                  const SizedBox(height: 12),
                   Text(
                     l10n.noCategories,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     l10n.addCategoryPrompt,
                     style: TextStyle(color: Colors.grey[500], fontSize: 12),
@@ -263,195 +275,30 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ),
           )
         else
-          ...categories.entries.map((entry) => Card(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              entry.key,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Iconsax.edit_2, size: 18),
-                            onPressed: () =>
-                                _editSkillCategory(entry.key, entry.value),
-                            tooltip: l10n.edit,
-                          ),
-                          IconButton(
-                            icon: const Icon(Iconsax.trash,
-                                size: 18, color: Colors.red),
-                            onPressed: () => showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (ctx) => Container(
-                                padding: const EdgeInsets.only(
-                                  bottom: 32,
-                                  top: 8,
-                                  left: 24,
-                                  right: 24,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(24)),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Center(
-                                      child: Container(
-                                        width: 40,
-                                        height: 4,
-                                        margin:
-                                            const EdgeInsets.only(bottom: 24),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .errorContainer,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Icon(
-                                            Iconsax.trash,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .error,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: Text(
-                                            l10n.deleteItem,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      l10n.deleteItemConfirmation(entry.key),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                            height: 1.5,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: OutlinedButton(
-                                            onPressed: () => Navigator.pop(ctx),
-                                            style: OutlinedButton.styleFrom(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 16),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                            ),
-                                            child: Text(l10n.cancel),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          flex: 2,
-                                          child: FilledButton(
-                                            onPressed: () {
-                                              provider
-                                                  .removeCustomSkillCategory(
-                                                sectionId: section.id,
-                                                categoryName: entry.key,
-                                              );
-                                              Navigator.pop(ctx);
-                                            },
-                                            style: FilledButton.styleFrom(
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .error,
-                                              foregroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .onError,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 16),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                            ),
-                                            child: Text(l10n.delete),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            tooltip: l10n.delete,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: entry.value
-                            .map((skill) => Chip(
-                                  label: Text(skill,
-                                      style: const TextStyle(fontSize: 11)),
-                                  backgroundColor: Colors.blue.shade50,
-                                  side: BorderSide(color: Colors.blue.shade200),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ))
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                ),
-              )),
-        const SizedBox(height: 16),
-        const Divider(),
-        const SizedBox(height: 16),
-        _buildInlineSkillsForm(context, provider, section),
+          AppSection(
+            child: Column(
+              children: categories.entries
+                  .map((entry) => _SkillCategoryCard(
+                        categoryName: entry.key,
+                        skills: entry.value,
+                        onEdit: () =>
+                            _editSkillCategory(entry.key, entry.value),
+                        onDelete: () => _showDeleteItemConfirmation(
+                          context,
+                          l10n.deleteCategory,
+                          l10n.deleteCategoryConfirmation(entry.key),
+                          () => provider.removeCustomSkillCategory(
+                              sectionId: section.id, categoryName: entry.key),
+                        ),
+                        l10n: l10n,
+                      ))
+                  .toList(),
+            ),
+          ),
+        const SizedBox(height: AppSizes.sm),
+        AppSection(
+          child: _buildInlineSkillsForm(context, provider, section),
+        ),
       ],
     );
   }
@@ -475,7 +322,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveSkillForm(CVBuilderProvider provider, CustomSection section) {
-    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
@@ -522,12 +368,13 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSizes.md),
         border: Border.all(color: Theme.of(context).dividerColor),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: AppSizes.md,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -536,7 +383,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 isEditing
                     ? '${l10n.edit} ${l10n.categoryName}'
                     : '${l10n.addItem} ${l10n.categoryName}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -548,7 +395,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
           TextFormField(
             controller: _categoryNameCtrl,
             decoration: InputDecoration(
@@ -562,7 +408,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             validator: (v) =>
                 v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
-          const SizedBox(height: 16),
           TextFormField(
             controller: _categorySkillsCtrl,
             decoration: InputDecoration(
@@ -576,7 +421,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             validator: (v) =>
                 v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
-          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => _saveSkillForm(provider, section),
             style: ElevatedButton.styleFrom(
@@ -604,38 +448,54 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (lines.isNotEmpty) ...[
-          Text(
-            l10n.itemsCount(lines.length),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-          const SizedBox(height: 8),
-          ...lines.asMap().entries.map((e) {
-            final index = e.key;
-            final line = e.value.trim();
-            return Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: const Text('•',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                title: Text(line, style: const TextStyle(fontSize: 14)),
-                trailing: IconButton(
-                  icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
-                  onPressed: () {
-                    final newLines = List<String>.from(lines)..removeAt(index);
-                    provider.updateCustomSectionContent(
-                      sectionId: section.id,
-                      content: newLines.join('\n'),
-                    );
-                  },
+        if (lines.isNotEmpty)
+          AppSection(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.itemsCount(lines.length),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14),
                 ),
-              ),
-            );
-          }),
-          const SizedBox(height: 16),
-        ],
-        _buildInlineBulletForm(context, provider, section),
+                const SizedBox(height: 8),
+                ...lines.asMap().entries.map((e) {
+                  final index = e.key;
+                  final line = e.value.trim();
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: const Text('•',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      title: Text(line, style: const TextStyle(fontSize: 14)),
+                      trailing: IconButton(
+                        icon: const Icon(Iconsax.trash,
+                            size: 18, color: Colors.red),
+                        onPressed: () => _showDeleteItemConfirmation(
+                          context,
+                          l10n.deleteItem,
+                          l10n.deleteItemConfirmation(line),
+                          () {
+                            final newLines = List<String>.from(lines)
+                              ..removeAt(index);
+                            provider.updateCustomSectionContent(
+                              sectionId: section.id,
+                              content: newLines.join('\n'),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        const SizedBox(height: AppSizes.sm),
+        AppSection(
+          child: _buildInlineBulletForm(context, provider, section),
+        ),
       ],
     );
   }
@@ -678,7 +538,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -692,7 +551,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   onSubmitted: (_) => _saveBulletItem(provider, section),
                 ),
               ),
-              const SizedBox(width: 16),
               ElevatedButton(
                 onPressed: () => _saveBulletItem(provider, section),
                 style: ElevatedButton.styleFrom(
@@ -781,7 +639,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveEntryForm(CVBuilderProvider provider, CustomSection section) {
-    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
@@ -852,9 +709,9 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 isEditing
                     ? '${l10n.edit} ${section.titleLabel}'
                     : '${l10n.addItem} ${section.titleLabel}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               if (isEditing)
                 TextButton.icon(
@@ -864,7 +721,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSizes.md),
           TextFormField(
             controller: _titleCtrl,
             decoration: InputDecoration(
@@ -1006,7 +863,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               },
             ),
           ],
-          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => _saveEntryForm(provider, section),
             style: ElevatedButton.styleFrom(
@@ -1041,6 +897,145 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       case CustomSectionTemplate.paragraph:
         return l10n.formatParagraph;
     }
+  }
+}
+
+Future<void> _showDeleteItemConfirmation(BuildContext context, String title,
+    String content, VoidCallback onConfirm) async {
+  final l10n = AppLocalizations.of(context)!;
+  final shouldDelete = await showModalBottomSheet<bool>(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) => Container(
+          padding: const EdgeInsets.all(AppSizes.lg),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.md,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Icon(
+                Iconsax.trash,
+                size: 48,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              Column(
+                spacing: AppSizes.xs,
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    content,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: AppSizes.md,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      style: OutlinedButton.styleFrom(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: AppSizes.md),
+                      ),
+                      child: Text(l10n.cancel),
+                    ),
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        foregroundColor: Theme.of(context).colorScheme.onError,
+                        padding:
+                            const EdgeInsets.symmetric(vertical: AppSizes.md),
+                        elevation: 0,
+                      ),
+                      child: Text(l10n.delete),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ) ??
+      false;
+
+  if (shouldDelete) {
+    onConfirm();
+  }
+}
+
+class _SkillCategoryCard extends StatelessWidget {
+  final String categoryName;
+  final List<String> skills;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final AppLocalizations l10n;
+
+  const _SkillCategoryCard({
+    required this.categoryName,
+    required this.skills,
+    required this.onEdit,
+    required this.onDelete,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: AppSizes.md),
+      child: ListTile(
+        title: Text(
+          categoryName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          skills.join(', '),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Iconsax.edit, size: 20),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
+              onPressed: onDelete,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -1104,124 +1099,12 @@ class _EntryCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (ctx) => Container(
-                        padding: const EdgeInsets.only(
-                          bottom: 32,
-                          top: 8,
-                          left: 24,
-                          right: 24,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(24)),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                              child: Container(
-                                width: 40,
-                                height: 4,
-                                margin: const EdgeInsets.only(bottom: 24),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .errorContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Iconsax.trash,
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Text(
-                                    l10n.deleteItem,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              l10n.deleteItemConfirmation(entry.title),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                    height: 1.5,
-                                  ),
-                            ),
-                            const SizedBox(height: 32),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () => Navigator.pop(ctx),
-                                    style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    child: Text(l10n.cancel),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  flex: 2,
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      onDelete();
-                                      Navigator.pop(ctx);
-                                    },
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                      foregroundColor:
-                                          Theme.of(context).colorScheme.onError,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    child: Text(l10n.delete),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    onDelete,
+                  ),
                 ),
               ],
             ),

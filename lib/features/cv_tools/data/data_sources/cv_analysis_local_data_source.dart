@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/cv_tools/data/models/cv_analysis_model.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
-import 'package:flutter/foundation.dart';
 
 class CVAnalysisLocalDataSource {
   final DatabaseHelper _dbHelper;
@@ -24,9 +23,7 @@ class CVAnalysisLocalDataSource {
       };
 
       await _dbHelper.upsert(DatabaseHelper.tableAnalysisHistory, data);
-      debugPrint('✅ Analysis result saved to local DB: ${result.id}');
     } catch (e) {
-      debugPrint('❌ Error saving analysis result: $e');
       rethrow;
     }
   }
@@ -52,7 +49,6 @@ class CVAnalysisLocalDataSource {
         );
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error getting analysis history: $e');
       return [];
     }
   }
@@ -78,7 +74,6 @@ class CVAnalysisLocalDataSource {
         jobDescription: data['job_description'] as String?,
       );
     } catch (e) {
-      debugPrint('❌ Error getting analysis by ID: $e');
       return null;
     }
   }
@@ -90,9 +85,7 @@ class CVAnalysisLocalDataSource {
         where: 'id = ?',
         whereArgs: [id],
       );
-      debugPrint('✅ Analysis deleted: $id');
     } catch (e) {
-      debugPrint('❌ Error deleting analysis: $e');
       rethrow;
     }
   }

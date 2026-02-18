@@ -4,6 +4,9 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+
 @RoutePage()
 class CvHistoryScreen extends StatelessWidget {
   const CvHistoryScreen({super.key});
@@ -15,26 +18,27 @@ class CvHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.cvHistory),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const HistoryRoute()),
         ),
       ),
       body: SafeArea(
-        child: Center(
+        child: AppSection(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: AppSizes.xxl),
               Icon(
                 Icons.construction,
                 size: 64,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSizes.xl),
               Text(
                 l10n.cvHistory,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSizes.md),
               Text(
                 l10n.screenUnderConstruction,
                 style: Theme.of(context).textTheme.bodyMedium,

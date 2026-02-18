@@ -383,8 +383,8 @@ abstract class AppLocalizations {
   /// No description provided for @score.
   ///
   /// In en, this message translates to:
-  /// **'Score: {score}/100'**
-  String score(int score);
+  /// **'Score: {value}'**
+  String score(int value);
 
   /// No description provided for @hoursAgo.
   ///
@@ -1262,6 +1262,24 @@ abstract class AppLocalizations {
   /// **'Upload New CV'**
   String get uploadNewCv;
 
+  /// No description provided for @selectCvToAnalyze.
+  ///
+  /// In en, this message translates to:
+  /// **'Select CV to Analyze'**
+  String get selectCvToAnalyze;
+
+  /// No description provided for @searchCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Search CV...'**
+  String get searchCv;
+
+  /// No description provided for @noCvFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No CV found. Create one in the CV Builder first.'**
+  String get noCvFound;
+
   /// No description provided for @uploadCvFileHint.
   ///
   /// In en, this message translates to:
@@ -1289,7 +1307,7 @@ abstract class AppLocalizations {
   /// No description provided for @cvNumber.
   ///
   /// In en, this message translates to:
-  /// **'CV {number}'**
+  /// **'CV #{number}'**
   String cvNumber(int number);
 
   /// No description provided for @createdOnDate.
@@ -1398,7 +1416,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Updated on {date}'**
-  String updatedOnDate(Object date);
+  String updatedOnDate(String date);
 
   /// No description provided for @noSavedCvs.
   ///
@@ -4285,6 +4303,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save to Downloads folder'**
   String get saveToDownloads;
+
+  /// No description provided for @activityHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity History'**
+  String get activityHistory;
+
+  /// No description provided for @historySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor your career progress here'**
+  String get historySubtitle;
+
+  /// No description provided for @weeklyInsight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Insight'**
+  String get weeklyInsight;
+
+  /// No description provided for @weeklyInsightDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CV score increased by 15 points in the last 2 weeks! 🚀'**
+  String get weeklyInsightDesc;
+
+  /// No description provided for @viewProgressDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'View Progress Detail'**
+  String get viewProgressDetail;
+
+  /// No description provided for @suggestionForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvement Suggestion'**
+  String get suggestionForYou;
+
+  /// No description provided for @suggestionForYouDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Already revised CV 2x for PM position. Time to try an interview simulation?'**
+  String get suggestionForYouDesc;
+
+  /// No description provided for @startPracticeBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Practice →'**
+  String get startPracticeBtn;
+
+  /// No description provided for @filterCv.
+  ///
+  /// In en, this message translates to:
+  /// **'CV'**
+  String get filterCv;
+
+  /// No description provided for @filterInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview'**
+  String get filterInterview;
+
+  /// No description provided for @noActivityFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity found yet'**
+  String get noActivityFound;
+
+  /// No description provided for @deleteExperienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Experience?'**
+  String get deleteExperienceTitle;
+
+  /// No description provided for @deleteExperienceContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this experience? This action cannot be undone.'**
+  String get deleteExperienceContent;
+
+  /// No description provided for @deleteEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Education?'**
+  String get deleteEducationTitle;
+
+  /// No description provided for @deleteEducationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this education? This action cannot be undone.'**
+  String get deleteEducationContent;
 }
 
 class _AppLocalizationsDelegate

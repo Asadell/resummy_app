@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
-import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
-import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
-import 'package:intl/intl.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_card.dart';
+import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class HistoryScreen extends StatefulWidget {
@@ -21,151 +22,172 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HistoryProvider>().refresh();
+      context.read<HistoryProvider>().loadActivities();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(l10n.history),
+        title: Text(l10n.activityHistory),
       ),
-      body: SafeArea(
-        child: Consumer<HistoryProvider>(
-          builder: (context, provider, child) {
-            final history = provider.activities;
+      body: Consumer<HistoryProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading && provider.activities.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            if (provider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (history.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Iconsax.clock, size: 64, color: Colors.grey[300]),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.noInterviewHistory,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.grey,
-                          ),
+          return RefreshIndicator(
+            onRefresh: () => provider.loadActivities(),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  AppSection(
+                    child: _FilterTabs(
+                      currentFilter: provider.filter,
+                      onFilterChanged: provider.setFilter,
                     ),
-                  ],
-                ),
-              );
-            }
-
-            return ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: history.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final activity = history[index];
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: _getActivityColor(context, activity.type)
-                          .withValues(alpha: 0.1),
-                      child: Icon(_getActivityIcon(activity.type),
-                          color: _getActivityColor(context, activity.type)),
-                    ),
-                    title: Text(activity.title),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                  const SizedBox(height: AppSizes.sm),
+                  AppSection(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: AppSizes.sm,
                       children: [
-                        Text(activity.subtitle),
-                        Text(
-                          DateFormat('MMM d, y • HH:mm')
-                              .format(activity.timestamp),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        if (provider.activities.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(AppSizes.xl),
+                            child: Center(
+                              child: Text(
+                                l10n.noInterviewHistory,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.grey),
+                              ),
+                            ),
+                          )
+                        else ...[
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemCount: provider.activities.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: AppSizes.sm),
+                            itemBuilder: (context, index) {
+                              final item = provider.activities[index];
+                              return _buildActivityItem(item, index);
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: AppSizes.lg),
+                            child: Center(
+                              child: Text(
+                                l10n.moreHistoryWillAppear,
+                                style: TextStyle(
+                                    color: Colors.grey[500], fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
-                    trailing: const Icon(Iconsax.arrow_right_3, size: 16),
-                    onTap: () => _handleActivityTap(context, activity),
                   ),
-                );
-              },
-            );
-          },
-        ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  void _handleActivityTap(BuildContext context, ActivityEntity activity) {
-    switch (activity.type) {
-      case ActivityType.interviewPrep:
-        _navigateToInterview(context, activity);
-        break;
-      case ActivityType.cvCreated:
-        context.router.navigate(const CvBuilderWelcomeRoute());
-        break;
-      case ActivityType.cvAnalyzed:
-        context.router.navigate(const CvAnalyzerUploadRoute());
-        break;
-      case ActivityType.cvTranslated:
-        context.router.navigate(const CvAtsConverterRoute());
-        break;
-      default:
-        break;
-    }
+  Widget _buildActivityItem(ActivityItem item, int index) {
+    return item is CvActivityItem
+        ? CvHistoryCard(cv: item.cvData, index: index)
+        : item is InterviewActivityItem
+            ? InterviewHistoryCard(interview: item.interview)
+            : const SizedBox();
+  }
+}
+
+class _FilterTabs extends StatelessWidget {
+  final HistoryFilter currentFilter;
+  final ValueChanged<HistoryFilter> onFilterChanged;
+
+  const _FilterTabs({
+    required this.currentFilter,
+    required this.onFilterChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Theme.of(context)
+            .colorScheme
+            .surfaceContainerHighest
+            .withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppSizes.md),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+              child: _buildTab(context, l10n.filterAll, HistoryFilter.all)),
+          Expanded(child: _buildTab(context, l10n.filterCv, HistoryFilter.cv)),
+          Expanded(
+              child: _buildTab(
+                  context, l10n.filterInterview, HistoryFilter.interview)),
+        ],
+      ),
+    );
   }
 
-  void _navigateToInterview(BuildContext context, ActivityEntity activity) {
-    final interviewProvider = context.read<InterviewProvider>();
-    final interviewId = activity.relatedId;
-
-    if (interviewId != null) {
-      try {
-        final interview = interviewProvider.history.firstWhere(
-          (i) => i.id == interviewId,
-          orElse: () => throw Exception('Not found'),
-        );
-
-        if (interview.report != null) {
-          interviewProvider.setReport(interview.report!);
-          context.router.push(const InterviewFeedbackOverviewRoute());
-          return;
-        }
-      } catch (_) {}
-    }
-    context.router.navigate(const InterviewPrepRoute());
-  }
-
-  IconData _getActivityIcon(ActivityType type) {
-    switch (type) {
-      case ActivityType.cvCreated:
-        return Iconsax.document_text;
-      case ActivityType.cvAnalyzed:
-        return Iconsax.chart_2;
-      case ActivityType.interviewPrep:
-        return Iconsax.microphone;
-      case ActivityType.cvTranslated:
-        return Iconsax.translate;
-      default:
-        return Iconsax.activity;
-    }
-  }
-
-  Color _getActivityColor(BuildContext context, ActivityType type) {
-    switch (type) {
-      case ActivityType.cvCreated:
-        return Theme.of(context).colorScheme.primary;
-      case ActivityType.cvAnalyzed:
-        return Theme.of(context).colorScheme.secondary;
-      case ActivityType.interviewPrep:
-        return Theme.of(context).colorScheme.tertiary;
-      default:
-        return Colors.grey;
-    }
+  Widget _buildTab(BuildContext context, String label, HistoryFilter filter) {
+    final isSelected = currentFilter == filter;
+    return GestureDetector(
+      onTap: () => onFilterChanged(filter),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? Theme.of(context).colorScheme.primary : null,
+          borderRadius: BorderRadius.circular(AppSizes.sm),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 13,
+          ),
+        ),
+      ),
+    );
   }
 }

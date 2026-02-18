@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class InterviewLocalDataSource {
   final DatabaseHelper _dbHelper;
@@ -22,9 +21,7 @@ class InterviewLocalDataSource {
       };
 
       await _dbHelper.upsert(DatabaseHelper.tableInterviews, data);
-      debugPrint('✅ Interview saved to local DB: ${interview.id}');
     } catch (e) {
-      debugPrint('❌ Error saving interview: $e');
       rethrow;
     }
   }
@@ -43,7 +40,6 @@ class InterviewLocalDataSource {
         return InterviewEntity.fromJson(data);
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error getting interview history: $e');
       return [];
     }
   }
@@ -63,7 +59,6 @@ class InterviewLocalDataSource {
 
       return InterviewEntity.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error getting interview by ID: $e');
       return null;
     }
   }
@@ -75,9 +70,7 @@ class InterviewLocalDataSource {
         where: 'id = ?',
         whereArgs: [id],
       );
-      debugPrint('✅ Interview deleted: $id');
     } catch (e) {
-      debugPrint('❌ Error deleting interview: $e');
       rethrow;
     }
   }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
-import 'package:flutter/foundation.dart';
 
 class CVLocalDataSource {
   final DatabaseHelper _dbHelper;
@@ -22,7 +21,6 @@ class CVLocalDataSource {
         return CVData.fromJson(data);
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error getting CVs from local DB: $e');
       throw Exception('Failed to load CVs from local storage');
     }
   }
@@ -41,7 +39,6 @@ class CVLocalDataSource {
           jsonDecode(maps.first['data'] as String);
       return CVData.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error getting CV by ID from local DB: $e');
       return null;
     }
   }
@@ -62,7 +59,6 @@ class CVLocalDataSource {
 
       await _dbHelper.upsert(DatabaseHelper.tableCVs, cvMap);
     } catch (e) {
-      debugPrint('❌ Error saving CV to local DB: $e');
       throw Exception('Failed to save CV to local storage');
     }
   }
@@ -75,7 +71,6 @@ class CVLocalDataSource {
         whereArgs: [id],
       );
     } catch (e) {
-      debugPrint('❌ Error deleting CV from local DB: $e');
       throw Exception('Failed to delete CV from local storage');
     }
   }
@@ -88,7 +83,6 @@ class CVLocalDataSource {
         whereArgs: [userId],
       );
     } catch (e) {
-      debugPrint('❌ Error clearing CVs from local DB: $e');
       throw Exception('Failed to clear local CV storage');
     }
   }

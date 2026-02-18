@@ -4,7 +4,6 @@ import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_ser
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
-import 'package:flutter/foundation.dart';
 
 class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
   final CVAnalysisRemoteDataSource _remoteDataSource;
@@ -32,10 +31,8 @@ class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
         language: language,
       );
 
-      debugPrint('✅ CV analyzed successfully. Score: ${result.overallScore}');
       return result;
     } catch (e) {
-      debugPrint('❌ Error in analyzeCV: $e');
       rethrow;
     }
   }
@@ -58,10 +55,8 @@ class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
         source: 'analyzer',
       );
 
-      debugPrint('✅ Applied ${appliedSuggestions.length} suggestions to CV');
       return cvData;
     } catch (e) {
-      debugPrint('❌ Error applying suggestions: $e');
       rethrow;
     }
   }

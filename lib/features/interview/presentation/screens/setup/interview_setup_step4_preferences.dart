@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 
@@ -21,13 +23,13 @@ class InterviewSetupStep4Screen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.interviewFocus),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () =>
               context.router.push(const InterviewSetupStep3Route()),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: AppSizes.md),
             child: Center(
               child: Text(
                 l10n.stepProgress(4, 5),
@@ -41,60 +43,73 @@ class InterviewSetupStep4Screen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.sm,
             children: [
-              Text(
-                l10n.selectInterviewFocus,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
+              AppSection(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: AppSizes.xs,
+                  children: [
+                    Text(
+                      l10n.selectInterviewFocus,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.interviewFocusDesc,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    Text(
+                      l10n.interviewFocusDesc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                     ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
-              _buildFocusCard(
-                context,
-                title: l10n.focusBehavioralTitle,
-                description: l10n.focusBehavioralDesc,
-                icon: Iconsax.user_search,
-                value: InterviewFocus.behavioral,
-                groupValue: provider.selectedFocus,
-                onChanged: (val) => provider.updateFocus(val!),
+              AppSection(
+                child: Column(
+                  spacing: AppSizes.sm,
+                  children: [
+                    _buildFocusCard(
+                      context,
+                      title: l10n.focusBehavioralTitle,
+                      description: l10n.focusBehavioralDesc,
+                      icon: Iconsax.user_search,
+                      value: InterviewFocus.behavioral,
+                      groupValue: provider.selectedFocus,
+                      onChanged: (val) => provider.updateFocus(val!),
+                    ),
+                    _buildFocusCard(
+                      context,
+                      title: l10n.focusTechnicalTitle,
+                      description: l10n.focusTechnicalDesc,
+                      icon: Iconsax.code_1,
+                      value: InterviewFocus.technical,
+                      groupValue: provider.selectedFocus,
+                      onChanged: (val) => provider.updateFocus(val!),
+                    ),
+                    _buildFocusCard(
+                      context,
+                      title: l10n.focusMixedTitle,
+                      description: l10n.focusMixedDesc,
+                      icon: Iconsax.blend_2,
+                      value: InterviewFocus.mixed,
+                      groupValue: provider.selectedFocus,
+                      onChanged: (val) => provider.updateFocus(val!),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-              _buildFocusCard(
-                context,
-                title: l10n.focusTechnicalTitle,
-                description: l10n.focusTechnicalDesc,
-                icon: Iconsax.code_1,
-                value: InterviewFocus.technical,
-                groupValue: provider.selectedFocus,
-                onChanged: (val) => provider.updateFocus(val!),
-              ),
-              const SizedBox(height: 16),
-              _buildFocusCard(
-                context,
-                title: l10n.focusMixedTitle,
-                description: l10n.focusMixedDesc,
-                icon: Iconsax.blend_2,
-                value: InterviewFocus.mixed,
-                groupValue: provider.selectedFocus,
-                onChanged: (val) => provider.updateFocus(val!),
-              ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 80),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
@@ -115,12 +130,12 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   onPressed: () =>
                       context.router.push(const InterviewSetupStep3Route()),
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
+                    minimumSize: const Size.fromHeight(52),
                   ),
                   child: Text('← ${l10n.back}'),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSizes.sm),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -128,7 +143,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                         .push(const InterviewSetupConfirmationRoute());
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
+                    minimumSize: const Size.fromHeight(52),
                   ),
                   child: Text('${l10n.continueText} →'),
                 ),
@@ -152,10 +167,10 @@ class InterviewSetupStep4Screen extends StatelessWidget {
     final isSelected = value == groupValue;
     return InkWell(
       onTap: () => onChanged(value),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSizes.sm),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context)
@@ -163,7 +178,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   .primaryContainer
                   .withValues(alpha: 0.2)
               : Theme.of(context).cardTheme.color,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSizes.sm),
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
@@ -181,10 +196,11 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSizes.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: AppSizes.xs,
                 children: [
                   Row(
                     children: [
@@ -193,7 +209,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                           color: isSelected
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onSurfaceVariant),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSizes.sm),
                       Text(
                         title,
                         style:
@@ -206,7 +222,6 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     description,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(

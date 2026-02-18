@@ -120,7 +120,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Use the new RemoteDataSource which uses GeminiPoolManager
       _result = await _dataSource.analyzeCV(
         cvText: _extractedText,
         jobPosition:
@@ -199,7 +198,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     _result = _result!.copyWith(suggestions: newSuggestions);
     notifyListeners();
   }
-
 
   void clearFile() {
     _selectedFile = null;

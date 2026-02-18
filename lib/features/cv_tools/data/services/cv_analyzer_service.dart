@@ -231,10 +231,10 @@ Return JSON ini:
       "title": "string",
       "isVisible": true,
 
-      // Untuk type "summary":
+
       "content": "string",
 
-      // Untuk type "experience":
+
       "entries": [
         {
           "companyName": "string",
@@ -248,7 +248,7 @@ Return JSON ini:
         }
       ],
 
-      // Untuk type "education":
+
       "entries": [
         {
           "institution": "string",
@@ -262,7 +262,7 @@ Return JSON ini:
         }
       ],
 
-      // Untuk type "organization":
+
       "entries": [
         {
           "organizationName": "string",
@@ -275,12 +275,12 @@ Return JSON ini:
         }
       ],
 
-      // Untuk type "skills":
+
       "skillCategories": {
         "Category Name": ["skill1", "skill2"]
       },
 
-      // Untuk type "certifications":
+
       "entries": [
         {
           "name": "string",
@@ -291,11 +291,11 @@ Return JSON ini:
         }
       ],
 
-      // Untuk type "custom" dengan template "skillsLike":
+
       "template": "skillsLike",
       "skillCategories": { "Category": ["item1"] },
 
-      // Untuk type "custom" dengan template "experienceLike" atau "educationLike":
+
       "template": "experienceLike",
       "titleLabel": "string",
       "subtitleLabel": "string",
@@ -312,11 +312,11 @@ Return JSON ini:
         }
       ],
 
-      // Untuk type "custom" dengan template "bulletList":
+
       "template": "bulletList",
       "content": "item1\\nitem2\\nitem3",
 
-      // Untuk type "custom" dengan template "paragraph":
+
       "template": "paragraph",
       "content": "free text"
     }

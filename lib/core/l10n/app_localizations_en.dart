@@ -150,8 +150,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cvAnalysisCompleted => 'CV Analysis Completed';
 
   @override
-  String score(int score) {
-    return 'Score: $score/100';
+  String score(int value) {
+    return 'Score: $value';
   }
 
   @override
@@ -612,6 +612,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadNewCv => 'Upload New CV';
 
   @override
+  String get selectCvToAnalyze => 'Select CV to Analyze';
+
+  @override
+  String get searchCv => 'Search CV...';
+
+  @override
+  String get noCvFound => 'No CV found. Create one in the CV Builder first.';
+
+  @override
   String get uploadCvFileHint => 'Upload PDF file (Max 5MB)';
 
   @override
@@ -625,7 +634,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String cvNumber(int number) {
-    return 'CV $number';
+    return 'CV #$number';
   }
 
   @override
@@ -682,7 +691,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summaryFeedback => 'Summary Feedback';
 
   @override
-  String updatedOnDate(Object date) {
+  String updatedOnDate(String date) {
     return 'Updated on $date';
   }
 
@@ -2218,4 +2227,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveToDownloads => 'Save to Downloads folder';
+
+  @override
+  String get activityHistory => 'Activity History';
+
+  @override
+  String get historySubtitle => 'Monitor your career progress here';
+
+  @override
+  String get weeklyInsight => 'Weekly Insight';
+
+  @override
+  String get weeklyInsightDesc =>
+      'Your CV score increased by 15 points in the last 2 weeks! 🚀';
+
+  @override
+  String get viewProgressDetail => 'View Progress Detail';
+
+  @override
+  String get suggestionForYou => 'Improvement Suggestion';
+
+  @override
+  String get suggestionForYouDesc =>
+      'Already revised CV 2x for PM position. Time to try an interview simulation?';
+
+  @override
+  String get startPracticeBtn => 'Start Practice →';
+
+  @override
+  String get filterCv => 'CV';
+
+  @override
+  String get filterInterview => 'Interview';
+
+  @override
+  String get noActivityFound => 'No activity found yet';
+
+  @override
+  String get deleteExperienceTitle => 'Delete Experience?';
+
+  @override
+  String get deleteExperienceContent =>
+      'Are you sure you want to delete this experience? This action cannot be undone.';
+
+  @override
+  String get deleteEducationTitle => 'Delete Education?';
+
+  @override
+  String get deleteEducationContent =>
+      'Are you sure you want to delete this education? This action cannot be undone.';
 }

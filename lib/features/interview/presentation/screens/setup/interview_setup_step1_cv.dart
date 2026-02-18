@@ -2,13 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
 
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class InterviewSetupStep1Screen extends StatefulWidget {
@@ -20,9 +24,95 @@ class InterviewSetupStep1Screen extends StatefulWidget {
 }
 
 class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
-  int _selectedCvIndex = 0;
+  int? _selectedCvIndex;
   String? _uploadedCvName;
   String? _uploadedCvText;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CVBuilderProvider>().loadAllCVs();
+    });
+  }
+
+  String _buildCvText(CVData cv) {
+    final buf = StringBuffer();
+    buf.writeln('Name: ${cv.header.name}');
+    if (cv.header.email != null) buf.writeln('Email: ${cv.header.email}');
+    if (cv.header.phone != null) buf.writeln('Phone: ${cv.header.phone}');
+    if (cv.header.location != null)
+      buf.writeln('Location: ${cv.header.location}');
+
+    final summary = cv.summarySection?.content ?? '';
+    if (summary.isNotEmpty) {
+      buf.writeln('\nSummary:\n$summary');
+    }
+
+    final exp = cv.workExperience;
+    if (exp.isNotEmpty) {
+      buf.writeln('\nWork Experience:');
+      for (final e in exp) {
+        buf.writeln(
+            '- ${e.jobTitle} at ${e.companyName} (${e.employmentType})');
+        buf.writeln('  ${e.responsibilities}');
+      }
+    }
+
+    final edu = cv.education;
+    if (edu.isNotEmpty) {
+      buf.writeln('\nEducation:');
+      for (final e in edu) {
+        buf.writeln('- ${e.degree} in ${e.major}, ${e.institution}');
+      }
+    }
+
+    final skills = cv.skills;
+    if (skills.isNotEmpty) {
+      buf.writeln('\nSkills: ${skills.join(', ')}');
+    }
+
+    return buf.toString();
+  }
+
+  String _sourceLabel(AppLocalizations l10n, String source) {
+    switch (source) {
+      case 'builder':
+        return l10n.cvSourceBuilder;
+      case 'ats_converter':
+        return l10n.cvSourceAtsConverter;
+      case 'analyzer':
+        return l10n.cvSourceAnalyzer;
+      default:
+        return l10n.cvSourceBuilder;
+    }
+  }
+
+  IconData _sourceIcon(String source) {
+    switch (source) {
+      case 'builder':
+        return Iconsax.document_text;
+      case 'ats_converter':
+        return Iconsax.magic_star;
+      case 'analyzer':
+        return Iconsax.chart_2;
+      default:
+        return Iconsax.document_text;
+    }
+  }
+
+  Color _sourceColor(BuildContext context, String source) {
+    switch (source) {
+      case 'builder':
+        return Theme.of(context).colorScheme.primary;
+      case 'ats_converter':
+        return Colors.purple;
+      case 'analyzer':
+        return Colors.green;
+      default:
+        return Theme.of(context).colorScheme.primary;
+    }
+  }
 
   Future<void> _pickCvFile() async {
     final l10n = AppLocalizations.of(context)!;
@@ -36,11 +126,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         final path = result.files.single.path;
         if (path != null) {
           final text = await PdfUtils().extractText(path);
-
           setState(() {
             _uploadedCvName = result.files.single.name;
             _uploadedCvText = text;
-            _selectedCvIndex = 2;
+            _selectedCvIndex = -1;
           });
         }
       }
@@ -49,12 +138,34 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
         message = l10n.max5PagesInterview;
       }
-
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
       );
     }
+  }
+
+  void _showBrowseSheet(List<CVData> allCvs) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _BrowseCvSheet(
+        allCvs: allCvs,
+        selectedIndex: _selectedCvIndex,
+        sourceLabel: (s) => _sourceLabel(l10n, s),
+        sourceIcon: _sourceIcon,
+        sourceColor: (s) => _sourceColor(ctx, s),
+        onSelected: (index) {
+          setState(() {
+            _selectedCvIndex = index;
+            _uploadedCvName = null;
+            _uploadedCvText = null;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -63,16 +174,9 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Iconsax.microphone_2,
-                color: Theme.of(context).colorScheme.primary, size: 20),
-            const SizedBox(width: 8),
-            Text(l10n.aiInterviewSimulator),
-          ],
-        ),
+        title: Text(l10n.aiInterviewSimulator),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const InterviewPrepRoute()),
         ),
       ),
@@ -80,215 +184,210 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.sm,
             children: [
-              Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black.withValues(alpha: 0.05)
-                          : Colors.transparent,
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+              AppSection(
                 child: Column(
+                  spacing: AppSizes.md,
                   children: [
                     Icon(
                       Iconsax.microphone_2,
                       size: 64,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.aiInterviewSimulator,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.setupStep1Desc,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                      textAlign: TextAlign.center,
+                    Column(
+                      spacing: AppSizes.xs,
+                      children: [
+                        Text(
+                          l10n.aiInterviewSimulator,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          l10n.setupStep1Desc,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: AppSizes.sm,
                   children: [
                     Row(
                       children: [
                         Icon(Iconsax.document_text,
                             color: Theme.of(context).colorScheme.primary,
                             size: 20),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppSizes.sm),
                         Text(
                           l10n.formatInterview,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 2.5,
+                    Wrap(
+                      runSpacing: AppSizes.sm,
                       children: [
-                        _buildInfoChip(context, l10n.durationAprox),
-                        _buildInfoChip(context, l10n.questionsCount),
-                        _buildInfoChip(context, l10n.languageOption),
-                        _buildInfoChip(context, l10n.methodStar),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.timer_1,
+                          l10n.durationAprox,
+                          color: Colors.blue,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.message_question,
+                          l10n.questionsCount,
+                          color: Colors.orange,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.global,
+                          l10n.languageOption,
+                          color: Colors.purple,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.star,
+                          l10n.methodStar,
+                          color: Colors.green,
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Row(
-                  children: [
-                    const Expanded(child: Divider()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        l10n.step1SelectCv,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                      ),
-                    ),
-                    const Expanded(child: Divider()),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    ...[0, 1].map((i) => Padding(
-                          padding: EdgeInsets.only(bottom: i == 1 ? 12 : 0),
-                          child: _buildCvItem(
-                            context,
-                            index: i,
-                            filename: i == 0
-                                ? 'CV_Software_Engineer.pdf'
-                                : 'CV_Product_Manager.pdf',
-                            score: i == 0 ? 78 : 85,
-                          ),
-                        )),
-                    if (_uploadedCvName != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _buildCvItem(
-                          context,
-                          index: 2,
-                          filename: _uploadedCvName!,
-                          score: 0,
-                          isUploaded: true,
+              Consumer<CVBuilderProvider>(
+                builder: (context, cvProvider, _) {
+                  final allCvs = cvProvider.savedCVs;
+                  final recentCvs = allCvs.take(2).toList();
+
+                  return AppSection(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.step1SelectCv,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            if (allCvs.length > 2)
+                              TextButton(
+                                onPressed: () => _showBrowseSheet(allCvs),
+                                child: Text(l10n.viewAll),
+                              ),
+                          ],
                         ),
-                      ),
-                    _buildUploadOption(context),
-                  ],
-                ),
+                        if (recentCvs.isEmpty)
+                          _buildEmptyCvHint(context, l10n)
+                        else
+                          ...recentCvs.asMap().entries.map((entry) {
+                            final i = entry.key;
+                            final cv = entry.value;
+                            return _buildCvItem(
+                              context,
+                              index: i,
+                              cv: cv,
+                              l10n: l10n,
+                            );
+                          }),
+                        if (_uploadedCvName != null)
+                          _buildUploadedItem(context, l10n),
+                        _buildUploadOption(context, l10n),
+                      ],
+                    ),
+                  );
+                },
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 80),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: ElevatedButton(
-            onPressed: () {
-              final provider = context.read<InterviewProvider>();
-              String cvText = "";
-              String cvName = "";
+      bottomNavigationBar: _buildBottomBar(context, l10n),
+    );
+  }
 
-              if (_selectedCvIndex == 2 && _uploadedCvText != null) {
-                cvText = _uploadedCvText!;
-                cvName = _uploadedCvName ?? "Uploaded CV.pdf";
-              } else if (_selectedCvIndex == 0) {
-                cvText =
-                    "Experienced Flutter Developer with 5 years of experience in mobile app development. Proficient in Dart, BLoC pattern, and Clean Architecture. Strong background in integrating REST APIs and Firebase.";
-                cvName = "CV_Software_Engineer.pdf";
-              } else {
-                cvText =
-                    "Product Manager with 3 years experience in Fintech. Skilled in Agile methodology, user research, and roadmap planning. Experience leading cross-functional teams.";
-                cvName = "CV_Product_Manager.pdf";
-              }
-
-              provider.updateCvText(cvText);
-              provider.updateCvFileName(cvName);
-
-              context.router.push(const InterviewSetupStep2Route());
-            },
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
-            ),
-            child: Text('${l10n.continueText} →'),
+  Widget _buildInfoChip(
+    BuildContext context,
+    IconData icon,
+    String text, {
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.sm,
+        vertical: AppSizes.xs,
+      ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppSizes.sm),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: color,
           ),
-        ),
+          const SizedBox(width: AppSizes.xs),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: color.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildInfoChip(BuildContext context, String text) {
+  Widget _buildEmptyCvHint(BuildContext context, AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSizes.md),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppSizes.sm),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12,
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        textAlign: TextAlign.center,
+      child: Row(
+        children: [
+          Icon(Iconsax.info_circle,
+              color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
+          const SizedBox(width: AppSizes.sm),
+          Expanded(
+            child: Text(
+              l10n.noCvFound,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -296,27 +395,34 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
   Widget _buildCvItem(
     BuildContext context, {
     required int index,
-    required String filename,
-    required int score,
-    bool isUploaded = false,
+    required CVData cv,
+    required AppLocalizations l10n,
   }) {
-    final l10n = AppLocalizations.of(context)!;
     final isSelected = _selectedCvIndex == index;
+    final color = _sourceColor(context, cv.source);
+    final date = DateFormat.yMMMd().format(cv.updatedAt);
+
     return InkWell(
-      onTap: () => setState(() => _selectedCvIndex = index),
-      child: Container(
-        padding: const EdgeInsets.all(16),
+      onTap: () => setState(() {
+        _selectedCvIndex = index;
+        _uploadedCvName = null;
+        _uploadedCvText = null;
+      }),
+      borderRadius: BorderRadius.circular(AppSizes.sm),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer
-              : Theme.of(context).cardTheme.color,
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).dividerTheme.color!,
+                : Colors.transparent,
             width: isSelected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSizes.sm),
         ),
         child: Row(
           children: [
@@ -326,85 +432,385 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(width: 12),
-            Icon(isUploaded ? Iconsax.document_upload : Iconsax.document_1,
-                color: isUploaded
-                    ? Theme.of(context).colorScheme.secondary
-                    : Theme.of(context).colorScheme.primary,
-                size: 24),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSizes.sm),
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: color.withValues(alpha: 0.15),
+              child: Icon(_sourceIcon(cv.source), color: color, size: 18),
+            ),
+            const SizedBox(width: AppSizes.sm),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    filename,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                    cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (isUploaded)
-                    Text(
-                      l10n.uploadedFromDevice,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontSize: 10,
-                          ),
-                    ),
+                  Text(
+                    '${_sourceLabel(l10n, cv.source)} • $date',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
                 ],
               ),
             ),
-            if (!isUploaded)
-              Text(
-                l10n.score(score),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUploadOption(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildUploadedItem(BuildContext context, AppLocalizations l10n) {
+    final isSelected = _selectedCvIndex == -1;
     return InkWell(
-      onTap: _pickCvFile,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.all(16),
+      onTap: () => setState(() => _selectedCvIndex = -1),
+      borderRadius: BorderRadius.circular(AppSizes.sm),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
           border: Border.all(
-            color: AppColors.primary,
-            width: 1,
-            style: BorderStyle.solid,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.transparent,
+            width: isSelected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSizes.sm),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Iconsax.document_upload,
-                color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 8),
-            Text(
-              l10n.uploadNewCv,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
+            Icon(
+              isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: AppSizes.sm),
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .secondary
+                  .withValues(alpha: 0.15),
+              child: Icon(Iconsax.document_upload,
+                  color: Theme.of(context).colorScheme.secondary, size: 18),
+            ),
+            const SizedBox(width: AppSizes.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _uploadedCvName!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w600),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  Text(
+                    l10n.uploadedFromDevice,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildUploadOption(BuildContext context, AppLocalizations l10n) {
+    return OutlinedButton.icon(
+      onPressed: _pickCvFile,
+      icon: const Icon(Iconsax.document_upload),
+      label: Text(l10n.uploadNewCv),
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
+        padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+        side: BorderSide(color: Theme.of(context).colorScheme.primary),
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.sm),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomBar(BuildContext context, AppLocalizations l10n) {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.md),
+      decoration: BoxDecoration(
+        color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Consumer<CVBuilderProvider>(
+          builder: (context, cvProvider, _) {
+            final canContinue = _selectedCvIndex != null;
+            return ElevatedButton(
+              onPressed: canContinue
+                  ? () {
+                      final provider = context.read<InterviewProvider>();
+                      String cvText = '';
+                      String cvName = '';
+
+                      if (_selectedCvIndex == -1 && _uploadedCvText != null) {
+                        cvText = _uploadedCvText!;
+                        cvName = _uploadedCvName ?? 'Uploaded CV.pdf';
+                      } else if (_selectedCvIndex != null &&
+                          _selectedCvIndex! >= 0) {
+                        final cv = cvProvider.savedCVs[_selectedCvIndex!];
+                        cvText = _buildCvText(cv);
+                        cvName = cv.name.isNotEmpty
+                            ? cv.name
+                            : l10n.cvNumber(_selectedCvIndex! + 1);
+                      }
+
+                      provider.updateCvText(cvText);
+                      provider.updateCvFileName(cvName);
+                      context.router.push(const InterviewSetupStep2Route());
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(52),
+              ),
+              child: Text('${l10n.continueText} →'),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _BrowseCvSheet extends StatefulWidget {
+  final List<CVData> allCvs;
+  final int? selectedIndex;
+  final String Function(String) sourceLabel;
+  final IconData Function(String) sourceIcon;
+  final Color Function(String) sourceColor;
+  final void Function(int) onSelected;
+
+  const _BrowseCvSheet({
+    required this.allCvs,
+    required this.selectedIndex,
+    required this.sourceLabel,
+    required this.sourceIcon,
+    required this.sourceColor,
+    required this.onSelected,
+  });
+
+  @override
+  State<_BrowseCvSheet> createState() => _BrowseCvSheetState();
+}
+
+class _BrowseCvSheetState extends State<_BrowseCvSheet> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final filtered = _query.isEmpty
+        ? widget.allCvs
+        : widget.allCvs
+            .where((cv) =>
+                cv.name.toLowerCase().contains(_query.toLowerCase()) ||
+                cv.source.toLowerCase().contains(_query.toLowerCase()))
+            .toList();
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      expand: false,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+          ),
+          child: Column(
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.symmetric(vertical: AppSizes.sm),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor,
+                    borderRadius: BorderRadius.circular(AppSizes.xs),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: AppSizes.lg, right: AppSizes.lg, bottom: AppSizes.sm),
+                child: Text(
+                  l10n.step1SelectCv,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.lg, vertical: AppSizes.sm),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: l10n.searchCv,
+                    prefixIcon: const Icon(Iconsax.search_normal, size: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.sm),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.md, vertical: AppSizes.sm),
+                  ),
+                  onChanged: (v) => setState(() => _query = v),
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: filtered.isEmpty
+                    ? Center(
+                        child: Text(
+                          l10n.noCvFound,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      )
+                    : ListView.separated(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.lg, vertical: AppSizes.sm),
+                        itemCount: filtered.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: AppSizes.sm),
+                        itemBuilder: (context, i) {
+                          final cv = filtered[i];
+                          final globalIndex = widget.allCvs.indexOf(cv);
+                          final isSelected =
+                              widget.selectedIndex == globalIndex;
+                          final color = widget.sourceColor(cv.source);
+                          final date = DateFormat.yMMMd().format(cv.updatedAt);
+
+                          return InkWell(
+                            onTap: () {
+                              widget.onSelected(globalIndex);
+                              Navigator.of(context).pop();
+                            },
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.all(AppSizes.md),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainerHighest,
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.sm),
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor:
+                                        color.withValues(alpha: 0.15),
+                                    child: Icon(widget.sourceIcon(cv.source),
+                                        color: color, size: 20),
+                                  ),
+                                  const SizedBox(width: AppSizes.sm),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          cv.name.isNotEmpty
+                                              ? cv.name
+                                              : 'CV ${globalIndex + 1}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          '${widget.sourceLabel(cv.source)} • $date',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (isSelected)
+                                    Icon(Iconsax.tick_circle,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

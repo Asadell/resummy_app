@@ -16,7 +16,6 @@ class DOSpacesService {
       region: AppConstants.doSpacesRegion,
       useSSL: true,
     );
-    debugPrint('✅ DOSpacesService initialized');
   }
 
   Future<String> uploadPDF({
@@ -35,8 +34,6 @@ class DOSpacesService {
       final suffixPart = suffix != null ? '_$suffix' : '';
       final objectName = '$userId/${cvId}_$timestamp$suffixPart.pdf';
 
-      debugPrint('📤 Uploading PDF to DO Spaces: $objectName');
-
       final bytes = await file.readAsBytes();
       final uint8list = Uint8List.fromList(bytes);
       final stream = Stream<Uint8List>.value(uint8list);
@@ -52,11 +49,9 @@ class DOSpacesService {
       );
 
       final publicUrl = '$cdnEndpoint/$objectName';
-      debugPrint('✅ PDF uploaded successfully: $publicUrl');
 
       return publicUrl;
     } catch (e) {
-      debugPrint('❌ Error uploading PDF: $e');
       rethrow;
     }
   }
@@ -68,13 +63,8 @@ class DOSpacesService {
         throw Exception('Invalid PDF URL: $pdfUrl');
       }
 
-      debugPrint('🗑️ Deleting PDF from DO Spaces: $objectName');
-
       await _client.removeObject(AppConstants.doSpacesBucket, objectName);
-
-      debugPrint('✅ PDF deleted successfully: $objectName');
     } catch (e) {
-      debugPrint('❌ Error deleting PDF: $e');
       rethrow;
     }
   }
@@ -89,18 +79,13 @@ class DOSpacesService {
         throw Exception('Invalid PDF URL: $pdfUrl');
       }
 
-      debugPrint('📥 Downloading PDF from DO Spaces: $objectName');
-
       final stream =
           await _client.getObject(AppConstants.doSpacesBucket, objectName);
       final file = File(localPath);
       await stream.pipe(file.openWrite());
 
-      debugPrint('✅ PDF downloaded successfully to: $localPath');
-
       return localPath;
     } catch (e) {
-      debugPrint('❌ Error downloading PDF: $e');
       rethrow;
     }
   }
@@ -123,7 +108,6 @@ class DOSpacesService {
 
       return presignedUrl;
     } catch (e) {
-      debugPrint('❌ Error generating presigned URL: $e');
       rethrow;
     }
   }
@@ -169,7 +153,6 @@ class DOSpacesService {
 
       return [];
     } catch (e) {
-      debugPrint('❌ Error listing user PDFs: $e');
       return [];
     }
   }

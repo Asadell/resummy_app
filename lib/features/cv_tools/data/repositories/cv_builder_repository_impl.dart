@@ -3,7 +3,6 @@ import 'package:resummy_app/features/cv_tools/data/data_sources/cv_remote_data_s
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_builder_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 class CVBuilderRepositoryImpl implements CVBuilderRepository {
   final CVLocalDataSource _localDataSource;
@@ -29,7 +28,6 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
 
       return localCVs;
     } catch (e) {
-      debugPrint('❌ Error in getAllCVs: $e');
       return await _localDataSource.getAllCVs(_currentUserId);
     }
   }
@@ -51,14 +49,11 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         try {
           await _remoteDataSource.saveCV(cv, _currentUserId);
         } catch (e) {
-          debugPrint('⚠️ Failed to save to remote, marked for sync: $e');
-
           await _localDataSource.saveCV(cv, _currentUserId,
               syncStatus: 'pending');
         }
       }
     } catch (e) {
-      debugPrint('❌ Error in saveCV: $e');
       rethrow;
     }
   }
@@ -71,12 +66,9 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       if (_currentUserId != 'anonymous') {
         try {
           await _remoteDataSource.deleteCV(id);
-        } catch (e) {
-          debugPrint('⚠️ Failed to delete from remote: $e');
-        }
+        } catch (e) {}
       }
     } catch (e) {
-      debugPrint('❌ Error in deleteCV: $e');
       rethrow;
     }
   }
@@ -92,9 +84,6 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       for (final cv in remoteCVs) {
         await _localDataSource.saveCV(cv, _currentUserId);
       }
-      debugPrint('✅ Synced ${remoteCVs.length} CVs from remote');
-    } catch (e) {
-      debugPrint('⚠️ Background sync failed: $e');
-    }
+    } catch (e) {}
   }
 }

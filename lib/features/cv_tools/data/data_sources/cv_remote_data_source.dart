@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
-import 'package:flutter/foundation.dart';
 
 class CVRemoteDataSource {
   final FirebaseFirestore _firestore;
@@ -21,7 +20,6 @@ class CVRemoteDataSource {
         return CVData.fromJson(_convertTimestamps(data));
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error getting CVs from Firestore: $e');
       throw Exception('Failed to load CVs from cloud storage');
     }
   }
@@ -35,7 +33,6 @@ class CVRemoteDataSource {
 
       return CVData.fromJson(_convertTimestamps(docSnapshot.data()!));
     } catch (e) {
-      debugPrint('❌ Error getting CV by ID from Firestore: $e');
       return null;
     }
   }
@@ -44,10 +41,10 @@ class CVRemoteDataSource {
     try {
       final data = cv.toJson();
       data['userId'] = userId;
-      
-      // Convert string timestamps to Firestore Timestamps to satisfy security rules
+
       if (data['createdAt'] is String) {
-        data['createdAt'] = Timestamp.fromDate(DateTime.parse(data['createdAt']));
+        data['createdAt'] =
+            Timestamp.fromDate(DateTime.parse(data['createdAt']));
       }
       data['updatedAt'] = FieldValue.serverTimestamp();
 
@@ -56,7 +53,6 @@ class CVRemoteDataSource {
           .doc(cv.id)
           .set(data, SetOptions(merge: true));
     } catch (e) {
-      debugPrint('❌ Error saving CV to Firestore: $e');
       throw Exception('Failed to save CV to cloud storage');
     }
   }
@@ -65,11 +61,9 @@ class CVRemoteDataSource {
     try {
       await _firestore.collection(_collectionPath).doc(id).delete();
     } catch (e) {
-      debugPrint('❌ Error deleting CV from Firestore: $e');
       throw Exception('Failed to delete CV from cloud storage');
     }
   }
-
 
   Map<String, dynamic> _convertTimestamps(Map<String, dynamic> data) {
     final newData = Map<String, dynamic>.from(data);

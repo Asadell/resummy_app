@@ -4,7 +4,6 @@ import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/cv_tools/data/models/cv_analysis_model.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter/foundation.dart';
 
 class CVAnalysisRemoteDataSource {
   final GeminiPoolManager _geminiPool;
@@ -56,7 +55,6 @@ class CVAnalysisRemoteDataSource {
         jobDescription: jobDescription.isEmpty ? null : jobDescription,
       );
     } catch (e) {
-      debugPrint('❌ Error analyzing CV: $e');
       rethrow;
     }
   }
@@ -143,7 +141,6 @@ Return JSON ini:
 
       return jsonDecode(cleanJson) as Map<String, dynamic>;
     } catch (e) {
-      debugPrint('❌ Error converting suggestions: $e');
       rethrow;
     }
   }

@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class InterviewFeedbackProgressScreen extends StatelessWidget {
@@ -16,7 +18,7 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_2),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () =>
               context.router.push(const InterviewFeedbackOverviewRoute()),
         ),
@@ -37,305 +39,357 @@ class InterviewFeedbackProgressScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.sm,
             children: [
-              Row(
-                children: [
-                  Icon(Iconsax.chart_21,
-                      color: Theme.of(context).colorScheme.primary, size: 32),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.yourProgress,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.trackingLast5Sessions,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-              const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.scoreHistory,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 16),
-                    CustomPaint(
-                      size: const Size(double.infinity, 200),
-                      painter: _ProgressChartPainter(
-                        lineColor: Theme.of(context).colorScheme.primary,
-                        gridColor: Theme.of(context).dividerTheme.color ??
-                            AppColors.gray200,
-                        textColor:
-                            Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.metricComparison,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildMetricRow(
-                        context, l10n.overallScore, '+0.5', true, false),
-                    const Divider(height: 24),
-                    _buildMetricRow(
-                        context, l10n.starStructure, '+1.0', true, true),
-                    const Divider(height: 24),
-                    _buildMetricRow(
-                        context, l10n.fluency, '-0.5', false, false),
-                    const Divider(height: 24),
-                    _buildMetricRow(context, '${l10n.fillerWordsLabel} %',
-                        '+2.1%', false, true),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primaryContainer,
-                      Theme.of(context).cardTheme.color!
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primary, width: 2),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Iconsax.direct_up,
-                        color: Theme.of(context).colorScheme.primary, size: 32),
-                    const SizedBox(height: 12),
-                    Text(
-                      l10n.focusThisWeekFiller,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppColors.primary700,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Filler words Anda meningkat dari 11.5% menjadi 13.6%. Prioritas latihan pengurangan "um/uh" untuk minggu ini.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.primary800,
-                            height: 1.6,
-                          ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(44),
-                      ),
-                      child: Text('${l10n.viewPracticeTips} →'),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: AppSizes.xs,
                   children: [
                     Row(
                       children: [
-                        Icon(Iconsax.award,
-                            color: Theme.of(context).colorScheme.secondary,
-                            size: 24),
-                        const SizedBox(width: 12),
+                        Icon(Iconsax.chart_21,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 32),
+                        const SizedBox(width: AppSizes.sm),
                         Text(
-                          l10n.milestonesReached,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          l10n.yourProgress,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
-                      children: [
-                        _buildBadge(
-                            context,
-                            Iconsax.award,
-                            l10n.fiveInterviewsCompleted,
-                            true,
-                            Theme.of(context).colorScheme.secondaryContainer),
-                        _buildBadge(
-                            context,
-                            Iconsax.ranking,
-                            l10n.score75FirstTime,
-                            true,
-                            const Color(0xFFFEF3C7)),
-                        _buildBadge(
-                            context,
-                            Iconsax.lock,
-                            l10n.score80,
-                            false,
-                            Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest),
-                        _buildBadge(
-                            context,
-                            Iconsax.lock,
-                            l10n.tenInterviewsCompleted,
-                            false,
-                            Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
                     Text(
-                      l10n.compareSessions,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                      l10n.trackingLast5Sessions,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            initialValue: l10n.session(4),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                            ),
-                            items: [
-                              l10n.session(1),
-                              l10n.session(2),
-                              l10n.session(3),
-                              l10n.session(4)
-                            ]
-                                .map((s) =>
-                                    DropdownMenuItem(value: s, child: Text(s)))
-                                .toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(l10n.vs,
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant
-                                      .withValues(alpha: 0.5))),
-                        ),
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            initialValue: l10n.session(5),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                            ),
-                            items: [l10n.session(5)]
-                                .map((s) =>
-                                    DropdownMenuItem(value: s, child: Text(s)))
-                                .toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(40),
-                      ),
-                      child: Text('${l10n.compare} →'),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 100),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.md,
+                    children: [
+                      Text(
+                        l10n.scoreHistory,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                      CustomPaint(
+                        size: const Size(double.infinity, 200),
+                        painter: _ProgressChartPainter(
+                          lineColor: Theme.of(context).colorScheme.primary,
+                          gridColor: Theme.of(context).dividerTheme.color ??
+                              AppColors.gray200,
+                          textColor:
+                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.md,
+                    children: [
+                      Text(
+                        l10n.metricComparison,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                      Column(
+                        spacing: 0,
+                        children: [
+                          _buildMetricRow(
+                              context, l10n.overallScore, '+0.5', true, false),
+                          Divider(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withValues(alpha: 0.5),
+                              height: 32),
+                          _buildMetricRow(
+                              context, l10n.starStructure, '+1.0', true, true),
+                          Divider(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withValues(alpha: 0.5),
+                              height: 32),
+                          _buildMetricRow(
+                              context, l10n.fluency, '-0.5', false, false),
+                          Divider(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withValues(alpha: 0.5),
+                              height: 32),
+                          _buildMetricRow(context, '${l10n.fillerWordsLabel} %',
+                              '+2.1%', false, true),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primaryContainer,
+                        Theme.of(context).colorScheme.surfaceContainerLow,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                    border: Border.all(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.2)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.sm,
+                    children: [
+                      Icon(Iconsax.direct_up,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 32),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          Text(
+                            l10n.focusThisWeekFiller,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          Text(
+                            'Filler words Anda meningkat dari 11.5% menjadi 13.6%. Prioritas latihan pengurangan "um/uh" untuk minggu ini.',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      height: 1.6,
+                                    ),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(44),
+                        ),
+                        child: Text('${l10n.viewPracticeTips} →'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.md,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Iconsax.award,
+                              color: Theme.of(context).colorScheme.secondary,
+                              size: 24),
+                          const SizedBox(width: AppSizes.sm),
+                          Text(
+                            l10n.milestonesReached,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ],
+                      ),
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        mainAxisSpacing: AppSizes.sm,
+                        crossAxisSpacing: AppSizes.sm,
+                        childAspectRatio: 1.5,
+                        children: [
+                          _buildBadge(
+                              context,
+                              Iconsax.award,
+                              l10n.fiveInterviewsCompleted,
+                              true,
+                              Theme.of(context).colorScheme.secondaryContainer),
+                          _buildBadge(
+                              context,
+                              Iconsax.ranking,
+                              l10n.score75FirstTime,
+                              true,
+                              Colors.orange.withValues(alpha: 0.1)),
+                          _buildBadge(
+                              context,
+                              Iconsax.lock,
+                              l10n.score80,
+                              false,
+                              Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHigh),
+                          _buildBadge(
+                              context,
+                              Iconsax.lock,
+                              l10n.tenInterviewsCompleted,
+                              false,
+                              Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHigh),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.md,
+                    children: [
+                      Text(
+                        l10n.compareSessions,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              initialValue: l10n.session(4),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
+                              ),
+                              items: [
+                                l10n.session(1),
+                                l10n.session(2),
+                                l10n.session(3),
+                                l10n.session(4)
+                              ]
+                                  .map((s) => DropdownMenuItem(
+                                      value: s, child: Text(s)))
+                                  .toList(),
+                              onChanged: (_) {},
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(l10n.vs,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant
+                                        .withValues(alpha: 0.5))),
+                          ),
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              initialValue: l10n.session(5),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
+                              ),
+                              items: [l10n.session(5)]
+                                  .map((s) => DropdownMenuItem(
+                                      value: s, child: Text(s)))
+                                  .toList(),
+                              onChanged: (_) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(44),
+                        ),
+                        child: Text('${l10n.compare} →'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.lg),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
-          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border(
+              top: BorderSide(
+                  color:
+                      Theme.of(context).dividerColor.withValues(alpha: 0.1))),
         ),
         child: SafeArea(
           child: ElevatedButton.icon(

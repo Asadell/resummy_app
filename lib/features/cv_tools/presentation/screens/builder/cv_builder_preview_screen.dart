@@ -7,6 +7,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderPreviewScreen extends StatefulWidget {
@@ -166,14 +168,14 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         title: Text(l10n.previewCV),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.maybePop(),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Center(
-              child: TextButton(
+              child: IconButton(
                 onPressed: () async {
                   final provider = context.read<CVBuilderProvider>();
                   final success = await provider.saveCurrentCV();
@@ -193,129 +195,137 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                     }
                   }
                 },
-                child: Text(
-                  l10n.save,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF0EA5E9),
-                      ),
+                icon: Icon(
+                  Iconsax.save_2,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            color: Colors.green.withValues(alpha: 0.1),
-            child: Row(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.green, size: 20),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.cvConvertedSuccess,
-                    style: const TextStyle(
-                        color: Colors.green, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Consumer<CVBuilderProvider>(
-              builder: (context, provider, child) {
-                return CvPreviewCard(cvData: provider.currentCV);
-              },
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  offset: const Offset(0, -4),
-                  blurRadius: 16,
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.all(16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () =>
-                              context.router.push(const CvBuilderStep1Route()),
-                          child: Text(l10n.edit),
-                        ),
+      body: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: AppSection(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: AppSizes.sm, horizontal: AppSizes.md),
+                color: Colors.green.withValues(alpha: 0.1),
+                child: Row(
+                  children: [
+                    const Icon(Icons.check_circle,
+                        color: Colors.green, size: 20),
+                    const SizedBox(width: AppSizes.sm),
+                    Expanded(
+                      child: Text(
+                        l10n.cvConvertedSuccess,
+                        style: const TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
-                            padding: const EdgeInsets.all(16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Consumer<CVBuilderProvider>(
+                  builder: (context, provider, child) {
+                    return CvPreviewCard(cvData: provider.currentCV);
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(AppSizes.md),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      offset: const Offset(0, -4),
+                      blurRadius: 16,
+                    ),
+                  ],
+                ),
+                child: SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.all(AppSizes.md),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                ),
+                              ),
+                              onPressed: () => context.router
+                                  .push(const CvBuilderStep1Route()),
+                              child: Text(l10n.edit),
                             ),
                           ),
-                          onPressed: () async {
-                            final provider = context.read<CVBuilderProvider>();
-                            final success = await provider.saveCurrentCV();
+                          const SizedBox(width: AppSizes.md),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.onPrimary,
+                                padding: const EdgeInsets.all(AppSizes.md),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                ),
+                              ),
+                              onPressed: () async {
+                                final provider =
+                                    context.read<CVBuilderProvider>();
+                                final success = await provider.saveCurrentCV();
 
-                            if (context.mounted) {
-                              if (success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.cvSavedToLibrary),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
+                                if (context.mounted) {
+                                  if (success) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(l10n.cvSavedToLibrary),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
 
-                                context.router.replaceAll([const HomeRoute()]);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.failedToSaveCv),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: Text(l10n.save),
-                        ),
+                                    context.router
+                                        .replaceAll([const HomeRoute()]);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(l10n.failedToSaveCv),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              child: Text(l10n.save),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSizes.sm),
+                      TextButton.icon(
+                        onPressed: _isGenerating ? null : _showPdfOptions,
+                        icon: const Icon(Iconsax.export_1, size: 20),
+                        label: Text(l10n.exportPdf),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  TextButton.icon(
-                    onPressed: _isGenerating ? null : _showPdfOptions,
-                    icon: const Icon(Iconsax.export_1, size: 20),
-                    label: Text(l10n.exportPdf),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

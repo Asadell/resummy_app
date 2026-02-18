@@ -5,6 +5,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderStep2Screen extends StatefulWidget {
@@ -54,97 +56,102 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
       },
       onNext: _saveAndNext,
       editContent: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Consumer<CVBuilderProvider>(
-                builder: (context, provider, _) {
-                  final currentStep =
-                      DynamicCvSteps.getStepForSection(context, 'summary');
-                  final totalSteps =
-                      DynamicCvSteps.getTotalSteps(provider.currentCV);
-                  return Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      border: Border.all(color: theme.primaryColor),
-                      borderRadius: BorderRadius.circular(20),
+            AppSection(
+              child: Column(
+                spacing: AppSizes.sm,
+                children: [
+                  Consumer<CVBuilderProvider>(
+                    builder: (context, provider, _) {
+                      final currentStep =
+                          DynamicCvSteps.getStepForSection(context, 'summary');
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: theme.cardColor,
+                          border: Border.all(color: theme.primaryColor),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          l10n.stepHeader(currentStep, totalSteps),
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    l10n.summaryHeader,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    l10n.summaryDesc,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSizes.sm),
+            AppSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: AppSizes.md,
+                children: [
+                  Text(
+                    l10n.summaryHeader,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextField(
+                    controller: _summaryController,
+                    maxLines: 6,
+                    decoration: InputDecoration(
+                      hintText: l10n.summaryHint,
+                      hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant
+                            .withValues(alpha: 0.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppSizes.sm),
+                      ),
+                      counterText: '',
+                      filled: true,
+                      fillColor: theme.colorScheme.surfaceContainerLowest,
+                    ),
+                    style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+                    onChanged: (value) {
+                      setState(() {});
+                      context
+                          .read<CVBuilderProvider>()
+                          .updateSummary(value.trim());
+                    },
+                    maxLength: 2000,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
                     child: Text(
-                      l10n.stepHeader(currentStep, totalSteps),
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      '${_summaryController.text.length} ${l10n.characters}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 12),
-            Center(
-              child: Text(
-                l10n.summaryHeader,
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Center(
-              child: Text(
-                l10n.summaryDesc,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color:
-                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Text(
-              l10n.summaryHeader,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _summaryController,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: l10n.summaryHint,
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  color: theme.hintColor,
-                  height: 1.5,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                counterText: '',
-                filled: true,
-                fillColor: theme.canvasColor,
-              ),
-              style: const TextStyle(fontSize: 14, height: 1.6),
-              onChanged: (value) {
-                setState(() {});
-                context.read<CVBuilderProvider>().updateSummary(value.trim());
-              },
-              maxLength: 2000,
-            ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '${_summaryController.text.length} ${l10n.characters}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: theme.disabledColor,
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 80),

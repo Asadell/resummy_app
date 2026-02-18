@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
 import 'package:resummy_app/core/error/exceptions.dart';
 import 'package:resummy_app/features/auth/domain/entities/user_entity.dart';
 
@@ -50,7 +49,6 @@ class AuthRemoteDataSource {
 
       return _mapFirebaseUserToEntity(user);
     } catch (e) {
-      debugPrint('❌ Google Sign-In Error: $e');
       throw AuthException(e.toString());
     }
   }
@@ -60,7 +58,6 @@ class AuthRemoteDataSource {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
     } catch (e) {
-      debugPrint('❌ Sign-Out Error: $e');
       throw AuthException(e.toString());
     }
   }

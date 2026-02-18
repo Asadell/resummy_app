@@ -5,8 +5,9 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'dart:async';
 
 @RoutePage()
@@ -63,23 +64,95 @@ class _InterviewSessionQuestionScreenState
     _recordingTimer?.cancel();
   }
 
-  Future<void> _showExitDialog(BuildContext context) async {
+  Future<void> _showExitBottomSheet(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
-    final shouldExit = await showDialog<bool>(
+    final shouldExit = await showModalBottomSheet<bool>(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Text(l10n.exitInterviewTitle),
-            content: Text(l10n.exitInterviewContent),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n.continueInterview),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(l10n.exitYes),
-              ),
-            ],
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(AppSizes.lg),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppSizes.md)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSizes.md,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).dividerColor,
+                      borderRadius: BorderRadius.circular(AppSizes.xs),
+                    ),
+                  ),
+                ),
+                Icon(
+                  Iconsax.warning_2,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                Column(
+                  spacing: AppSizes.xs,
+                  children: [
+                    Text(
+                      l10n.exitInterviewTitle,
+                      textAlign: TextAlign.center,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    Text(
+                      l10n.exitInterviewContent,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: AppSizes.sm,
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: Text(
+                          l10n.continueInterview,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          elevation: 0,
+                        ),
+                        child: Text(l10n.exitYes),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSizes.xs),
+              ],
+            ),
           ),
         ) ??
         false;
@@ -101,9 +174,9 @@ class _InterviewSessionQuestionScreenState
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                spacing: AppSizes.md,
                 children: [
                   const CircularProgressIndicator(),
-                  const SizedBox(height: 16),
                   Text(l10n.generatingQuestions,
                       style: Theme.of(context).textTheme.bodyLarge),
                 ],
@@ -117,19 +190,19 @@ class _InterviewSessionQuestionScreenState
             appBar: AppBar(title: Text(l10n.errorTitle)),
             body: Center(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(AppSizes.lg),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: AppSizes.md,
                   children: [
                     Icon(Iconsax.warning_2,
                         size: 64, color: Theme.of(context).colorScheme.error),
-                    const SizedBox(height: 16),
                     Text(
                       provider.errorMessage ?? l10n.unknownError,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSizes.sm),
                     ElevatedButton.icon(
                       onPressed: () {
                         provider.startInterview(
@@ -140,11 +213,9 @@ class _InterviewSessionQuestionScreenState
                       icon: const Icon(Iconsax.refresh),
                       label: Text(l10n.retry),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        minimumSize: const Size(200, 52),
                       ),
                     ),
-                    const SizedBox(height: 12),
                     TextButton(
                       onPressed: () {
                         provider.resetInterview();
@@ -172,13 +243,13 @@ class _InterviewSessionQuestionScreenState
             leading: IconButton(
               icon: Icon(Iconsax.close_circle,
                   color: Theme.of(context).colorScheme.error),
-              onPressed: () => _showExitDialog(context),
+              onPressed: () => _showExitBottomSheet(context),
             ),
             title: Text(l10n.questionXofY(
                 provider.currentQuestionIndex + 1, provider.questions.length)),
             actions: [
               Padding(
-                padding: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: AppSizes.md),
                 child: Center(
                   child: Row(
                     children: [
@@ -202,14 +273,7 @@ class _InterviewSessionQuestionScreenState
           body: SafeArea(
             child: Column(
               children: [
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                AppSection(
                   child: Row(
                     children: [
                       Text(
@@ -222,363 +286,363 @@ class _InterviewSessionQuestionScreenState
                       ),
                       const Spacer(),
                       _buildToggleButton(true, l10n.on),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSizes.sm),
                       _buildToggleButton(false, l10n.off),
                     ],
                   ),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: AppSizes.sm,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Iconsax.cpu_charge,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  size: 16),
-                              const SizedBox(width: 8),
-                              Text(
-                                l10n.behavioralStar,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardTheme.color,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                        AppSection(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: AppSizes.md,
                             children: [
-                              Row(
-                                children: [
-                                  Icon(Iconsax.profile_circle,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      size: 24),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      l10n.aiInterviewer,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      provider.isPlayingQuestion
-                                          ? Iconsax.stop_circle
-                                          : Iconsax.refresh,
-                                      color: provider.isPlayingQuestion
-                                          ? Theme.of(context).colorScheme.error
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                    ),
-                                    onPressed: () =>
-                                        provider.playQuestionAudio(),
-                                    tooltip: provider.isPlayingQuestion
-                                        ? l10n.stop
-                                        : l10n.replayQuestion,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              if (provider.isQuestionTextVisible)
-                                Text(
-                                  question.text,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                      ),
+                              Container(
+                                padding: const EdgeInsets.all(AppSizes.md),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardTheme.color,
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                  border: Border.all(
+                                      color: Theme.of(context).dividerColor),
                                 ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primaryContainer
-                                .withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                onTap: () =>
-                                    setState(() => _showHint = !_showHint),
-                                child: Row(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: AppSizes.md,
                                   children: [
-                                    Icon(Iconsax.lamp_on,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 20),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      l10n.hintStarMethod,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(
+                                    Row(
+                                      children: [
+                                        Icon(Iconsax.profile_circle,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                            fontWeight: FontWeight.w600,
+                                            size: 24),
+                                        const SizedBox(width: AppSizes.sm),
+                                        Expanded(
+                                          child: Text(
+                                            l10n.aiInterviewer,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurfaceVariant,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                           ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            provider.isPlayingQuestion
+                                                ? Iconsax.stop_circle
+                                                : Iconsax.refresh,
+                                            color: provider.isPlayingQuestion
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .error
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                          ),
+                                          onPressed: () =>
+                                              provider.playQuestionAudio(),
+                                          tooltip: provider.isPlayingQuestion
+                                              ? l10n.stop
+                                              : l10n.replayQuestion,
+                                        ),
+                                      ],
                                     ),
-                                    const Spacer(),
-                                    Icon(
-                                      _showHint
-                                          ? Icons.expand_less
-                                          : Icons.expand_more,
-                                      color: AppColors.primary700,
-                                    ),
+                                    if (provider.isQuestionTextVisible)
+                                      Text(
+                                        question.text,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                            ),
+                                      ),
                                   ],
                                 ),
                               ),
-                              if (_showHint) ...[
-                                const SizedBox(height: 12),
-                                Text(
-                                  question.starHint ?? l10n.hintStarDetail,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
+                            ],
+                          ),
+                        ),
+                        AppSection(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: const EdgeInsets.all(AppSizes.md),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(AppSizes.sm),
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer
+                                    .withValues(alpha: 0.5),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              spacing: AppSizes.md,
+                              children: [
+                                InkWell(
+                                  onTap: () =>
+                                      setState(() => _showHint = !_showHint),
+                                  child: Row(
+                                    children: [
+                                      Icon(Iconsax.lamp_on,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 20),
+                                      const SizedBox(width: AppSizes.md),
+                                      Expanded(
+                                        child: Text(
+                                          l10n.hintStarMethod,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        _showHint
+                                            ? Icons.expand_less
+                                            : Icons.expand_more,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurfaceVariant,
+                                            .primary,
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                if (_showHint)
+                                  Text(
+                                    question.starHint ?? l10n.hintStarDetail,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        AppSection(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (provider.isRecording) ...[
+                                Center(
+                                  child: Column(
+                                    spacing: AppSizes.md,
+                                    children: [
+                                      Container(
+                                        width: 72,
+                                        height: 72,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error
+                                              .withValues(alpha: 0.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Iconsax.microphone_2,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          size: 32,
+                                        ),
+                                      ),
+                                      Text(
+                                        l10n.recording,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                      Text(
+                                        '${(_recordingDuration ~/ 60).toString().padLeft(2, '0')}:${(_recordingDuration % 60).toString().padLeft(2, '0')}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      AudioWaveforms(
+                                        enableGesture: true,
+                                        size: Size(
+                                            MediaQuery.of(context).size.width -
+                                                64,
+                                            50),
+                                        recorderController: _recorderController,
+                                        waveStyle: WaveStyle(
+                                          waveColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          extendWaveform: true,
+                                          showMiddleLine: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ] else if (provider.isTranscribing) ...[
+                                Center(
+                                  child: Column(
+                                    spacing: AppSizes.md,
+                                    children: [
+                                      const CircularProgressIndicator(),
+                                      Text(
+                                        l10n.processingAnswer,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ] else if (provider
+                                  .currentTranscript.isEmpty) ...[
+                                Center(
+                                  child: Column(
+                                    spacing: AppSizes.md,
+                                    children: [
+                                      Icon(Iconsax.message_text_1,
+                                          size: 48,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant),
+                                      Text(
+                                        l10n.speakRelaxed,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              if (provider.currentTranscript.isNotEmpty) ...[
+                                Container(
+                                  padding: const EdgeInsets.all(AppSizes.md),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSizes.sm),
+                                    border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    spacing: AppSizes.sm,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Iconsax.note_text,
+                                              size: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                          const SizedBox(width: AppSizes.sm),
+                                          Text(
+                                            l10n.transcriptRealTime,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurfaceVariant,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        provider.currentTranscript,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          l10n.wordsAndSeconds(
+                                              provider.currentTranscript
+                                                  .split(' ')
+                                                  .length,
+                                              _recordingDuration),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                        if (provider.isRecording) ...[
-                          Center(
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 72,
-                                  height: 72,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .error
-                                        .withValues(alpha: 0.1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Iconsax.microphone_2,
-                                    color: Theme.of(context).colorScheme.error,
-                                    size: 32,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  l10n.recording,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  '${(_recordingDuration ~/ 60).toString().padLeft(2, '0')}:${(_recordingDuration % 60).toString().padLeft(2, '0')}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 16),
-                                AudioWaveforms(
-                                  enableGesture: true,
-                                  size: Size(
-                                      MediaQuery.of(context).size.width, 50),
-                                  recorderController: _recorderController,
-                                  waveStyle: WaveStyle(
-                                    waveColor:
-                                        Theme.of(context).colorScheme.error,
-                                    extendWaveform: true,
-                                    showMiddleLine: false,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ] else if (provider.isTranscribing) ...[
-                          Center(
-                            child: Column(
-                              children: [
-                                const CircularProgressIndicator(),
-                                const SizedBox(height: 16),
-                                Text(
-                                  l10n.processingAnswer,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ] else if (provider.currentTranscript.isEmpty) ...[
-                          Center(
-                            child: Column(
-                              children: [
-                                Icon(Iconsax.message_text_1,
-                                    size: 48,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .surfaceContainerHighest),
-                                const SizedBox(height: 16),
-                                Text(
-                                  l10n.speakRelaxed,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                        if (provider.currentTranscript.isNotEmpty) ...[
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Iconsax.note_text,
-                                        size: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      l10n.transcriptRealTime,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  provider.currentTranscript,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                const SizedBox(height: 12),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    l10n.wordsAndSeconds(
-                                        provider.currentTranscript
-                                            .split(' ')
-                                            .length,
-                                        _recordingDuration),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppSizes.md),
                   decoration: BoxDecoration(
                     color: Theme.of(context)
                         .bottomNavigationBarTheme
@@ -599,6 +663,7 @@ class _InterviewSessionQuestionScreenState
                       children: [
                         if (provider.isRecording)
                           Row(
+                            spacing: AppSizes.sm,
                             children: [
                               Expanded(
                                 child: OutlinedButton(
@@ -621,7 +686,6 @@ class _InterviewSessionQuestionScreenState
                                   child: Text(l10n.cancel),
                                 ),
                               ),
-                              const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
@@ -636,7 +700,7 @@ class _InterviewSessionQuestionScreenState
                                     foregroundColor:
                                         Theme.of(context).colorScheme.onError,
                                     minimumSize: const Size.fromHeight(56),
-                                    elevation: 2,
+                                    elevation: 0,
                                   ),
                                 ),
                               ),
@@ -666,11 +730,12 @@ class _InterviewSessionQuestionScreenState
                                 : l10n.startAnswering),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size.fromHeight(56),
-                              elevation: 2,
+                              elevation: 0,
                             ),
                           )
                         else
                           Row(
+                            spacing: AppSizes.sm,
                             children: [
                               Expanded(
                                 child: OutlinedButton(
@@ -689,7 +754,6 @@ class _InterviewSessionQuestionScreenState
                                   child: Text(l10n.recordAgain),
                                 ),
                               ),
-                              const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: provider.isTranscribing
@@ -710,13 +774,13 @@ class _InterviewSessionQuestionScreenState
                                         },
                                   style: ElevatedButton.styleFrom(
                                     minimumSize: const Size.fromHeight(56),
-                                    elevation: 2,
+                                    elevation: 0,
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: AppSizes.sm,
                                     children: [
                                       Text(l10n.next),
-                                      const SizedBox(width: 8),
                                       const Icon(Icons.arrow_forward, size: 18),
                                     ],
                                   ),
