@@ -34,7 +34,6 @@ class DOSpacesService {
       final suffixPart = suffix != null ? '_$suffix' : '';
       final objectName = '$userId/${cvId}_$timestamp$suffixPart.pdf';
 
-
       final bytes = await file.readAsBytes();
       final uint8list = Uint8List.fromList(bytes);
       final stream = Stream<Uint8List>.value(uint8list);
@@ -64,9 +63,7 @@ class DOSpacesService {
         throw Exception('Invalid PDF URL: $pdfUrl');
       }
 
-
       await _client.removeObject(AppConstants.doSpacesBucket, objectName);
-
     } catch (e) {
       rethrow;
     }
@@ -82,12 +79,10 @@ class DOSpacesService {
         throw Exception('Invalid PDF URL: $pdfUrl');
       }
 
-
       final stream =
           await _client.getObject(AppConstants.doSpacesBucket, objectName);
       final file = File(localPath);
       await stream.pipe(file.openWrite());
-
 
       return localPath;
     } catch (e) {

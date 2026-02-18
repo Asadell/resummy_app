@@ -253,6 +253,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
     }
     return null;
   }
+
   Future<void> _showDeleteConfirmation(
       BuildContext context, CVBuilderProvider provider, int index) async {
     final l10n = AppLocalizations.of(context)!;
@@ -264,7 +265,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -300,7 +302,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       l10n.deleteExperienceContent,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
@@ -312,7 +315,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                         ),
                         child: Text(l10n.cancel),
                       ),
@@ -322,8 +326,10 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                           elevation: 0,
                         ),
                         child: Text(l10n.delete),
@@ -341,7 +347,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       provider.removeWorkExperience(index);
     }
   }
-
 
   @override
   void dispose() {
@@ -502,7 +507,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               maxLength: 50,
             ),
             DropdownButtonFormField<String>(
-              // ignore: deprecated_member_use
               value: _employmentType,
               decoration: InputDecoration(
                 labelText: l10n.employmentTypeLabel,
@@ -650,6 +654,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       ),
     );
   }
+
   String _getEmploymentTypeLabel(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
     switch (type) {

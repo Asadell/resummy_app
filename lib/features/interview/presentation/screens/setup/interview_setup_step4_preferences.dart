@@ -54,20 +54,21 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   children: [
                     Text(
                       l10n.selectInterviewFocus,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
                     Text(
                       l10n.interviewFocusDesc,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
                 ),
               ),
-
               AppSection(
                 child: Column(
                   spacing: AppSizes.sm,

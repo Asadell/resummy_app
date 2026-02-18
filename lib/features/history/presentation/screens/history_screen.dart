@@ -133,18 +133,24 @@ class _FilterTabs extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(AppSizes.md),
-        ),
-        child: Row(
-          children: [
-            Expanded(child: _buildTab(context, l10n.filterAll, HistoryFilter.all)),
-            Expanded(child: _buildTab(context, l10n.filterCv, HistoryFilter.cv)),
-            Expanded(child: _buildTab(context, l10n.filterInterview, HistoryFilter.interview)),
-          ],
-        ),
-      );
+      decoration: BoxDecoration(
+        color: Theme.of(context)
+            .colorScheme
+            .surfaceContainerHighest
+            .withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppSizes.md),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+              child: _buildTab(context, l10n.filterAll, HistoryFilter.all)),
+          Expanded(child: _buildTab(context, l10n.filterCv, HistoryFilter.cv)),
+          Expanded(
+              child: _buildTab(
+                  context, l10n.filterInterview, HistoryFilter.interview)),
+        ],
+      ),
+    );
   }
 
   Widget _buildTab(BuildContext context, String label, HistoryFilter filter) {
@@ -160,7 +166,10 @@ class _FilterTabs extends StatelessWidget {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   )

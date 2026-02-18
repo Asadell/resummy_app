@@ -398,7 +398,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               const SizedBox(height: 24),
               Text(
                 l10n.selectSectionFormat,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               ...CustomSectionTemplate.values.map((template) {
                 final isSelected = selectedTemplate == template;
@@ -451,8 +454,13 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                               const SizedBox(height: 2),
                               Text(
                                 _getTemplateDesc(template),
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
                                     ),
                               ),
                             ],

@@ -78,16 +78,18 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                     const SizedBox(height: AppSizes.md),
                     Text(
                       l10n.setupComplete,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: AppSizes.xs),
                     Text(
                       l10n.readyToStartDesc,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -95,7 +97,6 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               AppSection(
                 child: Container(
                   padding: const EdgeInsets.all(AppSizes.md),
@@ -117,10 +118,13 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                             ),
                       ),
                       const SizedBox(height: AppSizes.sm),
-                      _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel,
+                      _buildSummaryRow(
+                          context,
+                          Iconsax.document_1,
+                          l10n.cvLabel,
                           provider.cvFileName ?? l10n.cvDefaultLabel),
-                      _buildSummaryRow(context, Iconsax.briefcase, l10n.roleLabel,
-                          provider.role ?? '-'),
+                      _buildSummaryRow(context, Iconsax.briefcase,
+                          l10n.roleLabel, provider.role ?? '-'),
                       _buildSummaryRow(
                           context,
                           Iconsax.radar_1,
@@ -172,8 +176,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
             },
             child: Text(
               l10n.startInterviewNow,
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ),

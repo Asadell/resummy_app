@@ -20,7 +20,6 @@ class CVConversionRemoteDataSource {
       final bytes = await file.readAsBytes();
       final mimeType = _getMimeType(file.path);
 
-
       final prompt = _buildConversionPrompt(targetLanguage: targetLanguage);
 
       final response = await _geminiPool.executeWithRetry(

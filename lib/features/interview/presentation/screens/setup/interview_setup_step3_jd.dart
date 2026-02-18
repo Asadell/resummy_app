@@ -60,20 +60,21 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                   children: [
                     Text(
                       l10n.step3PasteJd,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                     ),
                     Text(
                       '(${l10n.optional})',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
                 ),
               ),
-
               AppSection(
                 child: Container(
                   padding: const EdgeInsets.all(AppSizes.md),
@@ -85,24 +86,25 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(Iconsax.lamp_on,
-                          color: Theme.of(context).colorScheme.primary, size: 24),
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 24),
                       const SizedBox(width: AppSizes.md),
                       Expanded(
                         child: Text(
                           l10n.jdDetailHelpsAi,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,81 +146,6 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                       ),
                     ),
                   ],
-                ),
-              ),
-
-              AppSection(
-                child: Column(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() => _showExtracted = true);
-                      },
-                      icon: const Icon(Iconsax.cpu_charge, size: 20),
-                      label: Text(l10n.extractKeyRequirements),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52),
-                      ),
-                    ),
-                    if (_showExtracted) ...[
-                      const SizedBox(height: AppSizes.sm),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(AppSizes.md),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(AppSizes.sm),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: AppSizes.sm,
-                          children: [
-                            Text(
-                              l10n.extractedRequirements,
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                            Wrap(
-                              spacing: AppSizes.xs,
-                              runSpacing: AppSizes.xs,
-                              children: [
-                                _buildChip('React'),
-                                _buildChip('RESTful API'),
-                                _buildChip('Microservices'),
-                                _buildChip('3+ years'),
-                                _buildChip('Docker'),
-                                _buildChip('Kubernetes'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-
-              AppSection(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.noJdQuestion,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                      TextButton(
-                        onPressed: () =>
-                            context.router.push(const InterviewSetupStep4Route()),
-                        child: Text(l10n.skipThisStep),
-                      ),
-                    ],
-                  ),
                 ),
               ),
               const SizedBox(height: 80),
@@ -276,7 +203,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
 
   Widget _buildChip(String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.sm, vertical: AppSizes.xs),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.sm, vertical: AppSizes.xs),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(100),

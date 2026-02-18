@@ -80,12 +80,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       ),
                       Text(
                         l10n.certificationHeader,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                         textAlign: TextAlign.center,
                       ),
                       Text(
@@ -125,9 +123,12 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                           Text(
                             l10n.skipStepPrompt,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                           ),
                         ],
                       ),
@@ -186,8 +187,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                                 IconButton(
                                   icon: const Icon(Iconsax.trash,
                                       size: 20, color: Colors.red),
-                                  onPressed: () =>
-                                      _showDeleteConfirmation(context, provider, index),
+                                  onPressed: () => _showDeleteConfirmation(
+                                      context, provider, index),
                                 ),
                               ],
                             ),
@@ -505,7 +506,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
             padding: const EdgeInsets.all(AppSizes.lg),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppSizes.md)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -541,7 +543,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       l10n.deleteItemConfirmation(''),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
@@ -553,7 +556,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                         ),
                         child: Text(l10n.cancel),
                       ),
@@ -563,8 +567,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                           elevation: 0,
                         ),
                         child: Text(l10n.delete),

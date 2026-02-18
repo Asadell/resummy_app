@@ -76,12 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 radius: 40,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.primary,
-                                backgroundImage: authProvider
-                                            .currentUser?.photoUrl !=
-                                        null
-                                    ? NetworkImage(
-                                        authProvider.currentUser!.photoUrl!)
-                                    : null,
+                                backgroundImage:
+                                    authProvider.currentUser?.photoUrl != null
+                                        ? NetworkImage(
+                                            authProvider.currentUser!.photoUrl!)
+                                        : null,
                                 child:
                                     authProvider.currentUser?.photoUrl == null
                                         ? Icon(
@@ -220,7 +219,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.all(AppSizes.lg),
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Theme.of(context).colorScheme.error,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.error,
                               side: BorderSide(
                                   color: Theme.of(context).colorScheme.error),
                               padding: const EdgeInsets.all(AppSizes.md),
@@ -264,8 +264,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
   }
-
-
 
   Widget _buildProfileRow(BuildContext context, String label, String value) {
     return Padding(
@@ -383,7 +381,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       DropdownMenuItem(
                           value: 'working', child: Text(l10n.currentlyWorking)),
                       DropdownMenuItem(
-                          value: 'job_seeking', child: Text(l10n.lookingForJob)),
+                          value: 'job_seeking',
+                          child: Text(l10n.lookingForJob)),
                       DropdownMenuItem(
                           value: 'freelancer', child: Text(l10n.freelancer)),
                     ],

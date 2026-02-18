@@ -49,8 +49,7 @@ class _InterviewSessionClosingScreenState
 
   @override
   void dispose() {
-    if (!_analysisComplete) {
-    }
+    if (!_analysisComplete) {}
     super.dispose();
   }
 
@@ -193,7 +192,6 @@ class _InterviewSessionClosingScreenState
                         ],
                       ),
                     ),
-                    
                     AppSection(
                       child: Row(
                         spacing: AppSizes.md,
@@ -202,7 +200,10 @@ class _InterviewSessionClosingScreenState
                             width: 48,
                             height: 48,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -214,15 +215,18 @@ class _InterviewSessionClosingScreenState
                           Expanded(
                             child: Text(
                               l10n.aiClosingMessage(''),
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    
                     AppSection(
                       child: Column(
                         spacing: AppSizes.md,
@@ -251,7 +255,8 @@ class _InterviewSessionClosingScreenState
                             spacing: AppSizes.xs,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(AppSizes.xs),
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.xs),
                                 child: LinearProgressIndicator(
                                   value: _progress,
                                   minHeight: 12,
@@ -268,7 +273,8 @@ class _InterviewSessionClosingScreenState
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -277,7 +283,6 @@ class _InterviewSessionClosingScreenState
                         ],
                       ),
                     ),
-                    
                     AppSection(
                       child: Column(
                         spacing: AppSizes.xs,
@@ -286,12 +291,11 @@ class _InterviewSessionClosingScreenState
 
                           final isDone =
                               _analysisComplete || index < currentStepIndex;
-                          final isInProgress = !_analysisComplete &&
-                              index == currentStepIndex;
+                          final isInProgress =
+                              !_analysisComplete && index == currentStepIndex;
 
                           return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
                               spacing: AppSizes.md,
                               children: [
@@ -307,11 +311,10 @@ class _InterviewSessionClosingScreenState
                                     height: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                   )
                                 else
@@ -323,23 +326,26 @@ class _InterviewSessionClosingScreenState
                                       size: 20),
                                 Text(
                                   _steps(l10n)[index],
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: isDone
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondary
-                                        : isInProgress
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: isDone
                                             ? Theme.of(context)
                                                 .colorScheme
-                                                .primary
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant
-                                                .withValues(alpha: 0.5),
-                                    fontWeight: isDone || isInProgress
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
-                                  ),
+                                                .secondary
+                                            : isInProgress
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant
+                                                    .withValues(alpha: 0.5),
+                                        fontWeight: isDone || isInProgress
+                                            ? FontWeight.w600
+                                            : FontWeight.normal,
+                                      ),
                                 ),
                               ],
                             ),
@@ -351,10 +357,12 @@ class _InterviewSessionClosingScreenState
                       child: Center(
                         child: Text(
                           l10n.estimateTime,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -379,7 +387,8 @@ class _InterviewSessionClosingScreenState
         padding: const EdgeInsets.all(AppSizes.lg),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+          borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -429,7 +438,10 @@ class _InterviewSessionClosingScreenState
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text(l10n.cancel, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+                    child: Text(l10n.cancel,
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color)),
                   ),
                 ),
                 Expanded(

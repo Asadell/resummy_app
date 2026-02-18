@@ -109,9 +109,7 @@ class InterviewProvider extends ChangeNotifier {
     try {
       _history = await _repository.getInterviewHistory(_userId!);
       notifyListeners();
-    } catch (e) {
-      // ignore: empty_catches
-    }
+    } catch (e) {}
   }
 
   InterviewStatus get status => _status;
@@ -242,7 +240,6 @@ class InterviewProvider extends ChangeNotifier {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    // Set defaults so generateReport() has valid context
     _role ??= 'Software Engineer';
     _cvText ??=
         'Experienced Flutter developer with 2 years of experience building mobile apps. '
@@ -255,7 +252,8 @@ class InterviewProvider extends ChangeNotifier {
       _questions = [
         const InterviewQuestion(
           id: '1',
-          text: 'Ceritakan tentang tantangan terbesar yang pernah Anda hadapi dalam pekerjaan.',
+          text:
+              'Ceritakan tentang tantangan terbesar yang pernah Anda hadapi dalam pekerjaan.',
           difficulty: 'Medium',
           userAnswerTranscript:
               "Saya pernah menghadapi situasi di mana API backend belum siap padahal deadline rilis sudah sangat dekat (Situation). "
@@ -376,7 +374,6 @@ class InterviewProvider extends ChangeNotifier {
     generateReport();
   }
 
-
   Future<void> _generateAndPlayQuestionAudio() async {
     if (currentQuestion == null) return;
 
@@ -393,9 +390,7 @@ class InterviewProvider extends ChangeNotifier {
           await playQuestionAudio();
         }
       }
-    } catch (e) {
-      // ignore: empty_catches
-    }
+    } catch (e) {}
   }
 
   StreamSubscription? _playerCompleteSubscription;
@@ -461,9 +456,7 @@ class InterviewProvider extends ChangeNotifier {
       _recordingStartTime = null;
       _currentAudioDuration = 0;
       notifyListeners();
-    } catch (e) {
-      // ignore: empty_catches
-    }
+    } catch (e) {}
   }
 
   Future<void> _transcribeAudio(File audioFile, int questionIndex) async {
@@ -488,7 +481,6 @@ class InterviewProvider extends ChangeNotifier {
       if (_currentQuestionIndex == questionIndex) {
         _currentTranscript = "Error transcribing: $e";
       }
-      // ignore transcription error details in logs
     } finally {
       _isTranscribing = false;
       notifyListeners();
@@ -635,7 +627,6 @@ class InterviewProvider extends ChangeNotifier {
           });
         }
       } catch (e) {
-        // ignore: empty_catches
         if (!_isDisposed) {
           _isPlayingQuestion = false;
           notifyListeners();

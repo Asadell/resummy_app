@@ -345,28 +345,36 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurfaceVariant
+                  .withValues(alpha: 0.5),
             ),
             helperText: helperText,
-            helperStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+            helperStyle:
+                TextStyle(color: Theme.of(context).colorScheme.primary),
             prefixIcon: prefixIcon != null
                 ? Icon(prefixIcon,
-                    size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant)
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant)
                 : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSizes.sm),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.outline),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSizes.sm),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSizes.sm),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.primary),
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.md, vertical: AppSizes.sm),
             counterText: '',
           ),
         ),

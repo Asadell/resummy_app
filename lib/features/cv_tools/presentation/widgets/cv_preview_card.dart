@@ -29,7 +29,7 @@ class CvPreviewCard extends StatelessWidget {
 
     return Container(
       color: const Color(0xFFF5F5F5),
-      child: Center( 
+      child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Container(
@@ -206,7 +206,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceSection(BuildContext context, ExperienceSection section) {
+  Widget _buildExperienceSection(
+      BuildContext context, ExperienceSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
 
@@ -309,7 +310,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEducationSection(BuildContext context, EducationSection section) {
+  Widget _buildEducationSection(
+      BuildContext context, EducationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
 
@@ -423,7 +425,8 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrganizationEntry(AppLocalizations l10n, OrganizationExperience org) {
+  Widget _buildOrganizationEntry(
+      AppLocalizations l10n, OrganizationExperience org) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(org.startDate);
     final endDate =

@@ -168,8 +168,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ),
           ),
           const SizedBox(height: AppSizes.sm),
-          if (widget.section.template ==
-                  CustomSectionTemplate.experienceLike ||
+          if (widget.section.template == CustomSectionTemplate.experienceLike ||
               widget.section.template == CustomSectionTemplate.educationLike)
             _buildEntryListTemplate(context, provider, theme)
           else if (widget.section.template == CustomSectionTemplate.skillsLike)
@@ -323,7 +322,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveSkillForm(CVBuilderProvider provider, CustomSection section) {
-    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
@@ -641,7 +639,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveEntryForm(CVBuilderProvider provider, CustomSection section) {
-    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
@@ -713,8 +710,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                     ? '${l10n.edit} ${section.titleLabel}'
                     : '${l10n.addItem} ${section.titleLabel}',
                 style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               if (isEditing)
                 TextButton.icon(
@@ -914,8 +911,8 @@ Future<void> _showDeleteItemConfirmation(BuildContext context, String title,
           padding: const EdgeInsets.all(AppSizes.lg),
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(AppSizes.md)),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -951,8 +948,7 @@ Future<void> _showDeleteItemConfirmation(BuildContext context, String title,
                     content,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                 ],
@@ -975,8 +971,7 @@ Future<void> _showDeleteItemConfirmation(BuildContext context, String title,
                       onPressed: () => Navigator.pop(context, true),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.error,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onError,
+                        foregroundColor: Theme.of(context).colorScheme.onError,
                         padding:
                             const EdgeInsets.symmetric(vertical: AppSizes.md),
                         elevation: 0,

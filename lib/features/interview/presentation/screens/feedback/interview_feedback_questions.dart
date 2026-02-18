@@ -84,29 +84,31 @@ class _InterviewFeedbackQuestionsScreenState
               Expanded(
                 child: AppSection(
                   child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: AppSizes.lg),
-                  itemCount: feedbacks.length,
-                  itemBuilder: (context, index) {
-                    final feedback = feedbacks[index];
+                    padding: const EdgeInsets.only(bottom: AppSizes.lg),
+                    itemCount: feedbacks.length,
+                    itemBuilder: (context, index) {
+                      final feedback = feedbacks[index];
 
-                    final question = provider.questions.isNotEmpty &&
-                            index < provider.questions.length
-                        ? provider.questions[index]
-                        : null;
-                    final questionTitle =
-                        question?.text ?? '${l10n.question} ${index + 1}';
+                      final question = provider.questions.isNotEmpty &&
+                              index < provider.questions.length
+                          ? provider.questions[index]
+                          : null;
+                      final questionTitle =
+                          question?.text ?? '${l10n.question} ${index + 1}';
 
-                    final isExpanded = _expandedIndex == index;
-                    final scoreColor =
-                        _getScoreColor(context, feedback.starAnalysis.score * 10);
+                      final isExpanded = _expandedIndex == index;
+                      final scoreColor = _getScoreColor(
+                          context, feedback.starAnalysis.score * 10);
 
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: AppSizes.md),
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: AppSizes.md),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Theme.of(context).dividerColor.withValues(alpha: 0.25),
+                            color: Theme.of(context)
+                                .dividerColor
+                                .withValues(alpha: 0.25),
                             width: 1.5,
                           ),
                           boxShadow: [
@@ -131,11 +133,13 @@ class _InterviewFeedbackQuestionsScreenState
                                 Padding(
                                   padding: const EdgeInsets.all(AppSizes.md),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     spacing: AppSizes.sm,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: Text(
@@ -160,8 +164,10 @@ class _InterviewFeedbackQuestionsScreenState
                                               vertical: 6,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: scoreColor.withValues(alpha: 0.1),
-                                              borderRadius: BorderRadius.circular(10),
+                                              color: scoreColor.withValues(
+                                                  alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                             child: Text(
                                               '${feedback.starAnalysis.score}/10',
@@ -179,8 +185,11 @@ class _InterviewFeedbackQuestionsScreenState
                                         child: Row(
                                           spacing: AppSizes.xs,
                                           children: [
-                                            _buildScoreChip(context, 'STAR',
-                                                feedback.starAnalysis.score.toDouble()),
+                                            _buildScoreChip(
+                                                context,
+                                                'STAR',
+                                                feedback.starAnalysis.score
+                                                    .toDouble()),
                                             _buildScoreChip(
                                                 context,
                                                 l10n.fluency,
@@ -192,16 +201,23 @@ class _InterviewFeedbackQuestionsScreenState
                                       if (isExpanded) ...[
                                         const SizedBox(height: 4),
                                         Container(
-                                          padding: const EdgeInsets.all(AppSizes.md),
+                                          padding:
+                                              const EdgeInsets.all(AppSizes.md),
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.surfaceContainerLow,
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surfaceContainerLow,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             border: Border.all(
-                                              color: Theme.of(context).dividerColor.withValues(alpha: 0.15),
+                                              color: Theme.of(context)
+                                                  .dividerColor
+                                                  .withValues(alpha: 0.15),
                                             ),
                                           ),
                                           child: Text(
-                                            feedback.starAnalysis.overallFeedback,
+                                            feedback
+                                                .starAnalysis.overallFeedback,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium
@@ -219,14 +235,14 @@ class _InterviewFeedbackQuestionsScreenState
                                             onPressed: () => context.router.push(
                                                 InterviewFeedbackDetailRoute(
                                                     feedbackIndex: index)),
-                                            icon: const Icon(Iconsax.arrow_right_3,
+                                            icon: const Icon(
+                                                Iconsax.arrow_right_3,
                                                 size: 14),
-                                            label: Text(l10n.viewDetail, 
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              )
-                                            ),
+                                            label: Text(l10n.viewDetail,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
                                             iconAlignment: IconAlignment.end,
                                           ),
                                         ),
@@ -258,8 +274,8 @@ class _InterviewFeedbackQuestionsScreenState
                           ),
                         ),
                       );
-                  },
-                ),
+                    },
+                  ),
                 ),
               ),
             ],

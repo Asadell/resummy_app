@@ -61,8 +61,8 @@ class _InterviewFeedbackDetailScreenState
 
         String userTranscript = feedback.userTranscript;
 
-        // Fallback: try to get from live questions if available (during active session)
-        if (userTranscript.isEmpty && _currentIndex < provider.questions.length) {
+        if (userTranscript.isEmpty &&
+            _currentIndex < provider.questions.length) {
           userTranscript =
               provider.questions[_currentIndex].userAnswerTranscript ?? '';
         }
@@ -97,16 +97,26 @@ class _InterviewFeedbackDetailScreenState
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(AppSizes.lg),
-                            border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.2)),
                           ),
                           child: Text(
                             '${l10n.question} ${_currentIndex + 1}/$totalQuestions',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                         Row(
@@ -118,9 +128,12 @@ class _InterviewFeedbackDetailScreenState
                             Expanded(
                               child: Text(
                                 questionText,
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
                             ),
                           ],
@@ -128,12 +141,12 @@ class _InterviewFeedbackDetailScreenState
                       ],
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                       ),
                       child: Column(
@@ -153,27 +166,31 @@ class _InterviewFeedbackDetailScreenState
                                     .titleMedium
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                               ),
                             ],
                           ),
                           Text(
                             feedback.starAnalysis.overallFeedback,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              height: 1.5,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  height: 1.5,
+                                ),
                           ),
                         ],
                       ),
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                       ),
                       child: Column(
@@ -186,7 +203,8 @@ class _InterviewFeedbackDetailScreenState
                               Row(
                                 children: [
                                   Icon(Iconsax.chart_2,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       size: 20),
                                   const SizedBox(width: AppSizes.sm),
                                   Text(
@@ -213,7 +231,10 @@ class _InterviewFeedbackDetailScreenState
                               ),
                             ],
                           ),
-                          Divider(color: Theme.of(context).dividerColor.withValues(alpha: 0.5)),
+                          Divider(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withValues(alpha: 0.5)),
                           Column(
                             spacing: AppSizes.sm,
                             children: [
@@ -231,12 +252,12 @@ class _InterviewFeedbackDetailScreenState
                       ),
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                       ),
                       child: Row(
@@ -274,12 +295,12 @@ class _InterviewFeedbackDetailScreenState
                       ),
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                       ),
                       child: Column(
@@ -311,9 +332,13 @@ class _InterviewFeedbackDetailScreenState
                               Container(
                                 padding: const EdgeInsets.all(AppSizes.md),
                                 decoration: BoxDecoration(
-                                  color: AppColors.error.withValues(alpha: 0.05),
-                                  borderRadius: BorderRadius.circular(AppSizes.sm),
-                                  border: Border.all(color: AppColors.error.withValues(alpha: 0.1)),
+                                  color:
+                                      AppColors.error.withValues(alpha: 0.05),
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                  border: Border.all(
+                                      color: AppColors.error
+                                          .withValues(alpha: 0.1)),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,42 +346,58 @@ class _InterviewFeedbackDetailScreenState
                                   children: [
                                     Text(
                                       l10n.originalSpeechLabel,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.error,
-                                            ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.error,
+                                          ),
                                     ),
                                     Text(
                                       userTranscript.isNotEmpty
                                           ? userTranscript
                                           : 'No answer recorded.',
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.error.withValues(alpha: 0.8),
-                                        height: 1.5,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: AppColors.error
+                                                .withValues(alpha: 0.8),
+                                            height: 1.5,
+                                          ),
                                     ),
                                   ],
                                 ),
                               ),
-                              if (feedback.improvedSpeech.improvedText.isNotEmpty)
+                              if (feedback
+                                  .improvedSpeech.improvedText.isNotEmpty)
                                 Container(
                                   padding: const EdgeInsets.all(AppSizes.md),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
-                                    borderRadius: BorderRadius.circular(AppSizes.sm),
-                                    border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.05),
+                                    borderRadius:
+                                        BorderRadius.circular(AppSizes.sm),
+                                    border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withValues(alpha: 0.1)),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     spacing: 4,
                                     children: [
                                       Row(
                                         children: [
                                           Icon(Iconsax.magic_star,
-                                              color: Theme.of(context).colorScheme.primary,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               size: 14),
                                           const SizedBox(width: 4),
                                           Text(
@@ -375,11 +416,17 @@ class _InterviewFeedbackDetailScreenState
                                       ),
                                       Text(
                                         feedback.improvedSpeech.improvedText,
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
-                                          height: 1.5,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withValues(alpha: 0.8),
+                                              height: 1.5,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -399,7 +446,11 @@ class _InterviewFeedbackDetailScreenState
             padding: const EdgeInsets.all(AppSizes.md),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1))),
+              border: Border(
+                  top: BorderSide(
+                      color: Theme.of(context)
+                          .dividerColor
+                          .withValues(alpha: 0.1))),
             ),
             child: SafeArea(
               child: Row(
@@ -465,9 +516,9 @@ class _InterviewFeedbackDetailScreenState
             Text(
               isPresent ? 'Present' : 'Missing',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isPresent ? AppColors.secondary : AppColors.error,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: isPresent ? AppColors.secondary : AppColors.error,
+                    fontWeight: FontWeight.bold,
+                  ),
             )
           ],
         )

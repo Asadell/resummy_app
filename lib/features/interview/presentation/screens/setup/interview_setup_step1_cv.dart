@@ -24,7 +24,6 @@ class InterviewSetupStep1Screen extends StatefulWidget {
 }
 
 class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
-  /// null = no selection yet; -1 = uploaded CV
   int? _selectedCvIndex;
   String? _uploadedCvName;
   String? _uploadedCvText;
@@ -37,15 +36,13 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     });
   }
 
-  // ─── helpers ────────────────────────────────────────────────────────────────
-
-  /// Build a plain-text representation of a CVData for the AI prompt.
   String _buildCvText(CVData cv) {
     final buf = StringBuffer();
     buf.writeln('Name: ${cv.header.name}');
     if (cv.header.email != null) buf.writeln('Email: ${cv.header.email}');
     if (cv.header.phone != null) buf.writeln('Phone: ${cv.header.phone}');
-    if (cv.header.location != null) buf.writeln('Location: ${cv.header.location}');
+    if (cv.header.location != null)
+      buf.writeln('Location: ${cv.header.location}');
 
     final summary = cv.summarySection?.content ?? '';
     if (summary.isNotEmpty) {
@@ -56,7 +53,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     if (exp.isNotEmpty) {
       buf.writeln('\nWork Experience:');
       for (final e in exp) {
-        buf.writeln('- ${e.jobTitle} at ${e.companyName} (${e.employmentType})');
+        buf.writeln(
+            '- ${e.jobTitle} at ${e.companyName} (${e.employmentType})');
         buf.writeln('  ${e.responsibilities}');
       }
     }
@@ -116,8 +114,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     }
   }
 
-  // ─── file picker ────────────────────────────────────────────────────────────
-
   Future<void> _pickCvFile() async {
     final l10n = AppLocalizations.of(context)!;
     try {
@@ -149,8 +145,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     }
   }
 
-  // ─── browse-all bottom sheet ─────────────────────────────────────────────────
-
   void _showBrowseSheet(List<CVData> allCvs) {
     final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
@@ -174,8 +168,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     );
   }
 
-  // ─── build ───────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -194,7 +186,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: AppSizes.sm,
             children: [
-              // ── hero card ──
               AppSection(
                 child: Column(
                   spacing: AppSizes.md,
@@ -217,14 +208,12 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                         ),
                         Text(
                           l10n.setupStep1Desc,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -232,8 +221,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   ],
                 ),
               ),
-
-              // ── format info ──
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,8 +273,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   ],
                 ),
               ),
-
-              // ── CV selection ──
               Consumer<CVBuilderProvider>(
                 builder: (context, cvProvider, _) {
                   final allCvs = cvProvider.savedCVs;
@@ -315,8 +300,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                               ),
                           ],
                         ),
-
-                        // Recent CVs from provider
                         if (recentCvs.isEmpty)
                           _buildEmptyCvHint(context, l10n)
                         else
@@ -330,19 +313,14 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                               l10n: l10n,
                             );
                           }),
-
-                        // Uploaded CV
                         if (_uploadedCvName != null)
                           _buildUploadedItem(context, l10n),
-
-                        // Upload option
                         _buildUploadOption(context, l10n),
                       ],
                     ),
                   );
                 },
               ),
-
               const SizedBox(height: 80),
             ],
           ),
@@ -351,8 +329,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       bottomNavigationBar: _buildBottomBar(context, l10n),
     );
   }
-
-  // ─── sub-widgets ─────────────────────────────────────────────────────────────
 
   Widget _buildInfoChip(
     BuildContext context,
@@ -479,8 +455,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   Text(
                     '${_sourceLabel(l10n, cv.source)} • $date',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                 ],
@@ -523,8 +498,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
             const SizedBox(width: AppSizes.sm),
             CircleAvatar(
               radius: 18,
-              backgroundColor:
-                  Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .secondary
+                  .withValues(alpha: 0.15),
               child: Icon(Iconsax.document_upload,
                   color: Theme.of(context).colorScheme.secondary, size: 18),
             ),
@@ -545,8 +522,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   Text(
                     l10n.uploadedFromDevice,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                 ],
@@ -628,8 +604,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
   }
 }
 
-// ─── Browse-all bottom sheet ──────────────────────────────────────────────────
-
 class _BrowseCvSheet extends StatefulWidget {
   final List<CVData> allCvs;
   final int? selectedIndex;
@@ -686,7 +660,6 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
           ),
           child: Column(
             children: [
-              // Handle
               Center(
                 child: Container(
                   width: 40,
@@ -709,7 +682,6 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
-              // Search
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSizes.lg, vertical: AppSizes.sm),
@@ -733,14 +705,12 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                     ? Center(
                         child: Text(
                           l10n.noCvFound,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       )
                     : ListView.separated(
@@ -756,16 +726,14 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                           final isSelected =
                               widget.selectedIndex == globalIndex;
                           final color = widget.sourceColor(cv.source);
-                          final date =
-                              DateFormat.yMMMd().format(cv.updatedAt);
+                          final date = DateFormat.yMMMd().format(cv.updatedAt);
 
                           return InkWell(
                             onTap: () {
                               widget.onSelected(globalIndex);
                               Navigator.of(context).pop();
                             },
-                            borderRadius:
-                                BorderRadius.circular(AppSizes.sm),
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.all(AppSizes.md),
@@ -779,9 +747,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                         .surfaceContainerHighest,
                                 border: Border.all(
                                   color: isSelected
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .primary
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   width: isSelected ? 2 : 1,
                                 ),
@@ -794,10 +760,8 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                     radius: 20,
                                     backgroundColor:
                                         color.withValues(alpha: 0.15),
-                                    child: Icon(
-                                        widget.sourceIcon(cv.source),
-                                        color: color,
-                                        size: 20),
+                                    child: Icon(widget.sourceIcon(cv.source),
+                                        color: color, size: 20),
                                   ),
                                   const SizedBox(width: AppSizes.sm),
                                   Expanded(
@@ -813,8 +777,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                               .textTheme
                                               .titleSmall
                                               ?.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.w600),
+                                                  fontWeight: FontWeight.w600),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),

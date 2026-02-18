@@ -34,4 +34,3 @@ class HistoryRepositoryImpl implements HistoryRepository {
     return activities;
   }
 }
-

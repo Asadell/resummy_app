@@ -232,15 +232,15 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                           Text(
                             l10n.noOrganizationData,
                             style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
                             l10n.addOrganization,
                             textAlign: TextAlign.center,
                             style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ),
@@ -443,7 +443,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
             padding: const EdgeInsets.all(AppSizes.lg),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppSizes.md)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -476,12 +477,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                           ),
                     ),
                     Text(
-                      l10n.deleteItemConfirmation(
-                          provider.currentCV!.organizationSection!
-                              .entries[index].role),
+                      l10n.deleteItemConfirmation(provider
+                          .currentCV!.organizationSection!.entries[index].role),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
@@ -493,7 +494,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                         ),
                         child: Text(l10n.cancel),
                       ),
@@ -503,8 +505,10 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
                           elevation: 0,
                         ),
                         child: Text(l10n.delete),

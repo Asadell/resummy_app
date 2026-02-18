@@ -220,16 +220,18 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         children: [
                           Text(l10n.improvements,
                               style: Theme.of(context).textTheme.titleMedium),
-                          ...report.improvements.take(2).map((s) => Row(children: [
-                                Icon(Iconsax.info_circle,
-                                    size: 16, color: Colors.orange),
-                                const SizedBox(width: AppSizes.sm),
-                                Expanded(
-                                    child: Text(s,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall)),
-                              ])),
+                          ...report.improvements
+                              .take(2)
+                              .map((s) => Row(children: [
+                                    Icon(Iconsax.info_circle,
+                                        size: 16, color: Colors.orange),
+                                    const SizedBox(width: AppSizes.sm),
+                                    Expanded(
+                                        child: Text(s,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall)),
+                                  ])),
                         ],
                       ),
                     ],

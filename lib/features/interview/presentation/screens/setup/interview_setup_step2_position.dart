@@ -89,19 +89,19 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                       Expanded(
                         child: Text(
                           '${l10n.cvLabel} ${provider.cvFileName ?? l10n.cvDefaultLabel}',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,9 +113,10 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                       children: [
                         Text(
                           l10n.appliedPositionLabel,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         TextField(
                           controller: _positionController,
@@ -128,22 +129,25 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                         ),
                         Text(
                           l10n.autoFillFromProfile,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
                       ],
                     ),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: AppSizes.sm,
                       children: [
                         Text(
                           l10n.companyNameLabel,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         TextField(
                           controller: _companyController,
@@ -157,32 +161,32 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                         ),
                       ],
                     ),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: AppSizes.sm,
                       children: [
                         Text(
                           l10n.positionLevelLabel,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         _buildLevelOption(0, l10n.juniorLevel),
                         _buildLevelOption(1, l10n.midLevel),
                         _buildLevelOption(2, l10n.seniorLevel),
                       ],
                     ),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: AppSizes.sm,
                       children: [
                         Text(
                           l10n.industryLabel,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         DropdownButtonFormField<String>(
                           initialValue: _selectedIndustry,
@@ -230,34 +234,6 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                       ],
                     ),
                   ],
-                ),
-              ),
-
-              AppSection(
-                child: Container(
-                  padding: const EdgeInsets.all(AppSizes.md),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(AppSizes.sm),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Iconsax.lamp_on,
-                          color: Theme.of(context).colorScheme.primary, size: 20),
-                      const SizedBox(width: AppSizes.md),
-                      Expanded(
-                        child: Text(
-                          l10n.dataHelpsAiTailor,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
               const SizedBox(height: 80),
@@ -337,7 +313,8 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).dividerTheme.color ?? Theme.of(context).dividerColor,
+                : Theme.of(context).dividerTheme.color ??
+                    Theme.of(context).dividerColor,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(AppSizes.sm),

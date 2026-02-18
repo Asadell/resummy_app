@@ -49,7 +49,6 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         try {
           await _remoteDataSource.saveCV(cv, _currentUserId);
         } catch (e) {
-          // ignore: empty_catches
           await _localDataSource.saveCV(cv, _currentUserId,
               syncStatus: 'pending');
         }
@@ -67,9 +66,7 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       if (_currentUserId != 'anonymous') {
         try {
           await _remoteDataSource.deleteCV(id);
-        } catch (e) {
-          // ignore: empty_catches
-        }
+        } catch (e) {}
       }
     } catch (e) {
       rethrow;
@@ -87,8 +84,6 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       for (final cv in remoteCVs) {
         await _localDataSource.saveCV(cv, _currentUserId);
       }
-    } catch (e) {
-      // ignore: empty_catches
-    }
+    } catch (e) {}
   }
 }

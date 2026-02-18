@@ -478,8 +478,6 @@ class ImprovedSpeechData extends Equatable {
       ];
 }
 
-/// Holds the combined result of a single comprehensive Gemini analysis request,
-/// replacing the 4 separate STAR/Content/Fluency/Confidence requests.
 class ComprehensiveAnalysis {
   final STARAnalysis starAnalysis;
   final ContentQualityAnalysis contentAnalysis;

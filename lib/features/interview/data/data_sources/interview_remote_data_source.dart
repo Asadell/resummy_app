@@ -123,8 +123,6 @@ Return JSON:
     }
   }
 
-  /// Combines STAR, Content Quality, Fluency, and Confidence analysis into
-  /// a single Gemini request. Reduces per-question requests from 4 to 1.
   Future<ComprehensiveAnalysis> analyzeComprehensivePerformance({
     required String question,
     required String transcript,
@@ -221,10 +219,14 @@ Return a single JSON object:
       final responseText = response.text ?? '{}';
       final data = jsonDecode(responseText) as Map<String, dynamic>;
       return ComprehensiveAnalysis(
-        starAnalysis: STARAnalysis.fromJson(data['star'] as Map<String, dynamic>? ?? {}),
-        contentAnalysis: ContentQualityAnalysis.fromJson(data['content'] as Map<String, dynamic>? ?? {}),
-        fluencyAnalysis: FluencyAnalysis.fromJson(data['fluency'] as Map<String, dynamic>? ?? {}),
-        confidenceAnalysis: ConfidenceAnalysis.fromJson(data['confidence'] as Map<String, dynamic>? ?? {}),
+        starAnalysis:
+            STARAnalysis.fromJson(data['star'] as Map<String, dynamic>? ?? {}),
+        contentAnalysis: ContentQualityAnalysis.fromJson(
+            data['content'] as Map<String, dynamic>? ?? {}),
+        fluencyAnalysis: FluencyAnalysis.fromJson(
+            data['fluency'] as Map<String, dynamic>? ?? {}),
+        confidenceAnalysis: ConfidenceAnalysis.fromJson(
+            data['confidence'] as Map<String, dynamic>? ?? {}),
       );
     } catch (e) {
       debugPrint('Error in analyzeComprehensivePerformance: $e');

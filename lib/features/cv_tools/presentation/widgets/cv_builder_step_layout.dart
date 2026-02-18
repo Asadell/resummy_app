@@ -84,8 +84,7 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                                 : (provider.errorMessage ??
                                     l10n.failedToSaveCv),
                           ),
-                          backgroundColor:
-                              success ? Colors.green : Colors.red,
+                          backgroundColor: success ? Colors.green : Colors.red,
                         ),
                       );
                       if (success) {
@@ -118,7 +117,8 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                   color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                    color:
+                        Theme.of(context).dividerColor.withValues(alpha: 0.1),
                   ),
                 ),
                 child: TabBar(
@@ -128,14 +128,18 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   labelColor: Theme.of(context).colorScheme.onPrimary,
-                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  unselectedLabelColor:
+                      Theme.of(context).colorScheme.onSurfaceVariant,
                   labelStyle: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,

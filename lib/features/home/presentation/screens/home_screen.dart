@@ -50,7 +50,8 @@ class HomeScreen extends StatelessWidget {
                   _buildSectionHeader(
                     context,
                     title: l10n.recentActivity,
-                    onViewAll: () => context.router.navigate(const HistoryRoute()),
+                    onViewAll: () =>
+                        context.router.navigate(const HistoryRoute()),
                   ),
                   const SizedBox(height: AppSizes.md),
                   _buildRecentActivity(context, l10n),
@@ -58,7 +59,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Bottom padding
           const SliverToBoxAdapter(
             child: SizedBox(height: AppSizes.xl),
           ),
@@ -152,7 +152,8 @@ class HomeScreen extends StatelessWidget {
           child: CircleAvatar(
             backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: IconButton(
-              icon: const Icon(Iconsax.notification, color: Colors.white, size: 20),
+              icon: const Icon(Iconsax.notification,
+                  color: Colors.white, size: 20),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(l10n.notificationsComingSoon)),
@@ -268,7 +269,10 @@ class HomeScreen extends StatelessWidget {
                   Icon(
                     Iconsax.document_filter,
                     size: 48,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurfaceVariant
+                        .withValues(alpha: 0.2),
                   ),
                   const SizedBox(height: AppSizes.sm),
                   Text(
@@ -383,4 +387,3 @@ class _QuickActionCard extends StatelessWidget {
     );
   }
 }
-

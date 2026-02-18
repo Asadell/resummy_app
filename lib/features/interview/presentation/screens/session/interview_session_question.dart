@@ -74,7 +74,8 @@ class _InterviewSessionQuestionScreenState
             padding: const EdgeInsets.all(AppSizes.lg),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppSizes.md)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -102,15 +103,17 @@ class _InterviewSessionQuestionScreenState
                     Text(
                       l10n.exitInterviewTitle,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     Text(
                       l10n.exitInterviewContent,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
@@ -125,8 +128,10 @@ class _InterviewSessionQuestionScreenState
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         child: Text(
-                            l10n.continueInterview,
-                            style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                          l10n.continueInterview,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color),
                         ),
                       ),
                     ),
@@ -135,7 +140,8 @@ class _InterviewSessionQuestionScreenState
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           elevation: 0,
                         ),
@@ -297,41 +303,13 @@ class _InterviewSessionQuestionScreenState
                             spacing: AppSizes.md,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: AppSizes.md, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  spacing: AppSizes.sm,
-                                  children: [
-                                    Icon(Iconsax.cpu_charge,
-                                        color:
-                                            Theme.of(context).colorScheme.onPrimary,
-                                        size: 16),
-                                    Text(
-                                      l10n.behavioralStar,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
                                 padding: const EdgeInsets.all(AppSizes.md),
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).cardTheme.color,
-                                  borderRadius: BorderRadius.circular(AppSizes.sm),
-                                  border: Border.all(color: Theme.of(context).dividerColor),
+                                  borderRadius:
+                                      BorderRadius.circular(AppSizes.sm),
+                                  border: Border.all(
+                                      color: Theme.of(context).dividerColor),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,8 +318,9 @@ class _InterviewSessionQuestionScreenState
                                     Row(
                                       children: [
                                         Icon(Iconsax.profile_circle,
-                                            color:
-                                                Theme.of(context).colorScheme.primary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             size: 24),
                                         const SizedBox(width: AppSizes.sm),
                                         Expanded(
@@ -364,7 +343,9 @@ class _InterviewSessionQuestionScreenState
                                                 ? Iconsax.stop_circle
                                                 : Iconsax.refresh,
                                             color: provider.isPlayingQuestion
-                                                ? Theme.of(context).colorScheme.error
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .error
                                                 : Theme.of(context)
                                                     .colorScheme
                                                     .primary,
@@ -394,7 +375,6 @@ class _InterviewSessionQuestionScreenState
                             ],
                           ),
                         ),
-                        
                         AppSection(
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
@@ -445,7 +425,9 @@ class _InterviewSessionQuestionScreenState
                                         _showHint
                                             ? Icons.expand_less
                                             : Icons.expand_more,
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ],
                                   ),
@@ -455,15 +437,17 @@ class _InterviewSessionQuestionScreenState
                                     question.starHint ?? l10n.hintStarDetail,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
                                   ),
                               ],
                             ),
                           ),
                         ),
-
                         AppSection(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -485,7 +469,9 @@ class _InterviewSessionQuestionScreenState
                                         ),
                                         child: Icon(
                                           Iconsax.microphone_2,
-                                          color: Theme.of(context).colorScheme.error,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error,
                                           size: 32,
                                         ),
                                       ),
@@ -495,8 +481,9 @@ class _InterviewSessionQuestionScreenState
                                             .textTheme
                                             .titleMedium
                                             ?.copyWith(
-                                              color:
-                                                  Theme.of(context).colorScheme.error,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
                                               fontWeight: FontWeight.w600,
                                             ),
                                       ),
@@ -506,19 +493,23 @@ class _InterviewSessionQuestionScreenState
                                             .textTheme
                                             .headlineSmall
                                             ?.copyWith(
-                                              color:
-                                                  Theme.of(context).colorScheme.error,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
                                       AudioWaveforms(
                                         enableGesture: true,
                                         size: Size(
-                                            MediaQuery.of(context).size.width - 64, 50),
+                                            MediaQuery.of(context).size.width -
+                                                64,
+                                            50),
                                         recorderController: _recorderController,
                                         waveStyle: WaveStyle(
-                                          waveColor:
-                                              Theme.of(context).colorScheme.error,
+                                          waveColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
                                           extendWaveform: true,
                                           showMiddleLine: false,
                                         ),
@@ -547,7 +538,8 @@ class _InterviewSessionQuestionScreenState
                                     ],
                                   ),
                                 ),
-                              ] else if (provider.currentTranscript.isEmpty) ...[
+                              ] else if (provider
+                                  .currentTranscript.isEmpty) ...[
                                 Center(
                                   child: Column(
                                     spacing: AppSizes.md,
@@ -577,8 +569,10 @@ class _InterviewSessionQuestionScreenState
                                 Container(
                                   padding: const EdgeInsets.all(AppSizes.md),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.surface,
-                                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSizes.sm),
                                     border: Border.all(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -586,7 +580,8 @@ class _InterviewSessionQuestionScreenState
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     spacing: AppSizes.sm,
                                     children: [
                                       Row(
@@ -613,7 +608,9 @@ class _InterviewSessionQuestionScreenState
                                       ),
                                       Text(
                                         provider.currentTranscript,
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
                                       ),
                                       Align(
                                         alignment: Alignment.centerRight,
@@ -800,7 +797,6 @@ class _InterviewSessionQuestionScreenState
           ),
         );
       },
-
     );
   }
 

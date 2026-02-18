@@ -50,16 +50,16 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       title: l10n.cvBuilder,
                       description: l10n.cvBuilderDesc,
                       color: Theme.of(context).colorScheme.primary,
-                      onTap: () => context.router
-                          .push(const CvBuilderWelcomeRoute()),
+                      onTap: () =>
+                          context.router.push(const CvBuilderWelcomeRoute()),
                     ),
                     _FeatureCard(
                       icon: Iconsax.chart_2,
                       title: l10n.cvAnalyzer,
                       description: l10n.cvAnalyzerDesc,
                       color: Theme.of(context).colorScheme.secondary,
-                      onTap: () => context.router
-                          .push(const CvAnalyzerUploadRoute()),
+                      onTap: () =>
+                          context.router.push(const CvAnalyzerUploadRoute()),
                     ),
                     _FeatureCard(
                       icon: Iconsax.magic_star,
@@ -78,15 +78,15 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSizes.md,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           l10n.myCvs,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         TextButton(
                           onPressed: () =>
@@ -97,9 +97,9 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                     ),
                     Consumer<CVBuilderProvider>(
                       builder: (context, provider, child) {
-                        if (provider.isLoading &&
-                            provider.savedCVs.isEmpty) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (provider.isLoading && provider.savedCVs.isEmpty) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
 
                         if (provider.savedCVs.isEmpty) {
@@ -150,7 +150,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                               itemBuilder: (context, index) {
                                 final cv = recentCVs[index];
 
-
                                 return CVCard(
                                   cv: cv,
                                   index: index,
@@ -179,7 +178,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
       ),
     );
   }
-
 }
 
 class _FeatureCard extends StatelessWidget {

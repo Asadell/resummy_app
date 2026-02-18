@@ -31,7 +31,8 @@ class _InterviewSessionOpeningScreenState
             padding: const EdgeInsets.all(AppSizes.lg),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(AppSizes.md)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -59,15 +60,17 @@ class _InterviewSessionOpeningScreenState
                     Text(
                       l10n.exitInterviewTitle,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     Text(
                       l10n.exitInterviewContent,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ],
@@ -82,8 +85,10 @@ class _InterviewSessionOpeningScreenState
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         child: Text(
-                            l10n.continueInterview,
-                            style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                          l10n.continueInterview,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color),
                         ),
                       ),
                     ),
@@ -92,7 +97,8 @@ class _InterviewSessionOpeningScreenState
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onError,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           elevation: 0,
                         ),
@@ -186,9 +192,8 @@ class _InterviewSessionOpeningScreenState
                         children: [
                           CircleAvatar(
                             radius: 32,
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .primaryContainer,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primaryContainer,
                             child: Icon(
                               Iconsax.profile_circle,
                               color: Theme.of(context).colorScheme.primary,
@@ -202,9 +207,8 @@ class _InterviewSessionOpeningScreenState
                               Row(
                                 children: [
                                   Icon(Iconsax.profile_circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       size: 18),
                                   const SizedBox(width: AppSizes.sm),
                                   Text(
@@ -231,8 +235,7 @@ class _InterviewSessionOpeningScreenState
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Iconsax.lamp_on,
-                                  color:
-                                      Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   size: 18),
                               const SizedBox(width: AppSizes.sm),
                               Flexible(
@@ -258,7 +261,8 @@ class _InterviewSessionOpeningScreenState
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg, vertical: AppSizes.md),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.lg, vertical: AppSizes.md),
               child: Column(
                 spacing: AppSizes.md,
                 children: [
@@ -316,7 +320,8 @@ class _InterviewSessionOpeningScreenState
       onTap: () => setState(() => _showTranscript = isOn),
       borderRadius: BorderRadius.circular(100),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: 8),
+        padding:
+            const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: 8),
         decoration: BoxDecoration(
           color: isActive
               ? Theme.of(context).colorScheme.primary

@@ -44,13 +44,14 @@ class InterviewHistoryCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                   Center(
+                  Center(
                     child: Container(
                       width: 40,
                       height: 4,
@@ -78,16 +79,17 @@ class InterviewHistoryCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           l10n.confirmation,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    l10n.deleteCvConfirmation, // Reusing existing localization key or generic delete confirmation
+                    l10n.deleteCvConfirmation,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           height: 1.5,
@@ -114,8 +116,10 @@ class InterviewHistoryCard extends StatelessWidget {
                         child: FilledButton(
                           onPressed: () => Navigator.of(context).pop(true),
                           style: FilledButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.error,
-                            foregroundColor: Theme.of(context).colorScheme.onError,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onError,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -139,7 +143,8 @@ class InterviewHistoryCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: _getScoreColor(context, score).withValues(alpha: 0.1),
+            backgroundColor:
+                _getScoreColor(context, score).withValues(alpha: 0.1),
             child: Icon(
               Iconsax.microphone_2,
               color: _getScoreColor(context, score),

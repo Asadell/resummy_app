@@ -74,8 +74,8 @@ class InterviewRepositoryImpl implements InterviewRepository {
           final transcript = question.userAnswerTranscript!;
           final duration = question.audioDurationSeconds ?? 60;
 
-          // Single combined request replaces 4 separate STAR/Content/Fluency/Confidence calls
-          final comprehensive = await _remoteDataSource.analyzeComprehensivePerformance(
+          final comprehensive =
+              await _remoteDataSource.analyzeComprehensivePerformance(
             question: question.text,
             transcript: transcript,
             jobContext: jobContext,
@@ -90,20 +90,20 @@ class InterviewRepositoryImpl implements InterviewRepository {
             language: language,
           );
 
-            return QuestionFeedback(
-              questionId: question.id,
-              userTranscript: transcript,
-              starAnalysis: comprehensive.starAnalysis,
-              contentAnalysis: comprehensive.contentAnalysis,
-              fluencyAnalysis: comprehensive.fluencyAnalysis,
-              confidenceAnalysis: comprehensive.confidenceAnalysis,
-              improvedSpeech: improvedSpeech,
-            );
-          } catch (e) {
-            debugPrint('Error analyzing question ${question.id}: $e');
-            return null;
-          }
-        });
+          return QuestionFeedback(
+            questionId: question.id,
+            userTranscript: transcript,
+            starAnalysis: comprehensive.starAnalysis,
+            contentAnalysis: comprehensive.contentAnalysis,
+            fluencyAnalysis: comprehensive.fluencyAnalysis,
+            confidenceAnalysis: comprehensive.confidenceAnalysis,
+            improvedSpeech: improvedSpeech,
+          );
+        } catch (e) {
+          debugPrint('Error analyzing question ${question.id}: $e');
+          return null;
+        }
+      });
 
       final results = await Future.wait(futures);
       questionFeedbacks.addAll(results.whereType<QuestionFeedback>());
@@ -160,7 +160,8 @@ class InterviewRepositoryImpl implements InterviewRepository {
       debugPrint('Generated Interview Report:');
       debugPrint('Overall Score: ${finalReport.overallScore}');
       debugPrint('Questions analyzed: ${questionFeedbacks.length}');
-      debugPrint('Scores - Star: $totalStar, Content: $totalContent, Fluency: $totalFluency, Confidence: $totalConfidence');
+      debugPrint(
+          'Scores - Star: $totalStar, Content: $totalContent, Fluency: $totalFluency, Confidence: $totalConfidence');
 
       return finalReport;
     } catch (e) {
@@ -191,35 +192,33 @@ class InterviewRepositoryImpl implements InterviewRepository {
 
   @override
   Future<void> saveInterview(InterviewEntity interview) async {
-    // Save locally first
     await _localDataSource.saveInterview(interview);
 
-    // Also save to Firestore for cross-device access
     try {
       final firestore = FirebaseFirestore.instance;
       final auth = FirebaseAuth.instance;
       final currentUser = auth.currentUser;
-      
-      // Basic validation
+
       if (interview.userId.isEmpty || interview.userId == 'anonymous') {
-        debugPrint('Firestore save skipped: Invalid or anonymous userId (${interview.userId})');
+        debugPrint(
+            'Firestore save skipped: Invalid or anonymous userId (${interview.userId})');
         return;
       }
 
       if (currentUser == null) {
-        debugPrint('Firestore save failed: No authenticated user found in FirebaseAuth.');
+        debugPrint(
+            'Firestore save failed: No authenticated user found in FirebaseAuth.');
         return;
       }
 
       if (currentUser.uid != interview.userId) {
-        debugPrint('Firestore save WARNING: Provided userId (${interview.userId}) does not match authenticated UID (${currentUser.uid})');
-        // We will still try to save, but this is a likely cause of PERMISSION_DENIED if rules are strict.
+        debugPrint(
+            'Firestore save WARNING: Provided userId (${interview.userId}) does not match authenticated UID (${currentUser.uid})');
       }
 
       debugPrint('Attempting to save interview to Firestore:');
       debugPrint('Path: users/${interview.userId}/interviews/${interview.id}');
-      
-      // Add a timeout to avoid hangs
+
       await firestore
           .collection('users')
           .doc(interview.userId)
@@ -227,14 +226,16 @@ class InterviewRepositoryImpl implements InterviewRepository {
           .doc(interview.id)
           .set(interview.toJson())
           .timeout(const Duration(seconds: 10));
-      
+
       debugPrint('Successfully saved interview to Firestore.');
     } catch (e) {
       debugPrint('Firestore save failed for interview ${interview.id}: $e');
       if (e.toString().contains('permission-denied')) {
         final auth = FirebaseAuth.instance;
-        debugPrint('Recommendation: Check Firestore Rules. Current Auth UID: ${auth.currentUser?.uid}');
-        debugPrint('Ensure the rule allows writing to: users/${interview.userId}/interviews/${interview.id}');
+        debugPrint(
+            'Recommendation: Check Firestore Rules. Current Auth UID: ${auth.currentUser?.uid}');
+        debugPrint(
+            'Ensure the rule allows writing to: users/${interview.userId}/interviews/${interview.id}');
       }
     }
   }
@@ -251,10 +252,8 @@ class InterviewRepositoryImpl implements InterviewRepository {
 
   @override
   Future<void> deleteInterview(String id) async {
-    // Delete local
     await _localDataSource.deleteInterview(id);
 
-    // Delete remote
     try {
       final auth = FirebaseAuth.instance;
       final currentUser = auth.currentUser;
@@ -268,7 +267,6 @@ class InterviewRepositoryImpl implements InterviewRepository {
       }
     } catch (e) {
       debugPrint('Error deleting remote interview: $e');
-      // We don't rethrow here so local delete is considered "success" for UI
     }
   }
 }

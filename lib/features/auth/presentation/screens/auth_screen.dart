@@ -142,9 +142,7 @@ class _AuthScreenState extends State<AuthScreen> {
     final user = authProvider.currentUser!;
 
     await profileProvider.createProfileIfNotExists(user.id,
-        email: user.email,
-        fullName: user.displayName,
-        photoUrl: user.photoUrl);
+        email: user.email, fullName: user.displayName, photoUrl: user.photoUrl);
 
     if (context.mounted) {
       if (profileProvider.profile?.onboardingDone ?? false) {

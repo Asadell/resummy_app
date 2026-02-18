@@ -66,9 +66,7 @@ class HistoryLocalDataSource {
         try {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
 
         activities.add(ActivityEntity(
           id: interview['id'] as String,
@@ -118,6 +116,5 @@ class HistoryLocalDataSource {
     }
   }
 
-  Future<void> clearHistory(String userId) async {
-  }
+  Future<void> clearHistory(String userId) async {}
 }

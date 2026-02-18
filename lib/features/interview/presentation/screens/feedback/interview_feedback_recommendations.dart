@@ -78,22 +78,27 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                         ),
                         Text(
                           l10n.basedOnPerformance,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       ],
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                         border: Border(
-                          left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 4),
+                          left: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 4),
                         ),
                       ),
                       child: Column(
@@ -112,7 +117,8 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                                     .textTheme
                                     .titleMedium
                                     ?.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.w600,
                                     ),
                               ),
@@ -127,22 +133,24 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                           else
                             Column(
                               spacing: 8,
-                              children: report.strengths.map((s) => _buildListItem(
+                              children: report.strengths
+                                  .map((s) => _buildListItem(
                                       context,
                                       s,
                                       Theme.of(context).colorScheme.onSurface,
-                                      Iconsax.tick_circle)).toList(),
+                                      Iconsax.tick_circle))
+                                  .toList(),
                             ),
                         ],
                       ),
                     ),
                   ),
-
                   AppSection(
                     child: Container(
                       padding: const EdgeInsets.all(AppSizes.md),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppSizes.sm),
                         border: Border(
                           left: BorderSide(color: AppColors.error, width: 4),
@@ -160,11 +168,14 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                               const SizedBox(width: AppSizes.sm),
                               Text(
                                 l10n.areasForImprovement,
-                                style:
-                                    Theme.of(context).textTheme.titleMedium?.copyWith(
-                                          color: Theme.of(context).colorScheme.error,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
                             ],
                           ),
@@ -177,21 +188,22 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                           else
                             Column(
                               spacing: 8,
-                              children: report.improvements.map((s) => _buildListItem(
+                              children: report.improvements
+                                  .map((s) => _buildListItem(
                                       context,
                                       s,
                                       Theme.of(context).colorScheme.onSurface,
-                                      Iconsax.info_circle)).toList(),
+                                      Iconsax.info_circle))
+                                  .toList(),
                             ),
                         ],
                       ),
                     ),
                   ),
-
                   AppSection(
-                    child: _buildReadinessCard(context, report.overallScore, l10n),
+                    child:
+                        _buildReadinessCard(context, report.overallScore, l10n),
                   ),
-
                   const SizedBox(height: AppSizes.lg),
                 ],
               ),
@@ -201,7 +213,11 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(AppSizes.md),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1))),
+              border: Border(
+                  top: BorderSide(
+                      color: Theme.of(context)
+                          .dividerColor
+                          .withValues(alpha: 0.1))),
             ),
             child: SafeArea(
               child: Column(
@@ -252,9 +268,9 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
           child: Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: color,
-              height: 1.5,
-            ),
+                  color: color,
+                  height: 1.5,
+                ),
           ),
         ),
       ],
@@ -285,9 +301,11 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
       icon = Iconsax.close_circle;
     }
 
-    final textColor = score >= 80 
-        ? Theme.of(context).colorScheme.onPrimaryContainer 
-        : score >= 60 ? Colors.orange[800]! : AppColors.error;
+    final textColor = score >= 80
+        ? Theme.of(context).colorScheme.onPrimaryContainer
+        : score >= 60
+            ? Colors.orange[800]!
+            : AppColors.error;
 
     return Container(
       padding: const EdgeInsets.all(AppSizes.lg),
@@ -308,16 +326,16 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
-                ),
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
               ),
               Text(
                 message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: textColor.withValues(alpha: 0.8),
-                  height: 1.5,
-                ),
+                      color: textColor.withValues(alpha: 0.8),
+                      height: 1.5,
+                    ),
               ),
             ],
           ),

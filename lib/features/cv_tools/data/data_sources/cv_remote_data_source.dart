@@ -41,10 +41,10 @@ class CVRemoteDataSource {
     try {
       final data = cv.toJson();
       data['userId'] = userId;
-      
-      // Convert string timestamps to Firestore Timestamps to satisfy security rules
+
       if (data['createdAt'] is String) {
-        data['createdAt'] = Timestamp.fromDate(DateTime.parse(data['createdAt']));
+        data['createdAt'] =
+            Timestamp.fromDate(DateTime.parse(data['createdAt']));
       }
       data['updatedAt'] = FieldValue.serverTimestamp();
 
@@ -64,7 +64,6 @@ class CVRemoteDataSource {
       throw Exception('Failed to delete CV from cloud storage');
     }
   }
-
 
   Map<String, dynamic> _convertTimestamps(Map<String, dynamic> data) {
     final newData = Map<String, dynamic>.from(data);

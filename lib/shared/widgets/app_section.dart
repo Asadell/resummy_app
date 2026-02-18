@@ -17,7 +17,6 @@ class AppSection extends StatelessWidget {
     this.backgroundColor,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +27,6 @@ class AppSection extends StatelessWidget {
             horizontal: horizontalPadding ?? AppSizes.lg,
             vertical: verticalPadding ?? AppSizes.md,
           ),
-
       child: child,
     );
   }

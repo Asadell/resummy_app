@@ -16,7 +16,8 @@ class CVCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final date = '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
+    final date =
+        '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
     final provider = context.read<CVBuilderProvider>();
 
     return Dismissible(
@@ -42,7 +43,8 @@ class CVCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -76,9 +78,10 @@ class CVCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           l10n.confirmation,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                     ],
@@ -87,9 +90,9 @@ class CVCard extends StatelessWidget {
                   Text(
                     l10n.deleteCvConfirmation,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      height: 1.5,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          height: 1.5,
+                        ),
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -112,8 +115,10 @@ class CVCard extends StatelessWidget {
                         child: FilledButton(
                           onPressed: () => Navigator.of(context).pop(true),
                           style: FilledButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.error,
-                            foregroundColor: Theme.of(context).colorScheme.onError,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onError,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -137,7 +142,8 @@ class CVCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: _getSourceColor(context, cv.source).withValues(alpha: 0.1),
+            backgroundColor:
+                _getSourceColor(context, cv.source).withValues(alpha: 0.1),
             child: Icon(
               _getSourceIcon(cv.source),
               color: _getSourceColor(context, cv.source),

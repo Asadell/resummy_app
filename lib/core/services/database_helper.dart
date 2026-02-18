@@ -22,7 +22,6 @@ class DatabaseHelper {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, _databaseName);
 
-
     return await openDatabase(
       path,
       version: _databaseVersion,
@@ -32,7 +31,6 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-
     await db.execute('''
       CREATE TABLE $tableCVs (
         id TEXT PRIMARY KEY,
@@ -107,12 +105,10 @@ class DatabaseHelper {
         'CREATE INDEX idx_translations_userId ON $tableTranslations(userId)');
     await db.execute(
         'CREATE INDEX idx_sync_queue_recordId ON $tableSyncQueue(recordId)');
-
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      // Recreate interviews table with correct schema
       await db.execute('DROP TABLE IF EXISTS $tableInterviews');
       await db.execute('''
         CREATE TABLE $tableInterviews (

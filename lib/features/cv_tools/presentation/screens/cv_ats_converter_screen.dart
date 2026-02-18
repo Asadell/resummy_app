@@ -137,39 +137,42 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                   l10n.dataIntoForms
                 ),
                 ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
-              ].map((item) => Padding(
-                    padding: const EdgeInsets.only(bottom: 0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color:
-                                theme.primaryColor.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(item.$2,
-                              size: 18, color: theme.primaryColor),
+              ]
+                  .map((item) => Padding(
+                        padding: const EdgeInsets.only(bottom: 0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color:
+                                    theme.primaryColor.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(item.$2,
+                                  size: 18, color: theme.primaryColor),
+                            ),
+                            const SizedBox(width: AppSizes.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.$3,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14)),
+                                  Text(item.$4,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[600])),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: AppSizes.md),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.$3,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14)),
-                              Text(item.$4,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey[600])),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )).toList(),
+                      ))
+                  .toList(),
             ),
             const SizedBox(height: 32),
             GestureDetector(
@@ -217,8 +220,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                           Container(
                             padding: const EdgeInsets.all(AppSizes.md),
                             decoration: BoxDecoration(
-                              color: theme.primaryColor
-                                  .withValues(alpha: 0.1),
+                              color: theme.primaryColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(AppSizes.sm),
                             ),
                             child: Icon(
@@ -247,14 +249,12 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                                 Text(
                                   l10n.tapToChangeFile,
                                   style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[500]),
+                                      fontSize: 12, color: Colors.grey[500]),
                                 ),
                               ],
                             ),
                           ),
-                          Icon(Icons.check_circle,
-                              color: theme.primaryColor),
+                          Icon(Icons.check_circle, color: theme.primaryColor),
                         ],
                       ),
               ),
@@ -274,8 +274,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                     _buildLangChip(l10n.originalLanguage, theme,
                         value: 'Original'),
                     _buildLangChip(l10n.english, theme, value: 'English'),
-                    _buildLangChip(l10n.indonesian, theme,
-                        value: 'Indonesian'),
+                    _buildLangChip(l10n.indonesian, theme, value: 'Indonesian'),
                   ],
                 ),
               ],
@@ -285,16 +284,14 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 padding: const EdgeInsets.only(top: 16),
                 child: Text(
                   _errorMessage!,
-                  style:
-                      const TextStyle(color: Colors.red, fontSize: 13),
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
                 ),
               ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed:
-                    _selectedFile == null ? null : _processFile,
+                onPressed: _selectedFile == null ? null : _processFile,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor: theme.primaryColor,
@@ -513,7 +510,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   void _saveOnly() async {
     final l10n = AppLocalizations.of(context)!;
     if (_convertedCv == null) return;
-
 
     final provider = context.read<CVBuilderProvider>();
 

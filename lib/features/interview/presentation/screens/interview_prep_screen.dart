@@ -42,16 +42,22 @@ class InterviewPrepScreen extends StatelessWidget {
                       children: [
                         Text(
                           l10n.aiInterviewPractice,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                         Text(
                           l10n.practiceInterviewWithAi,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -77,9 +83,10 @@ class InterviewPrepScreen extends StatelessWidget {
                       children: [
                         Text(
                           l10n.recentInterviews,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         TextButton(
                           onPressed: () =>
@@ -96,8 +103,13 @@ class InterviewPrepScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(AppSizes.md),
                               child: Text(
                                 l10n.noInterviewHistory,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
                                     ),
                               ),
                             ),
@@ -114,8 +126,9 @@ class InterviewPrepScreen extends StatelessWidget {
                               margin: EdgeInsets.zero,
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: _getScoreColor(context, score)
-                                      .withValues(alpha: 0.1),
+                                  backgroundColor:
+                                      _getScoreColor(context, score)
+                                          .withValues(alpha: 0.1),
                                   child: Text(
                                     score.toString(),
                                     style: TextStyle(
@@ -126,15 +139,17 @@ class InterviewPrepScreen extends StatelessWidget {
                                 ),
                                 title: Text(l10n.interviewResults),
                                 subtitle: Text(
-                                  DateFormat.yMMMd().format(interview.createdAt),
+                                  DateFormat.yMMMd()
+                                      .format(interview.createdAt),
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
-                                trailing: const Icon(Iconsax.arrow_right_3, size: 16),
+                                trailing:
+                                    const Icon(Iconsax.arrow_right_3, size: 16),
                                 onTap: () {
                                   if (interview.report != null) {
                                     provider.setReport(interview.report!);
-                                    context.router
-                                        .push(const InterviewFeedbackOverviewRoute());
+                                    context.router.push(
+                                        const InterviewFeedbackOverviewRoute());
                                   }
                                 },
                               ),

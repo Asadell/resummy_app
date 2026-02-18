@@ -21,4 +21,3 @@ Future<void> setupHistoryDI(GetIt getIt) async {
     ),
   );
 }
-

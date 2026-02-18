@@ -27,7 +27,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
   SuggestionPriority? _filterPriority;
-  /// null = no selection yet; -1 = uploaded CV; >= 0 = saved CV index
+
   int? _selectedCvIndex;
 
   AppLocalizations get l10n => AppLocalizations.of(context)!;
@@ -125,15 +125,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ],
             ),
-            // ─── CV selection ──
             Consumer<CvAnalyzerProvider>(
               builder: (context, analyzerProvider, _) {
-                // We need access to CVBuilderProvider for the saved CVs
                 final cvBuilderProvider = context.watch<CVBuilderProvider>();
                 final allCvs = cvBuilderProvider.savedCVs;
                 final recentCvs = allCvs.take(2).toList();
-                
-                // If we have a file selected in the analyzer provider, emphasize it
+
                 final hasFile = analyzerProvider.hasFile;
 
                 return AppSection(
@@ -141,50 +138,58 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     spacing: AppSizes.sm,
                     children: [
-                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              l10n.selectCvToAnalyze,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.selectCvToAnalyze,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          if (allCvs.length > 2)
+                            TextButton(
+                              onPressed: () =>
+                                  _showBrowseSheet(context, allCvs),
+                              child: Text(l10n.viewAll),
                             ),
-                            if (allCvs.length > 2)
-                              TextButton(
-                                onPressed: () => _showBrowseSheet(context, allCvs),
-                                child: Text(l10n.viewAll),
-                              ),
-                          ],
-                        ),
+                        ],
+                      ),
                       Text(
                         l10n.cvAnalyzerSetupDesc,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Colors.grey[600],
                             ),
                       ),
-
                       const SizedBox(height: AppSizes.sm),
-
-                      // Recent CVs from provider
                       if (recentCvs.isEmpty && !hasFile)
-                         Container(
+                        Container(
                           padding: const EdgeInsets.all(AppSizes.md),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(AppSizes.sm),
                           ),
                           child: Row(
                             children: [
                               Icon(Iconsax.info_circle,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  size: 20),
                               const SizedBox(width: AppSizes.sm),
                               Expanded(
                                 child: Text(
                                   l10n.noCvFound,
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
                                       ),
                                 ),
                               ),
@@ -192,52 +197,43 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                           ),
                         )
                       else ...[
-                         ...recentCvs.asMap().entries.map((entry) {
-                            final i = entry.key;
-                            final cv = entry.value;
-                             // Check if this CV is currently selected in the provider (logic needs robust equality check or ID)
-                             // For now, relies on user clicking. 
-                             // The provider stores the file path/content, not the CVData object directly usually for uploads.
-                             // We'll need a way to know if a CVData is selected.
-                             // Actually, CvAnalyzerProvider mainly works with files/text. 
-                             // We should probably convert CVData to text and set it in provider when clicked.
-                             
-                             // Visual selection state is tricky without a dedicated field. 
-                             // Let's assume we use a local state `_selectedCvIndex` to track UI selection 
-                             // and update provider accordingly.
-                            final isSelected = _selectedCvIndex == i;
+                        ...recentCvs.asMap().entries.map((entry) {
+                          final i = entry.key;
+                          final cv = entry.value;
 
-                            return _buildCvItem(
-                              context,
+                          final isSelected = _selectedCvIndex == i;
+
+                          return _buildCvItem(context,
                               index: i,
                               cv: cv,
-                              isSelected: isSelected,
-                              onTap: () {
-                                setState(() {
-                                  _selectedCvIndex = i;
-                                });
-                                // Logic to process CVData into text/file for analyzer
-                                _selectCvData(cv);
-                              }
-                            );
-                          }),
-                      ],
+                              isSelected: isSelected, onTap: () {
+                            setState(() {
+                              _selectedCvIndex = i;
+                            });
 
-                      // Uploaded File Card (if using file picker)
+                            _selectCvData(cv);
+                          });
+                        }),
+                      ],
                       if (hasFile && _selectedCvIndex == -1)
                         Card(
                           elevation: 0,
-                          color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.2),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primaryContainer
+                              .withValues(alpha: 0.2),
                           shape: RoundedRectangleBorder(
-                             side: BorderSide(color: Theme.of(context).colorScheme.primary),
-                             borderRadius: BorderRadius.circular(AppSizes.sm)
-                          ),
+                              side: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary),
+                              borderRadius: BorderRadius.circular(AppSizes.sm)),
                           child: ListTile(
-                            leading: Icon(Iconsax.document, color: Theme.of(context).colorScheme.primary),
+                            leading: Icon(Iconsax.document,
+                                color: Theme.of(context).colorScheme.primary),
                             title: Text(analyzerProvider.fileName ?? 'Unknown'),
                             subtitle: Text(analyzerProvider.fileSize ?? ''),
                             trailing: IconButton(
-                              icon: const Icon(Iconsax.close_circle, color: Colors.grey),
+                              icon: const Icon(Iconsax.close_circle,
+                                  color: Colors.grey),
                               onPressed: () {
                                 analyzerProvider.clearFile();
                                 setState(() {
@@ -247,24 +243,24 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                             ),
                           ),
                         ),
-
-                      // Upload option
                       OutlinedButton.icon(
-                        onPressed: () { 
-                             analyzerProvider.pickAndExtract().then((_) {
-                                 if (analyzerProvider.hasFile) {
-                                     setState(() {
-                                         _selectedCvIndex = -1; // -1 indicates file upload
-                                     });
-                                 }
-                             });
+                        onPressed: () {
+                          analyzerProvider.pickAndExtract().then((_) {
+                            if (analyzerProvider.hasFile) {
+                              setState(() {
+                                _selectedCvIndex = -1;
+                              });
+                            }
+                          });
                         },
                         icon: const Icon(Iconsax.document_upload),
                         label: Text(l10n.uploadNewCv),
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(52),
-                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
-                          side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppSizes.sm),
                           ),
@@ -383,22 +379,21 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ),
             FilledButton.icon(
-              onPressed: (provider.hasFile || (_selectedCvIndex != null && _selectedCvIndex! >= 0)) && provider.jobPosition.isNotEmpty
+              onPressed: (provider.hasFile ||
+                          (_selectedCvIndex != null &&
+                              _selectedCvIndex! >= 0)) &&
+                      provider.jobPosition.isNotEmpty
                   ? () async {
                       if (_selectedCvIndex != null && _selectedCvIndex! >= 0) {
-                         // TODO: Handle saved CV analysis properly
-                         // For now, this path might need provider update to accept CVData or text
-                         // provider.analyzeCvData(cv);
-                         // Assuming we set file/text on selection or we implement a bridge here.
-                         
-                         // Temporary: Show snackbar or handle if not supported yet
-                         ScaffoldMessenger.of(context).showSnackBar(
-                           const SnackBar(content: Text('Analyzing saved CV not fully wired yet')),
-                         );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  'Analyzing saved CV not fully wired yet')),
+                        );
                       } else {
-                         provider.analyze(_selectedLanguage);
+                        provider.analyze(_selectedLanguage);
                       }
-                  }
+                    }
                   : null,
               icon: const Icon(Iconsax.scan_barcode),
               label: Text(l10n.startAnalysis),
@@ -414,7 +409,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       ),
     );
   }
-
 
   Widget _buildLoadingState(CvAnalyzerProvider provider) {
     final isConverting = provider.isConverting;
@@ -727,8 +721,10 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatChip(l10n.pendingStatus, result.pendingCount, Colors.blue),
-                  _buildStatChip(l10n.appliedStatus, result.appliedCount, Colors.green),
+                  _buildStatChip(
+                      l10n.pendingStatus, result.pendingCount, Colors.blue),
+                  _buildStatChip(
+                      l10n.appliedStatus, result.appliedCount, Colors.green),
                   _buildStatChip(
                       l10n.dismissedStatus, result.dismissedCount, Colors.grey),
                 ],
@@ -1010,8 +1006,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ─── helpers ────────────────────────────────────────────────────────────────
-
   String _sourceLabel(AppLocalizations l10n, String source) {
     switch (source) {
       case 'builder':
@@ -1051,13 +1045,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     }
   }
 
-  Future<void> _selectCvData(dynamic cv) async {
-       // TODO: Implement actual data selection for analyzer
-       // final provider = Provider.of<CvAnalyzerProvider>(context, listen: false);
-       // if (cv.filePath != null && cv.filePath.isNotEmpty) {
-           // provider.setFile(File(cv.filePath));
-       // }
-  }
+  Future<void> _selectCvData(dynamic cv) async {}
 
   void _showBrowseSheet(BuildContext context, List<dynamic> allCvs) {
     final l10n = AppLocalizations.of(context)!;
@@ -1074,7 +1062,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         onSelected: (index) {
           setState(() {
             _selectedCvIndex = index;
-             Provider.of<CvAnalyzerProvider>(context, listen: false).clearFile();
+            Provider.of<CvAnalyzerProvider>(context, listen: false).clearFile();
           });
         },
       ),
@@ -1090,9 +1078,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   }) {
     final l10n = AppLocalizations.of(context)!;
     final color = _sourceColor(context, cv.source);
-    final dateStr = (cv.updatedAt != null) 
-       ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}" 
-       : "";
+    final dateStr = (cv.updatedAt != null)
+        ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}"
+        : "";
 
     return InkWell(
       onTap: onTap,
@@ -1143,8 +1131,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   Text(
                     '${_sourceLabel(l10n, cv.source)} • $dateStr',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                 ],
@@ -1262,6 +1249,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       ),
     );
   }
+
   String _getPriorityLabel(SuggestionPriority priority) {
     switch (priority) {
       case SuggestionPriority.high:
@@ -1273,8 +1261,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     }
   }
 }
-
-// ─── Browse-all bottom sheet ──────────────────────────────────────────────────
 
 class _BrowseCvSheet extends StatefulWidget {
   final List<dynamic> allCvs;
@@ -1332,7 +1318,6 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
           ),
           child: Column(
             children: [
-              // Handle
               Center(
                 child: Container(
                   width: 40,
@@ -1355,7 +1340,6 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
-              // Search
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSizes.lg, vertical: AppSizes.sm),
@@ -1379,14 +1363,12 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                     ? Center(
                         child: Text(
                           l10n.noCvFound,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       )
                     : ListView.separated(
@@ -1402,8 +1384,8 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                           final isSelected =
                               widget.selectedIndex == globalIndex;
                           final color = widget.sourceColor(cv.source);
-                          final dateStr = (cv.updatedAt != null) 
-                              ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}" 
+                          final dateStr = (cv.updatedAt != null)
+                              ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}"
                               : "";
 
                           return InkWell(
@@ -1411,8 +1393,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                               widget.onSelected(globalIndex);
                               Navigator.of(context).pop();
                             },
-                            borderRadius:
-                                BorderRadius.circular(AppSizes.sm),
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.all(AppSizes.md),
@@ -1426,9 +1407,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                         .surfaceContainerHighest,
                                 border: Border.all(
                                   color: isSelected
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .primary
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   width: isSelected ? 2 : 1,
                                 ),
@@ -1441,10 +1420,8 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                     radius: 20,
                                     backgroundColor:
                                         color.withValues(alpha: 0.15),
-                                    child: Icon(
-                                        widget.sourceIcon(cv.source),
-                                        color: color,
-                                        size: 20),
+                                    child: Icon(widget.sourceIcon(cv.source),
+                                        color: color, size: 20),
                                   ),
                                   const SizedBox(width: AppSizes.sm),
                                   Expanded(
@@ -1460,8 +1437,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                                               .textTheme
                                               .titleSmall
                                               ?.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.w600),
+                                                  fontWeight: FontWeight.w600),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),

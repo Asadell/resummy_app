@@ -76,10 +76,12 @@ class HistoryProvider extends ChangeNotifier {
         _filteredActivities = List.from(_allActivities);
         break;
       case HistoryFilter.cv:
-        _filteredActivities = _allActivities.whereType<CvActivityItem>().toList();
+        _filteredActivities =
+            _allActivities.whereType<CvActivityItem>().toList();
         break;
       case HistoryFilter.interview:
-        _filteredActivities = _allActivities.whereType<InterviewActivityItem>().toList();
+        _filteredActivities =
+            _allActivities.whereType<InterviewActivityItem>().toList();
         break;
     }
     notifyListeners();
