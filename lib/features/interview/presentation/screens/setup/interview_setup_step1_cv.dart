@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
@@ -52,6 +51,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         message = l10n.max5PagesInterview;
       }
       
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
       );

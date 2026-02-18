@@ -3,19 +3,16 @@ import 'package:resummy_app/features/cv_tools/data/data_sources/cv_conversion_re
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_conversion_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 /// Implementation of CV Conversion Repository
 class CVConversionRepositoryImpl implements CVConversionRepository {
   final CVConversionRemoteDataSource _remoteDataSource;
   final CVLocalDataSource _localDataSource;
-  final FirebaseAuth _auth;
 
   CVConversionRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
-    this._auth,
   );
 
   @override

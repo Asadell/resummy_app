@@ -56,6 +56,7 @@ class InterviewRepositoryImpl implements InterviewRepository {
     required String jobContext,
     String language = 'en',
   }) async {
+    try {
       final questionFeedbacks = <QuestionFeedback>[];
       int totalScore = 0;
       double totalStar = 0;

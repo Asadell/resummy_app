@@ -134,7 +134,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   child: Text(
                     l10n.sectionManagerDesc,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -222,8 +222,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: section.isVisible 
-                        ? theme.primaryColor.withOpacity(0.1)
-                        : theme.disabledColor.withOpacity(0.1),
+                        ? theme.primaryColor.withValues(alpha: 0.1)
+                        : theme.disabledColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -304,7 +304,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   onChanged: (value) {
                     provider.toggleSectionVisibility(section.id);
                   },
-                  activeColor: theme.primaryColor,
+                  activeThumbColor: theme.primaryColor,
                 ),
               ],
             ),
@@ -367,12 +367,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     return 0;
   }
 
-  // ⭐ NEW: Edit Custom Section Dialog
-  void _showEditCustomSectionDialog(CVBuilderProvider provider, CustomSection section) {
-    // Navigate to the full screen editor
-    context.router.push(CvBuilderCustomSectionStepRoute(sectionId: section.id));
-  }
-
   void _showAddCustomSectionDialog(CVBuilderProvider provider) {
     final l10n = AppLocalizations.of(context)!;
     CustomSectionTemplate selectedTemplate = CustomSectionTemplate.experienceLike;
@@ -403,7 +397,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -426,7 +420,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(context).primaryColor.withOpacity(0.08)
+                          ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
                           : Theme.of(context).cardColor,
                       border: Border.all(
                         color: isSelected
@@ -481,7 +475,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
 
               const SizedBox(height: 20),
 

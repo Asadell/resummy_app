@@ -91,7 +91,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to share PDF: $e')),
+          SnackBar(content: Text(l10n.failedToGeneratePdf(e.toString()))),
         );
       }
     } finally {
@@ -139,7 +139,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -161,7 +161,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(

@@ -58,8 +58,7 @@ class CvPreviewCard extends StatelessWidget {
                       .map((section) => Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: _buildSection(section),
-                          ))
-                      .toList(),
+                          )),
                 ],
               ),
             ),
@@ -222,7 +221,7 @@ class CvPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((exp) => _buildExperienceEntry(exp)).toList(),
+        ...section.entries.map((exp) => _buildExperienceEntry(exp)),
       ],
     );
   }
@@ -317,8 +316,7 @@ class CvPreviewCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );
@@ -334,7 +332,7 @@ class CvPreviewCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(section.title),
-        ...section.entries.map((edu) => _buildEducationEntry(edu)).toList(),
+        ...section.entries.map((edu) => _buildEducationEntry(edu)),
       ],
     );
   }
@@ -519,8 +517,7 @@ class CvPreviewCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );

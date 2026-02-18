@@ -9,14 +9,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_entity.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
 import 'package:uuid/uuid.dart';
 
 enum InterviewStatus { initial, loading, inProgress, analyzing, completed, error }
 enum InterviewFocus { behavioral, technical, mixed }
-
-
-import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 class InterviewProvider extends ChangeNotifier {
   final InterviewRepository _repository;
@@ -59,6 +57,7 @@ class InterviewProvider extends ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlayingQuestion = false;
   File? _currentQuestionAudio;
+  bool _isDisposed = false;
 
   // Transcript
   String _currentTranscript = '';
@@ -491,19 +490,6 @@ class InterviewProvider extends ChangeNotifier {
     }
   }
   
-  bool _isDisposed = false;
-
-  @override
-  void dispose() {
-    _isDisposed = true;
-    _playerCompleteSubscription?.cancel();
-    _audioPlayer.dispose();
-    _stopSessionTimer();
-    if (_isRecorderInitialized) {
-        _audioRecorder.closeRecorder();
-    }
-    super.dispose();
-  }
 
   Future<void> playQuestionAudio() async {
     if (_isDisposed) return;

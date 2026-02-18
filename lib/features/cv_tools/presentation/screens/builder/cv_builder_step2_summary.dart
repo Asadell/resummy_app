@@ -2,8 +2,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
@@ -47,7 +45,6 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final currentStep = DynamicCvSteps.getStepForSection(context, 'summary');
 
     return CVBuilderStepLayout(
@@ -102,7 +99,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               child: Text(
                 l10n.summaryDesc,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),

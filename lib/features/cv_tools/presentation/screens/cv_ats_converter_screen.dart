@@ -73,21 +73,21 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  theme.primaryColor.withOpacity(0.15),
-                  theme.primaryColor.withOpacity(0.05),
+                  theme.primaryColor.withValues(alpha: 0.15),
+                  theme.primaryColor.withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
+              border: Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.15),
+                    color: theme.primaryColor.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Iconsax.magic_star, size: 40, color: theme.primaryColor),
@@ -104,7 +104,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 Text(
                   l10n.aiConvertingDesc,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -133,24 +133,24 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(item.$2 as IconData, size: 18, color: theme.primaryColor),
+                  child: Icon(item.$2, size: 18, color: theme.primaryColor),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.$3 as String, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                      Text(item.$4 as String, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                      Text(item.$3, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                      Text(item.$4, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
                     ],
                   ),
                 ),
               ],
             ),
-          )).toList(),
+          )),
 
           const SizedBox(height: 32),
 
@@ -162,8 +162,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
               decoration: BoxDecoration(
-                color: _selectedFile != null
-                    ? theme.primaryColor.withOpacity(0.05)
+                    color: _selectedFile != null
+                        ? theme.primaryColor.withValues(alpha: 0.05)
                     : theme.cardColor,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
@@ -199,7 +199,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: theme.primaryColor.withOpacity(0.1),
+                            color: theme.primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -304,7 +304,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
         // Preview Header
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          color: Colors.green.withOpacity(0.1),
+          color: Colors.green.withValues(alpha: 0.1),
           child: Row(
             children: [
               const Icon(Icons.check_circle, color: Colors.green, size: 20),
@@ -340,7 +340,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
             color: theme.cardColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, -5),
               ),
@@ -554,7 +554,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       onSelected: (val) {
         if (val) setState(() => _targetLanguage = label);
       },
-      selectedColor: theme.primaryColor.withOpacity(0.2),
+      selectedColor: theme.primaryColor.withValues(alpha: 0.2),
       labelStyle: TextStyle(
         color: isSelected ? theme.primaryColor : Colors.grey[700],
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

@@ -182,7 +182,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _selectedIndustry,
+                      initialValue: _selectedIndustry,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),

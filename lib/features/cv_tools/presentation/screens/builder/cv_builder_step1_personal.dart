@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
@@ -30,7 +29,6 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
   late TextEditingController _locationController;
   
   String? _fullPhoneNumber;
-  bool _showValidation = false;
 
   @override
   void initState() {
@@ -40,12 +38,12 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     final profile = context.read<ProfileProvider>().profile;
     
     _nameController = TextEditingController(
-      text: (cv?.name?.isNotEmpty == true) 
+      text: (cv?.name ?? '').isNotEmpty 
           ? cv!.name 
           : (profile?.fullName ?? ''),
     );
     _emailController = TextEditingController(
-      text: (cv?.email?.isNotEmpty == true) 
+      text: (cv?.email ?? '').isNotEmpty 
           ? cv!.email 
           : (profile?.email ?? ''),
     );
@@ -99,8 +97,6 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
@@ -108,7 +104,6 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
 
       onBack: null,
       onNext: () {
-        setState(() => _showValidation = true);
         if (_formKey.currentState!.validate()) {
           final provider = context.read<CVBuilderProvider>();
           

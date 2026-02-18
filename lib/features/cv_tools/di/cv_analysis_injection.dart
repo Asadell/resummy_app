@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
@@ -49,7 +48,6 @@ Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
     () => CVConversionRepositoryImpl(
       getIt<CVConversionRemoteDataSource>(),
       getIt<CVLocalDataSource>(),
-      getIt<FirebaseAuth>(),
     ),
   );
 }

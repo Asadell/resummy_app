@@ -3,15 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/app/app.dart';
-import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:resummy_app/core/di/injection.dart';
-import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
-import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
-import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
-import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:resummy_app/features/features.dart';
 
 import 'firebase_options.dart';
 

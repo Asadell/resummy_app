@@ -163,10 +163,9 @@ class InterviewSetupStep4Screen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Radio<InterviewFocus>(
-              value: value,
-              groupValue: groupValue,
-              onChanged: onChanged,
+            Icon(
+              isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+              color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
             Expanded(

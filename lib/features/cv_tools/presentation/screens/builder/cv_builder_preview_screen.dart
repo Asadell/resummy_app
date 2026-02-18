@@ -116,7 +116,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -138,7 +138,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -214,7 +214,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
           // Banner - Success
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            color: Colors.green.withOpacity(0.1),
+            color: Colors.green.withValues(alpha: 0.1),
             child: Row(
               children: [
                 const Icon(Icons.check_circle, color: Colors.green, size: 20),
@@ -245,7 +245,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   offset: const Offset(0, -4),
                   blurRadius: 16,
                 ),

@@ -115,7 +115,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: OutlinedButton.icon(
-              onPressed: () => _showAddCustomSectionDialog(context, provider),
+              onPressed: () => _showAddCustomSectionDialog(context, provider, l10n),
               icon: const Icon(Iconsax.add),
               label: Text(l10n.addCustomSection),
               style: OutlinedButton.styleFrom(
@@ -251,7 +251,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               const SizedBox(height: 12),
               TextButton.icon(
                 onPressed: () {
-                  _showDeleteConfirmation(context, provider, section);
+                _showDeleteConfirmation(context, provider, section, l10n);
                 },
                 icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
                 label: Text(
@@ -266,7 +266,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     );
   }
 
-  void _showAddCustomSectionDialog(BuildContext context, CVBuilderProvider provider) {
+  void _showAddCustomSectionDialog(BuildContext context, CVBuilderProvider provider, AppLocalizations l10n) {
     final titleController = TextEditingController();
     CustomSectionTemplate selectedTemplate = CustomSectionTemplate.bulletList;
 
@@ -343,7 +343,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<CustomSectionTemplate>(
-                value: selectedTemplate,
+                initialValue: selectedTemplate,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   isDense: true,
@@ -351,7 +351,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                 items: CustomSectionTemplate.values.map((template) {
                   return DropdownMenuItem(
                     value: template,
-                    child: Text(_getTemplateName(template)),
+                    child: Text(_getTemplateName(template, l10n)),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -412,6 +412,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     BuildContext context,
     CVBuilderProvider provider,
     CustomSection section,
+    AppLocalizations l10n,
   ) {
     showModalBottomSheet(
       context: context,
@@ -516,7 +517,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     );
   }
 
-  String _getTemplateName(CustomSectionTemplate template) {
+  String _getTemplateName(CustomSectionTemplate template, AppLocalizations l10n) {
     switch (template) {
       case CustomSectionTemplate.experienceLike:
         return l10n.templateExperienceNameLabel;

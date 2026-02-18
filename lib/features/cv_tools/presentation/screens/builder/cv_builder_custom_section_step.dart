@@ -104,7 +104,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   int? _editingIndex; // For entries and bullet list items
   String? _editingCategoryName; // For skills categories
   bool _showValidation = false;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -207,7 +206,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final section = _getCurrentSection(provider);
-    final isExperienceLike = section.template == CustomSectionTemplate.experienceLike;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,7 +438,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 ],
               ),
             ),
-          )).toList(),
+          )),
 
         const SizedBox(height: 16),
         const Divider(),
@@ -646,7 +644,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     CustomSection section,
   ) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(

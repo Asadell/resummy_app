@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:minio/minio.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
@@ -193,7 +192,7 @@ class DOSpacesService {
   /// List all PDFs for a specific user
   Future<List<String>> listUserPDFs(String userId) async {
     try {
-      final objects = await _client.listObjectsV2(
+      await _client.listObjectsV2(
         AppConstants.doSpacesBucket,
         prefix: '$userId/',
       ).toList();
