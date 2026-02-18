@@ -3,6 +3,7 @@ import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/core/di/storage_injection.dart';
 import 'package:resummy_app/features/cv_tools/di/cv_builder_injection.dart';
 import 'package:resummy_app/features/cv_tools/di/cv_analysis_injection.dart';
+import 'package:resummy_app/features/interview/di/interview_injection.dart';
 
 /// Global GetIt instance for dependency injection
 final getIt = GetIt.instance;
@@ -16,10 +17,9 @@ Future<void> setupDI() async {
   // Feature-specific DI
   await setupCvBuilderDI(getIt);
   await setupCvAnalysisAndConversionDI(getIt);
+  await setupInterviewDI(getIt);
   
   // TODO: Add other features
-  // await setupCvTranslatorDI(getIt);
-  // await setupInterviewDI(getIt);
   // await setupHistoryDI(getIt);
   // await setupAuthDI(getIt);
   // await setupProfileDI(getIt);

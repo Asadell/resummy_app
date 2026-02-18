@@ -6,10 +6,11 @@ import 'package:resummy_app/core/constants/app_constants.dart';
 /// and automatic retry with key rotation on quota exceeded errors.
 class GeminiPoolManager {
   late final List<GenerativeModel> _models;
+  late final List<String> _apiKeys;
   int _currentIndex = 0;
 
   GeminiPoolManager() {
-    _models = _initializeModels();
+    _initialize();
     if (_models.isEmpty) {
       throw Exception('No Gemini API keys configured. Please check your .env file.');
     }
@@ -17,7 +18,7 @@ class GeminiPoolManager {
   }
 
   /// Initialize all 51 GenerativeModel instances from app constants
-  List<GenerativeModel> _initializeModels() {
+  void _initialize() {
     final keys = [
       AppConstants.geminiApiKey,
       AppConstants.geminiApiKey2,
@@ -72,12 +73,13 @@ class GeminiPoolManager {
       AppConstants.geminiApiKey51,
     ];
 
-    // Filter out empty keys and create models
-    final models = <GenerativeModel>[];
-    for (int i = 0; i < keys.length; i++) {
-      final key = keys[i];
+    _models = [];
+    _apiKeys = [];
+
+    for (final key in keys) {
       if (key.isNotEmpty) {
-        models.add(
+        _apiKeys.add(key);
+        _models.add(
           GenerativeModel(
             model: 'gemini-3-flash-preview',
             apiKey: key,
@@ -88,8 +90,13 @@ class GeminiPoolManager {
         );
       }
     }
+  }
 
-    return models;
+  /// Get the next API key using round-robin strategy
+  String getNextApiKey() {
+    final key = _apiKeys[_currentIndex];
+    _rotateModel();
+    return key;
   }
 
   /// Get the next model using round-robin strategy
