@@ -744,5 +744,41 @@
   "shareDesc": "Bagikan via WhatsApp, Email, dsb.",
   "exportPdf": "Ekspor PDF",
   "ok": "OK",
-  "saveToDownloads": "Simpan ke folder Downloads"
+  "saveToDownloads": "Simpan ke folder Downloads",
+  "activityHistory": "Riwayat Aktivitas",
+  "historySubtitle": "Pantau progress karir Anda di sini",
+  "weeklyInsight": "Insight Mingguan",
+  "weeklyInsightDesc": "Skor CV Anda meningkat 15 poin dalam 2 minggu terakhir! 🚀",
+  "viewProgressDetail": "Lihat Detail Progress",
+  "suggestionForYou": "Saran Perbaikan",
+  "suggestionForYouDesc": "Sudah 2x revisi CV untuk posisi PM. Waktunya coba simulasi interview?",
+  "startPracticeBtn": "Mulai Latihan →",
+  "filterCv": "CV",
+  "filterInterview": "Interview",
+  "noActivityFound": "Belum ada aktivitas ditemukan",
+  "filterAll": "Semua",
+  "score": "Skor: {value}",
+  "@score": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "cvNumber": "CV #{number}",
+  "@cvNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "updatedOnDate": "Diupdate pada {date}",
+  "@updatedOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

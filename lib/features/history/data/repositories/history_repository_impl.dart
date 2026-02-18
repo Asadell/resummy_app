@@ -29,7 +29,6 @@ class HistoryRepositoryImpl implements HistoryRepository {
       activities.add(InterviewActivityItem(interview));
     }
 
-    // Sort by date descending (newest first)
     activities.sort((a, b) => b.date.compareTo(a.date));
 
     return activities;

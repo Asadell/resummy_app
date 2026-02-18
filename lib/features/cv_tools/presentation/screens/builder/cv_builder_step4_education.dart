@@ -7,7 +7,6 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
-import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:uuid/uuid.dart';

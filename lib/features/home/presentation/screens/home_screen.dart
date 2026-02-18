@@ -195,7 +195,7 @@ class HomeScreen extends StatelessWidget {
                 ? Iconsax.translate
                 : Iconsax.document_text;
         final title = cvData.name.isNotEmpty ? cvData.name : l10n.cvSourceBuilder;
-        final subtitle = cvData.source;
+        final subtitle = _getSourceLabel(l10n, cvData.source);
         final time = _formatTimeAgo(context, cvData.updatedAt);
         return (
           icon,
@@ -205,14 +205,27 @@ class HomeScreen extends StatelessWidget {
           () => context.router.navigate(const CvBuilderWelcomeRoute()),
         );
       case InterviewActivityItem(:final interview):
-        final score = interview.report?.overallScore ?? 0;
+        final scoreValue = interview.report?.overallScore ?? 0;
         return (
           Iconsax.microphone,
           l10n.interviewResults,
-          'Score: $score',
+          l10n.score(scoreValue),
           _formatTimeAgo(context, interview.createdAt),
           () => context.router.navigate(const HistoryRoute()),
         );
+    }
+  }
+
+  String _getSourceLabel(AppLocalizations l10n, String source) {
+    switch (source) {
+      case 'builder':
+        return l10n.cvSourceBuilder;
+      case 'ats_converter':
+        return l10n.cvSourceAtsConverter;
+      case 'analyzer':
+        return l10n.cvSourceAnalyzer;
+      default:
+        return l10n.cvSourceBuilder;
     }
   }
 

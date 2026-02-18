@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 class SuggestionCard extends StatelessWidget {
   const SuggestionCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSizes.lg),
       decoration: BoxDecoration(
@@ -29,7 +31,7 @@ class SuggestionCard extends StatelessWidget {
               const Icon(Iconsax.lamp_on, size: 32, color: Colors.amber),
               const SizedBox(width: AppSizes.sm),
               Text(
-                'Saran Perbaikan',
+                l10n.suggestionForYou,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.amber.shade900,
@@ -39,7 +41,7 @@ class SuggestionCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSizes.sm),
           Text(
-            'Sudah 2x revisi CV untuk posisi PM. Waktunya coba simulasi interview?',
+            l10n.suggestionForYouDesc,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.amber.shade900,
                   height: 1.5,
@@ -55,7 +57,7 @@ class SuggestionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Mulai Latihan →'),
+            child: Text(l10n.startPracticeBtn),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
@@ -20,7 +21,7 @@ class CvHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final date = '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
+    final date = DateFormat.yMMMd().format(cv.updatedAt);
 
     return Card(
       margin: EdgeInsets.zero,

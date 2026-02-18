@@ -7,7 +7,6 @@ import 'package:resummy_app/features/auth/presentation/providers/auth_provider.d
 import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
 
 Future<void> setupHistoryDI(GetIt getIt) async {
-  // Repository
   getIt.registerLazySingleton<HistoryRepository>(
     () => HistoryRepositoryImpl(
       getIt<CVBuilderRepository>(),
@@ -15,7 +14,6 @@ Future<void> setupHistoryDI(GetIt getIt) async {
     ),
   );
 
-  // Provider
   getIt.registerFactory<HistoryProvider>(
     () => HistoryProvider(
       repository: getIt<HistoryRepository>(),

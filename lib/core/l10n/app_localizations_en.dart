@@ -150,8 +150,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cvAnalysisCompleted => 'CV Analysis Completed';
 
   @override
-  String score(int score) {
-    return 'Score: $score/100';
+  String score(int value) {
+    return 'Score: $value';
   }
 
   @override
@@ -625,7 +625,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String cvNumber(int number) {
-    return 'CV $number';
+    return 'CV #$number';
   }
 
   @override
@@ -682,7 +682,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summaryFeedback => 'Summary Feedback';
 
   @override
-  String updatedOnDate(Object date) {
+  String updatedOnDate(String date) {
     return 'Updated on $date';
   }
 
@@ -2218,4 +2218,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveToDownloads => 'Save to Downloads folder';
+
+  @override
+  String get activityHistory => 'Activity History';
+
+  @override
+  String get historySubtitle => 'Monitor your career progress here';
+
+  @override
+  String get weeklyInsight => 'Weekly Insight';
+
+  @override
+  String get weeklyInsightDesc =>
+      'Your CV score increased by 15 points in the last 2 weeks! 🚀';
+
+  @override
+  String get viewProgressDetail => 'View Progress Detail';
+
+  @override
+  String get suggestionForYou => 'Improvement Suggestion';
+
+  @override
+  String get suggestionForYouDesc =>
+      'Already revised CV 2x for PM position. Time to try an interview simulation?';
+
+  @override
+  String get startPracticeBtn => 'Start Practice →';
+
+  @override
+  String get filterCv => 'CV';
+
+  @override
+  String get filterInterview => 'Interview';
+
+  @override
+  String get noActivityFound => 'No activity found yet';
 }

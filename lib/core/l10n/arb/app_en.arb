@@ -831,5 +831,41 @@
   "shareDesc": "Share via WhatsApp, Email, etc.",
   "exportPdf": "Export PDF",
   "ok": "OK",
-  "saveToDownloads": "Save to Downloads folder"
+  "saveToDownloads": "Save to Downloads folder",
+  "activityHistory": "Activity History",
+  "historySubtitle": "Monitor your career progress here",
+  "weeklyInsight": "Weekly Insight",
+  "weeklyInsightDesc": "Your CV score increased by 15 points in the last 2 weeks! 🚀",
+  "viewProgressDetail": "View Progress Detail",
+  "suggestionForYou": "Improvement Suggestion",
+  "suggestionForYouDesc": "Already revised CV 2x for PM position. Time to try an interview simulation?",
+  "startPracticeBtn": "Start Practice →",
+  "filterCv": "CV",
+  "filterInterview": "Interview",
+  "noActivityFound": "No activity found yet",
+  "filterAll": "All",
+  "score": "Score: {value}",
+  "@score": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "cvNumber": "CV #{number}",
+  "@cvNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "updatedOnDate": "Updated on {date}",
+  "@updatedOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

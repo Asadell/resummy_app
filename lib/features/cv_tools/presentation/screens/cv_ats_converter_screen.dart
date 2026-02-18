@@ -11,7 +11,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
-import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvAtsConverterScreen extends StatefulWidget {

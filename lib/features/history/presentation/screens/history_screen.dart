@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
@@ -29,12 +30,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'Riwayat Aktivitas',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.activityHistory,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
@@ -43,14 +45,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         actions: [
           IconButton(
             icon: const Icon(Iconsax.filter),
-            onPressed: () {
-              // TODO: Implement filter dialog if needed
-            },
+            onPressed: () {},
           ),
         ],
       ),
       body: Consumer<HistoryProvider>(
         builder: (context, provider, child) {
+          final l10n = AppLocalizations.of(context)!;
           if (provider.isLoading && provider.activities.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -68,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     color: Colors.grey[100],
                     child: Center(
                       child: Text(
-                        'Pantau progress karir Anda di sini',
+                        l10n.historySubtitle,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Colors.grey[600],
                             ),
@@ -97,19 +98,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         if (index == provider.activities.length) {
-                          // TODO: Load more button logic
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: AppSizes.lg),
                             child: Center(
                               child: Text(
-                                'Showing ${provider.activities.length} activities',
+                                l10n.moreHistoryWillAppear,
                                 style: TextStyle(color: Colors.grey[500], fontSize: 12),
                               ),
                             ),
                           );
                         }
 
-                        // Insert SuggestionCard after 3 items
                         if (index == 3) {
                           return Column(
                             children: [
@@ -170,6 +169,7 @@ class _FilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(
@@ -183,11 +183,11 @@ class _FilterTabs extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _buildTab(context, 'Semua', HistoryFilter.all),
+          _buildTab(context, l10n.filterAll, HistoryFilter.all),
           const SizedBox(width: AppSizes.lg),
-          _buildTab(context, 'CV', HistoryFilter.cv),
+          _buildTab(context, l10n.filterCv, HistoryFilter.cv),
           const SizedBox(width: AppSizes.lg),
-          _buildTab(context, 'Interview', HistoryFilter.interview),
+          _buildTab(context, l10n.filterInterview, HistoryFilter.interview),
         ],
       ),
     );
@@ -235,7 +235,7 @@ class _StickyFilterDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 50; // Approximating height from padding + text
+  double get maxExtent => 50;
 
   @override
   double get minExtent => 50;
