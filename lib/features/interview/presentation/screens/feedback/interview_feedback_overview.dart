@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
 
@@ -52,18 +54,17 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  color: Theme.of(context).cardTheme.color,
+                AppSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.xs,
                     children: [
                       Row(
                         children: [
                           Icon(Iconsax.tick_circle,
                               color: Theme.of(context).colorScheme.secondary,
                               size: 24),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSizes.sm),
                           Text(
                             l10n.interviewFinished,
                             style: Theme.of(context)
@@ -75,14 +76,12 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
                       Text(
                         '${l10n.positionLabel} ${provider.role ?? "Software Engineer"}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: AppColors.gray600,
                             ),
                       ),
-                      const SizedBox(height: 4),
                       Text(
                         '${report.questionFeedbacks.length} ${l10n.questions} | ${DateFormat('d MMM yyyy • HH:mm').format(report.createdAt)}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -95,14 +94,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                AppSection(
                   child: Column(
                     children: [
                       Text(
@@ -115,7 +107,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                 ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSizes.lg),
                       CustomPaint(
                         size: const Size(180, 180),
                         painter: _CircularGaugePainter(
@@ -160,7 +152,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSizes.lg),
                       Text(
                         _getScoreLabel(l10n, report.overallScore),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -169,7 +161,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSizes.sm),
                       Text(
                         report.overallFeedback,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -180,23 +172,17 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                AppSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.md,
                     children: [
                       Row(
                         children: [
                           Icon(Iconsax.chart_21,
                               color: Theme.of(context).colorScheme.primary,
                               size: 24),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSizes.sm),
                           Text(
                             l10n.scoreDetails,
                             style: Theme.of(context)
@@ -208,7 +194,6 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
                       _buildScoreItem(
                         context,
                         l10n.starStructure,
@@ -216,7 +201,6 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         AppColors.secondary,
                         l10n.excellentStructure,
                       ),
-                      const SizedBox(height: 16),
                       _buildScoreItem(
                         context,
                         l10n.fluency,
@@ -224,50 +208,48 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                         AppColors.warning,
                         l10n.goodPaceTone,
                       ),
-                      const SizedBox(height: 16),
-                      Text(l10n.strengths,
-                          style: Theme.of(context).textTheme.titleMedium),
-                      ...report.strengths.take(2).map((s) => Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Row(children: [
-                              Icon(Iconsax.tick_circle,
-                                  size: 16, color: Colors.green),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                  child: Text(s,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall)),
-                            ]),
-                          )),
-                      const SizedBox(height: 16),
-                      Text(l10n.improvements,
-                          style: Theme.of(context).textTheme.titleMedium),
-                      ...report.improvements.take(2).map((s) => Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Row(children: [
-                              Icon(Iconsax.info_circle,
-                                  size: 16, color: Colors.orange),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                  child: Text(s,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall)),
-                            ]),
-                          )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: AppSizes.xs,
+                        children: [
+                          Text(l10n.strengths,
+                              style: Theme.of(context).textTheme.titleMedium),
+                          ...report.strengths.take(2).map((s) => Row(children: [
+                                Icon(Iconsax.tick_circle,
+                                    size: 16, color: Colors.green),
+                                const SizedBox(width: AppSizes.sm),
+                                Expanded(
+                                    child: Text(s,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall)),
+                              ])),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: AppSizes.xs,
+                        children: [
+                          Text(l10n.improvements,
+                              style: Theme.of(context).textTheme.titleMedium),
+                          ...report.improvements.take(2).map((s) => Row(children: [
+                                Icon(Iconsax.info_circle,
+                                    size: 16, color: Colors.orange),
+                                const SizedBox(width: AppSizes.sm),
+                                Expanded(
+                                    child: Text(s,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall)),
+                              ])),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                AppSection(
                   child: Column(
+                    spacing: AppSizes.sm,
                     children: [
                       ElevatedButton.icon(
                         onPressed: () => context.router
@@ -278,7 +260,6 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                           minimumSize: const Size.fromHeight(52),
                         ),
                       ),
-                      const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: () => context.router.push(
                             const InterviewFeedbackRecommendationsRoute()),
@@ -292,7 +273,6 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                               Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                      const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: () {
                           provider.resetInterview();
@@ -307,7 +287,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSizes.lg),
               ],
             ),
           ),

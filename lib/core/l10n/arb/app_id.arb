@@ -194,6 +194,8 @@
   "uploadCv": "Unggah CV",
   "chooseCvSource": "Pilih sumber CV Anda",
   "uploadNewCv": "Upload CV Baru",
+  "searchCv": "Cari CV...",
+  "noCvFound": "Belum ada CV. Buat dulu di CV Builder.",
   "uploadCvFileHint": "Upload file PDF (Max 5MB)",
   "or": "atau",
   "useExistingCv": "Gunakan CV yang telah dibuat",

@@ -31,7 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
@@ -54,23 +54,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onRefresh: () => provider.loadActivities(),
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.lg,
-                      vertical: AppSizes.md,
-                    ),
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-                    child: Center(
-                      child: Text(
-                        l10n.historySubtitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                    ),
-                  ),
-                ),
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _StickyFilterDelegate(

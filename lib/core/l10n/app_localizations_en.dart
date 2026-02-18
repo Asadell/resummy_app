@@ -612,6 +612,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadNewCv => 'Upload New CV';
 
   @override
+  String get searchCv => 'Search CV...';
+
+  @override
+  String get noCvFound => 'No CV found. Create one in the CV Builder first.';
+
+  @override
   String get uploadCvFileHint => 'Upload PDF file (Max 5MB)';
 
   @override

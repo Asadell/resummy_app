@@ -1262,6 +1262,18 @@ abstract class AppLocalizations {
   /// **'Upload New CV'**
   String get uploadNewCv;
 
+  /// No description provided for @searchCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Search CV...'**
+  String get searchCv;
+
+  /// No description provided for @noCvFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No CV found. Create one in the CV Builder first.'**
+  String get noCvFound;
+
   /// No description provided for @uploadCvFileHint.
   ///
   /// In en, this message translates to:

@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -177,58 +176,67 @@ class _InterviewSessionOpeningScreenState
             ),
             const SizedBox(height: AppSizes.sm),
             Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Theme.of(context).colorScheme.primary,
-                              Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.7)
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    AppSection(
+                      child: Column(
+                        spacing: AppSizes.md,
+                        children: [
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer,
+                            child: Icon(
+                              Iconsax.profile_circle,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 36,
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: AppSizes.sm,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Iconsax.profile_circle,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
+                                      size: 18),
+                                  const SizedBox(width: AppSizes.sm),
+                                  Text(
+                                    l10n.aiInterviewer,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                l10n.aiMessageOpening,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                             ],
                           ),
-                          border: Border.all(
-                               color: Theme.of(context).colorScheme.surface,
-                              width: 4),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 20,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Iconsax.profile_circle,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 40,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      AppSection(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          spacing: AppSizes.sm,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Iconsax.profile_circle,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 18),
-                                const SizedBox(width: AppSizes.sm),
-                                Text(
-                                  l10n.aiInterviewer,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Iconsax.lamp_on,
+                                  color:
+                                      Theme.of(context).colorScheme.primary,
+                                  size: 18),
+                              const SizedBox(width: AppSizes.sm),
+                              Flexible(
+                                child: Text(
+                                  l10n.transcriptToggleHint,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -236,39 +244,15 @@ class _InterviewSessionOpeningScreenState
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurfaceVariant,
-                                        fontWeight: FontWeight.w600,
                                       ),
                                 ),
-                              ],
-                            ),
-                            Text(
-                              l10n.aiMessageOpening,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Iconsax.lamp_on,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 18),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.transcriptToggleHint,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
