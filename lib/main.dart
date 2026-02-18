@@ -6,6 +6,7 @@ import 'package:resummy_app/app/app.dart';
 import 'package:resummy_app/core/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
+import 'package:resummy_app/core/di/injection.dart';
 import 'package:resummy_app/features/cv_tools/data/repositories/cv_builder_repository_impl.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
@@ -30,6 +31,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize all dependencies including 51 Gemini models
+  await setupDI();
 
   final themeProvider = ThemeProvider();
   final localeProvider = LocaleProvider();
