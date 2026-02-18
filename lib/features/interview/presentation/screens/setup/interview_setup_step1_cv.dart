@@ -255,13 +255,32 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                       ],
                     ),
                     Wrap(
-                      spacing: AppSizes.sm,
                       runSpacing: AppSizes.sm,
                       children: [
-                        _buildInfoChip(context, Iconsax.timer_1, l10n.durationAprox),
-                        _buildInfoChip(context, Iconsax.message_question, l10n.questionsCount),
-                        _buildInfoChip(context, Iconsax.global, l10n.languageOption),
-                        _buildInfoChip(context, Iconsax.star, l10n.methodStar),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.timer_1,
+                          l10n.durationAprox,
+                          color: Colors.blue,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.message_question,
+                          l10n.questionsCount,
+                          color: Colors.orange,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.global,
+                          l10n.languageOption,
+                          color: Colors.purple,
+                        ),
+                        _buildInfoChip(
+                          context,
+                          Iconsax.star,
+                          l10n.methodStar,
+                          color: Colors.green,
+                        ),
                       ],
                     ),
                   ],
@@ -335,15 +354,21 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
 
   // ─── sub-widgets ─────────────────────────────────────────────────────────────
 
-  Widget _buildInfoChip(BuildContext context, IconData icon, String text) {
+  Widget _buildInfoChip(
+    BuildContext context,
+    IconData icon,
+    String text, {
+    required Color color,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.sm,
         vertical: AppSizes.xs,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppSizes.sm),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -351,14 +376,15 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           Icon(
             icon,
             size: 14,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            color: color,
           ),
           const SizedBox(width: AppSizes.xs),
           Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+                  color: color.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w600,
+                ),
           ),
         ],
       ),

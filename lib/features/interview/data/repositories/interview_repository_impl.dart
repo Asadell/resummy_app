@@ -92,6 +92,7 @@ class InterviewRepositoryImpl implements InterviewRepository {
 
             return QuestionFeedback(
               questionId: question.id,
+              userTranscript: transcript,
               starAnalysis: comprehensive.starAnalysis,
               contentAnalysis: comprehensive.contentAnalysis,
               fluencyAnalysis: comprehensive.fluencyAnalysis,
@@ -126,7 +127,8 @@ class InterviewRepositoryImpl implements InterviewRepository {
             questionFeedbacks.length;
 
         totalScore =
-            ((totalStar + totalContent + totalFluency + totalConfidence) / 4)
+            (((totalStar + totalContent + totalFluency + totalConfidence) / 4) *
+                    10)
                 .round();
       }
 
@@ -249,6 +251,24 @@ class InterviewRepositoryImpl implements InterviewRepository {
 
   @override
   Future<void> deleteInterview(String id) async {
+    // Delete local
     await _localDataSource.deleteInterview(id);
+
+    // Delete remote
+    try {
+      final auth = FirebaseAuth.instance;
+      final currentUser = auth.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('interviews')
+            .doc(id)
+            .delete();
+      }
+    } catch (e) {
+      debugPrint('Error deleting remote interview: $e');
+      // We don't rethrow here so local delete is considered "success" for UI
+    }
   }
 }

@@ -194,6 +194,7 @@
   "uploadCv": "Unggah CV",
   "chooseCvSource": "Pilih sumber CV Anda",
   "uploadNewCv": "Upload CV Baru",
+  "selectCvToAnalyze": "Pilih CV untuk Dianalisis",
   "searchCv": "Cari CV...",
   "noCvFound": "Belum ada CV. Buat dulu di CV Builder.",
   "uploadCvFileHint": "Upload file PDF (Max 5MB)",

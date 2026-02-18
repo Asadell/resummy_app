@@ -644,6 +644,16 @@ class InterviewProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteInterview(String id) async {
+    try {
+      await _repository.deleteInterview(id);
+      await loadHistory();
+    } catch (e) {
+      _errorMessage = 'Failed to delete interview: $e';
+      notifyListeners();
+    }
+  }
+
   void resetInterview() {
     if (_isDisposed) return;
     _status = InterviewStatus.initial;

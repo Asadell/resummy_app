@@ -612,6 +612,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadNewCv => 'Upload New CV';
 
   @override
+  String get selectCvToAnalyze => 'Select CV to Analyze';
+
+  @override
   String get searchCv => 'Search CV...';
 
   @override

@@ -1262,6 +1262,12 @@ abstract class AppLocalizations {
   /// **'Upload New CV'**
   String get uploadNewCv;
 
+  /// No description provided for @selectCvToAnalyze.
+  ///
+  /// In en, this message translates to:
+  /// **'Select CV to Analyze'**
+  String get selectCvToAnalyze;
+
   /// No description provided for @searchCv.
   ///
   /// In en, this message translates to:

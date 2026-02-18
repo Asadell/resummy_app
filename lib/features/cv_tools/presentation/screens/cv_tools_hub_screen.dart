@@ -85,11 +85,22 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSizes.md,
                   children: [
-                    Text(
-                      l10n.myCvs,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          l10n.myCvs,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        TextButton(
+                          onPressed: () =>
+                              context.router.navigate(const HistoryRoute()),
+                          child: Text(l10n.viewAll),
+                        ),
+                      ],
                     ),
                     Consumer<CVBuilderProvider>(
                       builder: (context, provider, child) {
@@ -133,16 +144,18 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           );
                         }
 
+                        final recentCVs = provider.savedCVs.take(3).toList();
+
                         return Stack(
                           children: [
                             ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.savedCVs.length,
+                              itemCount: recentCVs.length,
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: AppSizes.md),
                               itemBuilder: (context, index) {
-                                final cv = provider.savedCVs[index];
+                                final cv = recentCVs[index];
 
 
                                 return CVCard(

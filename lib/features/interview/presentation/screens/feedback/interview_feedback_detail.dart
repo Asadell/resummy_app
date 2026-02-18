@@ -59,8 +59,10 @@ class _InterviewFeedbackDetailScreenState
           questionText = provider.questions[_currentIndex].text;
         }
 
-        String userTranscript = '';
-        if (_currentIndex < provider.questions.length) {
+        String userTranscript = feedback.userTranscript;
+
+        // Fallback: try to get from live questions if available (during active session)
+        if (userTranscript.isEmpty && _currentIndex < provider.questions.length) {
           userTranscript =
               provider.questions[_currentIndex].userAnswerTranscript ?? '';
         }
@@ -101,9 +103,8 @@ class _InterviewFeedbackDetailScreenState
                           ),
                           child: Text(
                             '${l10n.question} ${_currentIndex + 1}/$totalQuestions',
-                            style: TextStyle(
+                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
-                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -205,7 +206,7 @@ class _InterviewFeedbackDetailScreenState
                                     .textTheme
                                     .titleMedium
                                     ?.copyWith(
-                                      color: _getScoreColor(
+                                      color: _getScoreColor(context,
                                           feedback.starAnalysis.score * 10),
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -264,7 +265,7 @@ class _InterviewFeedbackDetailScreenState
                                 .textTheme
                                 .titleMedium
                                 ?.copyWith(
-                                  color: _getScoreColor(
+                                  color: _getScoreColor(context,
                                       feedback.fluencyAnalysis.score * 10),
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -320,11 +321,13 @@ class _InterviewFeedbackDetailScreenState
                                   children: [
                                     Text(
                                       l10n.originalSpeechLabel,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.error,
-                                      ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.error,
+                                            ),
                                     ),
                                     Text(
                                       userTranscript.isNotEmpty
@@ -358,11 +361,15 @@ class _InterviewFeedbackDetailScreenState
                                           const SizedBox(width: 4),
                                           Text(
                                             l10n.improvedSpeechLabel,
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).colorScheme.primary,
-                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -436,10 +443,10 @@ class _InterviewFeedbackDetailScreenState
     );
   }
 
-  Color _getScoreColor(int score) {
-    if (score >= 80) return AppColors.secondary;
-    if (score >= 60) return AppColors.primary;
-    return AppColors.warning;
+  Color _getScoreColor(BuildContext context, int score) {
+    if (score >= 80) return Theme.of(context).colorScheme.primary;
+    if (score >= 60) return Colors.orange;
+    return Theme.of(context).colorScheme.error;
   }
 
   Widget _buildPresenceRow(BuildContext context, String label, bool isPresent) {
@@ -457,7 +464,7 @@ class _InterviewFeedbackDetailScreenState
             const SizedBox(width: 8),
             Text(
               isPresent ? 'Present' : 'Missing',
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isPresent ? AppColors.secondary : AppColors.error,
                 fontWeight: FontWeight.bold,
               ),

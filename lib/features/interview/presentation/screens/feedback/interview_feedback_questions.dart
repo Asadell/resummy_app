@@ -98,11 +98,10 @@ class _InterviewFeedbackQuestionsScreenState
 
                     final isExpanded = _expandedIndex == index;
                     final scoreColor =
-                        _getScoreColor(feedback.starAnalysis.score * 10);
+                        _getScoreColor(context, feedback.starAnalysis.score * 10);
 
-                    return AppSection(
-                      verticalPadding: AppSizes.xs,
-                      child: Container(
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: AppSizes.sm),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surfaceContainerLow,
                           borderRadius: BorderRadius.circular(AppSizes.sm),
@@ -263,8 +262,7 @@ class _InterviewFeedbackQuestionsScreenState
                             ),
                           ),
                         ),
-                      ),
-                    );
+                      );
                   },
                 ),
                 ),
@@ -299,10 +297,10 @@ class _InterviewFeedbackQuestionsScreenState
     });
   }
 
-  Color _getScoreColor(int score) {
-    if (score >= 80) return AppColors.primary;
+  Color _getScoreColor(BuildContext context, int score) {
+    if (score >= 80) return Theme.of(context).colorScheme.primary;
     if (score >= 60) return Colors.orange;
-    return AppColors.error;
+    return Theme.of(context).colorScheme.error;
   }
 
   Widget _buildScoreChip(BuildContext context, String label, double score) {

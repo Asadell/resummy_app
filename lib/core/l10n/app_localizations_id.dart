@@ -615,6 +615,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get uploadNewCv => 'Upload CV Baru';
 
   @override
+  String get selectCvToAnalyze => 'Pilih CV untuk Dianalisis';
+
+  @override
   String get searchCv => 'Cari CV...';
 
   @override

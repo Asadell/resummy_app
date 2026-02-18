@@ -255,6 +255,7 @@
   "uploadCv": "Upload CV",
   "chooseCvSource": "Choose your CV source",
   "uploadNewCv": "Upload New CV",
+  "selectCvToAnalyze": "Select CV to Analyze",
   "searchCv": "Search CV...",
   "noCvFound": "No CV found. Create one in the CV Builder first.",
   "uploadCvFileHint": "Upload PDF file (Max 5MB)",

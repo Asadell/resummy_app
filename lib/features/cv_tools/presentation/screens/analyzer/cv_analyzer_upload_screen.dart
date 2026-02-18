@@ -27,6 +27,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
   SuggestionPriority? _filterPriority;
+  /// null = no selection yet; -1 = uploaded CV; >= 0 = saved CV index
+  int? _selectedCvIndex;
 
   AppLocalizations get l10n => AppLocalizations.of(context)!;
 
@@ -123,7 +125,156 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ],
             ),
-            _buildUploadCard(provider),
+            // ─── CV selection ──
+            Consumer<CvAnalyzerProvider>(
+              builder: (context, analyzerProvider, _) {
+                // We need access to CVBuilderProvider for the saved CVs
+                final cvBuilderProvider = context.watch<CVBuilderProvider>();
+                final allCvs = cvBuilderProvider.savedCVs;
+                final recentCvs = allCvs.take(2).toList();
+                
+                // If we have a file selected in the analyzer provider, emphasize it
+                final hasFile = analyzerProvider.hasFile;
+
+                return AppSection(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: AppSizes.sm,
+                    children: [
+                       Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.selectCvToAnalyze,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            if (allCvs.length > 2)
+                              TextButton(
+                                onPressed: () => _showBrowseSheet(context, allCvs),
+                                child: Text(l10n.viewAll),
+                              ),
+                          ],
+                        ),
+                      Text(
+                        l10n.cvAnalyzerSetupDesc,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                      ),
+
+                      const SizedBox(height: AppSizes.sm),
+
+                      // Recent CVs from provider
+                      if (recentCvs.isEmpty && !hasFile)
+                         Container(
+                          padding: const EdgeInsets.all(AppSizes.md),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Iconsax.info_circle,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
+                              const SizedBox(width: AppSizes.sm),
+                              Expanded(
+                                child: Text(
+                                  l10n.noCvFound,
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else ...[
+                         ...recentCvs.asMap().entries.map((entry) {
+                            final i = entry.key;
+                            final cv = entry.value;
+                             // Check if this CV is currently selected in the provider (logic needs robust equality check or ID)
+                             // For now, relies on user clicking. 
+                             // The provider stores the file path/content, not the CVData object directly usually for uploads.
+                             // We'll need a way to know if a CVData is selected.
+                             // Actually, CvAnalyzerProvider mainly works with files/text. 
+                             // We should probably convert CVData to text and set it in provider when clicked.
+                             
+                             // Visual selection state is tricky without a dedicated field. 
+                             // Let's assume we use a local state `_selectedCvIndex` to track UI selection 
+                             // and update provider accordingly.
+                            final isSelected = _selectedCvIndex == i;
+
+                            return _buildCvItem(
+                              context,
+                              index: i,
+                              cv: cv,
+                              isSelected: isSelected,
+                              onTap: () {
+                                setState(() {
+                                  _selectedCvIndex = i;
+                                });
+                                // Logic to process CVData into text/file for analyzer
+                                _selectCvData(cv);
+                              }
+                            );
+                          }),
+                      ],
+
+                      // Uploaded File Card (if using file picker)
+                      if (hasFile && _selectedCvIndex == -1)
+                        Card(
+                          elevation: 0,
+                          color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.2),
+                          shape: RoundedRectangleBorder(
+                             side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                             borderRadius: BorderRadius.circular(AppSizes.sm)
+                          ),
+                          child: ListTile(
+                            leading: Icon(Iconsax.document, color: Theme.of(context).colorScheme.primary),
+                            title: Text(analyzerProvider.fileName ?? 'Unknown'),
+                            subtitle: Text(analyzerProvider.fileSize ?? ''),
+                            trailing: IconButton(
+                              icon: const Icon(Iconsax.close_circle, color: Colors.grey),
+                              onPressed: () {
+                                analyzerProvider.clearFile();
+                                setState(() {
+                                  _selectedCvIndex = null;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+
+                      // Upload option
+                      OutlinedButton.icon(
+                        onPressed: () { 
+                             analyzerProvider.pickAndExtract().then((_) {
+                                 if (analyzerProvider.hasFile) {
+                                     setState(() {
+                                         _selectedCvIndex = -1; // -1 indicates file upload
+                                     });
+                                 }
+                             });
+                        },
+                        icon: const Icon(Iconsax.document_upload),
+                        label: Text(l10n.uploadNewCv),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(52),
+                          padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+                          side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             TextField(
               controller: _jobPositionController,
               decoration: InputDecoration(
@@ -232,8 +383,22 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ),
             FilledButton.icon(
-              onPressed: provider.hasFile && provider.jobPosition.isNotEmpty
-                  ? () => provider.analyze(_selectedLanguage)
+              onPressed: (provider.hasFile || (_selectedCvIndex != null && _selectedCvIndex! >= 0)) && provider.jobPosition.isNotEmpty
+                  ? () async {
+                      if (_selectedCvIndex != null && _selectedCvIndex! >= 0) {
+                         // TODO: Handle saved CV analysis properly
+                         // For now, this path might need provider update to accept CVData or text
+                         // provider.analyzeCvData(cv);
+                         // Assuming we set file/text on selection or we implement a bridge here.
+                         
+                         // Temporary: Show snackbar or handle if not supported yet
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(content: Text('Analyzing saved CV not fully wired yet')),
+                         );
+                      } else {
+                         provider.analyze(_selectedLanguage);
+                      }
+                  }
                   : null,
               icon: const Icon(Iconsax.scan_barcode),
               label: Text(l10n.startAnalysis),
@@ -250,64 +415,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  Widget _buildUploadCard(CvAnalyzerProvider provider) {
-    if (provider.hasFile) {
-      return Card(
-        child: ListTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Iconsax.document, color: Colors.green.shade700),
-          ),
-          title: Text(provider.fileName ?? 'Unknown'),
-          subtitle: Text(provider.fileSize ?? ''),
-          trailing: IconButton(
-            icon: const Icon(Iconsax.trash, color: Colors.red),
-            onPressed: provider.clearFile,
-          ),
-        ),
-      );
-    }
-
-    return Card(
-      child: InkWell(
-        onTap: provider.isPickingFile ? null : provider.pickAndExtract,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              if (provider.isPickingFile)
-                const CircularProgressIndicator()
-              else
-                Icon(
-                  Iconsax.document_upload,
-                  size: 48,
-                  color: Theme.of(context).primaryColor,
-                ),
-              const SizedBox(height: 16),
-              Text(
-                provider.isPickingFile ? l10n.processingCv : l10n.uploadCv,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.max5Pages,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildLoadingState(CvAnalyzerProvider provider) {
     final isConverting = provider.isConverting;
@@ -903,6 +1010,152 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
+  // ─── helpers ────────────────────────────────────────────────────────────────
+
+  String _sourceLabel(AppLocalizations l10n, String source) {
+    switch (source) {
+      case 'builder':
+        return l10n.cvSourceBuilder;
+      case 'ats_converter':
+        return l10n.cvSourceAtsConverter;
+      case 'analyzer':
+        return l10n.cvSourceAnalyzer;
+      default:
+        return l10n.cvSourceBuilder;
+    }
+  }
+
+  IconData _sourceIcon(String source) {
+    switch (source) {
+      case 'builder':
+        return Iconsax.document_text;
+      case 'ats_converter':
+        return Iconsax.magic_star;
+      case 'analyzer':
+        return Iconsax.chart_2;
+      default:
+        return Iconsax.document_text;
+    }
+  }
+
+  Color _sourceColor(BuildContext context, String source) {
+    switch (source) {
+      case 'builder':
+        return Theme.of(context).colorScheme.primary;
+      case 'ats_converter':
+        return Colors.purple;
+      case 'analyzer':
+        return Colors.green;
+      default:
+        return Theme.of(context).colorScheme.primary;
+    }
+  }
+
+  Future<void> _selectCvData(dynamic cv) async {
+       // TODO: Implement actual data selection for analyzer
+       // final provider = Provider.of<CvAnalyzerProvider>(context, listen: false);
+       // if (cv.filePath != null && cv.filePath.isNotEmpty) {
+           // provider.setFile(File(cv.filePath));
+       // }
+  }
+
+  void _showBrowseSheet(BuildContext context, List<dynamic> allCvs) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _BrowseCvSheet(
+        allCvs: allCvs,
+        selectedIndex: _selectedCvIndex,
+        sourceLabel: (s) => _sourceLabel(l10n, s),
+        sourceIcon: _sourceIcon,
+        sourceColor: (s) => _sourceColor(ctx, s),
+        onSelected: (index) {
+          setState(() {
+            _selectedCvIndex = index;
+             Provider.of<CvAnalyzerProvider>(context, listen: false).clearFile();
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildCvItem(
+    BuildContext context, {
+    required int index,
+    required dynamic cv,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    final color = _sourceColor(context, cv.source);
+    final dateStr = (cv.updatedAt != null) 
+       ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}" 
+       : "";
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.sm),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(AppSizes.md),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.transparent,
+            width: isSelected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(AppSizes.sm),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: AppSizes.sm),
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: color.withValues(alpha: 0.15),
+              child: Icon(_sourceIcon(cv.source), color: color, size: 18),
+            ),
+            const SizedBox(width: AppSizes.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w600),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '${_sourceLabel(l10n, cv.source)} • $dateStr',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _handleBuatCvAts(CvAnalyzerProvider provider) {
     showModalBottomSheet(
       context: context,
@@ -1018,5 +1271,230 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       case SuggestionPriority.low:
         return l10n.priorityLow;
     }
+  }
+}
+
+// ─── Browse-all bottom sheet ──────────────────────────────────────────────────
+
+class _BrowseCvSheet extends StatefulWidget {
+  final List<dynamic> allCvs;
+  final int? selectedIndex;
+  final String Function(String) sourceLabel;
+  final IconData Function(String) sourceIcon;
+  final Color Function(String) sourceColor;
+  final void Function(int) onSelected;
+
+  const _BrowseCvSheet({
+    required this.allCvs,
+    required this.selectedIndex,
+    required this.sourceLabel,
+    required this.sourceIcon,
+    required this.sourceColor,
+    required this.onSelected,
+  });
+
+  @override
+  State<_BrowseCvSheet> createState() => _BrowseCvSheetState();
+}
+
+class _BrowseCvSheetState extends State<_BrowseCvSheet> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final filtered = _query.isEmpty
+        ? widget.allCvs
+        : widget.allCvs
+            .where((cv) =>
+                cv.name.toLowerCase().contains(_query.toLowerCase()) ||
+                cv.source.toLowerCase().contains(_query.toLowerCase()))
+            .toList();
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      expand: false,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
+          ),
+          child: Column(
+            children: [
+              // Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.symmetric(vertical: AppSizes.sm),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor,
+                    borderRadius: BorderRadius.circular(AppSizes.xs),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: AppSizes.lg, right: AppSizes.lg, bottom: AppSizes.sm),
+                child: Text(
+                  l10n.selectCv,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              // Search
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.lg, vertical: AppSizes.sm),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: l10n.searchCv,
+                    prefixIcon: const Icon(Iconsax.search_normal, size: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.sm),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.md, vertical: AppSizes.sm),
+                  ),
+                  onChanged: (v) => setState(() => _query = v),
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: filtered.isEmpty
+                    ? Center(
+                        child: Text(
+                          l10n.noCvFound,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                        ),
+                      )
+                    : ListView.separated(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.lg, vertical: AppSizes.sm),
+                        itemCount: filtered.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: AppSizes.sm),
+                        itemBuilder: (context, i) {
+                          final cv = filtered[i];
+                          final globalIndex = widget.allCvs.indexOf(cv);
+                          final isSelected =
+                              widget.selectedIndex == globalIndex;
+                          final color = widget.sourceColor(cv.source);
+                          final dateStr = (cv.updatedAt != null) 
+                              ? "${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}" 
+                              : "";
+
+                          return InkWell(
+                            onTap: () {
+                              widget.onSelected(globalIndex);
+                              Navigator.of(context).pop();
+                            },
+                            borderRadius:
+                                BorderRadius.circular(AppSizes.sm),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.all(AppSizes.md),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainerHighest,
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                      : Colors.transparent,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(AppSizes.sm),
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor:
+                                        color.withValues(alpha: 0.15),
+                                    child: Icon(
+                                        widget.sourceIcon(cv.source),
+                                        color: color,
+                                        size: 20),
+                                  ),
+                                  const SizedBox(width: AppSizes.sm),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          cv.name.isNotEmpty
+                                              ? cv.name
+                                              : 'CV ${globalIndex + 1}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                  fontWeight:
+                                                      FontWeight.w600),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          '${widget.sourceLabel(cv.source)} • $dateStr',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (isSelected)
+                                    Icon(Iconsax.tick_circle,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

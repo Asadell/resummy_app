@@ -86,6 +86,7 @@ class InterviewReport extends Equatable {
 
 class QuestionFeedback extends Equatable {
   final String questionId;
+  final String userTranscript;
 
   final STARAnalysis starAnalysis;
   final ContentQualityAnalysis contentAnalysis;
@@ -95,6 +96,7 @@ class QuestionFeedback extends Equatable {
 
   const QuestionFeedback({
     required this.questionId,
+    this.userTranscript = '',
     required this.starAnalysis,
     required this.contentAnalysis,
     required this.fluencyAnalysis,
@@ -105,6 +107,7 @@ class QuestionFeedback extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'questionId': questionId,
+      'userTranscript': userTranscript,
       'starAnalysis': starAnalysis.toJson(),
       'contentAnalysis': contentAnalysis.toJson(),
       'fluencyAnalysis': fluencyAnalysis.toJson(),
@@ -116,6 +119,7 @@ class QuestionFeedback extends Equatable {
   factory QuestionFeedback.fromJson(Map<String, dynamic> json) {
     return QuestionFeedback(
       questionId: json['questionId'] as String? ?? '',
+      userTranscript: json['userTranscript'] as String? ?? '',
       starAnalysis: STARAnalysis.fromJson(
           json['starAnalysis'] as Map<String, dynamic>? ?? {}),
       contentAnalysis: ContentQualityAnalysis.fromJson(
@@ -132,6 +136,7 @@ class QuestionFeedback extends Equatable {
   @override
   List<Object?> get props => [
         questionId,
+        userTranscript,
         starAnalysis,
         contentAnalysis,
         fluencyAnalysis,
