@@ -73,7 +73,7 @@ class _InterviewFeedbackDetailScreenState
             title: Text(
                 '${l10n.question} ${_currentIndex + 1} ${l10n.totalOf} $totalQuestions'),
             leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left_1),
+              icon: const Icon(Iconsax.arrow_left),
               onPressed: () =>
                   context.router.push(const InterviewFeedbackQuestionsRoute()),
             ),
@@ -432,7 +432,7 @@ class _InterviewFeedbackDetailScreenState
                               setState(() => _currentIndex--);
                             }
                           : null,
-                      icon: const Icon(Iconsax.arrow_left_2, size: 18),
+                      icon: const Icon(Iconsax.arrow_left, size: 18),
                       label: Text(l10n.previous),
                     ),
                   ),

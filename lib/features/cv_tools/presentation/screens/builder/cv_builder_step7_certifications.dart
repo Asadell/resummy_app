@@ -9,6 +9,8 @@ import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_st
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:uuid/uuid.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderStep7Screen extends StatefulWidget {
@@ -43,168 +45,171 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
           final certList = provider.currentCV?.certifications ?? [];
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Consumer<CVBuilderProvider>(
-                    builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(
-                          context, 'certifications');
-                      final totalSteps =
-                          DynamicCvSteps.getTotalSteps(provider.currentCV);
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          l10n.stepHeader(currentStep, totalSteps),
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: Text(
-                    l10n.certificationHeader,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Center(
-                  child: Text(
-                    l10n.certificationDesc,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.color
-                              ?.withValues(alpha: 0.7),
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (certList.isEmpty)
+            child: AppSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(color: Theme.of(context).dividerColor),
-                      ),
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Iconsax.verify,
-                            size: 48,
-                            color: Color(0xFF9CA3AF),
+                    child: Consumer<CVBuilderProvider>(
+                      builder: (context, provider, _) {
+                        final currentStep = DynamicCvSteps.getStepForSection(
+                            context, 'certifications');
+                        final totalSteps =
+                            DynamicCvSteps.getTotalSteps(provider.currentCV);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            borderRadius: BorderRadius.circular(AppSizes.xl),
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            l10n.noCertificationData,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.skipStepPrompt,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF6B7280),
+                          child: Text(
+                            l10n.stepHeader(currentStep, totalSteps),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
-                if (certList.isNotEmpty) ...[
-                  ReorderableListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: certList.length,
-                    onReorder: (oldIndex, newIndex) {
-                      provider.reorderCertifications(oldIndex, newIndex);
-                    },
-                    itemBuilder: (context, index) {
-                      final cert = certList[index];
-                      final date =
-                          '${cert.issueDate.month}/${cert.issueDate.year}';
-
-                      return Card(
-                        key: ValueKey(cert.id),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(16),
-                          leading: const Icon(Icons.drag_indicator),
-                          title: Text(
-                            cert.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                  const SizedBox(height: AppSizes.sm),
+                  Center(
+                    child: Text(
+                      l10n.certificationHeader,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.xs),
+                  Center(
+                    child: Text(
+                      l10n.certificationDesc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withValues(alpha: 0.7),
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4),
-                              Text('${cert.issuingOrganization} • $date'),
-                              if (cert.credentialId != null &&
-                                  cert.credentialId!.isNotEmpty) ...[
-                                const SizedBox(height: 4),
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.lg),
+                  if (certList.isEmpty)
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppSizes.xl),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(AppSizes.md),
+                          border:
+                              Border.all(color: Theme.of(context).dividerColor),
+                        ),
+                        child: Column(
+                          children: [
+                            const Icon(
+                              Iconsax.verify,
+                              size: 48,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                            const SizedBox(height: AppSizes.md),
+                            Text(
+                              l10n.noCertificationData,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                            const SizedBox(height: AppSizes.sm),
+                            Text(
+                              l10n.skipStepPrompt,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Color(0xFF6B7280),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (certList.isNotEmpty) ...[
+                    ReorderableListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: certList.length,
+                      onReorder: (oldIndex, newIndex) {
+                        provider.reorderCertifications(oldIndex, newIndex);
+                      },
+                      itemBuilder: (context, index) {
+                        final cert = certList[index];
+                        final date =
+                            '${cert.issueDate.month}/${cert.issueDate.year}';
+
+                        return Card(
+                          key: ValueKey(cert.id),
+                          margin: const EdgeInsets.only(bottom: AppSizes.sm),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(AppSizes.md),
+                            leading: const Icon(Icons.drag_indicator),
+                            title: Text(
+                              cert.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: AppSizes.xs),
+                                Text('${cert.issuingOrganization} • $date'),
+                                if (cert.credentialId != null &&
+                                    cert.credentialId!.isNotEmpty) ...[
+                                  const SizedBox(height: AppSizes.xs),
                                   Text(
                                     '${l10n.credentialIdLabel}: ${cert.credentialId}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
                                   ),
+                                ],
+                              ],
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Iconsax.edit, size: 20),
+                                  onPressed: () =>
+                                      _editCertification(cert, index),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Iconsax.trash,
+                                      size: 20, color: Colors.red),
+                                  onPressed: () =>
+                                      provider.removeCertification(index),
                                 ),
                               ],
-                            ],
+                            ),
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Iconsax.edit, size: 20),
-                                onPressed: () =>
-                                    _editCertification(cert, index),
-                              ),
-                              IconButton(
-                                icon: const Icon(Iconsax.trash,
-                                    size: 20, color: Colors.red),
-                                onPressed: () =>
-                                    provider.removeCertification(index),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: AppSizes.lg),
+                  ],
+                  const SizedBox(height: AppSizes.lg),
+                  const Divider(),
+                  const SizedBox(height: AppSizes.lg),
+                  _buildInlineForm(context, provider),
+                  const SizedBox(height: 80),
                 ],
-                const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 24),
-                _buildInlineForm(context, provider),
-                const SizedBox(height: 80),
-              ],
+              ),
             ),
           );
         },
@@ -338,10 +343,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSizes.md),
         border: Border.all(color: Theme.of(context).dividerColor),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSizes.md),
       child: Form(
         key: _formKey,
         autovalidateMode: _showValidation
@@ -367,7 +372,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                   ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.lg),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -379,7 +384,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             TextFormField(
               controller: _organizationController,
               decoration: InputDecoration(
@@ -391,7 +396,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             Row(
               children: [
                 Expanded(
@@ -410,7 +415,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppSizes.md),
                 Expanded(
                   child: InkWell(
                     onTap: _doesNotExpire
@@ -457,7 +462,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.xs),
             TextFormField(
               controller: _credentialIdController,
               decoration: InputDecoration(
@@ -467,7 +472,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               ),
               maxLength: 50,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             TextFormField(
               controller: _credentialUrlController,
               decoration: InputDecoration(
@@ -483,7 +488,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               ],
               maxLength: 100,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSizes.xl),
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(

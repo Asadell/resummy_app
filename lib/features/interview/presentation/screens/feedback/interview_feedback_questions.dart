@@ -39,7 +39,7 @@ class _InterviewFeedbackQuestionsScreenState
         appBar: AppBar(
           title: Text(l10n.fullReport),
           leading: IconButton(
-            icon: const Icon(Iconsax.arrow_left_1),
+            icon: const Icon(Iconsax.arrow_left),
             onPressed: () =>
                 context.router.push(const InterviewFeedbackOverviewRoute()),
           ),

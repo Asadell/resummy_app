@@ -21,7 +21,7 @@ class InterviewSetupStep4Screen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.interviewFocus),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () =>
               context.router.push(const InterviewSetupStep3Route()),
         ),

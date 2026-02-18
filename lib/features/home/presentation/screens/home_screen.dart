@@ -1,11 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
-import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -32,146 +34,162 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.welcomeBack,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.letsBuildYourPerfectCareer,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
+              AppSection(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.welcomeBack,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                    Text(
+                      l10n.letsBuildYourPerfectCareer,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              Text(
-                l10n.quickActions,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Iconsax.document_text,
-                      title: l10n.buildCv,
-                      color: Theme.of(context).colorScheme.primary,
-                      onTap: () =>
-                          context.router.push(const CvBuilderWelcomeRoute()),
+              const SizedBox(height: AppSizes.sm),
+              AppSection(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.quickActions,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Iconsax.chart_2,
-                      title: l10n.analyzeCv,
-                      color: Theme.of(context).colorScheme.secondary,
-                      onTap: () =>
-                          context.router.push(const CvAnalyzerUploadRoute()),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Iconsax.microphone,
-                      title: l10n.interviewPrep,
-                      color: Theme.of(context).colorScheme.tertiary,
-                      onTap: () =>
-                          context.router.push(const InterviewSetupStep1Route()),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Iconsax.magic_star,
-                      title: l10n.convertToCvAts,
-                      color: Colors.purple,
-                      onTap: () =>
-                          context.router.push(const CvAtsConverterRoute()),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    l10n.recentActivity,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.router.navigate(const HistoryRoute());
-                    },
-                    child: Text(l10n.viewAll),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Consumer<HistoryProvider>(
-                builder: (context, provider, child) {
-                  final activities = provider.activities.take(3).toList();
-
-                  if (activities.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24.0),
-                        child: Text(
-                          l10n.noInterviewHistory,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
+                    const SizedBox(height: AppSizes.md),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _QuickActionCard(
+                            icon: Iconsax.document_text,
+                            title: l10n.buildCv,
+                            color: Theme.of(context).colorScheme.primary,
+                            onTap: () => context.router
+                                .push(const CvBuilderWelcomeRoute()),
+                          ),
                         ),
-                      ),
-                    );
-                  }
-
-                  return Column(
-                    children: activities.map((activity) {
-                      return _ActivityCard(
-                        icon: _getActivityIcon(activity.type),
-                        title: activity.title,
-                        subtitle: activity.subtitle,
-                        time: _formatTimeAgo(context, activity.timestamp),
-                        onTap: () {
-                          if (activity.type == ActivityType.interviewPrep) {
+                        const SizedBox(width: AppSizes.md),
+                        Expanded(
+                          child: _QuickActionCard(
+                            icon: Iconsax.chart_2,
+                            title: l10n.analyzeCv,
+                            color: Theme.of(context).colorScheme.secondary,
+                            onTap: () => context.router
+                                .push(const CvAnalyzerUploadRoute()),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSizes.md),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _QuickActionCard(
+                            icon: Iconsax.microphone,
+                            title: l10n.interviewPrep,
+                            color: Theme.of(context).colorScheme.tertiary,
+                            onTap: () => context.router
+                                .push(const InterviewSetupStep1Route()),
+                          ),
+                        ),
+                        const SizedBox(width: AppSizes.md),
+                        Expanded(
+                          child: _QuickActionCard(
+                            icon: Iconsax.magic_star,
+                            title: l10n.convertToCvAts,
+                            color: Colors.purple,
+                            onTap: () =>
+                                context.router.push(const CvAtsConverterRoute()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSizes.sm),
+              AppSection(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          l10n.recentActivity,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        TextButton(
+                          onPressed: () {
                             context.router.navigate(const HistoryRoute());
-                          } else if (activity.type == ActivityType.cvCreated) {
-                            context.router
-                                .navigate(const CvBuilderWelcomeRoute());
-                          } else if (activity.type == ActivityType.cvAnalyzed) {
-                            context.router
-                                .navigate(const CvAnalyzerUploadRoute());
-                          } else if (activity.type ==
-                              ActivityType.cvTranslated) {
-                            context.router
-                                .navigate(const CvAtsConverterRoute());
-                          }
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
+                          },
+                          child: Text(l10n.viewAll),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                    Consumer<HistoryProvider>(
+                      builder: (context, provider, child) {
+                        final activities = provider.activities.take(3).toList();
+
+                        if (activities.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: AppSizes.lg),
+                              child: Text(
+                                l10n.noInterviewHistory,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Column(
+                          spacing: AppSizes.sm,
+                          children: activities.map((activity) {
+                            return _ActivityCard(
+                              icon: _getActivityIcon(activity.type),
+                              title: activity.title,
+                              subtitle: activity.subtitle,
+                              time: _formatTimeAgo(context, activity.timestamp),
+                              onTap: () {
+                                if (activity.type ==
+                                    ActivityType.interviewPrep) {
+                                  context.router.navigate(const HistoryRoute());
+                                } else if (activity.type ==
+                                    ActivityType.cvCreated) {
+                                  context.router
+                                      .navigate(const CvBuilderWelcomeRoute());
+                                } else if (activity.type ==
+                                    ActivityType.cvAnalyzed) {
+                                  context.router
+                                      .navigate(const CvAnalyzerUploadRoute());
+                                } else if (activity.type ==
+                                    ActivityType.cvTranslated) {
+                                  context.router
+                                      .navigate(const CvAtsConverterRoute());
+                                }
+                              },
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -179,6 +197,8 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+
 
   IconData _getActivityIcon(ActivityType type) {
     switch (type) {
@@ -227,16 +247,23 @@ class _QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSizes.md),
           child: Column(
             children: [
               Icon(icon, size: 32, color: color),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSizes.sm),
               Text(
                 title,
                 style: Theme.of(context).textTheme.labelLarge,
@@ -267,16 +294,55 @@ class _ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: Text(
-          time,
-          style: Theme.of(context).textTheme.bodySmall,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(AppSizes.sm),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+          ),
         ),
-        onTap: onTap,
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppSizes.xs),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon,  size: 20, color: Theme.of(context).colorScheme.primary),
+            ),
+            const SizedBox(width: AppSizes.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSizes.sm),
+            Text(
+              time,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }

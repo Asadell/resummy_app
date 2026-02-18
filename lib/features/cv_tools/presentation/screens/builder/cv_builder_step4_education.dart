@@ -7,6 +7,9 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -41,182 +44,184 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
           final educationList = provider.currentCV?.education ?? [];
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Consumer<CVBuilderProvider>(
-                    builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(
-                          context, 'education');
-                      final totalSteps =
-                          DynamicCvSteps.getTotalSteps(provider.currentCV);
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          l10n.stepHeader(currentStep, totalSteps),
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: Text(
-                    l10n.educationHistoryHeader,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Center(
-                  child: Text(
-                    l10n.educationHistoryDesc,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.color
-                              ?.withValues(alpha: 0.7),
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (educationList.isEmpty)
+            child: AppSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(color: Theme.of(context).dividerColor),
-                      ),
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Iconsax.teacher,
-                            size: 48,
-                            color: Color(0xFF9CA3AF),
+                    child: Consumer<CVBuilderProvider>(
+                      builder: (context, provider, _) {
+                        final currentStep = DynamicCvSteps.getStepForSection(
+                            context, 'education');
+                        final totalSteps =
+                            DynamicCvSteps.getTotalSteps(provider.currentCV);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            l10n.noEducationData,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.addEducationPrompt,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF6B7280),
+                          child: Text(
+                            l10n.stepHeader(currentStep, totalSteps),
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
-                if (educationList.isNotEmpty) ...[
-                  ReorderableListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: educationList.length,
-                    onReorder: (oldIndex, newIndex) {
-                      provider.reorderEducation(oldIndex, newIndex);
-                    },
-                    itemBuilder: (context, index) {
-                      final edu = educationList[index];
-                      final period = edu.isCurrentlyStudying
-                          ? '${edu.startYear} - ${l10n.present}'
-                          : '${edu.startYear} - ${edu.endYear ?? l10n.present}';
-
-                      return Card(
-                        key: ValueKey(edu.id),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(16),
-                          leading: const Icon(Icons.drag_indicator),
-                          title: Text(
-                            edu.institution,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                  const SizedBox(height: AppSizes.md),
+                  Center(
+                    child: Text(
+                      l10n.educationHistoryHeader,
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4),
-                              Text(
-                                  '${edu.degree} ${l10n.educationDegreesConnector} ${edu.major}'),
-                              const SizedBox(height: 4),
-                              Text(
-                                period,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: const Color(0xFF6B7280),
-                                      fontSize: 12,
-                                    ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.xs),
+                  Center(
+                    child: Text(
+                      l10n.educationHistoryDesc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withValues(alpha: 0.7),
+                          ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.xl),
+                  if (educationList.isEmpty)
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(32),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border:
+                              Border.all(color: Theme.of(context).dividerColor),
+                        ),
+                        child: Column(
+                          children: [
+                            const Icon(
+                              Iconsax.teacher,
+                              size: 48,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              l10n.noEducationData,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.addEducationPrompt,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Color(0xFF6B7280),
                               ),
-                              if (edu.gpa != null && edu.gpa!.isNotEmpty) ...[
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (educationList.isNotEmpty) ...[
+                    ReorderableListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: educationList.length,
+                      onReorder: (oldIndex, newIndex) {
+                        provider.reorderEducation(oldIndex, newIndex);
+                      },
+                      itemBuilder: (context, index) {
+                        final edu = educationList[index];
+                        final period = edu.isCurrentlyStudying
+                            ? '${edu.startYear} - ${l10n.present}'
+                            : '${edu.startYear} - ${edu.endYear ?? l10n.present}';
+
+                        return Card(
+                          key: ValueKey(edu.id),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(16),
+                            leading: const Icon(Icons.drag_indicator),
+                            title: Text(
+                              edu.institution,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 const SizedBox(height: 4),
                                 Text(
-                                  '${l10n.gpaLabel}: ${edu.gpa}',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
+                                    '${edu.degree} ${l10n.educationDegreesConnector} ${edu.major}'),
+                                const SizedBox(height: 4),
+                                Text(
+                                  period,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: const Color(0xFF6B7280),
+                                        fontSize: 12,
+                                      ),
+                                ),
+                                if (edu.gpa != null && edu.gpa!.isNotEmpty) ...[
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${l10n.gpaLabel}: ${edu.gpa}',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                    ),
                                   ),
+                                ],
+                              ],
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Iconsax.edit, size: 20),
+                                  onPressed: () => _editEducation(edu, index),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Iconsax.trash,
+                                      size: 20, color: Colors.red),
+                                  onPressed: () =>
+                                      provider.removeEducation(index),
                                 ),
                               ],
-                            ],
+                            ),
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Iconsax.edit, size: 20),
-                                onPressed: () => _editEducation(edu, index),
-                              ),
-                              IconButton(
-                                icon: const Icon(Iconsax.trash,
-                                    size: 20, color: Colors.red),
-                                onPressed: () =>
-                                    provider.removeEducation(index),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: AppSizes.xl),
+                  ],
+                  const SizedBox(height: AppSizes.xl),
+                  const Divider(),
+                  const SizedBox(height: AppSizes.xl),
+                  _buildInlineForm(context, provider),
+                  const SizedBox(height: 80),
                 ],
-                const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 24),
-                _buildInlineForm(context, provider),
-                const SizedBox(height: 80),
-              ],
+              ),
             ),
           );
         },

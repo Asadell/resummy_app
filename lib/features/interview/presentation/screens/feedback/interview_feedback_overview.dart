@@ -29,7 +29,7 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Iconsax.arrow_left_2),
+            icon: const Icon(Iconsax.arrow_left),
             onPressed: () => context.router.push(const InterviewPrepRoute()),
           ),
           title: Row(

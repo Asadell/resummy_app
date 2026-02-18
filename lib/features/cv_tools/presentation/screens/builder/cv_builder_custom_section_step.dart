@@ -8,6 +8,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderCustomSectionStepScreen extends StatelessWidget {
@@ -126,57 +128,62 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                border: Border.all(color: theme.primaryColor),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                l10n.stepHeader(widget.currentStep, totalSteps),
-                style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+      child: AppSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                decoration: BoxDecoration(
+                  color: theme.cardColor,
+                  border: Border.all(color: theme.primaryColor),
+                  borderRadius: BorderRadius.circular(AppSizes.xl),
+                ),
+                child: Text(
+                  l10n.stepHeader(widget.currentStep, totalSteps),
+                  style: TextStyle(
+                    color: theme.primaryColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Center(
-            child: Text(
-              widget.section.title,
-              style: theme.textTheme.headlineLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            const SizedBox(height: AppSizes.sm),
+            Center(
+              child: Text(
+                widget.section.title,
+                style: theme.textTheme.headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Center(
-            child: Text(
-              _getTemplateDisplayName(context, widget.section.template),
-              style:
-                  theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+            const SizedBox(height: AppSizes.xs),
+            Center(
+              child: Text(
+                _getTemplateDisplayName(context, widget.section.template),
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: Colors.grey[600]),
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          if (widget.section.template == CustomSectionTemplate.experienceLike ||
-              widget.section.template == CustomSectionTemplate.educationLike)
-            _buildEntryListTemplate(context, provider, theme)
-          else if (widget.section.template == CustomSectionTemplate.skillsLike)
-            _buildSkillsLikeTemplate(context, provider, theme)
-          else if (widget.section.template == CustomSectionTemplate.bulletList)
-            _buildBulletListTemplate(context, provider, theme)
-          else
-            _buildParagraphTemplate(context, provider, theme),
-          const SizedBox(height: 80),
-        ],
+            const SizedBox(height: AppSizes.lg),
+            if (widget.section.template ==
+                    CustomSectionTemplate.experienceLike ||
+                widget.section.template == CustomSectionTemplate.educationLike)
+              _buildEntryListTemplate(context, provider, theme)
+            else if (widget.section.template ==
+                CustomSectionTemplate.skillsLike)
+              _buildSkillsLikeTemplate(context, provider, theme)
+            else if (widget.section.template ==
+                CustomSectionTemplate.bulletList)
+              _buildBulletListTemplate(context, provider, theme)
+            else
+              _buildParagraphTemplate(context, provider, theme),
+            const SizedBox(height: 80),
+          ],
+        ),
       ),
     );
   }
@@ -195,12 +202,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         if (section.entries.isEmpty)
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: AppSizes.xxl),
               child: Column(
                 children: [
                   Icon(Iconsax.document_text,
                       size: 56, color: Colors.grey[300]),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSizes.md),
                   Text(
                     l10n.noItems,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
@@ -221,9 +228,9 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   sectionId: section.id, entryIndex: index),
             );
           }),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSizes.md),
         const Divider(),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSizes.md),
         _buildInlineEntryForm(context, provider, section),
       ],
     );
@@ -244,16 +251,16 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         if (categories.isEmpty)
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xl),
               child: Column(
                 children: [
                   Icon(Iconsax.code, size: 56, color: Colors.grey[300]),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSizes.sm),
                   Text(
                     l10n.noCategories,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSizes.xs),
                   Text(
                     l10n.addCategoryPrompt,
                     style: TextStyle(color: Colors.grey[500], fontSize: 12),
@@ -295,10 +302,10 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                               backgroundColor: Colors.transparent,
                               builder: (ctx) => Container(
                                 padding: const EdgeInsets.only(
-                                  bottom: 32,
-                                  top: 8,
-                                  left: 24,
-                                  right: 24,
+                                  bottom: AppSizes.xl,
+                                  top: AppSizes.sm,
+                                  left: AppSizes.lg,
+                                  right: AppSizes.lg,
                                 ),
                                 decoration: BoxDecoration(
                                   color:
@@ -522,10 +529,10 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSizes.md),
         border: Border.all(color: Theme.of(context).dividerColor),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -548,7 +555,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSizes.md),
           TextFormField(
             controller: _categoryNameCtrl,
             decoration: InputDecoration(
@@ -562,7 +569,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             validator: (v) =>
                 v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSizes.md),
           TextFormField(
             controller: _categorySkillsCtrl,
             decoration: InputDecoration(
@@ -576,7 +583,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             validator: (v) =>
                 v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSizes.lg),
           ElevatedButton(
             onPressed: () => _saveSkillForm(provider, section),
             style: ElevatedButton.styleFrom(

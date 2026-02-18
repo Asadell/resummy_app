@@ -8,6 +8,8 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvAnalyzerUploadScreen extends StatefulWidget {
@@ -98,150 +100,153 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
   Widget _buildInputState(CvAnalyzerProvider provider) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.uploadYourCv,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+      child: AppSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.uploadYourCv,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: AppSizes.sm),
+            Text(
+              l10n.cvAnalyzerSetupDesc,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+            ),
+            const SizedBox(height: AppSizes.xl),
+            _buildUploadCard(provider),
+            const SizedBox(height: AppSizes.md),
+            TextField(
+              controller: _jobPositionController,
+              decoration: InputDecoration(
+                labelText: l10n.appliedPositionLabel,
+                hintText: l10n.targetRoleHint,
+                prefixIcon: const Icon(Iconsax.briefcase),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.sm),
                 ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.cvAnalyzerSetupDesc,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-          ),
-          const SizedBox(height: 24),
-          _buildUploadCard(provider),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _jobPositionController,
-            decoration: InputDecoration(
-              labelText: l10n.appliedPositionLabel,
-              hintText: l10n.targetRoleHint,
-              prefixIcon: const Icon(Iconsax.briefcase),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
               ),
+              onChanged: provider.setJobPosition,
             ),
-            onChanged: provider.setJobPosition,
-          ),
-          const SizedBox(height: 16),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Iconsax.document_text_1),
-                  title: Text('${l10n.jobDescription} ${l10n.optionalField}'),
-                  subtitle: Text(l10n.jobDescSubtitle),
-                  trailing: Icon(
-                    _isJobDescExpanded
-                        ? Iconsax.arrow_up_2
-                        : Iconsax.arrow_down_1,
-                  ),
-                  onTap: () {
-                    setState(() => _isJobDescExpanded = !_isJobDescExpanded);
-                  },
-                ),
-                if (_isJobDescExpanded)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: TextField(
-                      controller: _jobDescController,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        hintText: l10n.jobDescPasteHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onChanged: provider.setJobDescription,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+            const SizedBox(height: AppSizes.md),
+            Card(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      const Icon(Iconsax.language_square, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.languageLabel,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  SegmentedButton<String>(
-                    segments: [
-                      ButtonSegment(
-                        value: 'id',
-                        label: Text(l10n.indonesian),
-                        icon: const Icon(Icons.flag, size: 16),
-                      ),
-                      ButtonSegment(
-                        value: 'en',
-                        label: Text(l10n.english),
-                        icon: const Icon(Icons.flag, size: 16),
-                      ),
-                    ],
-                    selected: {_selectedLanguage},
-                    onSelectionChanged: (Set<String> newSelection) {
-                      setState(() => _selectedLanguage = newSelection.first);
+                  ListTile(
+                    leading: const Icon(Iconsax.document_text_1),
+                    title: Text('${l10n.jobDescription} ${l10n.optionalField}'),
+                    subtitle: Text(l10n.jobDescSubtitle),
+                    trailing: Icon(
+                      _isJobDescExpanded
+                          ? Iconsax.arrow_up_2
+                          : Iconsax.arrow_down_1,
+                    ),
+                    onTap: () {
+                      setState(() => _isJobDescExpanded = !_isJobDescExpanded);
                     },
                   ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-          if (provider.errorMessage != null)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.red.shade200),
-              ),
-              child: Row(
-                children: [
-                  Icon(Iconsax.warning_2, color: Colors.red.shade700, size: 20),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      provider.errorMessage!,
-                      style: TextStyle(color: Colors.red.shade700),
+                  if (_isJobDescExpanded)
+                    Padding(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      child: TextField(
+                        controller: _jobDescController,
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: l10n.jobDescPasteHint,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
+                          ),
+                        ),
+                        onChanged: provider.setJobDescription,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
-          if (provider.errorMessage != null) const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: provider.hasFile && provider.jobPosition.isNotEmpty
-                ? () => provider.analyze(_selectedLanguage)
-                : null,
-            icon: const Icon(Iconsax.scan_barcode),
-            label: Text(l10n.startAnalysis),
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: AppSizes.md),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSizes.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Iconsax.language_square, size: 20),
+                        const SizedBox(width: AppSizes.sm),
+                        Text(
+                          l10n.languageLabel,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                    SegmentedButton<String>(
+                      segments: [
+                        ButtonSegment(
+                          value: 'id',
+                          label: Text(l10n.indonesian),
+                          icon: const Icon(Icons.flag, size: 16),
+                        ),
+                        ButtonSegment(
+                          value: 'en',
+                          label: Text(l10n.english),
+                          icon: const Icon(Icons.flag, size: 16),
+                        ),
+                      ],
+                      selected: {_selectedLanguage},
+                      onSelectionChanged: (Set<String> newSelection) {
+                        setState(() => _selectedLanguage = newSelection.first);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: AppSizes.xl),
+            if (provider.errorMessage != null)
+              Container(
+                padding: const EdgeInsets.all(AppSizes.sm),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(AppSizes.xs),
+                  border: Border.all(color: Colors.red.shade200),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Iconsax.warning_2,
+                        color: Colors.red.shade700, size: 20),
+                    const SizedBox(width: AppSizes.sm),
+                    Expanded(
+                      child: Text(
+                        provider.errorMessage!,
+                        style: TextStyle(color: Colors.red.shade700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (provider.errorMessage != null)
+              const SizedBox(height: AppSizes.md),
+            FilledButton.icon(
+              onPressed: provider.hasFile && provider.jobPosition.isNotEmpty
+                  ? () => provider.analyze(_selectedLanguage)
+                  : null,
+              icon: const Icon(Iconsax.scan_barcode),
+              label: Text(l10n.startAnalysis),
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.sm),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -366,67 +371,68 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
   Widget _buildReportTab(CvAnalysisResult result) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildScoreCircle(result),
-          const SizedBox(height: 24),
-          _buildMetricsSection(result.metrics),
-          const SizedBox(height: 24),
-          if (result.summaryFeedback.isNotEmpty) ...[
-            _buildSectionCard(
-              title: l10n.summary,
-              icon: Iconsax.message_text,
-              child: Text(result.summaryFeedback),
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (result.highlights.isNotEmpty) ...[
-            _buildSectionCard(
-              title: l10n.strengths,
-              icon: Iconsax.like_1,
-              color: Colors.green,
-              child: Column(
-                children: result.highlights
-                    .map((h) => _buildBulletPoint(h, Colors.green))
-                    .toList(),
+      child: AppSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildScoreCircle(result),
+            const SizedBox(height: AppSizes.xl),
+            _buildMetricsSection(result.metrics),
+            const SizedBox(height: AppSizes.xl),
+            if (result.summaryFeedback.isNotEmpty) ...[
+              _buildSectionCard(
+                title: l10n.summary,
+                icon: Iconsax.message_text,
+                child: Text(result.summaryFeedback),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (result.improvements.isNotEmpty) ...[
-            _buildSectionCard(
-              title: l10n.improvements,
-              icon: Iconsax.warning_2,
-              color: Colors.orange,
-              child: Column(
-                children: result.improvements
-                    .map((i) => _buildBulletPoint(i, Colors.orange))
-                    .toList(),
+              const SizedBox(height: AppSizes.md),
+            ],
+            if (result.highlights.isNotEmpty) ...[
+              _buildSectionCard(
+                title: l10n.strengths,
+                icon: Iconsax.like_1,
+                color: Colors.green,
+                child: Column(
+                  children: result.highlights
+                      .map((h) => _buildBulletPoint(h, Colors.green))
+                      .toList(),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (result.missingKeywords.isNotEmpty) ...[
-            _buildSectionCard(
-              title: l10n.missingKeywords,
-              icon: Iconsax.search_normal,
-              color: Colors.red,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: result.missingKeywords
-                    .map((kw) => Chip(
-                          label: Text(kw),
-                          backgroundColor: Colors.red.shade50,
-                          side: BorderSide(color: Colors.red.shade200),
-                        ))
-                    .toList(),
+              const SizedBox(height: AppSizes.md),
+            ],
+            if (result.improvements.isNotEmpty) ...[
+              _buildSectionCard(
+                title: l10n.improvements,
+                icon: Iconsax.warning_2,
+                color: Colors.orange,
+                child: Column(
+                  children: result.improvements
+                      .map((i) => _buildBulletPoint(i, Colors.orange))
+                      .toList(),
+                ),
               ),
-            ),
+              const SizedBox(height: AppSizes.md),
+            ],
+            if (result.missingKeywords.isNotEmpty) ...[
+              _buildSectionCard(
+                title: l10n.missingKeywords,
+                icon: Iconsax.search_normal,
+                color: Colors.red,
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: result.missingKeywords
+                      .map((kw) => Chip(
+                            label: Text(kw),
+                            backgroundColor: Colors.red.shade50,
+                            side: BorderSide(color: Colors.red.shade200),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

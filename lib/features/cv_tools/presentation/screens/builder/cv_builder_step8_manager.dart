@@ -8,6 +8,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderStep8Screen extends StatefulWidget {
@@ -97,80 +99,82 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                border: Border.all(color: theme.primaryColor),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                l10n.stepHeader(totalSteps, totalSteps),
-                style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+      child: AppSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                decoration: BoxDecoration(
+                  color: theme.cardColor,
+                  border: Border.all(color: theme.primaryColor),
+                  borderRadius: BorderRadius.circular(AppSizes.xl),
+                ),
+                child: Text(
+                  l10n.stepHeader(totalSteps, totalSteps),
+                  style: TextStyle(
+                    color: theme.primaryColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Center(
-            child: Text(
-              l10n.sectionManagerTitle,
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+            const SizedBox(height: AppSizes.sm),
+            Center(
+              child: Text(
+                l10n.sectionManagerTitle,
+                style: theme.textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Center(
-            child: Text(
-              l10n.sectionManagerDesc,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color:
-                    theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+            const SizedBox(height: AppSizes.xs),
+            Center(
+              child: Text(
+                l10n.sectionManagerDesc,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color:
+                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 24),
-          ReorderableListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: cv.sections.length,
-            proxyDecorator:
-                (Widget child, int index, Animation<double> animation) {
-              return child;
-            },
-            onReorder: (oldIndex, newIndex) {
-              provider.reorderSections(oldIndex, newIndex);
-            },
-            itemBuilder: (context, index) {
-              final section = cv.sections[index];
+            const SizedBox(height: AppSizes.lg),
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: cv.sections.length,
+              proxyDecorator:
+                  (Widget child, int index, Animation<double> animation) {
+                return child;
+              },
+              onReorder: (oldIndex, newIndex) {
+                provider.reorderSections(oldIndex, newIndex);
+              },
+              itemBuilder: (context, index) {
+                final section = cv.sections[index];
 
-              return _buildSectionCard(section, provider, index, context);
-            },
-          ),
-          const SizedBox(height: 24),
-          OutlinedButton.icon(
-            onPressed: () => _showAddCustomSectionDialog(provider),
-            icon: const Icon(Iconsax.add),
-            label: Text(l10n.addCustomSection),
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                return _buildSectionCard(section, provider, index, context);
+              },
+            ),
+            const SizedBox(height: AppSizes.lg),
+            OutlinedButton.icon(
+              onPressed: () => _showAddCustomSectionDialog(provider),
+              icon: const Icon(Iconsax.add),
+              label: Text(l10n.addCustomSection),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.sm),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 80),
-        ],
+            const SizedBox(height: 80),
+          ],
+        ),
       ),
     );
   }
@@ -185,20 +189,20 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
 
     return Card(
       key: ValueKey(section.id),
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppSizes.sm),
       elevation: section.isVisible ? 2 : 0,
       color: section.isVisible
           ? theme.cardColor
           : (isDark ? Colors.grey.shade800 : Colors.grey.shade100),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(Iconsax.menu_1, color: theme.disabledColor, size: 20),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSizes.sm),
                 Icon(
                   _getSectionIcon(section.type),
                   color: section.isVisible
@@ -206,10 +210,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                       : theme.disabledColor,
                   size: 20,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSizes.sm),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.xs, vertical: 4),
                   decoration: BoxDecoration(
                     color: section.isVisible
                         ? theme.primaryColor.withValues(alpha: 0.1)
@@ -227,7 +231,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSizes.sm),
                 Expanded(
                   child: isEditing
                       ? TextField(
@@ -240,7 +244,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                           decoration: const InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(
-                              horizontal: 8,
+                              horizontal: AppSizes.xs,
                               vertical: 4,
                             ),
                             border: OutlineInputBorder(),
@@ -286,7 +290,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                           ),
                         ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSizes.sm),
                 Switch(
                   value: section.isVisible,
                   onChanged: (value) {
@@ -300,7 +304,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 section is EducationSection ||
                 section is OrganizationSection ||
                 section is CertificationsSection) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSizes.xs),
               Row(
                 children: [
                   const SizedBox(width: 44),
@@ -317,7 +321,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               ),
             ],
             if (section is CustomSection) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSizes.xs),
               Row(
                 children: [
                   const SizedBox(width: 44),

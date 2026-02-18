@@ -1,16 +1,18 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
-import 'package:flutter/foundation.dart';
-import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -63,165 +65,195 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  backgroundImage: authProvider
-                                              .currentUser?.photoUrl !=
-                                          null
-                                      ? NetworkImage(
-                                          authProvider.currentUser!.photoUrl!)
-                                      : null,
-                                  child:
-                                      authProvider.currentUser?.photoUrl == null
-                                          ? Icon(
-                                              Iconsax.user,
-                                              size: 48,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            )
-                                          : null,
+                        AppSection(
+                          child: Column(
+                            spacing: AppSizes.md,
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                backgroundImage: authProvider
+                                            .currentUser?.photoUrl !=
+                                        null
+                                    ? NetworkImage(
+                                        authProvider.currentUser!.photoUrl!)
+                                    : null,
+                                child:
+                                    authProvider.currentUser?.photoUrl == null
+                                        ? Icon(
+                                            Iconsax.user,
+                                            size: 48,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          )
+                                        : null,
+                              ),
+                              Column(
+                                spacing: AppSizes.xs,
+                                children: [
+                                  Text(
+                                    profile?.fullName ??
+                                        authProvider.currentUser?.displayName ??
+                                        '',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    profile?.email ??
+                                        authProvider.currentUser?.email ??
+                                        '',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.sm),
+                        AppSection(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: AppSizes.md,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    l10n.profileInfo,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: const Icon(Iconsax.edit),
+                                    onPressed: () =>
+                                        _showEditBottomSheet(context, profile),
+                                  ),
+                                ],
+                              ),
+                              _buildProfileRow(
+                                  context,
+                                  l10n.status,
+                                  _getStatusLabel(
+                                      context, profile?.workStatus)),
+                              _buildProfileRow(context, l10n.targetRole,
+                                  profile?.targetRole ?? '-'),
+                              _buildProfileRow(context, l10n.goal,
+                                  profile?.careerGoal ?? '-'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.sm),
+                        AppSection(
+                          padding: EdgeInsets.zero,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSizes.lg,
+                                  vertical: AppSizes.md,
                                 ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  profile?.fullName ??
-                                      authProvider.currentUser?.displayName ??
-                                      '',
+                                child: Text(
+                                  l10n.settings,
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
-                                Text(
-                                  profile?.email ??
-                                      authProvider.currentUser?.email ??
-                                      '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
+                              ),
+                              SwitchListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: AppSizes.lg,
+                                  vertical: 4,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      l10n.profileInfo,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      icon: const Icon(Iconsax.edit),
-                                      onPressed: () => _showEditBottomSheet(
-                                          context, profile),
-                                    ),
-                                  ],
+                                title: Text(l10n.darkMode),
+                                subtitle: Text(themeProvider.isDarkMode
+                                    ? l10n.darkThemeEnabled
+                                    : l10n.lightThemeEnabled),
+                                secondary: Icon(
+                                  themeProvider.isDarkMode
+                                      ? Iconsax.moon
+                                      : Iconsax.sun_1,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                                const Divider(),
-                                _buildProfileRow(
-                                    context,
-                                    l10n.status,
-                                    _getStatusLabel(
-                                        context, profile?.workStatus)),
-                                _buildProfileRow(context, l10n.targetRole,
-                                    profile?.targetRole ?? '-'),
-                                _buildProfileRow(context, l10n.goal,
-                                    profile?.careerGoal ?? '-'),
-                              ],
+                                value: themeProvider.isDarkMode,
+                                onChanged: (_) => themeProvider.toggleTheme(),
+                              ),
+                              Divider(
+                                height: 1,
+                                indent: AppSizes.lg,
+                                endIndent: AppSizes.lg,
+                                color: Theme.of(context).dividerTheme.color,
+                              ),
+                              SwitchListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: AppSizes.lg,
+                                  vertical: 4,
+                                ),
+                                title: Text(l10n.language),
+                                subtitle: Text(localeProvider.isIndonesian
+                                    ? l10n.bahasaIndonesia
+                                    : l10n.english),
+                                secondary: Icon(
+                                  Iconsax.global,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                value: localeProvider.isIndonesian,
+                                onChanged: (_) => localeProvider.toggleLocale(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.sm),
+                        Padding(
+                          padding: const EdgeInsets.all(AppSizes.lg),
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.error,
+                              padding: const EdgeInsets.all(AppSizes.md),
                             ),
+                            icon: const Icon(Iconsax.logout),
+                            label: Text(l10n.logout),
+                            onPressed: () => _showLogoutDialog(context),
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          l10n.settings,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 12),
-                        Card(
-                          child: SwitchListTile(
-                            title: Text(l10n.darkMode),
-                            subtitle: Text(themeProvider.isDarkMode
-                                ? l10n.darkThemeEnabled
-                                : l10n.lightThemeEnabled),
-                            secondary: Icon(
-                              themeProvider.isDarkMode
-                                  ? Iconsax.moon
-                                  : Iconsax.sun_1,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            value: themeProvider.isDarkMode,
-                            onChanged: (_) => themeProvider.toggleTheme(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Card(
-                          child: SwitchListTile(
-                            title: Text(l10n.language),
-                            subtitle: Text(localeProvider.isIndonesian
-                                ? l10n.bahasaIndonesia
-                                : l10n.english),
-                            secondary: Icon(
-                              Iconsax.global,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            value: localeProvider.isIndonesian,
-                            onChanged: (_) => localeProvider.toggleLocale(),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.error,
-                            padding: const EdgeInsets.all(16),
-                          ),
-                          icon: const Icon(Iconsax.logout),
-                          label: Text(l10n.logout),
-                          onPressed: () => _showLogoutDialog(context),
                         ),
                         if (kDebugMode) ...[
                           const SizedBox(height: 50),
-                          OutlinedButton(
-                            onPressed: () {
-                              context
-                                  .read<InterviewProvider>()
-                                  .startInterviewWithDummyData();
-                              context.router
-                                  .push(const InterviewSessionClosingRoute());
-                            },
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.all(16),
-                              side: BorderSide(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withValues(alpha: 0.5)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppSizes.lg),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                context
+                                    .read<InterviewProvider>()
+                                    .startInterviewWithDummyData();
+                                context.router
+                                    .push(const InterviewSessionClosingRoute());
+                              },
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.all(AppSizes.md),
+                                side: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.5)),
+                              ),
+                              child: Text(l10n.debugSkipQuestions),
                             ),
-                            child: Text(l10n.debugSkipQuestions),
                           ),
+                          const SizedBox(height: 50),
                         ],
                       ],
                     ),
@@ -232,9 +264,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+
+
   Widget _buildProfileRow(BuildContext context, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

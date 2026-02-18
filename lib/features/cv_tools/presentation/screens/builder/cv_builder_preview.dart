@@ -9,6 +9,7 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 @RoutePage()
@@ -110,7 +111,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSizes.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -122,17 +123,17 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.lg),
             Text(
               'Export CV',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.lg),
             ListTile(
               leading: Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSizes.md),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
@@ -152,10 +153,10 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 _downloadPdf(cv);
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.sm),
             ListTile(
               leading: Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSizes.md),
                 decoration: BoxDecoration(
                   color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -172,7 +173,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 _sharePdf(cv);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
           ],
         ),
       ),

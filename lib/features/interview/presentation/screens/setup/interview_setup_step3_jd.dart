@@ -28,7 +28,7 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
       appBar: AppBar(
         title: Text(l10n.jobDescription),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () =>
               context.router.push(const InterviewSetupStep2Route()),
         ),

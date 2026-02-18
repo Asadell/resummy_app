@@ -72,7 +72,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           ],
         ),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const InterviewPrepRoute()),
         ),
       ),

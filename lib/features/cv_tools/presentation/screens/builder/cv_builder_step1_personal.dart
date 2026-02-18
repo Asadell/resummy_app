@@ -9,6 +9,8 @@ import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_st
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderStep1Screen extends StatefulWidget {
@@ -114,186 +116,187 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
         }
       },
       editContent: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  border: Border.all(color: Theme.of(context).primaryColor),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Consumer<CVBuilderProvider>(
-                  builder: (context, provider, _) {
-                    final totalSteps =
-                        DynamicCvSteps.getTotalSteps(provider.currentCV);
-                    return Text(
-                      l10n.stepHeader(1, totalSteps),
-                      style: const TextStyle(
-                        color: Color(0xFF0EA5E9),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Center(
-              child: Text(
-                l10n.personalInfoHeader,
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Center(
-              child: Text(
-                l10n.personalInfoDesc,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.color
-                          ?.withValues(alpha: 0.7),
-                    ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Column(
-                    children: [
-                      _buildTextField(
-                        controller: _nameController,
-                        label: l10n.fullName,
-                        isRequired: true,
-                        hint: l10n.namePlaceholder,
-                        context: context,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTextField(
-                        controller: _emailController,
-                        label: l10n.emailLabel,
-                        isRequired: true,
-                        hint: l10n.emailPlaceholder,
-                        keyboardType: TextInputType.emailAddress,
-                        context: context,
-                      ),
-                      const SizedBox(height: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              text: l10n.phoneNumber,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          IntlPhoneField(
-                            controller: _phoneController,
-                            decoration: InputDecoration(
-                              labelText: l10n.phoneNumber,
-                              border: const OutlineInputBorder(
-                                borderSide: BorderSide(),
-                              ),
-                              counterText: '',
-                            ),
-                            initialCountryCode: 'ID',
-                            disableLengthCheck: true,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            onChanged: (phone) {
-                              _fullPhoneNumber = phone.completeNumber;
-
-                              final provider =
-                                  context.read<CVBuilderProvider>();
-                              provider.updatePersonalInfo(
-                                phone: _fullPhoneNumber!,
-                                name: _nameController.text.trim(),
-                                email: _emailController.text.trim(),
-                                linkedin: _linkedinController.text.trim(),
-                                portfolio: _portfolioController.text.trim(),
-                                location: _locationController.text.trim(),
-                              );
-                            },
-                            onCountryChanged: (country) {},
-                            validator: (value) {
-                              if (value == null || value.number.isEmpty) {
-                                return l10n.requiredField;
-                              }
-
-                              if (value.number.startsWith('0')) {
-                                return l10n.phoneNoLeadingZero;
-                              }
-
-                              if (value.number.length < 8) {
-                                return l10n.phoneTooShort;
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTextField(
-                        controller: _linkedinController,
-                        label: l10n.linkedin,
-                        isOptional: true,
-                        hint: l10n.linkedinPlaceholder,
-                        prefixIcon: Iconsax.link_1,
-                        context: context,
-                        maxLength: 100,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTextField(
-                        controller: _portfolioController,
-                        label: l10n.portfolio,
-                        isOptional: true,
-                        hint: l10n.portfolioPlaceholder,
-                        prefixIcon: Iconsax.global,
-                        context: context,
-                        maxLength: 100,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTextField(
-                        controller: _locationController,
-                        label: l10n.location,
-                        isRequired: true,
-                        hint: l10n.locationPlaceholder,
-                        prefixIcon: Iconsax.location,
-                        context: context,
-                        maxLength: 50,
-                      ),
-                    ],
+        child: AppSection(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    border: Border.all(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Consumer<CVBuilderProvider>(
+                    builder: (context, provider, _) {
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      return Text(
+                        l10n.stepHeader(1, totalSteps),
+                        style: const TextStyle(
+                          color: Color(0xFF0EA5E9),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 80),
-          ],
+              const SizedBox(height: AppSizes.md),
+              Center(
+                child: Text(
+                  l10n.personalInfoHeader,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.xs),
+              Center(
+                child: Text(
+                  l10n.personalInfoDesc,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.color
+                            ?.withValues(alpha: 0.7),
+                      ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.xl),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSizes.lg),
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _nameController,
+                          label: l10n.fullName,
+                          isRequired: true,
+                          hint: l10n.namePlaceholder,
+                          context: context,
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        _buildTextField(
+                          controller: _emailController,
+                          label: l10n.emailLabel,
+                          isRequired: true,
+                          hint: l10n.emailPlaceholder,
+                          keyboardType: TextInputType.emailAddress,
+                          context: context,
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: l10n.phoneNumber,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(height: AppSizes.sm),
+                            IntlPhoneField(
+                              controller: _phoneController,
+                              decoration: InputDecoration(
+                                labelText: l10n.phoneNumber,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(),
+                                ),
+                                counterText: '',
+                              ),
+                              initialCountryCode: 'ID',
+                              disableLengthCheck: true,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              onChanged: (phone) {
+                                _fullPhoneNumber = phone.completeNumber;
+
+                                final provider =
+                                    context.read<CVBuilderProvider>();
+                                provider.updatePersonalInfo(
+                                  phone: _fullPhoneNumber!,
+                                  name: _nameController.text.trim(),
+                                  email: _emailController.text.trim(),
+                                  linkedin: _linkedinController.text.trim(),
+                                  portfolio: _portfolioController.text.trim(),
+                                  location: _locationController.text.trim(),
+                                );
+                              },
+                              onCountryChanged: (country) {},
+                              validator: (value) {
+                                if (value == null || value.number.isEmpty) {
+                                  return l10n.requiredField;
+                                }
+
+                                if (value.number.startsWith('0')) {
+                                  return l10n.phoneNoLeadingZero;
+                                }
+
+                                if (value.number.length < 8) {
+                                  return l10n.phoneTooShort;
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        _buildTextField(
+                          controller: _linkedinController,
+                          label: l10n.linkedin,
+                          isOptional: true,
+                          hint: l10n.linkedinPlaceholder,
+                          prefixIcon: Iconsax.link_1,
+                          context: context,
+                          maxLength: 100,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        _buildTextField(
+                          controller: _portfolioController,
+                          label: l10n.portfolio,
+                          isOptional: true,
+                          hint: l10n.portfolioPlaceholder,
+                          prefixIcon: Iconsax.global,
+                          context: context,
+                          maxLength: 100,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        _buildTextField(
+                          controller: _locationController,
+                          label: l10n.location,
+                          isRequired: true,
+                          hint: l10n.locationPlaceholder,
+                          prefixIcon: Iconsax.location,
+                          context: context,
+                          maxLength: 50,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
+            ],
+          ),
         ),
       ),
     );

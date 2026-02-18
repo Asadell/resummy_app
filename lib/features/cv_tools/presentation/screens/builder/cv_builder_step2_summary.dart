@@ -5,6 +5,8 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvBuilderStep2Screen extends StatefulWidget {
@@ -54,101 +56,103 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
       },
       onNext: _saveAndNext,
       editContent: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Consumer<CVBuilderProvider>(
-                builder: (context, provider, _) {
-                  final currentStep =
-                      DynamicCvSteps.getStepForSection(context, 'summary');
-                  final totalSteps =
-                      DynamicCvSteps.getTotalSteps(provider.currentCV);
-                  return Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      border: Border.all(color: theme.primaryColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l10n.stepHeader(currentStep, totalSteps),
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+        child: AppSection(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Consumer<CVBuilderProvider>(
+                  builder: (context, provider, _) {
+                    final currentStep =
+                        DynamicCvSteps.getStepForSection(context, 'summary');
+                    final totalSteps =
+                        DynamicCvSteps.getTotalSteps(provider.currentCV);
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        border: Border.all(color: theme.primaryColor),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ),
-                  );
-                },
+                      child: Text(
+                        l10n.stepHeader(currentStep, totalSteps),
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Center(
-              child: Text(
+              const SizedBox(height: AppSizes.md),
+              Center(
+                child: Text(
+                  l10n.summaryHeader,
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSizes.xs),
+              Center(
+                child: Text(
+                  l10n.summaryDesc,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.textTheme.bodyMedium?.color
+                        ?.withValues(alpha: 0.7),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: AppSizes.xl),
+              Text(
                 l10n.summaryHeader,
-                style: theme.textTheme.headlineLarge?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Center(
-              child: Text(
-                l10n.summaryDesc,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color:
-                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+              const SizedBox(height: AppSizes.sm),
+              TextField(
+                controller: _summaryController,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  hintText: l10n.summaryHint,
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                    color: theme.hintColor,
+                    height: 1.5,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  counterText: '',
+                  filled: true,
+                  fillColor: theme.canvasColor,
                 ),
-                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14, height: 1.6),
+                onChanged: (value) {
+                  setState(() {});
+                  context.read<CVBuilderProvider>().updateSummary(value.trim());
+                },
+                maxLength: 2000,
               ),
-            ),
-            Text(
-              l10n.summaryHeader,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _summaryController,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: l10n.summaryHint,
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  color: theme.hintColor,
-                  height: 1.5,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                counterText: '',
-                filled: true,
-                fillColor: theme.canvasColor,
-              ),
-              style: const TextStyle(fontSize: 14, height: 1.6),
-              onChanged: (value) {
-                setState(() {});
-                context.read<CVBuilderProvider>().updateSummary(value.trim());
-              },
-              maxLength: 2000,
-            ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '${_summaryController.text.length} ${l10n.characters}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: theme.disabledColor,
+              const SizedBox(height: AppSizes.md),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '${_summaryController.text.length} ${l10n.characters}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.disabledColor,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 80),
-          ],
+              const SizedBox(height: 80),
+            ],
+          ),
         ),
       ),
     );

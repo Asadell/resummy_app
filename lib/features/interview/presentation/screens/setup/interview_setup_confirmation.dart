@@ -31,7 +31,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.confirmation),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1),
+          icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.back(),
         ),
         actions: [

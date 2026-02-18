@@ -10,6 +10,8 @@ import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_ser
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
 class CvAtsConverterScreen extends StatefulWidget {
@@ -57,238 +59,260 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   Widget _buildUploadStep(ThemeData theme, AppLocalizations l10n) {
     return SingleChildScrollView(
       key: const ValueKey('upload'),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  theme.primaryColor.withValues(alpha: 0.15),
-                  theme.primaryColor.withValues(alpha: 0.05),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              border:
-                  Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Iconsax.magic_star,
-                      size: 40, color: theme.primaryColor),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.convertToCvAts,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.aiConvertingDesc,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color
-                        ?.withValues(alpha: 0.7),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            l10n.howItWorks,
-            style: theme.textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          ...[
-            ('1', Iconsax.document_upload, l10n.uploadCvStep, l10n.photoOrPdf),
-            (
-              '2',
-              Iconsax.magic_star,
-              l10n.geminiAnalysis,
-              l10n.aiExtractedInfo
-            ),
-            ('3', Iconsax.document_text, l10n.autoPopulate, l10n.dataIntoForms),
-            ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
-          ].map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: theme.primaryColor.withValues(alpha: 0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(item.$2, size: 18, color: theme.primaryColor),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item.$3,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14)),
-                          Text(item.$4,
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.grey[600])),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-          const SizedBox(height: 32),
-          GestureDetector(
-            onTap: _pickFile,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+      child: AppSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: _selectedFile != null
-                    ? theme.primaryColor.withValues(alpha: 0.05)
-                    : theme.cardColor,
+                gradient: LinearGradient(
+                  colors: [
+                    theme.primaryColor.withValues(alpha: 0.15),
+                    theme.primaryColor.withValues(alpha: 0.05),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: _selectedFile != null
-                      ? theme.primaryColor
-                      : theme.dividerColor,
-                  width: _selectedFile != null ? 2 : 1.5,
-                  style: _selectedFile != null
-                      ? BorderStyle.solid
-                      : BorderStyle.solid,
-                ),
+                    color: theme.primaryColor.withValues(alpha: 0.2)),
               ),
-              child: _selectedFile == null
-                  ? Column(
-                      children: [
-                        Icon(Iconsax.document_upload,
-                            size: 48, color: Colors.grey[400]),
-                        const SizedBox(height: 12),
-                        Text(
-                          l10n.tapToSelectFile,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[600],
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          l10n.supportedFormats,
-                          style:
-                              TextStyle(fontSize: 12, color: Colors.grey[500]),
-                        ),
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: theme.primaryColor.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            _selectedFileName?.endsWith('.pdf') == true
-                                ? Iconsax.document_text
-                                : Iconsax.image,
-                            color: theme.primaryColor,
-                            size: 28,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _selectedFileName ?? l10n.fileSelected,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                l10n.tapToChangeFile,
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey[500]),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Icon(Icons.check_circle, color: theme.primaryColor),
-                      ],
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
                     ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.optionalTranslateCv,
-            style: theme.textTheme.titleSmall
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              _buildLangChip(l10n.originalLanguage, theme, value: 'Original'),
-              const SizedBox(width: 8),
-              _buildLangChip(l10n.english, theme, value: 'English'),
-              const SizedBox(width: 8),
-              _buildLangChip(l10n.indonesian, theme, value: 'Indonesian'),
-            ],
-          ),
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text(
-                _errorMessage!,
-                style: const TextStyle(color: Colors.red, fontSize: 13),
+                    child: Icon(Iconsax.magic_star,
+                        size: 40, color: theme.primaryColor),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.convertToCvAts,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.aiConvertingDesc,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.textTheme.bodyMedium?.color
+                          ?.withValues(alpha: 0.7),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _selectedFile == null ? null : _processFile,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: theme.primaryColor,
-                foregroundColor: Colors.white,
-                disabledBackgroundColor: Colors.grey[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: 32),
+            Text(
+              l10n.howItWorks,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            ...[
+              (
+                '1',
+                Iconsax.document_upload,
+                l10n.uploadCvStep,
+                l10n.photoOrPdf
+              ),
+              (
+                '2',
+                Iconsax.magic_star,
+                l10n.geminiAnalysis,
+                l10n.aiExtractedInfo
+              ),
+              (
+                '3',
+                Iconsax.document_text,
+                l10n.autoPopulate,
+                l10n.dataIntoForms
+              ),
+              ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
+            ].map((item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color:
+                              theme.primaryColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(item.$2,
+                            size: 18, color: theme.primaryColor),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item.$3,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14)),
+                            Text(item.$4,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[600])),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(height: 32),
+            GestureDetector(
+              onTap: _pickFile,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 40, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: _selectedFile != null
+                      ? theme.primaryColor.withValues(alpha: 0.05)
+                      : theme.cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: _selectedFile != null
+                        ? theme.primaryColor
+                        : theme.dividerColor,
+                    width: _selectedFile != null ? 2 : 1.5,
+                    style: _selectedFile != null
+                        ? BorderStyle.solid
+                        : BorderStyle.solid,
+                  ),
+                ),
+                child: _selectedFile == null
+                    ? Column(
+                        children: [
+                          Icon(Iconsax.document_upload,
+                              size: 48, color: Colors.grey[400]),
+                          const SizedBox(height: 12),
+                          Text(
+                            l10n.tapToSelectFile,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n.supportedFormats,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey[500]),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: theme.primaryColor
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              _selectedFileName?.endsWith('.pdf') == true
+                                  ? Iconsax.document_text
+                                  : Iconsax.image,
+                              color: theme.primaryColor,
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _selectedFileName ?? l10n.fileSelected,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.tapToChangeFile,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500]),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.check_circle,
+                              color: theme.primaryColor),
+                        ],
+                      ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.optionalTranslateCv,
+              style: theme.textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                _buildLangChip(l10n.originalLanguage, theme,
+                    value: 'Original'),
+                const SizedBox(width: 8),
+                _buildLangChip(l10n.english, theme, value: 'English'),
+                const SizedBox(width: 8),
+                _buildLangChip(l10n.indonesian, theme,
+                    value: 'Indonesian'),
+              ],
+            ),
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text(
+                  _errorMessage!,
+                  style:
+                      const TextStyle(color: Colors.red, fontSize: 13),
                 ),
               ),
-              child: Text(
-                l10n.startConversion,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed:
+                    _selectedFile == null ? null : _processFile,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: theme.primaryColor,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Colors.grey[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  l10n.startConversion,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
