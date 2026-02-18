@@ -50,8 +50,6 @@ class _InterviewSessionClosingScreenState
   @override
   void dispose() {
     if (!_analysisComplete) {
-      debugPrint(
-          'InterviewSessionClosingScreen disposed before completion. Cancelling analysis.');
     }
     super.dispose();
   }

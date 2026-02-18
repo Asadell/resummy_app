@@ -50,7 +50,6 @@ class InterviewRemoteDataSource {
 
       final responseText = (response as GenerateContentResponse).text;
       if (responseText == null) {
-        debugPrint('⚠️ Empty response, using fallback questions');
         return _getFallbackQuestions();
       }
 
@@ -64,7 +63,6 @@ class InterviewRemoteDataSource {
         );
       }).toList();
     } catch (e) {
-      debugPrint('❌ Error generating questions: $e');
       return _getFallbackQuestions();
     }
   }
@@ -121,7 +119,6 @@ Return JSON:
       final data = jsonDecode(responseText);
       return STARAnalysis.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error analyzing STAR structure: $e');
       rethrow;
     }
   }
@@ -197,7 +194,6 @@ Return JSON:
       final data = jsonDecode(responseText);
       return InterviewFeedback.fromJson(data);
     } catch (e) {
-      debugPrint('❌ Error generating feedback: $e');
       rethrow;
     }
   }
@@ -280,7 +276,6 @@ Return JSON:
         suggestions: List<String>.from(json['suggestions'] ?? []),
       );
     } catch (e) {
-      debugPrint('❌ Error analyzing content quality: $e');
       return const ContentQualityAnalysis(
         score: 0,
         relevanceScore: 0,
@@ -369,7 +364,6 @@ Return JSON:
         suggestions: List<String>.from(json['suggestions'] ?? []),
       );
     } catch (e) {
-      debugPrint('❌ Error analyzing fluency: $e');
       return const FluencyAnalysis(
         score: 0,
         wordCount: 0,
@@ -446,7 +440,6 @@ Return JSON:
         tips: List<String>.from(json['tips'] ?? []),
       );
     } catch (e) {
-      debugPrint('❌ Error analyzing confidence: $e');
       return const ConfidenceAnalysis(
         score: 0,
         toneAssessment: 'neutral',
@@ -522,7 +515,6 @@ Return JSON:
         wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
       );
     } catch (e) {
-      debugPrint('❌ Error generating improved speech: $e');
       return ImprovedSpeechData(
         originalText: transcript,
         improvedText: transcript,

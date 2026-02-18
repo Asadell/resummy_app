@@ -56,7 +56,6 @@ class HistoryProvider extends ChangeNotifier {
       _allActivities = await _repository.getActivities(_currentUserId!);
       _applyFilter();
     } catch (e) {
-      debugPrint('Error loading history: $e');
       _allActivities = [];
       _filteredActivities = [];
     } finally {

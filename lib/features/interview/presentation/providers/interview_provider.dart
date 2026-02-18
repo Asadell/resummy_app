@@ -110,7 +110,7 @@ class InterviewProvider extends ChangeNotifier {
       _history = await _repository.getInterviewHistory(_userId!);
       notifyListeners();
     } catch (e) {
-      debugPrint('Error loading history: $e');
+      // ignore
     }
   }
 
@@ -177,17 +177,13 @@ class InterviewProvider extends ChangeNotifier {
 
   Future<void> initRecorder() async {
     if (!_isRecorderInitialized) {
-      if (kDebugMode) print("Requesting microphone permission...");
       final status = await Permission.microphone.request();
-      if (kDebugMode) print("Microphone permission status: $status");
 
       if (status != PermissionStatus.granted) {
         throw Exception('Microphone permission not granted');
       }
-      if (kDebugMode) print("Opening recorder...");
       await _audioRecorder.openRecorder();
       _isRecorderInitialized = true;
-      if (kDebugMode) print("Recorder initialized");
     }
   }
 
@@ -201,10 +197,6 @@ class InterviewProvider extends ChangeNotifier {
     InterviewFocus focus = InterviewFocus.mixed,
     String locale = 'id-ID',
   }) async {
-    if (kDebugMode) {
-      print("Starting interview process...");
-      print("Role: $role");
-    }
     _cvText = cvText;
     _jdText = jdText;
     _role = role;
@@ -215,7 +207,6 @@ class InterviewProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      if (kDebugMode) print("Initializing recorder...");
       await initRecorder();
 
       final questions = await _repository.generateQuestions(
@@ -226,7 +217,6 @@ class InterviewProvider extends ChangeNotifier {
       );
 
       _questions = questions;
-      if (kDebugMode) print("Questions generated: ${_questions.length}");
 
       if (_questions.isEmpty) {
         throw Exception("Failed to generate questions (empty list)");
@@ -240,7 +230,6 @@ class InterviewProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      debugPrint("Error in startInterview: $e");
       _status = InterviewStatus.error;
       _errorMessage = e.toString();
       notifyListeners();
@@ -294,7 +283,6 @@ class InterviewProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint('Error generating TTS: $e');
     }
   }
 
@@ -324,7 +312,6 @@ class InterviewProvider extends ChangeNotifier {
       _currentTranscript = '';
       notifyListeners();
     } catch (e) {
-      debugPrint("Start recording error: $e");
       _errorMessage = "Could not start recorder: $e";
       notifyListeners();
     }
@@ -348,7 +335,6 @@ class InterviewProvider extends ChangeNotifier {
             File(_currentRecordingPath!), _currentQuestionIndex);
       }
     } catch (e) {
-      debugPrint("Stop recording error: $e");
       _errorMessage = "Could not stop recorder: $e";
       notifyListeners();
     }
@@ -364,7 +350,6 @@ class InterviewProvider extends ChangeNotifier {
       _currentAudioDuration = 0;
       notifyListeners();
     } catch (e) {
-      debugPrint("Cancel recording error: $e");
     }
   }
 
@@ -390,7 +375,7 @@ class InterviewProvider extends ChangeNotifier {
       if (_currentQuestionIndex == questionIndex) {
         _currentTranscript = "Error transcribing: $e";
       }
-      debugPrint("STT Error: $e");
+      // ignore transcription error details in logs
     } finally {
       _isTranscribing = false;
       notifyListeners();
@@ -479,7 +464,6 @@ class InterviewProvider extends ChangeNotifier {
         await loadHistory();
       }
     } catch (e) {
-      debugPrint('Failed to generate feedback: $e');
       _status = InterviewStatus.error;
       _errorMessage = 'Failed to generate feedback: $e';
     } finally {
@@ -530,7 +514,7 @@ class InterviewProvider extends ChangeNotifier {
           });
         }
       } catch (e) {
-        debugPrint('Error playing audio: $e');
+        // ignore
         if (!_isDisposed) {
           _isPlayingQuestion = false;
           notifyListeners();

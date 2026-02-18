@@ -19,7 +19,6 @@ class GeminiPoolManager {
       throw Exception(
           'No Gemini API keys configured. Please check your .env file.');
     }
-    debugPrint('✅ GeminiPoolManager initialized with 3 partitioned pools');
   }
 
   void _initialize() {
@@ -61,7 +60,6 @@ class GeminiPoolManager {
         );
       }
     }
-    debugPrint('📦 Pool $type initialized with ${_pools[type]!.length} keys');
   }
 
   GenerativeModel _getModel(GeminiPoolType type) {
@@ -131,7 +129,6 @@ class GeminiPoolManager {
       attempts++;
 
       try {
-        debugPrint('🚀 Requesting Gemini via $poolType pool (index $index, attempt $attempts/$maxAttempts)');
         
         return await task(model).timeout(
           const Duration(seconds: 120),
@@ -145,7 +142,6 @@ class GeminiPoolManager {
                         err.contains('limit');
 
         if (isQuota && attempts < maxAttempts) {
-          debugPrint('⚠️ Pool $poolType key $index quota exceeded. Failing over...');
           continue;
         }
         
@@ -156,7 +152,6 @@ class GeminiPoolManager {
         }
 
         if (attempts < maxAttempts) {
-          debugPrint('❌ Pool $poolType error with key $index: $e. trying next...');
           continue;
         }
 

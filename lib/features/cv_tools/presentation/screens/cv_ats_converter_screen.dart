@@ -514,8 +514,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     final l10n = AppLocalizations.of(context)!;
     if (_convertedCv == null) return;
 
-    debugPrint('CV name: "${_convertedCv?.header.name}"');
-    debugPrint('CV isValid: ${_convertedCv?.isValid}');
 
     final provider = context.read<CVBuilderProvider>();
 

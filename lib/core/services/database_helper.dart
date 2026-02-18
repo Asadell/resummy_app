@@ -23,7 +23,6 @@ class DatabaseHelper {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, _databaseName);
 
-    debugPrint('📂 Initializing SQLite database at: $path');
 
     return await openDatabase(
       path,
@@ -34,7 +33,6 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    debugPrint('🔨 Creating database tables...');
 
     await db.execute('''
       CREATE TABLE $tableCVs (
@@ -112,11 +110,9 @@ class DatabaseHelper {
     await db.execute(
         'CREATE INDEX idx_sync_queue_recordId ON $tableSyncQueue(recordId)');
 
-    debugPrint('✅ Database tables created successfully');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    debugPrint('⬆️ Upgrading database from v$oldVersion to v$newVersion');
   }
 
   Future<void> upsert(String table, Map<String, dynamic> data) async {
@@ -178,7 +174,6 @@ class DatabaseHelper {
       'createdAt': DateTime.now().millisecondsSinceEpoch,
       'retryCount': 0,
     });
-    debugPrint('📝 Added to sync queue: $operation on $tableName/$recordId');
   }
 
   Future<List<Map<String, dynamic>>> getPendingSyncOperations() async {
@@ -202,6 +197,5 @@ class DatabaseHelper {
     final db = await database;
     await db.close();
     _database = null;
-    debugPrint('🔒 Database connection closed');
   }
 }

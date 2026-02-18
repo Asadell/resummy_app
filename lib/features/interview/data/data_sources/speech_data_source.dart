@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
@@ -64,15 +63,11 @@ class SpeechDataSource {
         final wavBytes = _pcmToWav(pcmBytes, 24000, 1, 16);
         await wavFile.writeAsBytes(wavBytes);
 
-        debugPrint('✅ TTS generated: ${wavFile.path}');
         return wavFile;
       } else {
-        debugPrint(
-            '❌ TTS API Error: ${response.statusCode} - ${response.body}');
         return null;
       }
     } catch (e) {
-      debugPrint('❌ TTS Error: $e');
       return null;
     }
   }
@@ -82,7 +77,6 @@ class SpeechDataSource {
   }) async {
     try {
       if (!await audioFile.exists()) {
-        debugPrint('❌ STT Error: File not found at ${audioFile.path}');
         return '';
       }
 
@@ -128,17 +122,13 @@ class SpeechDataSource {
             responseData['candidates'][0]['content']['parts'] != null) {
           final text =
               responseData['candidates'][0]['content']['parts'][0]['text'];
-          debugPrint('✅ STT Result: $text');
           return text ?? '';
         }
         return '';
       } else {
-        debugPrint(
-            '❌ STT API Error: ${response.statusCode} - ${response.body}');
         return '';
       }
     } catch (e) {
-      debugPrint('❌ STT Error: $e');
       return '';
     }
   }

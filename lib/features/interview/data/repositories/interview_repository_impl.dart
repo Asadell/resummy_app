@@ -6,7 +6,6 @@ import 'package:resummy_app/features/interview/domain/entities/interview_entity.
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
-import 'package:flutter/foundation.dart';
 
 class InterviewRepositoryImpl implements InterviewRepository {
   final InterviewRemoteDataSource _remoteDataSource;
@@ -118,7 +117,6 @@ class InterviewRepositoryImpl implements InterviewRepository {
             improvedSpeech: improvedSpeech,
           );
         } catch (e) {
-          debugPrint('Error analyzing question ${question.id}: $e');
           return null;
         }
       });
@@ -174,7 +172,6 @@ class InterviewRepositoryImpl implements InterviewRepository {
         questionFeedbacks: questionFeedbacks,
       );
     } catch (e) {
-      debugPrint('❌ Error generating interview report: $e');
       rethrow;
     }
   }

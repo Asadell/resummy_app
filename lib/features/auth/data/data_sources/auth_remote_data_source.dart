@@ -50,7 +50,6 @@ class AuthRemoteDataSource {
 
       return _mapFirebaseUserToEntity(user);
     } catch (e) {
-      debugPrint('❌ Google Sign-In Error: $e');
       throw AuthException(e.toString());
     }
   }
@@ -60,7 +59,6 @@ class AuthRemoteDataSource {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
     } catch (e) {
-      debugPrint('❌ Sign-Out Error: $e');
       throw AuthException(e.toString());
     }
   }
