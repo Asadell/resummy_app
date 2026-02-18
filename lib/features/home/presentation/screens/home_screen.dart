@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
-import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 
@@ -160,29 +160,13 @@ class HomeScreen extends StatelessWidget {
                         return Column(
                           spacing: AppSizes.sm,
                           children: activities.map((activity) {
+                            final (icon, title, subtitle, time, onTap) = _resolveActivity(context, activity);
                             return _ActivityCard(
-                              icon: _getActivityIcon(activity.type),
-                              title: activity.title,
-                              subtitle: activity.subtitle,
-                              time: _formatTimeAgo(context, activity.timestamp),
-                              onTap: () {
-                                if (activity.type ==
-                                    ActivityType.interviewPrep) {
-                                  context.router.navigate(const HistoryRoute());
-                                } else if (activity.type ==
-                                    ActivityType.cvCreated) {
-                                  context.router
-                                      .navigate(const CvBuilderWelcomeRoute());
-                                } else if (activity.type ==
-                                    ActivityType.cvAnalyzed) {
-                                  context.router
-                                      .navigate(const CvAnalyzerUploadRoute());
-                                } else if (activity.type ==
-                                    ActivityType.cvTranslated) {
-                                  context.router
-                                      .navigate(const CvAtsConverterRoute());
-                                }
-                              },
+                              icon: icon,
+                              title: title,
+                              subtitle: subtitle,
+                              time: time,
+                              onTap: onTap,
                             );
                           }).toList(),
                         );
@@ -200,18 +184,35 @@ class HomeScreen extends StatelessWidget {
 
 
 
-  IconData _getActivityIcon(ActivityType type) {
-    switch (type) {
-      case ActivityType.cvCreated:
-        return Iconsax.document_text;
-      case ActivityType.cvAnalyzed:
-        return Iconsax.chart_2;
-      case ActivityType.interviewPrep:
-        return Iconsax.microphone;
-      case ActivityType.cvTranslated:
-        return Iconsax.translate;
-      default:
-        return Iconsax.activity;
+  (IconData, String, String, String, VoidCallback) _resolveActivity(
+      BuildContext context, ActivityItem activity) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (activity) {
+      case CvActivityItem(:final cvData):
+        final icon = cvData.source == 'analyzer'
+            ? Iconsax.chart_2
+            : cvData.source == 'ats_converter'
+                ? Iconsax.translate
+                : Iconsax.document_text;
+        final title = cvData.name.isNotEmpty ? cvData.name : l10n.cvSourceBuilder;
+        final subtitle = cvData.source;
+        final time = _formatTimeAgo(context, cvData.updatedAt);
+        return (
+          icon,
+          title,
+          subtitle,
+          time,
+          () => context.router.navigate(const CvBuilderWelcomeRoute()),
+        );
+      case InterviewActivityItem(:final interview):
+        final score = interview.report?.overallScore ?? 0;
+        return (
+          Iconsax.microphone,
+          l10n.interviewResults,
+          'Score: $score',
+          _formatTimeAgo(context, interview.createdAt),
+          () => context.router.navigate(const HistoryRoute()),
+        );
     }
   }
 

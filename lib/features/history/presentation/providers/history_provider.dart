@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/domain/repositories/history_repository.dart';
 import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+
+enum HistoryFilter { all, cv, interview }
 
 class HistoryProvider extends ChangeNotifier {
   final HistoryRepository _repository;
   final AuthProvider _authProvider;
 
-  List<ActivityEntity> _activities = [];
+  List<ActivityItem> _allActivities = [];
+  List<ActivityItem> _filteredActivities = [];
+  HistoryFilter _currentFilter = HistoryFilter.all;
   bool _isLoading = false;
   String? _currentUserId;
 
@@ -20,7 +24,8 @@ class HistoryProvider extends ChangeNotifier {
     _onAuthChanged();
   }
 
-  List<ActivityEntity> get activities => _activities;
+  List<ActivityItem> get activities => _filteredActivities;
+  HistoryFilter get filter => _currentFilter;
   bool get isLoading => _isLoading;
 
   @override
@@ -33,44 +38,57 @@ class HistoryProvider extends ChangeNotifier {
     final user = _authProvider.currentUser;
     if (user != null) {
       if (_currentUserId != user.id) {
-        loadActivities(user.id);
+        _currentUserId = user.id;
+        loadActivities();
       }
     } else {
       clear();
     }
   }
 
-  Future<void> loadActivities(String userId) async {
-    if (_currentUserId == userId && _activities.isNotEmpty) return;
-
-    _currentUserId = userId;
-    await _fetchActivities();
-  }
-
-  Future<void> refresh() async {
-    if (_currentUserId == null) return;
-    await _fetchActivities();
-  }
-
-  Future<void> _fetchActivities() async {
+  Future<void> loadActivities() async {
     if (_currentUserId == null) return;
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      _activities = await _repository.getActivities(userId: _currentUserId!);
+      _allActivities = await _repository.getActivities(_currentUserId!);
+      _applyFilter();
     } catch (e) {
       debugPrint('Error loading history: $e');
-      _activities = [];
+      _allActivities = [];
+      _filteredActivities = [];
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+  void setFilter(HistoryFilter filter) {
+    if (_currentFilter == filter) return;
+    _currentFilter = filter;
+    _applyFilter();
+  }
+
+  void _applyFilter() {
+    switch (_currentFilter) {
+      case HistoryFilter.all:
+        _filteredActivities = List.from(_allActivities);
+        break;
+      case HistoryFilter.cv:
+        _filteredActivities = _allActivities.whereType<CvActivityItem>().toList();
+        break;
+      case HistoryFilter.interview:
+        _filteredActivities = _allActivities.whereType<InterviewActivityItem>().toList();
+        break;
+    }
+    notifyListeners();
+  }
+
   void clear() {
-    _activities = [];
+    _allActivities = [];
+    _filteredActivities = [];
     _currentUserId = null;
     notifyListeners();
   }

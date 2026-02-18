@@ -1,27 +1,38 @@
-import 'package:resummy_app/features/history/data/data_sources/history_local_data_source.dart';
-import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
+import 'package:resummy_app/features/cv_tools/domain/repositories/cv_builder_repository.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/domain/repositories/history_repository.dart';
+import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
 
 class HistoryRepositoryImpl implements HistoryRepository {
-  final HistoryLocalDataSource _localDataSource;
+  final CVBuilderRepository _cvRepository;
+  final InterviewRepository _interviewRepository;
 
-  HistoryRepositoryImpl(this._localDataSource);
-
-  @override
-  Future<List<ActivityEntity>> getActivities({
-    required String userId,
-    int limit = 20,
-    int offset = 0,
-  }) async {
-    return await _localDataSource.getActivities(
-      userId,
-      limit: limit,
-      offset: offset,
-    );
-  }
+  HistoryRepositoryImpl(this._cvRepository, this._interviewRepository);
 
   @override
-  Future<void> clearHistory(String userId) async {
-    await _localDataSource.clearHistory(userId);
+  Future<List<ActivityItem>> getActivities(String userId) async {
+    final cvsFuture = _cvRepository.getAllCVs();
+    final interviewsFuture = _interviewRepository.getInterviewHistory(userId);
+
+    final results = await Future.wait([cvsFuture, interviewsFuture]);
+
+    final cvs = results[0] as List<dynamic>;
+    final interviews = results[1] as List<dynamic>;
+
+    final activities = <ActivityItem>[];
+
+    for (final cv in cvs) {
+      activities.add(CvActivityItem(cv));
+    }
+
+    for (final interview in interviews) {
+      activities.add(InterviewActivityItem(interview));
+    }
+
+    // Sort by date descending (newest first)
+    activities.sort((a, b) => b.date.compareTo(a.date));
+
+    return activities;
   }
 }
+
