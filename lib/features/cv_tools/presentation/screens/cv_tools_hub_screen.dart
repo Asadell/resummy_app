@@ -69,13 +69,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       onTap: () =>
                           context.router.push(const CvAtsConverterRoute()),
                     ),
-                    _FeatureCard(
-                      icon: Iconsax.clock,
-                      title: l10n.cvHistory,
-                      description: l10n.cvHistoryDesc,
-                      color: Theme.of(context).colorScheme.tertiary,
-                      onTap: () => context.router.push(const CvHistoryRoute()),
-                    ),
                   ],
                 ),
               ),

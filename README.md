@@ -1,193 +1,526 @@
-# 🚀 Resummy App
+<p align="center">
+  <img src="assets/icon/icon.png" alt="Resummy Logo" width="140"/>
+</p>
+
+<h1 align="center">✨ Resummy</h1>
 
 <p align="center">
-  <img src="assets/icon/icon.png" alt="Resummy Logo" width="120"/>
+  <strong>AI-Powered Resume Builder & Career Preparation Platform</strong><br/>
+  <em>Built with Flutter · Powered by Gemini AI · Works Offline</em>
 </p>
 
 <p align="center">
-  <strong>AI-Powered Resume Builder & Career Preparation App</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Flutter-3.0+-blue?logo=flutter" alt="Flutter"/>
-  <img src="https://img.shields.io/badge/Dart-3.0+-blue?logo=dart" alt="Dart"/>
-  <img src="https://img.shields.io/badge/Firebase-Enabled-orange?logo=firebase" alt="Firebase"/>
-  <img src="https://img.shields.io/badge/Material%203-Enabled-purple" alt="Material 3"/>
+  <img src="https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gemini_AI-Powered-4285F4?logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/Firebase-Enabled-FFCA28?logo=firebase&logoColor=black" />
+  <img src="https://img.shields.io/badge/Offline-Ready-34A853?logo=android&logoColor=white" />
+  <img src="https://img.shields.io/badge/Material_3-Design-6750A4" />
 </p>
 
 ---
 
-## 📖 About
+## 📋 Daftar Isi
 
-**Resummy** adalah aplikasi mobile yang membantu pengguna dalam:
-- 📝 **CV Builder** - Membuat CV profesional dengan template modern
-- 🌐 **CV Translator** - Menerjemahkan CV ke berbagai bahasa
-- 📊 **CV Analyzer** - Menganalisis kualitas CV dengan AI
-- 🎤 **Interview Prep** - Latihan interview dengan AI interviewer
-- 📈 **Progress Tracking** - Melacak perkembangan skill dan performa
+| # | Topik | Deskripsi |
+|---|-------|-----------|
+| 1 | [🎯 Tentang Resummy](#-tentang-resummy) | Visi, misi, dan keunggulan aplikasi |
+| 2 | [✨ Fitur Utama](#-fitur-utama) | CV Builder, Analyzer, Translator, Interview Prep |
+| 3 | [📸 Screenshots](#-screenshots) | Tampilan visual aplikasi |
+| 4 | [🏗️ Arsitektur](#️-arsitektur) | Clean Architecture & struktur folder |
+| 5 | [🤖 Gemini AI Round-Robin](#-gemini-ai-round-robin) | Sistem multi-key load balancing |
+| 6 | [📦 Offline Architecture](#-offline-architecture) | SQLite + Sync Queue |
+| 7 | [🎨 Theming System](#-theming-system) | Dark/Light mode & color palette |
+| 8 | [🌍 Localization](#-localization) | Multi-bahasa (ID & EN) |
+| 9 | [🛣️ Navigasi](#️-navigasi) | Auto Route type-safe navigation |
+| 10 | [⚙️ Konfigurasi](#️-konfigurasi) | Setup default & kustom |
+| 11 | [🚀 Getting Started](#-getting-started) | Instalasi & menjalankan app |
+| 12 | [🔥 Firebase Setup](#-firebase-setup) | Konfigurasi Firebase untuk tim |
+| 13 | [📦 Dependencies](#-dependencies) | Daftar paket yang digunakan |
 
 ---
 
-## 🏗️ Project Structure
+## 🎯 Tentang Resummy
+
+**Resummy** adalah aplikasi mobile berbasis AI yang dirancang untuk membantu para pencari kerja dan profesional dalam mempersiapkan karir mereka secara menyeluruh — mulai dari membuat CV yang menarik, menganalisis kualitasnya, menerjemahkannya ke berbagai bahasa, hingga berlatih wawancara kerja dengan AI interviewer yang realistis.
+
+### 💡 Mengapa Resummy?
+
+> Di era persaingan kerja yang semakin ketat, memiliki CV yang baik dan kemampuan interview yang solid adalah kunci. Resummy hadir sebagai *career companion* yang cerdas, tersedia 24/7, dan bekerja bahkan tanpa koneksi internet.
+
+| Masalah | Solusi Resummy |
+|---------|----------------|
+| CV tidak menarik / tidak ATS-friendly | CV Builder dengan template profesional + AI Analyzer |
+| Tidak tahu cara menjawab pertanyaan interview | AI Interview Simulator dengan feedback STAR |
+| CV hanya dalam satu bahasa | CV Translator ke berbagai bahasa |
+| Tidak bisa pakai app tanpa internet | Offline-first architecture dengan SQLite |
+| Biaya AI mahal & sering quota habis | Gemini Round-Robin dengan 51 API keys |
+
+---
+
+## ✨ Fitur Utama
+
+### 📝 CV Builder
+
+CV Builder yang komprehensif dengan **8 langkah terstruktur** untuk menghasilkan CV profesional.
+
+**Langkah-langkah:**
+1. **Data Pribadi** — Nama, kontak, foto profil
+2. **Ringkasan** — Professional summary dengan panduan AI
+3. **Pengalaman Kerja** — Multi-entry dengan format terstruktur
+4. **Pendidikan** — Riwayat pendidikan lengkap
+5. **Organisasi** — Pengalaman organisasi & kepanitiaan
+6. **Keahlian** — Technical & soft skills
+7. **Sertifikasi** — Sertifikat & penghargaan
+8. **Section Manager** — Atur urutan & visibilitas setiap section
+
+**Keunggulan:**
+- ✅ Preview CV real-time di tab "Lihat CV" (segmented control modern)
+- ✅ Custom Section — tambah section bebas dengan 5 template (Experience-like, Education-like, Skills-like, Bullet List, Paragraph)
+- ✅ Drag & drop untuk mengatur urutan section
+- ✅ Toggle visibilitas section tanpa menghapus data
+- ✅ Export ke PDF (Download & Share)
+- ✅ Auto-save ke Firestore & lokal
+
+---
+
+### 📊 CV Analyzer
+
+Analisis mendalam kualitas CV menggunakan Gemini AI.
+
+**Yang dianalisis:**
+- 🎯 **ATS Score** — Seberapa ramah CV terhadap sistem ATS
+- 📝 **Content Quality** — Kualitas konten dan relevansi
+- 🔤 **Language & Grammar** — Tata bahasa dan ejaan
+- 📐 **Format & Structure** — Keterbacaan dan layout
+- 💡 **Improvement Suggestions** — Saran perbaikan spesifik
+
+**Output:** Laporan lengkap dengan skor per kategori dan rekomendasi actionable.
+
+---
+
+### 🌐 CV Translator (ATS Converter)
+
+Terjemahkan CV ke berbagai bahasa dengan mempertahankan format dan konteks profesional.
+
+**Fitur:**
+- Terjemahan berbasis AI yang memahami konteks karir
+- Mempertahankan terminologi industri yang tepat
+- Mendukung berbagai bahasa target
+- Preview hasil terjemahan sebelum disimpan
+
+---
+
+### 🎤 Interview Prep
+
+Simulator wawancara kerja yang realistis dengan AI interviewer.
+
+**Alur Interview:**
+1. **Setup** — Pilih CV, posisi, job description, preferensi bahasa & jumlah pertanyaan
+2. **Session** — Wawancara real-time dengan speech-to-text
+3. **Feedback** — Analisis mendalam per pertanyaan
+
+**Feedback yang diberikan:**
+- 📊 **Overall Score** — Skor keseluruhan (0-100)
+- 🌟 **STAR Analysis** — Evaluasi Situation, Task, Action, Result
+- 💬 **Detailed Feedback** — Komentar per pertanyaan
+- 📈 **Improved Speech** — Contoh jawaban yang lebih baik
+- 🎯 **Recommendations** — Saran pengembangan skill
+
+---
+
+## 📸 Screenshots
+
+> 💡 *Tempatkan screenshot fitur di sini untuk menampilkan tampilan aplikasi.*
+
+### CV Builder
+<!-- Tambahkan screenshot CV Builder di sini -->
+| Langkah 1 - Data Pribadi | Langkah 8 - Section Manager | Preview CV |
+|:---:|:---:|:---:|
+| ![CV Builder Step 1](docs/screenshots/cv_builder_step1.png) | ![Section Manager](docs/screenshots/cv_builder_manager.png) | ![CV Preview](docs/screenshots/cv_preview.png) |
+
+### Interview Prep
+<!-- Tambahkan screenshot Interview di sini -->
+| Setup Interview | Sesi Wawancara | Feedback Detail |
+|:---:|:---:|:---:|
+| ![Interview Setup](docs/screenshots/interview_setup.png) | ![Interview Session](docs/screenshots/interview_session.png) | ![Interview Feedback](docs/screenshots/interview_feedback.png) |
+
+### CV Analyzer & Translator
+<!-- Tambahkan screenshot Analyzer & Translator di sini -->
+| CV Analyzer | Hasil Analisis | CV Translator |
+|:---:|:---:|:---:|
+| ![CV Analyzer](docs/screenshots/cv_analyzer.png) | ![Analysis Result](docs/screenshots/analysis_result.png) | ![CV Translator](docs/screenshots/cv_translator.png) |
+
+---
+
+## 🏗️ Arsitektur
+
+Resummy dibangun menggunakan **Clean Architecture** yang memisahkan concern secara tegas ke dalam 3 layer:
+
+```
+┌─────────────────────────────────────────────┐
+│              Presentation Layer              │
+│   Screens · Widgets · Providers (State)     │
+├─────────────────────────────────────────────┤
+│               Domain Layer                  │
+│      Entities · Use Cases · Repositories    │
+├─────────────────────────────────────────────┤
+│                Data Layer                   │
+│  Data Sources · Models · Repository Impl    │
+└─────────────────────────────────────────────┘
+```
+
+### Struktur Folder
 
 ```
 lib/
-├── app/                          # App-level configuration
-│   ├── app.dart                  # Root MaterialApp widget
-│   └── routes/                   # Auto Route configuration
-│       ├── app_router.dart       # Route definitions
-│       └── app_router.gr.dart    # Generated routes
+├── core/                          # Infrastruktur & utilitas global
+│   ├── constants/                 # Konstanta app (API keys, config)
+│   ├── di/                        # Dependency Injection (GetIt)
+│   ├── l10n/                      # Lokalisasi (ARB files)
+│   ├── providers/                 # Global state (Locale, Theme)
+│   ├── routes/                    # Auto Route definitions
+│   ├── services/
+│   │   ├── gemini_pool_manager.dart  # ⭐ AI Round-Robin Engine
+│   │   └── database_helper.dart      # ⭐ SQLite Offline DB
+│   └── theme/                     # Color palette & ThemeData
 │
-├── core/                         # Core utilities & shared logic
-│   ├── constants/                # App constants
-│   ├── errors/                   # Error handling (Failure, Exception)
-│   ├── l10n/                     # Localization (i18n)
-│   │   ├── arb/                  # ARB translation files
-│   │   │   ├── app_en.arb        # English translations
-│   │   │   └── app_id.arb        # Indonesian translations
-│   │   ├── app_localizations.dart
-│   │   └── app_localizations_*.dart
-│   ├── providers/                # Global state providers
-│   │   ├── locale_provider.dart  # Language preference
-│   │   └── theme_provider.dart   # Dark/Light mode
-│   ├── theme/                    # App theming
-│   │   ├── app_colors.dart       # Color palette
-│   │   └── app_theme.dart        # ThemeData (Light & Dark)
-│   └── utils/                    # Helper functions
-│
-├── features/                     # Feature modules (Clean Architecture)
-│   ├── auth/                     # Authentication & Onboarding
-│   │   ├── data/                 # Repositories, Data Sources
-│   │   ├── domain/               # Entities, Use Cases
-│   │   └── presentation/         # Screens, Widgets
+├── features/                      # Modul fitur (Clean Architecture)
+│   ├── auth/                      # Autentikasi & onboarding
+│   ├── cv_tools/                  # CV Builder, Analyzer, Translator
+│   │   ├── data/
+│   │   │   ├── data_sources/      # Local (SQLite) & Remote (Firestore)
+│   │   │   └── repositories/      # Implementasi repository
+│   │   ├── domain/
+│   │   │   ├── entities/          # CVData, SectionData, dll
+│   │   │   └── use_cases/         # Business logic
+│   │   └── presentation/
+│   │       ├── providers/         # CVBuilderProvider
+│   │       ├── screens/builder/   # 8 langkah CV Builder
+│   │       └── widgets/           # CVCard, CvPreviewCard, dll
 │   │
-│   ├── cv_tools/                 # CV Builder, Translator, Analyzer
-│   │   └── presentation/screens/
-│   │       ├── builder/          # 7-step CV creation
-│   │       ├── translator/       # Translation flow
-│   │       ├── analyzer/         # AI analysis
-│   │       └── history/          # CV history
+│   ├── interview/                 # Interview Prep
+│   │   ├── data/
+│   │   │   ├── data_sources/
+│   │   │   │   ├── interview_remote_data_source.dart  # Gemini AI calls
+│   │   │   │   ├── interview_local_data_source.dart   # SQLite
+│   │   │   │   └── speech_data_source.dart            # STT via Gemini
+│   │   │   └── repositories/
+│   │   ├── domain/
+│   │   │   └── entities/          # InterviewReport, QuestionFeedback
+│   │   └── presentation/
+│   │       ├── screens/setup/     # 4 langkah konfigurasi
+│   │       ├── screens/session/   # Live interview
+│   │       └── screens/feedback/  # Overview, Detail, Questions
 │   │
-│   ├── interview/                # Interview Preparation
-│   │   └── presentation/screens/
-│   │       ├── setup/            # Interview configuration
-│   │       ├── session/          # Live interview session
-│   │       └── feedback/         # AI feedback & recommendations
-│   │
-│   ├── home/                     # Dashboard & Hub screens
-│   ├── history/                  # Activity history
-│   └── profile/                  # User settings
+│   ├── home/                      # Dashboard & hub screens
+│   ├── history/                   # Riwayat aktivitas
+│   └── profile/                   # Pengaturan pengguna
 │
-├── shared/                       # Shared components
-│   └── widgets/                  # Reusable UI widgets
-│       ├── bottom_nav_bar.dart
-│       ├── custom_button.dart
-│       ├── custom_text_field.dart
-│       ├── error_display.dart
-│       └── loading_indicator.dart
-│
-└── main.dart                     # App entry point
+└── shared/
+    └── widgets/                   # Komponen UI yang dapat digunakan ulang
+        ├── app_section.dart       # Container section standar
+        └── ...
 ```
+
+---
+
+## 🤖 Gemini AI Round-Robin
+
+Salah satu inovasi teknis utama Resummy adalah sistem **Gemini AI Round-Robin** yang memungkinkan penggunaan AI tanpa batas dengan mengelola banyak API key secara cerdas.
+
+### Masalah yang Dipecahkan
+
+Gemini API memiliki **rate limit per key**. Saat banyak pengguna menggunakan fitur AI secara bersamaan, satu key akan cepat habis quotanya, menyebabkan error `429 Resource Exhausted`.
+
+### Solusi: GeminiPoolManager
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   GeminiPoolManager                     │
+│                                                         │
+│  Pool: cvAnalyzer    Pool: cvConverter   Pool: interview│
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐  │
+│  │ Key 1   ←──┐│    │ Key 22 ←─┐  │    │ Key 37 ←─┐  │  │
+│  │ Key 2      ││    │ Key 23   │  │    │ Key 38   │  │  │
+│  │ Key 3      ││    │ Key 24   │  │    │ Key 39   │  │  │
+│  │ ...        ││    │ ...      │  │    │ ...      │  │  │
+│  │ Key 21  ───┘│    │ Key 36 ──┘  │    │ Key 51 ──┘  │  │
+│  └─────────────┘    └─────────────┘    └─────────────┘  │
+│   21 keys             15 keys            15 keys        │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Distribusi Key
+
+| Pool | Jumlah Key | Digunakan Untuk |
+|------|-----------|-----------------|
+| `cvAnalyzer` | 21 keys | Analisis CV & ATS scoring |
+| `cvConverter` | 15 keys | Terjemahan CV |
+| `interview` | 15 keys | Analisis jawaban interview & STT |
+| **Total** | **51 keys** | — |
+
+### Cara Kerja
+
+```dart
+// Setiap request mengambil key berikutnya secara round-robin
+GenerativeModel _getModel(GeminiPoolType type) {
+  final pool = _pools[type]!;
+  final model = pool[_indices[type]!];
+  _indices[type] = (_indices[type]! + 1) % pool.length; // ← Circular rotation
+  return model;
+}
+```
+
+**Alur eksekusi dengan retry otomatis:**
+
+```
+Request masuk
+     │
+     ▼
+Ambil model dari pool (index saat ini)
+     │
+     ▼
+Kirim request ke Gemini API ──── Berhasil ──→ Return hasil
+     │
+     ▼ (Gagal: quota / 429)
+Coba key berikutnya di pool
+     │
+     ▼
+Ulangi hingga semua key dicoba
+     │
+     ▼ (Semua gagal)
+Throw QuotaExceededException
+```
+
+### Konfigurasi API Keys
+
+API keys dikonfigurasi melalui file `.env` (tidak di-commit ke repository):
+
+```bash
+# .env (buat file ini di root project)
+GEMINI_API_KEY_1=AIza...
+GEMINI_API_KEY_2=AIza...
+# ... hingga key ke-51
+GEMINI_API_KEY_51=AIza...
+```
+
+**Konfigurasi Minimum (1 key):**
+```bash
+# Cukup isi 1 key untuk development
+GEMINI_API_KEY_1=AIza...
+# Key lainnya boleh dikosongkan, sistem akan skip key kosong
+```
+
+**Konfigurasi Penuh (51 keys):**
+Untuk production dengan banyak pengguna, isi semua 51 key untuk throughput maksimal.
+
+### Keunggulan Sistem Ini
+
+| Aspek | Tanpa Round-Robin | Dengan Round-Robin |
+|-------|------------------|-------------------|
+| Throughput | 1x | Hingga 51x |
+| Downtime saat quota habis | ❌ Error langsung | ✅ Auto-fallback ke key lain |
+| Biaya | Bergantung 1 akun | Distribusi ke banyak akun |
+| Skalabilitas | Terbatas | Mudah ditambah key baru |
+
+---
+
+## 📦 Offline Architecture
+
+Resummy dirancang sebagai **offline-first application** — semua data tersimpan lokal terlebih dahulu, kemudian disinkronkan ke cloud saat koneksi tersedia.
+
+### Lapisan Penyimpanan
+
+```
+┌──────────────────────────────────────────────┐
+│              Aplikasi (Flutter)              │
+└──────────────────┬───────────────────────────┘
+                   │
+         ┌─────────┴─────────┐
+         │                   │
+         ▼                   ▼
+┌─────────────────┐  ┌───────────────────┐
+│  SQLite (Local) │  │ Firestore (Cloud) │
+│  resummy_       │  │ (saat online)     │
+│  offline.db     │  └───────────────────┘
+└─────────────────┘
+```
+
+### Skema Database SQLite
+
+```sql
+-- Tabel CVs: Menyimpan semua data CV pengguna
+CREATE TABLE cvs (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  title TEXT,
+  source TEXT,          -- 'builder' | 'uploaded' | 'converted'
+  data TEXT NOT NULL,   -- JSON serialized CVData
+  pdfUrl TEXT,
+  createdAt INTEGER NOT NULL,
+  updatedAt INTEGER NOT NULL,
+  syncStatus TEXT DEFAULT 'synced'  -- 'synced' | 'pending' | 'error'
+);
+
+-- Tabel Analysis History: Riwayat analisis CV
+CREATE TABLE analysis_history (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  cvId TEXT,
+  analysisData TEXT NOT NULL,  -- JSON hasil analisis
+  score INTEGER,
+  createdAt INTEGER NOT NULL,
+  syncStatus TEXT DEFAULT 'synced'
+);
+
+-- Tabel Interviews: Riwayat sesi interview
+CREATE TABLE interviews (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  jobPosition TEXT,
+  data TEXT NOT NULL,          -- JSON InterviewReport
+  createdAt INTEGER NOT NULL,
+  completedAt INTEGER,
+  isCompleted INTEGER DEFAULT 0,
+  syncStatus TEXT DEFAULT 'synced'
+);
+
+-- Tabel Translations: Riwayat terjemahan CV
+CREATE TABLE translations (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  originalCvId TEXT,
+  translationData TEXT NOT NULL,
+  fromLang TEXT,
+  toLang TEXT,
+  pdfUrl TEXT,
+  createdAt INTEGER NOT NULL,
+  syncStatus TEXT DEFAULT 'synced'
+);
+
+-- Sync Queue: Antrian operasi yang belum tersinkronisasi
+CREATE TABLE sync_queue (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  operation TEXT NOT NULL,    -- 'INSERT' | 'UPDATE' | 'DELETE'
+  tableName TEXT NOT NULL,
+  recordId TEXT NOT NULL,
+  data TEXT NOT NULL,
+  createdAt INTEGER NOT NULL,
+  retryCount INTEGER DEFAULT 0
+);
+```
+
+### Alur Sinkronisasi
+
+```
+Pengguna membuat/edit data
+         │
+         ▼
+Simpan ke SQLite (syncStatus = 'pending')
+         │
+         ▼
+Cek koneksi internet
+    │           │
+  Online      Offline
+    │           │
+    ▼           ▼
+Kirim ke     Tambahkan ke
+Firestore    sync_queue
+    │
+    ▼
+Update syncStatus = 'synced'
+```
+
+### Keunggulan Offline Architecture
+
+- **Instant Response** — Data tersedia langsung dari SQLite tanpa menunggu network
+- **Resilient** — App tetap berfungsi penuh saat offline
+- **Conflict-free** — Sync queue memastikan tidak ada data yang hilang
+- **Efficient** — Hanya data yang berubah yang disinkronkan
 
 ---
 
 ## 🎨 Theming System
 
-### Color Palette
+### Palet Warna
 
-| Color | Light Mode | Dark Mode | Usage |
-|-------|-----------|-----------|-------|
-| **Primary** | `#0EA5E9` (Sky Blue) | `#38BDF8` | Buttons, Links, Highlights |
-| **Secondary** | `#10B981` (Emerald) | `#4ADE80` | Success states, Accents |
-| **Error** | `#EF4444` | `#F87171` | Error messages, Alerts |
-| **Surface** | `#FFFFFF` | `#1E293B` | Cards, Dialogs |
-| **Background** | `#FAFAFA` | `#0F172A` | Screen backgrounds |
+| Token | Light Mode | Dark Mode | Penggunaan |
+|-------|-----------|-----------|------------|
+| `primary` | `#0EA5E9` Sky Blue | `#38BDF8` | Tombol utama, highlight |
+| `secondary` | `#10B981` Emerald | `#4ADE80` | Status sukses, aksen |
+| `error` | `#EF4444` Red | `#F87171` | Error, hapus |
+| `surface` | `#FFFFFF` | `#1E293B` | Card, dialog |
+| `background` | `#FAFAFA` | `#0F172A` | Background layar |
 
 ### Menggunakan Theme
 
 ```dart
-// Mengakses warna dari Theme
-final primaryColor = Theme.of(context).colorScheme.primary;
-final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+// Dari ColorScheme (direkomendasikan)
+final primary = Theme.of(context).colorScheme.primary;
+final onSurface = Theme.of(context).colorScheme.onSurface;
 
-// Menggunakan AppColors langsung
+// Dari AppColors (untuk nilai spesifik)
 import 'package:resummy_app/core/theme/app_colors.dart';
-final customBlue = AppColors.primary500;
+final customColor = AppColors.primary500;
 ```
 
-### Dark/Light Mode Toggle
-
-Theme dikelola oleh `ThemeProvider` dengan persistence ke `SharedPreferences`:
+### Toggle Dark/Light Mode
 
 ```dart
-// Di widget manapun
 final themeProvider = Provider.of<ThemeProvider>(context);
 
 // Cek mode saat ini
 bool isDark = themeProvider.isDarkMode;
 
-// Toggle theme
+// Toggle
 themeProvider.toggleTheme();
 
-// Set specific mode
+// Set spesifik
 themeProvider.setDarkMode(true);
 ```
 
-Theme akan tersimpan dan otomatis di-load saat app restart.
+Preferensi tema tersimpan otomatis di `SharedPreferences` dan di-load saat app restart.
 
 ---
 
-## 🌍 Localization (L10n)
+## 🌍 Localization
 
-Aplikasi mendukung multi-bahasa menggunakan Flutter's built-in localization:
+Resummy mendukung **2 bahasa** dengan sistem lokalisasi Flutter bawaan:
 
-### Bahasa yang Didukung
-- 🇮🇩 **Indonesian (id)** - Default
-- 🇺🇸 **English (en)**
-
-### File Struktur
-
-```
-lib/core/l10n/
-├── arb/
-│   ├── app_en.arb          # English strings
-│   └── app_id.arb          # Indonesian strings
-├── app_localizations.dart  # Generated localizations
-├── app_localizations_en.dart
-└── app_localizations_id.dart
-```
+- 🇮🇩 **Bahasa Indonesia** (default)
+- 🇺🇸 **English**
 
 ### Menambah String Baru
 
-1. **Tambahkan ke ARB files:**
+**1. Tambahkan ke kedua file ARB:**
 
 ```json
-// lib/core/l10n/arb/app_en.arb
+// lib/core/l10n/arb/app_id.arb
 {
-  "welcomeMessage": "Welcome to Resummy!",
+  "welcomeMessage": "Selamat datang di Resummy!",
   "@welcomeMessage": {
-    "description": "Welcome message on home screen"
+    "description": "Pesan sambutan di halaman utama"
   }
 }
 ```
 
 ```json
-// lib/core/l10n/arb/app_id.arb
+// lib/core/l10n/arb/app_en.arb
 {
-  "welcomeMessage": "Selamat datang di Resummy!"
+  "welcomeMessage": "Welcome to Resummy!"
 }
 ```
 
-2. **Generate localization files:**
+**2. Generate file lokalisasi:**
 ```bash
 flutter gen-l10n
 ```
 
-3. **Gunakan di Widget:**
+**3. Gunakan di widget:**
 ```dart
-import 'package:resummy_app/core/l10n/app_localizations.dart';
-
-Text(AppLocalizations.of(context)!.welcomeMessage)
+final l10n = AppLocalizations.of(context)!;
+Text(l10n.welcomeMessage)
 ```
 
 ### Mengubah Bahasa
@@ -195,124 +528,90 @@ Text(AppLocalizations.of(context)!.welcomeMessage)
 ```dart
 final localeProvider = Provider.of<LocaleProvider>(context);
 
-// Set bahasa
+localeProvider.setLocale(const Locale('id')); // Indonesia
 localeProvider.setLocale(const Locale('en')); // English
-localeProvider.setLocale(const Locale('id')); // Indonesian
-
-// Cek bahasa saat ini
-Locale currentLocale = localeProvider.locale;
 ```
 
 ---
 
-## 🧩 Shared Widgets
+## 🛣️ Navigasi
 
-Reusable widgets tersedia di `lib/shared/widgets/`:
-
-### CustomButton
-
-```dart
-import 'package:resummy_app/shared/widgets/custom_button.dart';
-
-CustomButton(
-  text: 'Submit',
-  onPressed: () => doSomething(),
-  isLoading: false,
-  isOutlined: false, // true for outlined style
-)
-```
-
-### CustomTextField
-
-```dart
-import 'package:resummy_app/shared/widgets/custom_text_field.dart';
-
-CustomTextField(
-  label: 'Email',
-  hint: 'Enter your email',
-  controller: emailController,
-  keyboardType: TextInputType.emailAddress,
-  validator: (value) => value!.isEmpty ? 'Required' : null,
-)
-```
-
-### LoadingIndicator
-
-```dart
-import 'package:resummy_app/shared/widgets/loading_indicator.dart';
-
-// Default circular indicator
-const LoadingIndicator()
-
-// With custom message
-const LoadingIndicator(message: 'Loading data...')
-```
-
-### ErrorDisplay
-
-```dart
-import 'package:resummy_app/shared/widgets/error_display.dart';
-
-ErrorDisplay(
-  message: 'Something went wrong',
-  onRetry: () => retryAction(),
-)
-```
-
----
-
-## 🛣️ Navigation (Auto Route)
-
-Aplikasi menggunakan [Auto Route](https://pub.dev/packages/auto_route) untuk type-safe navigation.
+Resummy menggunakan [Auto Route](https://pub.dev/packages/auto_route) untuk navigasi yang **type-safe** dan deklaratif.
 
 ### Navigasi Dasar
 
 ```dart
-import 'package:resummy_app/app/routes/app_router.gr.dart';
-
-// Push to new screen
+// Push ke layar baru
 context.router.push(const HomeRoute());
 
-// Replace current screen
+// Ganti layar saat ini
 context.router.replace(const LoginRoute());
 
-// Pop back
-context.router.pop();
+// Kembali
+context.router.maybePop();
 
-// Push and remove all previous
-context.router.replaceAll([const MainLayoutRoute()]);
-```
+// Reset stack navigasi
+context.router.replaceAll([const MainRoute(children: [CvToolsHubRoute()])]);
 
-### Definisi Route
-
-Routes didefinisikan di `lib/app/routes/app_router.dart`:
-
-```dart
-@AutoRouterConfig()
-class AppRouter extends $AppRouter {
-  @override
-  List<AutoRoute> get routes => [
-    AutoRoute(page: SplashRoute.page, initial: true),
-    AutoRoute(page: LoginRoute.page),
-    AutoRoute(page: MainLayoutRoute.page, children: [
-      AutoRoute(page: HomeRoute.page),
-      AutoRoute(page: CvToolsHubRoute.page),
-      AutoRoute(page: InterviewPrepRoute.page),
-      AutoRoute(page: HistoryRoute.page),
-      AutoRoute(page: ProfileRoute.page),
-    ]),
-    // ... more routes
-  ];
-}
+// Push dengan parameter
+context.router.push(InterviewFeedbackDetailRoute(report: report));
 ```
 
 ### Regenerate Routes
 
-Setelah menambah/mengubah routes, jalankan:
+Setelah menambah atau mengubah route:
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
+
+---
+
+## ⚙️ Konfigurasi
+
+### Konfigurasi Default
+
+Resummy berjalan dengan konfigurasi default yang sudah siap pakai:
+
+| Konfigurasi | Default | Keterangan |
+|-------------|---------|------------|
+| Bahasa | `id` (Indonesia) | Dapat diubah di Settings |
+| Tema | Light Mode | Dapat di-toggle |
+| Jumlah pertanyaan interview | 5 | Dapat diubah saat setup |
+| Bahasa interview | Indonesia | Dapat diubah saat setup |
+| Sync ke cloud | Otomatis | Saat koneksi tersedia |
+
+### Konfigurasi Kustom (`.env`)
+
+Buat file `.env` di root project untuk mengkonfigurasi API keys:
+
+```bash
+# Minimum: 1 key (untuk development)
+GEMINI_API_KEY_1=AIzaSy...
+
+# Optimal: Isi semua pool untuk production
+# Pool CV Analyzer (key 1-21)
+GEMINI_API_KEY_1=AIzaSy...
+GEMINI_API_KEY_2=AIzaSy...
+# ...
+GEMINI_API_KEY_21=AIzaSy...
+
+# Pool CV Converter (key 22-36)
+GEMINI_API_KEY_22=AIzaSy...
+# ...
+GEMINI_API_KEY_36=AIzaSy...
+
+# Pool Interview (key 37-51)
+GEMINI_API_KEY_37=AIzaSy...
+# ...
+GEMINI_API_KEY_51=AIzaSy...
+```
+
+> ⚠️ **Jangan commit file `.env` ke repository!** Pastikan `.env` ada di `.gitignore`.
+
+### Konfigurasi Firebase
+
+Lihat section [🔥 Firebase Setup](#-firebase-setup) untuk detail lengkap.
 
 ---
 
@@ -322,111 +621,101 @@ dart run build_runner build --delete-conflicting-outputs
 
 - Flutter SDK `>=3.0.0`
 - Dart `>=3.0.0`
-- Node.js (untuk Firebase CLI)
+- Android Studio / VS Code
+- Firebase account (untuk fitur cloud)
+- Gemini API key (dari [Google AI Studio](https://aistudio.google.com/))
 
-### Installation
+### Instalasi
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/resummy_app.git
+git clone https://github.com/Asadell/resummy_app.git
 cd resummy_app
 
 # 2. Install dependencies
 flutter pub get
 
-# 3. Generate files
+# 3. Buat file .env dan isi API keys
+cp .env.example .env
+# Edit .env dan isi GEMINI_API_KEY_1 minimal
+
+# 4. Generate kode otomatis (routes, dll)
 dart run build_runner build --delete-conflicting-outputs
+
+# 5. Generate lokalisasi
 flutter gen-l10n
 
-# 4. Setup Firebase (lihat section berikutnya)
+# 6. Setup Firebase (lihat section berikutnya)
+
+# 7. Jalankan app
+flutter run
+```
+
+### Build APK
+
+```bash
+# Debug APK
+flutter build apk --debug
+
+# Release APK (split per ABI untuk ukuran lebih kecil)
+flutter build apk --split-per-abi --release
+
+# App Bundle (untuk Google Play)
+flutter build appbundle --release
 ```
 
 ---
 
-## 🔥 Firebase Setup (Untuk Tim)
+## 🔥 Firebase Setup
 
-> **PENTING:** Setiap developer harus setup Firebase-nya sendiri karena SHA-1 fingerprint berbeda per device.
+> **Penting:** Setiap developer perlu setup Firebase sendiri karena SHA-1 fingerprint berbeda per mesin.
 
-### Step 1: Install Firebase CLI
+### Step 1: Install Tools
 
 ```bash
-# Install Firebase CLI
+# Firebase CLI
 npm install -g firebase-tools
-
-# Login ke Firebase (gunakan akun yang sudah di-invite ke project)
 firebase login
 
-# Install FlutterFire CLI
+# FlutterFire CLI
 dart pub global activate flutterfire_cli
-
-# Jika flutterfire command not found:
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 ```
 
-### Step 2: Configure FlutterFire
+### Step 2: Configure
 
 ```bash
 # Di root folder project
 flutterfire configure
-
-# Pilih project: resummy-app-xxxxx
-# Pilih platforms: android, web
+# Pilih project Firebase yang sudah ada
+# Pilih platform: android
 ```
 
-Ini akan generate/update `lib/firebase_options.dart`.
-
-### Step 3: Setup SHA-1 (Android)
-
-**Kenapa perlu?** Google Sign-In butuh SHA-1 fingerprint untuk security.
+### Step 3: SHA-1 untuk Google Sign-In
 
 ```bash
-# Cara 1: Via Gradle
+# Dapatkan SHA-1 debug keystore
 cd android
 ./gradlew signingReport
-
-# Copy SHA-1 dari output "Variant: debug"
-# Contoh: A1:B2:C3:D4:E5:F6:...
-
-# Cara 2: Via keytool
-keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+# Copy SHA-1 dari "Variant: debug"
 ```
 
-**Tambahkan SHA-1 ke Firebase Console:**
+Tambahkan SHA-1 di **Firebase Console → Project Settings → Your Apps → Android → Add Fingerprint**.
 
-1. Buka [Firebase Console](https://console.firebase.google.com/) → Project Settings (⚙️)
-2. Scroll ke "Your apps" → Pilih Android app
-3. Click **"Add fingerprint"** → Paste SHA-1 → Save
-4. **Download `google-services.json`** → Taruh di `android/app/`
+Lalu download `google-services.json` dan taruh di `android/app/`.
 
-### Step 4: Verify Setup
-
-```bash
-flutter run
-```
-
-Jika berhasil, app akan jalan tanpa error Firebase!
-
----
-
-## 🛡️ Firestore Security Rules
-
-Rules saat ini (development mode):
+### Firestore Security Rules
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users: hanya bisa akses data sendiri
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
-    // CVs: hanya pemilik yang bisa akses
     match /cvs/{cvId} {
       allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
     }
-    
-    // Interviews: hanya pemilik yang bisa akses
     match /interviews/{interviewId} {
       allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
     }
@@ -434,73 +723,60 @@ service cloud.firestore {
 }
 ```
 
-> ⚠️ **Production:** Rules ini perlu di-hardening sebelum release!
+### Troubleshooting Firebase
 
----
-
-## 🐛 Common Firebase Issues
-
-| Issue | Solution |
-|-------|----------|
+| Error | Solusi |
+|-------|--------|
 | `flutterfire: command not found` | `export PATH="$PATH":"$HOME/.pub-cache/bin"` |
-| Google Sign-In error | Pastikan SHA-1 sudah ditambahkan di Firebase Console |
+| Google Sign-In gagal | Pastikan SHA-1 sudah ditambahkan di Firebase Console |
 | `google-services.json` not found | Download dari Firebase Console → taruh di `android/app/` |
 | Permission denied Firestore | Cek user sudah login & rules benar |
 
 ---
 
-### Build for Production
-
-```bash
-# Android APK
-flutter build apk --release
-
-# Android App Bundle
-flutter build appbundle --release
-
-# iOS
-flutter build ios --release
-```
-
----
-
 ## 📦 Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
+### Core
+
+| Package | Versi | Kegunaan |
+|---------|-------|----------|
 | `provider` | ^6.1.1 | State Management |
-| `auto_route` | ^9.2.2 | Navigation |
+| `auto_route` | ^9.3.0 | Type-safe Navigation |
+| `get_it` | ^8.3.0 | Dependency Injection |
+| `google_generative_ai` | latest | Gemini AI SDK |
+
+### Firebase & Storage
+
+| Package | Versi | Kegunaan |
+|---------|-------|----------|
 | `firebase_core` | ^3.6.0 | Firebase Core |
-| `firebase_auth` | ^5.3.0 | Authentication |
-| `cloud_firestore` | ^5.4.4 | Database |
-| `google_fonts` | ^6.1.0 | Typography |
-| `shared_preferences` | ^2.3.2 | Local Storage |
-| `get_it` | ^8.0.0 | Dependency Injection |
+| `firebase_auth` | ^5.3.0 | Autentikasi |
+| `cloud_firestore` | ^5.4.4 | Cloud Database |
+| `sqflite` | latest | SQLite Offline DB |
+| `shared_preferences` | ^2.3.2 | Penyimpanan preferensi |
 
----
+### UI & UX
 
-## 📱 Screenshots
+| Package | Versi | Kegunaan |
+|---------|-------|----------|
+| `google_fonts` | ^6.1.0 | Tipografi premium |
+| `iconsax_flutter` | latest | Icon pack modern |
+| `audio_waveforms` | ^1.3.0 | Visualisasi audio |
+| `syncfusion_flutter_pdfviewer` | latest | PDF viewer |
 
-> Coming soon...
+### Utilities
 
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+| Package | Versi | Kegunaan |
+|---------|-------|----------|
+| `envied` | latest | Secure env variables |
+| `share_plus` | ^10.1.4 | Share file |
+| `permission_handler` | ^11.4.0 | Runtime permissions |
+| `file_picker` | latest | Pilih file dari device |
 
 ---
 
 <p align="center">
-  Made with ❤️ by Resummy Team
+  <br/>
+  <strong>Dibuat dengan ❤️ oleh Tim Resummy</strong><br/>
+  <em>Flutter Fusion · 2025</em>
 </p>
