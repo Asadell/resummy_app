@@ -8,25 +8,21 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 class CvAnalyzerProvider extends ChangeNotifier {
   final CvAnalyzerService _service;
 
-  CvAnalyzerProvider({CvAnalyzerService? service}) 
+  CvAnalyzerProvider({CvAnalyzerService? service})
       : _service = service ?? CvAnalyzerService();
 
-  // ── File state ──
   PlatformFile? _selectedFile;
   String _extractedText = '';
   bool _isPickingFile = false;
   bool _isConverting = false;
 
-  // ── Input state ──
   String _jobPosition = '';
   String _jobDescription = '';
 
-  // ── Analysis state ──
   bool _isAnalyzing = false;
   CvAnalysisResult? _result;
   String? _errorMessage;
 
-  // ── Getters ──
   PlatformFile? get selectedFile => _selectedFile;
   String get extractedText => _extractedText;
   bool get isPickingFile => _isPickingFile;
@@ -47,7 +43,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     return '${mb.toStringAsFixed(2)} MB';
   }
 
-  // ── Setters ──
   void setJobPosition(String v) {
     _jobPosition = v;
     notifyListeners();
@@ -58,7 +53,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Pick PDF & extract text (stay on same screen) ──
   Future<void> pickAndExtract() async {
     _isPickingFile = true;
     _errorMessage = null;
@@ -85,7 +79,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
         return;
       }
 
-      // Extract text di background isolate (max 5 halaman via PdfUtils)
       final text = await compute(PdfUtils().extractText, file.path!);
 
       if (!_isValidCv(text)) {
@@ -98,7 +91,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
 
       _selectedFile = file;
       _extractedText = text;
-      _result = null; // reset saat ganti file
+      _result = null;
       _errorMessage = null;
     } catch (e) {
       if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
@@ -112,7 +105,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Analyze ──
   Future<void> analyze(String languageCode) async {
     if (!hasFile) return;
 
@@ -124,7 +116,8 @@ class CvAnalyzerProvider extends ChangeNotifier {
     try {
       _result = await _service.analyze(
         cvText: _extractedText,
-        jobPosition: _jobPosition.isNotEmpty ? _jobPosition : 'General Position',
+        jobPosition:
+            _jobPosition.isNotEmpty ? _jobPosition : 'General Position',
         jobDescription: _jobDescription,
         language: languageCode,
       );
@@ -137,7 +130,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Convert to CV ──
   Future<CVData?> convertAppliedToCv() async {
     if (_result == null) return null;
 
@@ -151,14 +143,12 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Minta Gemini terapkan saran dan return JSON CVData
       final json = await _service.convertAppliedSuggestionsToCvJson(
         originalCvText: _extractedText,
         appliedSuggestions: applied,
         jobPosition: _jobPosition,
       );
 
-      // Parse JSON → CVData (gunakan CvAtsConverterService yang sudah ada)
       final converterService = CvAtsConverterService();
       final cvData = converterService.parseCvJson(json, source: 'analyzer');
 
@@ -174,7 +164,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     }
   }
 
-  // ── Suggestion actions ──
   void applySuggestion(String id) {
     _findSuggestion(id)
       ?..isApplied = true
@@ -199,7 +188,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
   CvSuggestion? _findSuggestion(String id) =>
       _result?.suggestions.where((s) => s.id == id).firstOrNull;
 
-  // ── Clear ──
   void clearFile() {
     _selectedFile = null;
     _extractedText = '';
@@ -218,7 +206,6 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Helpers ──
   bool _isValidCv(String text) {
     final lower = text.toLowerCase();
     final keywords = [

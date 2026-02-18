@@ -18,7 +18,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
   @override
   void initState() {
     super.initState();
-    // Load saved CVs when screen opens
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CVBuilderProvider>().loadAllCVs();
     });
@@ -27,7 +27,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -39,7 +39,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Feature Cards
               _FeatureCard(
                 icon: Iconsax.document_text,
                 title: l10n.cvBuilder,
@@ -71,45 +70,45 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 color: Theme.of(context).colorScheme.tertiary,
                 onTap: () => context.router.push(const CvHistoryRoute()),
               ),
-              
               const SizedBox(height: 32),
-              
-              // Saved CVs Section
               Text(
                 l10n.myCvs,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 16),
-              
               Consumer<CVBuilderProvider>(
                 builder: (context, provider, child) {
                   if (provider.isLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  
+
                   if (provider.savedCVs.isEmpty) {
                     return Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+                        border: Border.all(
+                            color: Colors.grey.withValues(alpha: 0.2)),
                       ),
                       child: Column(
                         children: [
-                          Icon(Iconsax.folder_open, size: 48, color: Colors.grey[400]),
+                          Icon(Iconsax.folder_open,
+                              size: 48, color: Colors.grey[400]),
                           const SizedBox(height: 12),
                           Text(
                             l10n.noSavedCvs,
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
                           ),
                           const SizedBox(height: 12),
                           OutlinedButton.icon(
-                            onPressed: () => context.router.push(const CvBuilderWelcomeRoute()),
+                            onPressed: () => context.router
+                                .push(const CvBuilderWelcomeRoute()),
                             icon: const Icon(Iconsax.add),
                             label: Text(l10n.startCreatingCv),
                           ),
@@ -117,17 +116,19 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       ),
                     );
                   }
-                  
+
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: provider.savedCVs.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final cv = provider.savedCVs[index];
-                      // Format date: dd/MM/yyyy
-                      final date = '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
-                      
+
+                      final date =
+                          '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
+
                       return Dismissible(
                         key: Key(cv.id),
                         direction: DismissDirection.endToStart,
@@ -150,21 +151,26 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                                   right: 24,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(24)),
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Center(
                                       child: Container(
                                         width: 40,
                                         height: 4,
-                                        margin: const EdgeInsets.only(bottom: 24),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 24),
                                         decoration: BoxDecoration(
                                           color: Colors.grey[300],
-                                          borderRadius: BorderRadius.circular(2),
+                                          borderRadius:
+                                              BorderRadius.circular(2),
                                         ),
                                       ),
                                     ),
@@ -173,19 +179,27 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                                         Container(
                                           padding: const EdgeInsets.all(12),
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.errorContainer,
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .errorContainer,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Icon(
                                             Iconsax.trash,
-                                            color: Theme.of(context).colorScheme.error,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
                                           ),
                                         ),
                                         const SizedBox(width: 16),
                                         Expanded(
                                           child: Text(
                                             l10n.confirmation,
-                                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge
+                                                ?.copyWith(
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                           ),
@@ -195,8 +209,13 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                                     const SizedBox(height: 12),
                                     Text(
                                       l10n.deleteCvConfirmation,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
                                             height: 1.5,
                                           ),
                                     ),
@@ -205,30 +224,45 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                                       children: [
                                         Expanded(
                                           child: OutlinedButton(
-                                            onPressed: () => Navigator.of(context).pop(false),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
                                             style: OutlinedButton.styleFrom(
-                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                               ),
                                             ),
-                                            child: Text(l10n.cancel.toUpperCase()),
+                                            child:
+                                                Text(l10n.cancel.toUpperCase()),
                                           ),
                                         ),
                                         const SizedBox(width: 12),
                                         Expanded(
                                           flex: 2,
                                           child: FilledButton(
-                                            onPressed: () => Navigator.of(context).pop(true),
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
                                             style: FilledButton.styleFrom(
-                                              backgroundColor: Theme.of(context).colorScheme.error,
-                                              foregroundColor: Theme.of(context).colorScheme.onError,
-                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              foregroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onError,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                               ),
                                             ),
-                                            child: Text(l10n.delete.toUpperCase()),
+                                            child:
+                                                Text(l10n.delete.toUpperCase()),
                                           ),
                                         ),
                                       ],
@@ -246,30 +280,38 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                           margin: EdgeInsets.zero,
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: _getSourceColor(context, cv.source).withValues(alpha: 0.1),
+                              backgroundColor:
+                                  _getSourceColor(context, cv.source)
+                                      .withValues(alpha: 0.1),
                               child: Icon(
                                 _getSourceIcon(cv.source),
                                 color: _getSourceColor(context, cv.source),
                               ),
                             ),
                             title: Text(
-                              cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
-                              style: const TextStyle(fontWeight: FontWeight.w600),
+                              cv.name.isNotEmpty
+                                  ? cv.name
+                                  : l10n.cvNumber(index + 1),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            subtitle: Text('${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}'),
+                            subtitle: Text(
+                                '${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}'),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.edit),
                               onPressed: () async {
                                 await provider.loadCV(cv.id);
                                 if (context.mounted) {
-                                  context.router.push(const CvBuilderStep1Route());
+                                  context.router
+                                      .push(const CvBuilderStep1Route());
                                 }
                               },
                             ),
                             onTap: () async {
                               await provider.loadCV(cv.id);
                               if (context.mounted) {
-                                context.router.push(const CvBuilderStep1Route());
+                                context.router
+                                    .push(const CvBuilderStep1Route());
                               }
                             },
                           ),
@@ -325,7 +367,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
     }
   }
 }
-
 
 class _FeatureCard extends StatelessWidget {
   final IconData icon;
@@ -388,6 +429,4 @@ class _FeatureCard extends StatelessWidget {
       ),
     );
   }
-
-
 }

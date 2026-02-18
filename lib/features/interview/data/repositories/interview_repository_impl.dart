@@ -8,7 +8,6 @@ import 'package:resummy_app/features/interview/domain/entities/interview_report.
 import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
 import 'package:flutter/foundation.dart';
 
-/// Implementation of Interview Repository
 class InterviewRepositoryImpl implements InterviewRepository {
   final InterviewRemoteDataSource _remoteDataSource;
   final InterviewLocalDataSource _localDataSource;
@@ -64,80 +63,92 @@ class InterviewRepositoryImpl implements InterviewRepository {
       double totalFluency = 0;
       double totalConfidence = 0;
 
-      // Process questions sequentially to avoid rate limiting if loop is too tight, or use Future.wait with care
-      // Given Gemini rate limits, sequential might be safer for free tier, but parallel is faster.
-      // Let's use Future.wait for speed but we have retry logic in remote data source.
-      
-      final futures = questions.where((q) => q.userAnswerTranscript != null && q.userAnswerTranscript!.isNotEmpty).map((question) async {
-         try {
-           final transcript = question.userAnswerTranscript!;
-           final duration = question.audioDurationSeconds ?? 60;
-           
-           // Run analyses in parallel for this question
-           final results = await Future.wait([
-              _remoteDataSource.analyzeSTARStructure(
-                question: question.text,
-                transcript: transcript,
-                jobContext: jobContext,
-                language: language,
-              ),
-              _remoteDataSource.analyzeContentQuality(
-                question: question.text,
-                transcript: transcript,
-                jobContext: jobContext,
-                language: language,
-              ),
-              _remoteDataSource.analyzeFluency(
-                transcript: transcript,
-                audioDurationSeconds: duration,
-                language: language,
-              ),
-              _remoteDataSource.analyzeConfidence(
-                transcript: transcript,
-                questionContext: question.text,
-                language: language,
-              ),
-           ]);
-           
-           final starAnalysis = results[0] as STARAnalysis;
-           final contentAnalysis = results[1] as ContentQualityAnalysis;
-           final fluencyAnalysis = results[2] as FluencyAnalysis;
-           final confidenceAnalysis = results[3] as ConfidenceAnalysis;
-           
-           final improvedSpeech = await _remoteDataSource.generateImprovedSpeech(
+      final futures = questions
+          .where((q) =>
+              q.userAnswerTranscript != null &&
+              q.userAnswerTranscript!.isNotEmpty)
+          .map((question) async {
+        try {
+          final transcript = question.userAnswerTranscript!;
+          final duration = question.audioDurationSeconds ?? 60;
+
+          final results = await Future.wait([
+            _remoteDataSource.analyzeSTARStructure(
+              question: question.text,
               transcript: transcript,
-              detectedFillers: fluencyAnalysis.fillerWords,
-              originalWpm: fluencyAnalysis.wpm,
+              jobContext: jobContext,
               language: language,
-           );
-           
-           return QuestionFeedback(
-             questionId: question.id,
-             starAnalysis: starAnalysis,
-             contentAnalysis: contentAnalysis,
-             fluencyAnalysis: fluencyAnalysis,
-             confidenceAnalysis: confidenceAnalysis,
-             improvedSpeech: improvedSpeech,
-           );
-         } catch (e) {
-           debugPrint('Error analyzing question ${question.id}: $e');
-           return null;
-         }
+            ),
+            _remoteDataSource.analyzeContentQuality(
+              question: question.text,
+              transcript: transcript,
+              jobContext: jobContext,
+              language: language,
+            ),
+            _remoteDataSource.analyzeFluency(
+              transcript: transcript,
+              audioDurationSeconds: duration,
+              language: language,
+            ),
+            _remoteDataSource.analyzeConfidence(
+              transcript: transcript,
+              questionContext: question.text,
+              language: language,
+            ),
+          ]);
+
+          final starAnalysis = results[0] as STARAnalysis;
+          final contentAnalysis = results[1] as ContentQualityAnalysis;
+          final fluencyAnalysis = results[2] as FluencyAnalysis;
+          final confidenceAnalysis = results[3] as ConfidenceAnalysis;
+
+          final improvedSpeech = await _remoteDataSource.generateImprovedSpeech(
+            transcript: transcript,
+            detectedFillers: fluencyAnalysis.fillerWords,
+            originalWpm: fluencyAnalysis.wpm,
+            language: language,
+          );
+
+          return QuestionFeedback(
+            questionId: question.id,
+            starAnalysis: starAnalysis,
+            contentAnalysis: contentAnalysis,
+            fluencyAnalysis: fluencyAnalysis,
+            confidenceAnalysis: confidenceAnalysis,
+            improvedSpeech: improvedSpeech,
+          );
+        } catch (e) {
+          debugPrint('Error analyzing question ${question.id}: $e');
+          return null;
+        }
       });
-      
+
       final results = await Future.wait(futures);
       questionFeedbacks.addAll(results.whereType<QuestionFeedback>());
 
       if (questionFeedbacks.isNotEmpty) {
-         totalStar = questionFeedbacks.map((q) => q.starAnalysis.score).reduce((a, b) => a + b) / questionFeedbacks.length;
-         totalContent = questionFeedbacks.map((q) => q.contentAnalysis.score).reduce((a, b) => a + b) / questionFeedbacks.length;
-         totalFluency = questionFeedbacks.map((q) => q.fluencyAnalysis.score).reduce((a, b) => a + b) / questionFeedbacks.length;
-         totalConfidence = questionFeedbacks.map((q) => q.confidenceAnalysis.score).reduce((a, b) => a + b) / questionFeedbacks.length;
-         
-         totalScore = ((totalStar + totalContent + totalFluency + totalConfidence) / 4).round();
+        totalStar = questionFeedbacks
+                .map((q) => q.starAnalysis.score)
+                .reduce((a, b) => a + b) /
+            questionFeedbacks.length;
+        totalContent = questionFeedbacks
+                .map((q) => q.contentAnalysis.score)
+                .reduce((a, b) => a + b) /
+            questionFeedbacks.length;
+        totalFluency = questionFeedbacks
+                .map((q) => q.fluencyAnalysis.score)
+                .reduce((a, b) => a + b) /
+            questionFeedbacks.length;
+        totalConfidence = questionFeedbacks
+                .map((q) => q.confidenceAnalysis.score)
+                .reduce((a, b) => a + b) /
+            questionFeedbacks.length;
+
+        totalScore =
+            ((totalStar + totalContent + totalFluency + totalConfidence) / 4)
+                .round();
       }
 
-      // Aggregate overall feedback strings
       final strengths = <String>{};
       final improvements = <String>{};
       for (final qf in questionFeedbacks) {
@@ -156,7 +167,8 @@ class InterviewRepositoryImpl implements InterviewRepository {
         contentQualityAverageScore: totalContent,
         fluencyAverageScore: totalFluency,
         confidenceAverageScore: totalConfidence,
-        overallFeedback: 'Interview analysis complete for ${questionFeedbacks.length} questions.',
+        overallFeedback:
+            'Interview analysis complete for ${questionFeedbacks.length} questions.',
         strengths: strengths.take(5).toList(),
         improvements: improvements.take(5).toList(),
         questionFeedbacks: questionFeedbacks,

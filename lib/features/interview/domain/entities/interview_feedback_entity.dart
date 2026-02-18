@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Simplified Interview Feedback entity
 class InterviewFeedback extends Equatable {
   final int overallScore;
   final List<String> strengths;
@@ -53,7 +52,6 @@ class InterviewFeedback extends Equatable {
       ];
 }
 
-/// Individual question feedback
 class QuestionFeedbackItem extends Equatable {
   final String questionId;
   final int score;

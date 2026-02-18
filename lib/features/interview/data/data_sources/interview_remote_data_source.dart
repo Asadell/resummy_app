@@ -6,13 +6,11 @@ import 'package:resummy_app/features/interview/domain/entities/interview_report.
 import 'package:resummy_app/features/interview/domain/entities/interview_feedback_entity.dart';
 import 'package:flutter/foundation.dart';
 
-/// Remote data source for Interview operations using Gemini AI
 class InterviewRemoteDataSource {
   final GeminiPoolManager _geminiPool;
 
   InterviewRemoteDataSource(this._geminiPool);
 
-  /// Generate interview questions based on CV and JD
   Future<List<InterviewQuestion>> generateQuestions({
     required String cvText,
     required String jdText,
@@ -24,12 +22,12 @@ class InterviewRemoteDataSource {
     Role: $role
     CV: $cvText
     JD: $jdText
-    
+
     Task: Generate 5 behavioral interview questions using the STAR method tailored to this candidate and job.
     Also provide a brief "STAR Hint" for each question to guide the candidate (e.g., "Situation: Describe the context... Task: ...").
-    
+
     Language: Respond in $langPrompt.
-    
+
     Format: JSON list containing objects with 'id' (string), 'text' (string), 'difficulty' (string: Easy/Medium/Hard), 'starHint' (string).
     Example: [{"id": "1", "text": "Tell me about a time...", "difficulty": "Medium", "starHint": "S: Focus on..."}]
     ''';
@@ -70,7 +68,6 @@ class InterviewRemoteDataSource {
     }
   }
 
-  /// Analyze STAR structure of answer
   Future<STARAnalysis> analyzeSTARStructure({
     required String question,
     required String transcript,
@@ -127,14 +124,13 @@ Return JSON:
     }
   }
 
-  /// Generate comprehensive interview feedback
   Future<InterviewFeedback> generateFeedback({
     required List<InterviewQuestion> questions,
     required String jobContext,
     String language = 'en',
   }) async {
     final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
-    
+
     final questionsText = questions.asMap().entries.map((e) {
       final i = e.key + 1;
       final q = e.value;
@@ -203,11 +199,6 @@ Return JSON:
     }
   }
 
-  // ========================================================================
-  // Granular Analysis Methods (Ported from GeminiInterviewService)
-  // ========================================================================
-
-  /// Analyze content quality
   Future<ContentQualityAnalysis> analyzeContentQuality({
     required String question,
     required String transcript,
@@ -266,12 +257,20 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-      
+
       return ContentQualityAnalysis(
-        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
-        relevanceScore: (json['relevanceScore'] is int) ? json['relevanceScore'] : (json['relevanceScore'] ?? 0).toInt(),
-        depthScore: (json['depthScore'] is int) ? json['depthScore'] : (json['depthScore'] ?? 0).toInt(),
-        professionalImpact: (json['professionalImpact'] is int) ? json['professionalImpact'] : (json['professionalImpact'] ?? 0).toInt(),
+        score: (json['score'] is int)
+            ? json['score']
+            : (json['score'] ?? 0).toInt(),
+        relevanceScore: (json['relevanceScore'] is int)
+            ? json['relevanceScore']
+            : (json['relevanceScore'] ?? 0).toInt(),
+        depthScore: (json['depthScore'] is int)
+            ? json['depthScore']
+            : (json['depthScore'] ?? 0).toInt(),
+        professionalImpact: (json['professionalImpact'] is int)
+            ? json['professionalImpact']
+            : (json['professionalImpact'] ?? 0).toInt(),
         strengths: List<String>.from(json['strengths'] ?? []),
         weaknesses: List<String>.from(json['weaknesses'] ?? []),
         suggestions: List<String>.from(json['suggestions'] ?? []),
@@ -290,7 +289,6 @@ Return JSON:
     }
   }
 
-  /// Analyze fluency
   Future<FluencyAnalysis> analyzeFluency({
     required String transcript,
     required int audioDurationSeconds,
@@ -344,15 +342,20 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-      
+
       return FluencyAnalysis(
-        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
-        wordCount: (json['wordCount'] is int) ? json['wordCount'] : (json['wordCount'] ?? 0).toInt(),
+        score: (json['score'] is int)
+            ? json['score']
+            : (json['score'] ?? 0).toInt(),
+        wordCount: (json['wordCount'] is int)
+            ? json['wordCount']
+            : (json['wordCount'] ?? 0).toInt(),
         wpm: (json['wpm'] ?? 0).toDouble(),
         fillerWords: (json['fillerWords'] as List? ?? []).map((fw) {
           return FillerWord(
             word: fw['word'] ?? '',
-            count: (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
+            count:
+                (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
             percentage: (fw['percentage'] ?? 0).toDouble(),
           );
         }).toList(),
@@ -374,7 +377,6 @@ Return JSON:
     }
   }
 
-  /// Analyze confidence
   Future<ConfidenceAnalysis> analyzeConfidence({
     required String transcript,
     required String questionContext,
@@ -425,9 +427,11 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-      
+
       return ConfidenceAnalysis(
-        score: (json['score'] is int) ? json['score'] : (json['score'] ?? 0).toInt(),
+        score: (json['score'] is int)
+            ? json['score']
+            : (json['score'] ?? 0).toInt(),
         toneAssessment: json['toneAssessment'] ?? 'neutral',
         energyLevel: json['energyLevel'] ?? 'low',
         convictionLevel: json['convictionLevel'] ?? 'weak',
@@ -449,7 +453,6 @@ Return JSON:
     }
   }
 
-  /// Generate improved speech
   Future<ImprovedSpeechData> generateImprovedSpeech({
     required String transcript,
     required List<FillerWord> detectedFillers,
@@ -458,7 +461,7 @@ Return JSON:
   }) async {
     final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
     final fillersList = detectedFillers.map((f) => f.word).join(', ');
-    
+
     final prompt = '''
 Rewrite this interview answer by removing filler words and improving clarity.
 
@@ -500,11 +503,13 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-      
+
       return ImprovedSpeechData(
         originalText: json['originalText'] ?? transcript,
         improvedText: json['improvedText'] ?? transcript,
-        fillerWordsRemoved: (json['fillerWordsRemoved'] is int) ? json['fillerWordsRemoved'] : (json['fillerWordsRemoved'] ?? 0).toInt(),
+        fillerWordsRemoved: (json['fillerWordsRemoved'] is int)
+            ? json['fillerWordsRemoved']
+            : (json['fillerWordsRemoved'] ?? 0).toInt(),
         keyChanges: List<String>.from(json['keyChanges'] ?? []),
         wpmBefore: (json['wpmBefore'] ?? originalWpm).toDouble(),
         wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
@@ -528,31 +533,36 @@ Return JSON:
         id: '1',
         text: 'Tell me about a time you faced a challenge.',
         difficulty: 'Medium',
-        starHint: 'S: Describe the challenge. T: What was your responsibility? A: What steps did you take? R: What was the outcome?',
+        starHint:
+            'S: Describe the challenge. T: What was your responsibility? A: What steps did you take? R: What was the outcome?',
       ),
       InterviewQuestion(
         id: '2',
         text: 'Describe a project where you demonstrated leadership.',
         difficulty: 'Medium',
-        starHint: 'S: Context of the project. T: Your leadership role. A: How you led the team. R: Project success metrics.',
+        starHint:
+            'S: Context of the project. T: Your leadership role. A: How you led the team. R: Project success metrics.',
       ),
       InterviewQuestion(
         id: '3',
         text: 'How do you prioritize tasks under pressure?',
         difficulty: 'Medium',
-        starHint: 'S: A busy situation. T: Competing deadlines. A: Prioritization method used. R: All tasks completed on time.',
+        starHint:
+            'S: A busy situation. T: Competing deadlines. A: Prioritization method used. R: All tasks completed on time.',
       ),
       InterviewQuestion(
         id: '4',
         text: 'Give an example of a conflict you resolved at work.',
         difficulty: 'Medium',
-        starHint: 'S: The conflict details. T: Goal to resolve it. A: Your communication strategy. R: Positive relationship restored.',
+        starHint:
+            'S: The conflict details. T: Goal to resolve it. A: Your communication strategy. R: Positive relationship restored.',
       ),
       InterviewQuestion(
         id: '5',
         text: 'What is your greatest professional achievement?',
         difficulty: 'Medium',
-        starHint: 'S: The opportunity/challenge. T: The goal you set. A: Your key actions. R: The quantifiable impact.',
+        starHint:
+            'S: The opportunity/challenge. T: The goal you set. A: Your key actions. R: The quantifiable impact.',
       ),
     ];
   }

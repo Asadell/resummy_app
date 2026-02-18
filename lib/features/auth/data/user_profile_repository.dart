@@ -5,7 +5,7 @@ class UserProfileRepository {
   final FirebaseFirestore _firestore;
   static const String _collection = 'users';
 
-  UserProfileRepository([FirebaseFirestore? firestore]) 
+  UserProfileRepository([FirebaseFirestore? firestore])
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<UserProfile?> getUserProfile(String uid) async {
@@ -42,7 +42,8 @@ class UserProfileRepository {
     }
   }
 
-  Future<bool> completeOnboarding(String uid, {
+  Future<bool> completeOnboarding(
+    String uid, {
     required String fullName,
     String? workStatus,
     String? targetRole,

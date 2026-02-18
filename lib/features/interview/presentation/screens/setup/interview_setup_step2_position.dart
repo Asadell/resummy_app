@@ -12,13 +12,14 @@ class InterviewSetupStep2Screen extends StatefulWidget {
   const InterviewSetupStep2Screen({super.key});
 
   @override
-  State<InterviewSetupStep2Screen> createState() => _InterviewSetupStep2ScreenState();
+  State<InterviewSetupStep2Screen> createState() =>
+      _InterviewSetupStep2ScreenState();
 }
 
 class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
   late TextEditingController _positionController;
   final _companyController = TextEditingController();
-  int _selectedLevel = 1; // 0: Junior, 1: Mid, 2: Senior
+  int _selectedLevel = 1;
   String _selectedIndustry = 'Technology';
 
   @override
@@ -47,7 +48,8 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
         title: Text(l10n.setupInterview),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => context.router.push(const InterviewSetupStep1Route()),
+          onPressed: () =>
+              context.router.push(const InterviewSetupStep1Route()),
         ),
         actions: [
           Padding(
@@ -56,8 +58,8 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
               child: Text(
                 l10n.stepProgress(2, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ),
@@ -69,7 +71,6 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Success Indicator
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -78,24 +79,25 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Iconsax.tick_circle, color: Theme.of(context).colorScheme.secondary, size: 20),
+                    Icon(Iconsax.tick_circle,
+                        color: Theme.of(context).colorScheme.secondary,
+                        size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         '${l10n.cvLabel} ${provider.cvFileName ?? l10n.cvDefaultLabel}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
-                          fontWeight: FontWeight.w500,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Form
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -105,12 +107,11 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Position Field
                     Text(
                       l10n.appliedPositionLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
@@ -126,18 +127,15 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                     Text(
                       l10n.autoFillFromProfile,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Company Field
                     Text(
                       l10n.companyNameLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
@@ -150,15 +148,12 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Level Position
                     Text(
                       l10n.positionLevelLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 12),
                     Column(
@@ -170,15 +165,12 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                         _buildLevelOption(2, l10n.seniorLevel),
                       ],
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Industry
                     Text(
                       l10n.industryLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
@@ -188,22 +180,36 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      items: ['Technology', 'Finance', 'Healthcare', 'Education', 'Other']
-                          .map((industry) {
-                            String label = industry;
-                            switch (industry) {
-                              case 'Technology': label = l10n.industryTechnology; break;
-                              case 'Finance': label = l10n.industryFinance; break;
-                              case 'Healthcare': label = l10n.industryHealthcare; break;
-                              case 'Education': label = l10n.industryEducation; break;
-                              case 'Other': label = l10n.industryOther; break;
-                            }
-                            return DropdownMenuItem(
-                                value: industry,
-                                child: Text(label),
-                            );
-                          })
-                          .toList(),
+                      items: [
+                        'Technology',
+                        'Finance',
+                        'Healthcare',
+                        'Education',
+                        'Other'
+                      ].map((industry) {
+                        String label = industry;
+                        switch (industry) {
+                          case 'Technology':
+                            label = l10n.industryTechnology;
+                            break;
+                          case 'Finance':
+                            label = l10n.industryFinance;
+                            break;
+                          case 'Healthcare':
+                            label = l10n.industryHealthcare;
+                            break;
+                          case 'Education':
+                            label = l10n.industryEducation;
+                            break;
+                          case 'Other':
+                            label = l10n.industryOther;
+                            break;
+                        }
+                        return DropdownMenuItem(
+                          value: industry,
+                          child: Text(label),
+                        );
+                      }).toList(),
                       onChanged: (value) {
                         if (value != null) {
                           setState(() => _selectedIndustry = value);
@@ -213,10 +219,7 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Info Box
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -226,20 +229,22 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
+                    Icon(Iconsax.lamp_on,
+                        color: Theme.of(context).colorScheme.primary, size: 20),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         l10n.dataHelpsAiTailor,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
                       ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 100),
             ],
           ),
@@ -251,7 +256,9 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black.withValues(alpha: 0.05)
+                  : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -262,7 +269,8 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => context.router.push(const InterviewSetupStep1Route()),
+                  onPressed: () =>
+                      context.router.push(const InterviewSetupStep1Route()),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),
@@ -276,9 +284,13 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
                   onPressed: () {
                     final provider = context.read<InterviewProvider>();
                     final position = _positionController.text;
-                    final level = _selectedLevel == 0 ? l10n.juniorLevel : _selectedLevel == 1 ? l10n.midLevel : l10n.seniorLevel;
+                    final level = _selectedLevel == 0
+                        ? l10n.juniorLevel
+                        : _selectedLevel == 1
+                            ? l10n.midLevel
+                            : l10n.seniorLevel;
                     final fullRole = "$level $position";
-                    
+
                     provider.updateRole(fullRole);
                     provider.updateCompanyName(_companyController.text);
                     context.router.push(const InterviewSetupStep3Route());
@@ -303,9 +315,13 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).cardTheme.color,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).cardTheme.color,
           border: Border.all(
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerTheme.color!,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerTheme.color!,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -314,13 +330,17 @@ class _InterviewSetupStep2ScreenState extends State<InterviewSetupStep2Screen> {
           children: [
             Icon(
               isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
-              color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.onSurface,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onPrimaryContainer
+                    : Theme.of(context).colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

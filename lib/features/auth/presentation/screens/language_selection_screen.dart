@@ -10,7 +10,8 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -26,7 +27,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 48),
-              // Welcome header
               Icon(
                 Iconsax.language_square,
                 size: 64,
@@ -36,16 +36,16 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               Text(
                 'Choose Your Language',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
                 'Pilih Bahasa Anda',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
@@ -67,13 +67,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 ),
                 onPressed: () async {
                   final router = context.router;
-                  final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
-                  
-                  // Save language preference and mark as selected
+                  final localeProvider =
+                      Provider.of<LocaleProvider>(context, listen: false);
+
                   await localeProvider.setLocale(Locale(_selectedLanguage));
                   await localeProvider.markLanguageSelected();
-                  
-                  // Navigate to Auth screen
+
                   router.replace(const AuthRoute());
                 },
                 child: Row(
@@ -112,7 +111,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           ),
           borderRadius: BorderRadius.circular(16),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
@@ -122,8 +124,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             Text(
               language,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
             ),
             const Spacer(),
             if (isSelected)

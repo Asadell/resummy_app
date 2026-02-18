@@ -10,29 +10,23 @@ import 'package:resummy_app/features/auth/domain/usecases/sign_in_with_google_us
 import 'package:resummy_app/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
-/// Setup Dependency Injection for Auth feature
 Future<void> setupAuthDI(GetIt getIt) async {
-  // External
   getIt.registerLazySingleton(() => FirebaseAuth.instance);
   getIt.registerLazySingleton(() => GoogleSignIn());
 
-  // Data Source
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(getIt(), getIt()),
   );
 
-  // Repository
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(getIt()),
   );
 
-  // Use Cases
   getIt.registerLazySingleton(() => SignInWithGoogleUseCase(getIt()));
   getIt.registerLazySingleton(() => SignOutUseCase(getIt()));
   getIt.registerLazySingleton(() => GetCurrentUserUseCase(getIt()));
   getIt.registerLazySingleton(() => GetUserStreamUseCase(getIt()));
 
-  // Provider
   getIt.registerLazySingleton<AuthProvider>(
     () => AuthProvider(
       getUserStreamUseCase: getIt(),

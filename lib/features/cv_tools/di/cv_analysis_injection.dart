@@ -11,14 +11,11 @@ import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_ser
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_conversion_repository.dart';
 
-/// Setup Dependency Injection for CV Analysis and Conversion features
 Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
-  // Shared service for parsing CV JSON
   getIt.registerLazySingleton<CvAtsConverterService>(
     () => CvAtsConverterService(),
   );
 
-  // CV Analysis Data Sources
   getIt.registerLazySingleton<CVAnalysisRemoteDataSource>(
     () => CVAnalysisRemoteDataSource(getIt<GeminiPoolManager>()),
   );
@@ -27,7 +24,6 @@ Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
     () => CVAnalysisLocalDataSource(getIt<DatabaseHelper>()),
   );
 
-  // CV Conversion Data Source
   getIt.registerLazySingleton<CVConversionRemoteDataSource>(
     () => CVConversionRemoteDataSource(
       getIt<GeminiPoolManager>(),
@@ -35,7 +31,6 @@ Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
     ),
   );
 
-  // Repositories
   getIt.registerLazySingleton<CVAnalysisRepository>(
     () => CVAnalysisRepositoryImpl(
       getIt<CVAnalysisRemoteDataSource>(),

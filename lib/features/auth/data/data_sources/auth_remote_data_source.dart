@@ -4,14 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:resummy_app/core/error/exceptions.dart';
 import 'package:resummy_app/features/auth/domain/entities/user_entity.dart';
 
-/// Remote data source for Authentication using Firebase
 class AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
   AuthRemoteDataSource(this._firebaseAuth, this._googleSignIn);
 
-  /// Stream of user changes
   Stream<UserEntity?> get userStream {
     return _firebaseAuth.authStateChanges().map((user) {
       if (user == null) return null;
@@ -19,7 +17,6 @@ class AuthRemoteDataSource {
     });
   }
 
-  /// Get current user
   UserEntity? getCurrentUser() {
     final user = _firebaseAuth.currentUser;
     if (user != null) {
@@ -28,22 +25,23 @@ class AuthRemoteDataSource {
     return null;
   }
 
-  /// Sign in with Google
   Future<UserEntity> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       if (googleUser == null) {
         throw AuthException('Google Sign-In aborted by user');
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
       final user = userCredential.user;
 
       if (user == null) {
@@ -57,7 +55,6 @@ class AuthRemoteDataSource {
     }
   }
 
-  /// Sign out
   Future<void> signOut() async {
     try {
       await _googleSignIn.signOut();
@@ -68,7 +65,6 @@ class AuthRemoteDataSource {
     }
   }
 
-  /// Helper: Map Firebase User to UserEntity
   UserEntity _mapFirebaseUserToEntity(User user) {
     return UserEntity(
       id: user.uid,

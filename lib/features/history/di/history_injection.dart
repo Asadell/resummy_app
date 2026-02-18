@@ -6,19 +6,17 @@ import 'package:resummy_app/features/history/domain/repositories/history_reposit
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
-/// Setup Dependency Injection for History feature
 Future<void> setupHistoryDI(GetIt getIt) async {
-  // Data Source
   getIt.registerLazySingleton<HistoryLocalDataSource>(
     () => HistoryLocalDataSource(getIt<DatabaseHelper>()),
   );
 
-  // Repository
   getIt.registerLazySingleton<HistoryRepository>(
-    () => HistoryRepositoryImpl(getIt<HistoryLocalDataSource>(),),
+    () => HistoryRepositoryImpl(
+      getIt<HistoryLocalDataSource>(),
+    ),
   );
 
-  // Provider
   getIt.registerLazySingleton<HistoryProvider>(
     () => HistoryProvider(
       repository: getIt<HistoryRepository>(),

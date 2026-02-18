@@ -4,10 +4,10 @@ class InterviewQuestion extends Equatable {
   final String id;
   final String text;
   final String difficulty;
-  final String? starHint; // Dynamic hint from Gemini
+  final String? starHint;
   final String? userAnswerTranscript;
   final String? audioPath;
-  final int? audioDurationSeconds; // For fluency analysis WPM calculation
+  final int? audioDurationSeconds;
 
   const InterviewQuestion({
     required this.id,
@@ -40,6 +40,13 @@ class InterviewQuestion extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, text, difficulty, starHint, userAnswerTranscript, audioPath, audioDurationSeconds];
+  List<Object?> get props => [
+        id,
+        text,
+        difficulty,
+        starHint,
+        userAnswerTranscript,
+        audioPath,
+        audioDurationSeconds
+      ];
 }
-

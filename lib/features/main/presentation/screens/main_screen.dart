@@ -112,14 +112,17 @@ class _NavBarItem extends StatelessWidget {
           children: [
             Icon(
               isActive ? activeIcon : icon,
-              color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
+              color:
+                  isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
               size: 24,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: textTheme.labelSmall?.copyWith(
-                color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                color: isActive
+                    ? colorScheme.primary
+                    : colorScheme.onSurfaceVariant,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
               ),
             ),

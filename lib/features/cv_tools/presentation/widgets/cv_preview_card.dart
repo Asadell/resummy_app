@@ -3,8 +3,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-/// Professional ATS-friendly CV Preview
-/// Optimized for Applicant Tracking Systems with clean, scannable layout
 class CvPreviewCard extends StatelessWidget {
   final CVData? cvData;
 
@@ -30,7 +28,7 @@ class CvPreviewCard extends StatelessWidget {
     }
 
     return Container(
-      color: const Color(0xFFF5F5F5), // Light gray background
+      color: const Color(0xFFF5F5F5),
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -47,7 +45,7 @@ class CvPreviewCard extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(48.0), // Professional margins
+              padding: const EdgeInsets.all(48.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,14 +66,10 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // HEADER - Name + Contact (ATS Format)
-  // ========================================
   Widget _buildHeader(CVData cv) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // NAME - Large, Bold, ALL CAPS
         Text(
           cv.name.toUpperCase(),
           style: const TextStyle(
@@ -87,12 +81,9 @@ class CvPreviewCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-
-        // CONTACT LINE - Single line with pipe separators
         _buildContactLine(cv),
-
-        // LINKS - LinkedIn, Portfolio
-        if (cv.linkedin?.isNotEmpty == true || cv.portfolio?.isNotEmpty == true) ...[
+        if (cv.linkedin?.isNotEmpty == true ||
+            cv.portfolio?.isNotEmpty == true) ...[
           const SizedBox(height: 4),
           _buildLinksLine(cv),
         ],
@@ -102,11 +93,11 @@ class CvPreviewCard extends StatelessWidget {
 
   Widget _buildContactLine(CVData cv) {
     final List<String> contacts = [];
-    
+
     if (cv.email?.isNotEmpty == true) contacts.add(cv.email!);
     if (cv.phone?.isNotEmpty == true) contacts.add(cv.phone!);
     if (cv.location?.isNotEmpty == true) contacts.add(cv.location!);
-    
+
     if (contacts.isEmpty) return const SizedBox.shrink();
 
     return Text(
@@ -114,7 +105,7 @@ class CvPreviewCard extends StatelessWidget {
       style: const TextStyle(
         fontSize: 11,
         height: 1.5,
-        color: Color(0xFF374151), // Dark gray
+        color: Color(0xFF374151),
         letterSpacing: 0.2,
       ),
     );
@@ -122,10 +113,11 @@ class CvPreviewCard extends StatelessWidget {
 
   Widget _buildLinksLine(CVData cv) {
     final List<String> links = [];
-    
+
     if (cv.linkedin?.isNotEmpty == true) links.add('LinkedIn: ${cv.linkedin}');
-    if (cv.portfolio?.isNotEmpty == true) links.add('Portfolio: ${cv.portfolio}');
-    
+    if (cv.portfolio?.isNotEmpty == true)
+      links.add('Portfolio: ${cv.portfolio}');
+
     if (links.isEmpty) return const SizedBox.shrink();
 
     return Text(
@@ -133,28 +125,24 @@ class CvPreviewCard extends StatelessWidget {
       style: const TextStyle(
         fontSize: 10,
         height: 1.5,
-        color: Color(0xFF6B7280), // Medium gray
+        color: Color(0xFF6B7280),
       ),
     );
   }
 
-  // ========================================
-  // SECTION BUILDER
-  // ========================================
   Widget _buildSection(SectionData section) {
     if (section is SummarySection) return _buildSummarySection(section);
     if (section is ExperienceSection) return _buildExperienceSection(section);
     if (section is EducationSection) return _buildEducationSection(section);
-    if (section is OrganizationSection) return _buildOrganizationSection(section);
+    if (section is OrganizationSection)
+      return _buildOrganizationSection(section);
     if (section is SkillsSection) return _buildSkillsSection(section);
-    if (section is CertificationsSection) return _buildCertificationsSection(section);
+    if (section is CertificationsSection)
+      return _buildCertificationsSection(section);
     if (section is CustomSection) return _buildCustomSection(section);
     return const SizedBox.shrink();
   }
 
-  // ========================================
-  // SECTION HEADER - Clean, Professional
-  // ========================================
   Widget _buildSectionHeader(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +153,7 @@ class CvPreviewCard extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.0,
-            color: Color(0xFF0EA5E9), // Cyan
+            color: Color(0xFF0EA5E9),
             height: 1.2,
           ),
         ),
@@ -187,9 +175,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 1. PROFESSIONAL SUMMARY
-  // ========================================
   Widget _buildSummarySection(SummarySection section) {
     if (section.content.isEmpty) return const SizedBox.shrink();
 
@@ -211,9 +196,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 2. WORK EXPERIENCE
-  // ========================================
   Widget _buildExperienceSection(ExperienceSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
 
@@ -229,14 +211,14 @@ class CvPreviewCard extends StatelessWidget {
   Widget _buildExperienceEntry(WorkExperience exp) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(exp.startDate);
-    final endDate = exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
+    final endDate =
+        exp.isCurrentlyWorking ? 'Present' : dateFormat.format(exp.endDate!);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Company Name (BOLD) + Date (Right-aligned)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,8 +246,6 @@ class CvPreviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 3),
-
-          // Job Title (Italic)
           Text(
             exp.jobTitle,
             style: const TextStyle(
@@ -275,7 +255,6 @@ class CvPreviewCard extends StatelessWidget {
               color: Color(0xFF374151),
             ),
           ),
-
           if (exp.location?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
@@ -287,10 +266,7 @@ class CvPreviewCard extends StatelessWidget {
               ),
             ),
           ],
-
           const SizedBox(height: 6),
-
-          // Responsibilities - Justified bullets
           ...exp.responsibilities
               .split('\n')
               .where((r) => r.trim().isNotEmpty)
@@ -322,9 +298,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 3. EDUCATION
-  // ========================================
   Widget _buildEducationSection(EducationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
 
@@ -338,14 +311,14 @@ class CvPreviewCard extends StatelessWidget {
   }
 
   Widget _buildEducationEntry(Education edu) {
-    final endYear = edu.isCurrentlyStudying ? 'Present' : edu.endYear?.toString() ?? '';
+    final endYear =
+        edu.isCurrentlyStudying ? 'Present' : edu.endYear?.toString() ?? '';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Institution (BOLD) + Year (Right-aligned)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,8 +346,6 @@ class CvPreviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 3),
-
-          // Degree (Italic)
           Text(
             '${edu.degree} in ${edu.major}',
             style: const TextStyle(
@@ -384,7 +355,6 @@ class CvPreviewCard extends StatelessWidget {
               color: Color(0xFF374151),
             ),
           ),
-
           if (edu.gpa?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
@@ -396,7 +366,6 @@ class CvPreviewCard extends StatelessWidget {
               ),
             ),
           ],
-
           if (edu.achievements?.isNotEmpty == true) ...[
             const SizedBox(height: 6),
             ...edu.achievements!
@@ -407,7 +376,8 @@ class CvPreviewCard extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('• ', style: TextStyle(fontSize: 11, height: 1.4)),
+                          const Text('• ',
+                              style: TextStyle(fontSize: 11, height: 1.4)),
                           Expanded(
                             child: Text(
                               achievement.trim(),
@@ -427,9 +397,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 4. ORGANIZATION EXPERIENCE
-  // ========================================
   Widget _buildOrganizationSection(OrganizationSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
 
@@ -445,14 +412,14 @@ class CvPreviewCard extends StatelessWidget {
   Widget _buildOrganizationEntry(OrganizationExperience org) {
     final dateFormat = DateFormat('MMM yyyy');
     final startDate = dateFormat.format(org.startDate);
-    final endDate = org.isCurrentlyActive ? 'Present' : dateFormat.format(org.endDate!);
+    final endDate =
+        org.isCurrentlyActive ? 'Present' : dateFormat.format(org.endDate!);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Organization Name (BOLD) + Date (Right-aligned)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -480,8 +447,6 @@ class CvPreviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 3),
-
-          // Role (Italic)
           Text(
             org.role,
             style: const TextStyle(
@@ -491,10 +456,7 @@ class CvPreviewCard extends StatelessWidget {
               color: Color(0xFF374151),
             ),
           ),
-
           const SizedBox(height: 6),
-
-          // Description
           ...org.description
               .split('\n')
               .where((d) => d.trim().isNotEmpty)
@@ -503,7 +465,8 @@ class CvPreviewCard extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
+                        const Text('• ',
+                            style: TextStyle(fontSize: 11, height: 1.5)),
                         Expanded(
                           child: Text(
                             desc.trim(),
@@ -523,9 +486,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 5. SKILLS (Category-based)
-  // ========================================
   Widget _buildSkillsSection(SkillsSection section) {
     if (section.skillCategories.isEmpty) return const SizedBox.shrink();
 
@@ -560,9 +520,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 6. CERTIFICATIONS
-  // ========================================
   Widget _buildCertificationsSection(CertificationsSection section) {
     if (section.entries.isEmpty) return const SizedBox.shrink();
 
@@ -584,7 +541,6 @@ class CvPreviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Certification Name (BOLD) + Date (Right-aligned)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -612,8 +568,6 @@ class CvPreviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 2),
-
-          // Issuing Organization
           Text(
             cert.issuingOrganization,
             style: const TextStyle(
@@ -622,7 +576,6 @@ class CvPreviewCard extends StatelessWidget {
               height: 1.3,
             ),
           ),
-
           if (cert.credentialId?.isNotEmpty == true) ...[
             const SizedBox(height: 2),
             Text(
@@ -639,12 +592,6 @@ class CvPreviewCard extends StatelessWidget {
     );
   }
 
-  // ========================================
-  // 7. CUSTOM SECTION
-  // ========================================
-  // ========================================
-  // 7. CUSTOM SECTION
-  // ========================================
   Widget _buildCustomSection(CustomSection section) {
     if (section.template == CustomSectionTemplate.paragraph) {
       if (section.content.isEmpty) return const SizedBox.shrink();
@@ -666,31 +613,35 @@ class CvPreviewCard extends StatelessWidget {
     }
 
     if (section.template == CustomSectionTemplate.bulletList) {
-      final lines = section.content.split('\n').where((l) => l.trim().isNotEmpty).toList();
+      final lines = section.content
+          .split('\n')
+          .where((l) => l.trim().isNotEmpty)
+          .toList();
       if (lines.isEmpty) return const SizedBox.shrink();
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSectionHeader(section.title),
           ...lines.map((line) => Padding(
-            padding: const EdgeInsets.only(bottom: 2),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
-                Expanded(
-                  child: Text(
-                    line.trim(),
-                    style: const TextStyle(
-                      fontSize: 11,
-                      height: 1.5,
-                      color: Color(0xFF374151),
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• ',
+                        style: TextStyle(fontSize: 11, height: 1.5)),
+                    Expanded(
+                      child: Text(
+                        line.trim(),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          height: 1.5,
+                          color: Color(0xFF374151),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
         ],
       );
     }
@@ -702,29 +653,28 @@ class CvPreviewCard extends StatelessWidget {
         children: [
           _buildSectionHeader(section.title),
           ...section.skillCategories.entries.map((category) => Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                  fontSize: 11,
-                  height: 1.5,
-                  color: Color(0xFF374151),
-                ),
-                children: [
-                  TextSpan(
-                    text: '${category.key}: ',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                padding: const EdgeInsets.only(bottom: 4),
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 11,
+                      height: 1.5,
+                      color: Color(0xFF374151),
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '${category.key}: ',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: category.value.join(', ')),
+                    ],
                   ),
-                  TextSpan(text: category.value.join(', ')),
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
         ],
       );
     }
 
-    // experienceLike & educationLike — render structured entries
     if (section.entries.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -735,13 +685,12 @@ class CvPreviewCard extends StatelessWidget {
           final dateStr = entry.startDate != null
               ? '${entry.startDate} - ${entry.isPresent ? "Present" : (entry.endDate ?? "")}'
               : '';
-              
+
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title (BOLD) + Date (Right-aligned)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -770,8 +719,6 @@ class CvPreviewCard extends StatelessWidget {
                     ],
                   ],
                 ),
-                
-                // Subtitle (Italic)
                 if (entry.subtitle?.isNotEmpty == true) ...[
                   const SizedBox(height: 2),
                   Text(
@@ -784,8 +731,6 @@ class CvPreviewCard extends StatelessWidget {
                     ),
                   ),
                 ],
-
-                // Meta
                 if (entry.meta?.isNotEmpty == true) ...[
                   const SizedBox(height: 2),
                   Text(
@@ -797,30 +742,28 @@ class CvPreviewCard extends StatelessWidget {
                     ),
                   ),
                 ],
-
                 const SizedBox(height: 4),
-
-                // Bullets
                 ...entry.bullets.map((bullet) => Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('• ', style: TextStyle(fontSize: 11, height: 1.5)),
-                      Expanded(
-                        child: Text(
-                          bullet,
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            height: 1.5,
-                            color: Color(0xFF374151),
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('• ',
+                              style: TextStyle(fontSize: 11, height: 1.5)),
+                          Expanded(
+                            child: Text(
+                              bullet,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                height: 1.5,
+                                color: Color(0xFF374151),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
+                    )),
               ],
             ),
           );

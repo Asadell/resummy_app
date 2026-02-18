@@ -1,6 +1,5 @@
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 
-/// Data model for CV Suggestion with JSON serialization
 class CvSuggestionModel extends CvSuggestion {
   const CvSuggestionModel({
     required super.id,
@@ -73,7 +72,6 @@ class CvSuggestionModel extends CvSuggestion {
   }
 }
 
-/// Data model for CV Score Metrics with JSON serialization
 class CvScoreMetricsModel extends CvScoreMetrics {
   const CvScoreMetricsModel({
     required super.keywordMatch,
@@ -104,7 +102,6 @@ class CvScoreMetricsModel extends CvScoreMetrics {
   }
 }
 
-/// Data model for CV Analysis Result with JSON serialization
 class CvAnalysisResultModel extends CvAnalysisResult {
   const CvAnalysisResultModel({
     required super.id,
@@ -142,8 +139,8 @@ class CvAnalysisResultModel extends CvAnalysisResult {
       suggestions: rawSugs
           .asMap()
           .entries
-          .map((e) =>
-              CvSuggestionModel.fromJson(e.value as Map<String, dynamic>, e.key))
+          .map((e) => CvSuggestionModel.fromJson(
+              e.value as Map<String, dynamic>, e.key))
           .toList(),
       jobPosition: jobPosition,
       jobDescription: jobDescription,
@@ -160,9 +157,8 @@ class CvAnalysisResultModel extends CvAnalysisResult {
       'highlights': highlights,
       'improvements': improvements,
       'missing_keywords': missingKeywords,
-      'suggestions': suggestions
-          .map((s) => (s as CvSuggestionModel).toJson())
-          .toList(),
+      'suggestions':
+          suggestions.map((s) => (s as CvSuggestionModel).toJson()).toList(),
       'job_position': jobPosition,
       'job_description': jobDescription,
     };

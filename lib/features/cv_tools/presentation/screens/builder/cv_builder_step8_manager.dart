@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +31,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
 
   TextEditingController _getController(SectionData section) {
     if (!_titleControllers.containsKey(section.id)) {
-      _titleControllers[section.id] = TextEditingController(text: section.title);
+      _titleControllers[section.id] =
+          TextEditingController(text: section.title);
     }
     return _titleControllers[section.id]!;
   }
@@ -67,11 +67,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     return Consumer<CVBuilderProvider>(
       builder: (context, provider, _) {
         final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
-        
+
         return CVBuilderStepLayout(
           title: l10n.cvBuilder,
           currentStep: totalSteps,
-
           onBack: () {
             DynamicCvSteps.navigateToPreviousStep(context, totalSteps);
           },
@@ -83,13 +82,15 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
             }
           },
           nextLabel: l10n.previewCV,
-          editContent: _buildContent(context, provider, totalSteps, theme, isDark, l10n),
+          editContent:
+              _buildContent(context, provider, totalSteps, theme, isDark, l10n),
         );
       },
     );
   }
 
-  Widget _buildContent(BuildContext context, CVBuilderProvider provider, int totalSteps, ThemeData theme, bool isDark, AppLocalizations l10n) {
+  Widget _buildContent(BuildContext context, CVBuilderProvider provider,
+      int totalSteps, ThemeData theme, bool isDark, AppLocalizations l10n) {
     final cv = provider.currentCV;
     if (cv == null) {
       return Center(child: Text(l10n.noCvData));
@@ -118,73 +119,64 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
               ),
             ),
           ),
-                const SizedBox(height: 12),
-                
-                Center(
-                  child: Text(
-                    l10n.sectionManagerTitle,
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                
-                Center(
-                  child: Text(
-                    l10n.sectionManagerDesc,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Reorderable Section List
-                ReorderableListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cv.sections.length,
-                  proxyDecorator: (Widget child, int index, Animation<double> animation) {
-                    return child;
-                  },
-                  onReorder: (oldIndex, newIndex) {
-                    provider.reorderSections(oldIndex, newIndex);
-                  },
-                  itemBuilder: (context, index) {
-                    final section = cv.sections[index];
-                    // Skip header section in reordering visual if desired, but user wants reordering. 
-                    // Header is fixed at top usually. Let's assume header is NOT in reorder list or displayed differently?
-                    // CVData struct puts header separate. `sections` only contains reorderable body sections.
-                    // Wait, `CVData` has `header` field AND `sections`. So `sections` are body sections. Yes.
-                    return _buildSectionCard(section, provider, index, context);
-                  },
-                ),
-
-                const SizedBox(height: 24),
-
-                // Add Custom Section Button
-                OutlinedButton.icon(
-                  onPressed: () => _showAddCustomSectionDialog(provider),
-                  icon: const Icon(Iconsax.add),
-                  label: Text(l10n.addCustomSection),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 80),
-              ],
+          const SizedBox(height: 12),
+          Center(
+            child: Text(
+              l10n.sectionManagerTitle,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          );
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: Text(
+              l10n.sectionManagerDesc,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color:
+                    theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 24),
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: cv.sections.length,
+            proxyDecorator:
+                (Widget child, int index, Animation<double> animation) {
+              return child;
+            },
+            onReorder: (oldIndex, newIndex) {
+              provider.reorderSections(oldIndex, newIndex);
+            },
+            itemBuilder: (context, index) {
+              final section = cv.sections[index];
+
+              return _buildSectionCard(section, provider, index, context);
+            },
+          ),
+          const SizedBox(height: 24),
+          OutlinedButton.icon(
+            onPressed: () => _showAddCustomSectionDialog(provider),
+            icon: const Icon(Iconsax.add),
+            label: Text(l10n.addCustomSection),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+        ],
+      ),
+    );
   }
 
-  Widget _buildSectionCard(SectionData section, CVBuilderProvider provider, int index, BuildContext context) {
+  Widget _buildSectionCard(SectionData section, CVBuilderProvider provider,
+      int index, BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingTitleSectionId == section.id;
     final controller = _getController(section);
@@ -195,8 +187,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
       key: ValueKey(section.id),
       margin: const EdgeInsets.only(bottom: 12),
       elevation: section.isVisible ? 2 : 0,
-      color: section.isVisible 
-          ? theme.cardColor 
+      color: section.isVisible
+          ? theme.cardColor
           : (isDark ? Colors.grey.shade800 : Colors.grey.shade100),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -205,23 +197,21 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
           children: [
             Row(
               children: [
-                // Drag Handle
                 Icon(Iconsax.menu_1, color: theme.disabledColor, size: 20),
                 const SizedBox(width: 12),
-
-                // Section Icon
                 Icon(
                   _getSectionIcon(section.type),
-                  color: section.isVisible ? theme.primaryColor : theme.disabledColor,
+                  color: section.isVisible
+                      ? theme.primaryColor
+                      : theme.disabledColor,
                   size: 20,
                 ),
                 const SizedBox(width: 12),
-
-                // Section Number
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: section.isVisible 
+                    color: section.isVisible
                         ? theme.primaryColor.withValues(alpha: 0.1)
                         : theme.disabledColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
@@ -231,13 +221,13 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: section.isVisible ? theme.primaryColor : theme.disabledColor,
+                      color: section.isVisible
+                          ? theme.primaryColor
+                          : theme.disabledColor,
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
-
-                // Section Title or Edit Field
                 Expanded(
                   child: isEditing
                       ? TextField(
@@ -258,7 +248,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                           ),
                           onSubmitted: (value) {
                             if (value.trim().isNotEmpty) {
-                              provider.updateSectionTitle(section.id, value.trim());
+                              provider.updateSectionTitle(
+                                  section.id, value.trim());
                             }
                             setState(() {
                               _editingTitleSectionId = null;
@@ -280,8 +271,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: section.isVisible 
-                                        ? theme.textTheme.bodyLarge?.color 
+                                    color: section.isVisible
+                                        ? theme.textTheme.bodyLarge?.color
                                         : theme.disabledColor,
                                   ),
                                 ),
@@ -295,10 +286,7 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                           ),
                         ),
                 ),
-
                 const SizedBox(width: 12),
-
-                // Visibility Toggle
                 Switch(
                   value: section.isVisible,
                   onChanged: (value) {
@@ -308,8 +296,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 ),
               ],
             ),
-
-            // Entry Count
             if (section is ExperienceSection ||
                 section is EducationSection ||
                 section is OrganizationSection ||
@@ -330,16 +316,15 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 ],
               ),
             ],
-
-            // Custom Section Actions - Simplified
             if (section is CustomSection) ...[
               const SizedBox(height: 8),
               Row(
                 children: [
-                   const SizedBox(width: 44),
-                   TextButton.icon(
+                  const SizedBox(width: 44),
+                  TextButton.icon(
                     onPressed: () => _showDeleteConfirmation(provider, section),
-                    icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
+                    icon:
+                        const Icon(Iconsax.trash, size: 16, color: Colors.red),
                     label: Text(
                       AppLocalizations.of(context)!.deleteSection,
                       style: const TextStyle(color: Colors.red),
@@ -369,7 +354,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
 
   void _showAddCustomSectionDialog(CVBuilderProvider provider) {
     final l10n = AppLocalizations.of(context)!;
-    CustomSectionTemplate selectedTemplate = CustomSectionTemplate.experienceLike;
+    CustomSectionTemplate selectedTemplate =
+        CustomSectionTemplate.experienceLike;
 
     showModalBottomSheet(
       context: context,
@@ -391,7 +377,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Handle bar
               Center(
                 child: Container(
                   width: 40,
@@ -403,14 +388,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                 ),
               ),
               const SizedBox(height: 24),
-
               Text(
                 l10n.selectSectionFormat,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-
-              // Template Selection
               ...CustomSectionTemplate.values.map((template) {
                 final isSelected = selectedTemplate == template;
                 return GestureDetector(
@@ -420,7 +403,9 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
+                          ? Theme.of(context)
+                              .primaryColor
+                              .withValues(alpha: 0.08)
                           : Theme.of(context).cardColor,
                       border: Border.all(
                         color: isSelected
@@ -451,7 +436,10 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                                   fontSize: 13,
                                   color: isSelected
                                       ? Theme.of(context).primaryColor
-                                      : Theme.of(context).textTheme.bodyLarge?.color,
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color,
                                 ),
                               ),
                               const SizedBox(height: 2),
@@ -476,14 +464,11 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                   ),
                 );
               }),
-
               const SizedBox(height: 20),
-
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Determine default title
                     String defaultTitle;
                     switch (selectedTemplate) {
                       case CustomSectionTemplate.experienceLike:
@@ -515,7 +500,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(l10n.createSection, style: const TextStyle(fontSize: 16)),
+                  child: Text(l10n.createSection,
+                      style: const TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -525,7 +511,6 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     );
   }
 
-  // Helper methods untuk dialog:
   IconData _getTemplateIcon(CustomSectionTemplate template) {
     switch (template) {
       case CustomSectionTemplate.experienceLike:
@@ -541,7 +526,8 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
     }
   }
 
-  void _showDeleteConfirmation(CVBuilderProvider provider, CustomSection section) {
+  void _showDeleteConfirmation(
+      CVBuilderProvider provider, CustomSection section) {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(

@@ -21,13 +21,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final currentStep = DynamicCvSteps.getStepForSection(context, 'experience');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: currentStep,
-
       onBack: () {
         DynamicCvSteps.navigateToPreviousStep(context, currentStep);
       },
@@ -39,23 +38,26 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
           final workList = provider.currentCV?.workExperience ?? [];
-          
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Step Header
                 Center(
                   child: Consumer<CVBuilderProvider>(
                     builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(context, 'experience');
-                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      final currentStep = DynamicCvSteps.getStepForSection(
+                          context, 'experience');
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
-                          border: Border.all(color: Theme.of(context).primaryColor),
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -75,8 +77,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                   child: Text(
                     l10n.experienceHistoryHeader,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -84,14 +86,15 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                   child: Text(
                     l10n.experienceHistoryDesc,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                    ),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.color
+                              ?.withValues(alpha: 0.7),
+                        ),
                   ),
                 ),
-                
                 const SizedBox(height: 24),
-                
-                // Empty State
                 if (workList.isEmpty)
                   Center(
                     child: Container(
@@ -99,7 +102,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Theme.of(context).dividerColor),
+                        border:
+                            Border.all(color: Theme.of(context).dividerColor),
                       ),
                       child: Column(
                         children: [
@@ -111,9 +115,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                           const SizedBox(height: 16),
                           Text(
                             l10n.noExperienceData,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -127,8 +134,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       ),
                     ),
                   ),
-                  
-                // List of Work Experience
                 if (workList.isNotEmpty) ...[
                   ReorderableListView.builder(
                     shrinkWrap: true,
@@ -139,11 +144,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                     },
                     itemBuilder: (context, index) {
                       final work = workList[index];
-                      final start = '${work.startDate.month}/${work.startDate.year}';
-                      final end = work.isCurrentlyWorking 
+                      final start =
+                          '${work.startDate.month}/${work.startDate.year}';
+                      final end = work.isCurrentlyWorking
                           ? l10n.present
                           : '${work.endDate?.month}/${work.endDate?.year}';
-                          
+
                       return Card(
                         key: ValueKey(work.id),
                         margin: const EdgeInsets.only(bottom: 12),
@@ -158,7 +164,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                              Text('${work.companyName} • ${work.employmentType}'),
+                              Text(
+                                  '${work.companyName} • ${work.employmentType}'),
                               const SizedBox(height: 4),
                               Text(
                                 '$start - $end',
@@ -184,11 +191,14 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                             children: [
                               IconButton(
                                 icon: const Icon(Iconsax.edit, size: 20),
-                                onPressed: () => _editWorkExperience(work, index),
+                                onPressed: () =>
+                                    _editWorkExperience(work, index),
                               ),
                               IconButton(
-                                icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
-                                onPressed: () => provider.removeWorkExperience(index),
+                                icon: const Icon(Iconsax.trash,
+                                    size: 20, color: Colors.red),
+                                onPressed: () =>
+                                    provider.removeWorkExperience(index),
                               ),
                             ],
                           ),
@@ -196,16 +206,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                       );
                     },
                   ),
-                  
                   const SizedBox(height: 24),
                 ],
-
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 24),
-
                 _buildInlineForm(context, provider),
-                
                 const SizedBox(height: 80),
               ],
             ),
@@ -215,15 +221,12 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
     );
   }
 
-
-
-  // Form Controllers
   final _formKey = GlobalKey<FormState>();
   final _jobTitleController = TextEditingController();
   final _companyController = TextEditingController();
   final _locationController = TextEditingController();
   final _descriptionController = TextEditingController();
-  
+
   DateTime _startDate = DateTime.now();
   DateTime? _endDate;
   bool _isCurrentlyWorking = false;
@@ -233,14 +236,14 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
 
   String? _validateStartDate(AppLocalizations l10n) {
     if (_startDate.isAfter(DateTime.now())) {
-      return l10n.yearTooHigh; // Reusing yearTooHigh or could add dateTooHigh
+      return l10n.yearTooHigh;
     }
     return null;
   }
 
   String? _validateEndDate(AppLocalizations l10n) {
     if (_isCurrentlyWorking) return null;
-    // Removed required check to allow implicit "Currently Working"
+
     if (_endDate != null && _endDate!.isAfter(DateTime.now())) {
       return l10n.yearTooHigh;
     }
@@ -287,29 +290,33 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       _showValidation = false;
     });
   }
-  
+
   void _saveForm(CVBuilderProvider provider) {
     setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
-      if (!_isCurrentlyWorking && _endDate != null && _endDate!.isBefore(_startDate)) {
-        // Validation failed for dates
+      if (!_isCurrentlyWorking &&
+          _endDate != null &&
+          _endDate!.isBefore(_startDate)) {
         return;
       }
-      if (!_isCurrentlyWorking && _endDate != null && _endDate!.isAfter(DateTime.now())) {
-         return;
+      if (!_isCurrentlyWorking &&
+          _endDate != null &&
+          _endDate!.isAfter(DateTime.now())) {
+        return;
       }
       if (_startDate.isAfter(DateTime.now())) {
-         return;
+        return;
       }
-      // Removed check for null end date as it now implies "Currently Working"
 
       final work = WorkExperience(
-        id: _editingIndex != null 
-            ? provider.currentCV!.workExperience[_editingIndex!].id 
+        id: _editingIndex != null
+            ? provider.currentCV!.workExperience[_editingIndex!].id
             : const Uuid().v4(),
         jobTitle: _jobTitleController.text.trim(),
         companyName: _companyController.text.trim(),
-        location: _locationController.text.trim().isNotEmpty ? _locationController.text.trim() : null,
+        location: _locationController.text.trim().isNotEmpty
+            ? _locationController.text.trim()
+            : null,
         employmentType: _employmentType,
         startDate: _startDate,
         endDate: _isCurrentlyWorking || _endDate == null ? null : _endDate,
@@ -322,7 +329,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       } else {
         provider.addWorkExperience(work);
       }
-      
+
       _resetForm();
     }
   }
@@ -358,7 +365,9 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
-        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: _showValidation
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -368,8 +377,8 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                 Text(
                   isEditing ? l10n.editExperience : l10n.addExperience,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 if (isEditing)
                   TextButton.icon(
@@ -380,8 +389,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               ],
             ),
             const SizedBox(height: 24),
-            
-            // Job Title
             TextFormField(
               controller: _jobTitleController,
               decoration: InputDecoration(
@@ -394,8 +401,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Company
             TextFormField(
               controller: _companyController,
               decoration: InputDecoration(
@@ -408,8 +413,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Employment Type
             DropdownButtonFormField<String>(
               // ignore: deprecated_member_use
               value: _employmentType,
@@ -418,19 +421,27 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                 border: const OutlineInputBorder(),
               ),
               items: [
-                DropdownMenuItem(value: 'Full-time', child: Text(l10n.employmentTypeFullTime)),
-                DropdownMenuItem(value: 'Part-time', child: Text(l10n.employmentTypePartTime)),
-                DropdownMenuItem(value: 'Contract', child: Text(l10n.employmentTypeContract)),
-                DropdownMenuItem(value: 'Freelance', child: Text(l10n.employmentTypeFreelance)),
-                DropdownMenuItem(value: 'Internship', child: Text(l10n.employmentTypeInternship)),
+                DropdownMenuItem(
+                    value: 'Full-time',
+                    child: Text(l10n.employmentTypeFullTime)),
+                DropdownMenuItem(
+                    value: 'Part-time',
+                    child: Text(l10n.employmentTypePartTime)),
+                DropdownMenuItem(
+                    value: 'Contract',
+                    child: Text(l10n.employmentTypeContract)),
+                DropdownMenuItem(
+                    value: 'Freelance',
+                    child: Text(l10n.employmentTypeFreelance)),
+                DropdownMenuItem(
+                    value: 'Internship',
+                    child: Text(l10n.employmentTypeInternship)),
               ],
               onChanged: (val) {
                 if (val != null) setState(() => _employmentType = val);
               },
             ),
             const SizedBox(height: 16),
-            
-            // Location
             TextFormField(
               controller: _locationController,
               decoration: InputDecoration(
@@ -443,44 +454,49 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Dates
             Row(
               children: [
                 Expanded(
-                    child: InkWell(
+                  child: InkWell(
                     onTap: () => _selectDate(context, true),
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.startDate} *',
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        errorText: _showValidation ? _validateStartDate(l10n) : null,
+                        errorText:
+                            _showValidation ? _validateStartDate(l10n) : null,
                       ),
-                      child: Text('${_startDate.day}/${_startDate.month}/${_startDate.year}'),
+                      child: Text(
+                          '${_startDate.day}/${_startDate.month}/${_startDate.year}'),
                     ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: InkWell(
-                    onTap: _isCurrentlyWorking ? null : () => _selectDate(context, false),
+                    onTap: _isCurrentlyWorking
+                        ? null
+                        : () => _selectDate(context, false),
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.endDate,
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyWorking,
-                        errorText: _showValidation ? _validateEndDate(l10n) : null,
+                        errorText:
+                            _showValidation ? _validateEndDate(l10n) : null,
                       ),
                       child: Text(
-                        _isCurrentlyWorking 
-                            ? l10n.present 
-                            : (_endDate != null 
+                        _isCurrentlyWorking
+                            ? l10n.present
+                            : (_endDate != null
                                 ? '${_endDate!.day}/${_endDate!.month}/${_endDate!.year}'
                                 : l10n.selectDate),
                         style: TextStyle(
-                          color: _isCurrentlyWorking ? Colors.grey : Theme.of(context).textTheme.bodyMedium?.color,
+                          color: _isCurrentlyWorking
+                              ? Colors.grey
+                              : Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ),
@@ -488,7 +504,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                 ),
               ],
             ),
-            
             CheckboxListTile(
               value: _isCurrentlyWorking,
               onChanged: (val) {
@@ -503,10 +518,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
             ),
-            
             const SizedBox(height: 16),
-            
-            // Description (AI Enhanced)
             Stack(
               children: [
                 TextFormField(
@@ -529,15 +541,14 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                     child: CircleAvatar(
                       radius: 16,
                       backgroundColor: Colors.purple.withValues(alpha: 0.1),
-                      child: const Icon(Iconsax.magic_star, size: 16, color: Colors.purple),
+                      child: const Icon(Iconsax.magic_star,
+                          size: 16, color: Colors.purple),
                     ),
                   ),
                 ),
               ],
             ),
-            
             const SizedBox(height: 32),
-            
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(

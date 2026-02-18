@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// User entity representing an authenticated user
 class UserEntity extends Equatable {
   final String id;
   final String email;
@@ -17,5 +16,6 @@ class UserEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, email, displayName, photoUrl, isEmailVerified];
+  List<Object?> get props =>
+      [id, email, displayName, photoUrl, isEmailVerified];
 }

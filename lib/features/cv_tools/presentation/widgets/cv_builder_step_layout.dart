@@ -57,7 +57,8 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
     return Consumer<CVBuilderProvider>(
       builder: (context, provider, _) {
         final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
-        final stepTitle = DynamicCvSteps.getStepTitle(widget.currentStep, provider.currentCV);
+        final stepTitle =
+            DynamicCvSteps.getStepTitle(widget.currentStep, provider.currentCV);
 
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -79,9 +80,12 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              success ? l10n.cvSavedToLibrary : l10n.failedToSaveCv,
+                              success
+                                  ? l10n.cvSavedToLibrary
+                                  : l10n.failedToSaveCv,
                             ),
-                            backgroundColor: success ? Colors.green : Colors.red,
+                            backgroundColor:
+                                success ? Colors.green : Colors.red,
                           ),
                         );
                         if (success) {
@@ -105,57 +109,50 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
           ),
           body: Column(
             children: [
-              // Progress Bar (Dynamic)
               LinearProgressIndicator(
                 value: widget.currentStep / totalSteps,
                 backgroundColor: const Color(0xFFE5E7EB),
                 color: const Color(0xFF0EA5E9),
                 minHeight: 4,
               ),
-
-          // Tab Bar
-          Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                  width: 1,
+              Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorColor: const Color(0xFF0EA5E9),
+                  indicatorWeight: 3,
+                  labelColor: const Color(0xFF0EA5E9),
+                  unselectedLabelColor: const Color(0xFF6B7280),
+                  labelStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  tabs: [
+                    Tab(text: l10n.edit),
+                    Tab(text: l10n.previewCV),
+                  ],
                 ),
               ),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicatorColor: const Color(0xFF0EA5E9),
-              indicatorWeight: 3,
-              labelColor: const Color(0xFF0EA5E9),
-              unselectedLabelColor: const Color(0xFF6B7280),
-              labelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent,
-              tabs: [
-                Tab(text: l10n.edit),
-                Tab(text: l10n.previewCV),
-              ],
-            ),
-          ),
-
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    // Edit Tab
                     widget.editContent,
-                    
-                    // Preview Tab
                     CvPreviewCard(cvData: provider.currentCV),
                   ],
                 ),
@@ -163,58 +160,60 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
             ],
           ),
           bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              offset: const Offset(0, -4),
-              blurRadius: 16,
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              if (widget.onBack != null) ...[
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: widget.onBack,
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(widget.backLabel ?? l10n.goBack),
-                  ),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  offset: const Offset(0, -4),
+                  blurRadius: 16,
                 ),
-                const SizedBox(width: 16),
               ],
-              if (widget.onNext != null)
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: widget.isNextEnabled ? widget.onNext : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      minimumSize: const Size(double.infinity, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+            ),
+            child: SafeArea(
+              child: Row(
+                children: [
+                  if (widget.onBack != null) ...[
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: widget.onBack,
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(widget.backLabel ?? l10n.goBack),
                       ),
                     ),
-                    child: Text(widget.nextLabel ?? l10n.next),
-                  ),
-                ),
-            ],
+                    const SizedBox(width: 16),
+                  ],
+                  if (widget.onNext != null)
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: widget.isNextEnabled ? widget.onNext : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          minimumSize: const Size(double.infinity, 48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(widget.nextLabel ?? l10n.next),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
-  },
-);
-}
+  }
 
   void _showExitConfirmation(BuildContext context, AppLocalizations l10n) {
     showModalBottomSheet(
@@ -267,7 +266,7 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.pop(context);
                       context.router.replaceAll([
                         const MainRoute(children: [CvToolsHubRoute()]),
                       ]);

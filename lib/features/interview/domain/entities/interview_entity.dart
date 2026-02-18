@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 
-/// Interview session entity
 class InterviewEntity extends Equatable {
   final String id;
   final String userId;
@@ -55,15 +54,17 @@ class InterviewEntity extends Equatable {
       'jobPosition': jobPosition,
       'jobDescription': jobDescription,
       'cvText': cvText,
-      'questions': questions.map((q) => {
-        'id': q.id,
-        'text': q.text,
-        'difficulty': q.difficulty,
-        'starHint': q.starHint,
-        'userAnswerTranscript': q.userAnswerTranscript,
-        'audioPath': q.audioPath,
-        'audioDurationSeconds': q.audioDurationSeconds,
-      }).toList(),
+      'questions': questions
+          .map((q) => {
+                'id': q.id,
+                'text': q.text,
+                'difficulty': q.difficulty,
+                'starHint': q.starHint,
+                'userAnswerTranscript': q.userAnswerTranscript,
+                'audioPath': q.audioPath,
+                'audioDurationSeconds': q.audioDurationSeconds,
+              })
+          .toList(),
       'report': report?.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'completedAt': completedAt?.toIso8601String(),

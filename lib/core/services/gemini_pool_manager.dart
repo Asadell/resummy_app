@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 
-/// Centralized manager for 51 Gemini API keys with round-robin allocation
-/// and automatic retry with key rotation on quota exceeded errors.
 class GeminiPoolManager {
   late final List<GenerativeModel> _models;
   late final List<String> _apiKeys;
@@ -12,12 +10,12 @@ class GeminiPoolManager {
   GeminiPoolManager() {
     _initialize();
     if (_models.isEmpty) {
-      throw Exception('No Gemini API keys configured. Please check your .env file.');
+      throw Exception(
+          'No Gemini API keys configured. Please check your .env file.');
     }
     debugPrint('✅ GeminiPoolManager initialized with ${_models.length} models');
   }
 
-  /// Initialize all 51 GenerativeModel instances from app constants
   void _initialize() {
     final keys = [
       AppConstants.geminiApiKey,
@@ -92,21 +90,18 @@ class GeminiPoolManager {
     }
   }
 
-  /// Get the next API key using round-robin strategy
   String getNextApiKey() {
     final key = _apiKeys[_currentIndex];
     _rotateModel();
     return key;
   }
 
-  /// Get the next model using round-robin strategy
   GenerativeModel getModel() {
     final model = _models[_currentIndex];
     _rotateModel();
     return model;
   }
 
-  /// Rotate to next model index (round-robin)
   void _rotateModel() {
     if (_models.length > 1) {
       _currentIndex = (_currentIndex + 1) % _models.length;
@@ -114,26 +109,19 @@ class GeminiPoolManager {
     }
   }
 
-  /// Execute a task with automatic retry and key rotation on quota exceeded
-  /// 
-  /// [task] - Function that takes a GenerativeModel and returns a result
-  /// [fallback] - Optional fallback value if all keys fail
-  /// 
-  /// Throws [QuotaExceededException] if all 51 keys have exceeded quota
   Future<T> executeWithRetry<T>({
     required Future<T> Function(GenerativeModel) task,
     T? fallback,
   }) async {
     int attempts = 0;
-    // Try each model at least twice (2 full rotations)
+
     final maxAttempts = _models.length * 2;
     final failedKeys = <int>[];
 
     while (attempts < maxAttempts) {
       try {
         final model = getModel();
-        
-        // Wrap API call with timeout to prevent hanging
+
         return await task(model).timeout(
           const Duration(seconds: 180),
           onTimeout: () => throw TimeoutException(
@@ -143,21 +131,19 @@ class GeminiPoolManager {
       } catch (e) {
         attempts++;
         final errorMessage = e.toString().toLowerCase();
-        
-        // Check if this is a quota exceeded error
-        if (errorMessage.contains('quota') || 
-            errorMessage.contains('429') || 
+
+        if (errorMessage.contains('quota') ||
+            errorMessage.contains('429') ||
             errorMessage.contains('resource_exhausted')) {
           failedKeys.add(_currentIndex);
-          debugPrint('⚠️ Model $_currentIndex quota exceeded. Trying next key...');
+          debugPrint(
+              '⚠️ Model $_currentIndex quota exceeded. Trying next key...');
         } else {
           debugPrint('❌ Error with Model $_currentIndex: $e');
         }
 
-        // If we've tried all models twice, give up
         if (attempts >= maxAttempts) {
           if (failedKeys.length >= _models.length) {
-            // All keys have quota exceeded
             throw QuotaExceededException(
               'All ${_models.length} Gemini API keys have exceeded their quota. '
               'Please try again later.',
@@ -166,31 +152,25 @@ class GeminiPoolManager {
             debugPrint('⚠️ All retry attempts failed. Using fallback value.');
             return fallback;
           } else {
-            // Some other error occurred on all attempts
             rethrow;
           }
         }
 
-        // Small delay before retry
         await Future.delayed(const Duration(milliseconds: 500));
       }
     }
 
-    // This should never be reached, but just in case
     if (fallback != null) {
       return fallback;
     }
     throw Exception('Unexpected error in executeWithRetry');
   }
 
-  /// Get total number of available models
   int get modelCount => _models.length;
 
-  /// Get current model index
   int get currentIndex => _currentIndex;
 }
 
-/// Custom exception for when all API keys have exceeded quota
 class QuotaExceededException implements Exception {
   final String message;
   QuotaExceededException(this.message);
@@ -199,7 +179,6 @@ class QuotaExceededException implements Exception {
   String toString() => 'QuotaExceededException: $message';
 }
 
-/// Custom exception for timeout
 class TimeoutException implements Exception {
   final String message;
   TimeoutException(this.message);

@@ -6,7 +6,7 @@ import 'package:resummy_app/features/auth/presentation/providers/auth_provider.d
 class ProfileProvider extends ChangeNotifier {
   final UserProfileRepository _repository;
   final AuthProvider _authProvider;
-  
+
   UserProfile? _profile;
   bool _isLoading = false;
   String? _error;
@@ -14,11 +14,10 @@ class ProfileProvider extends ChangeNotifier {
   ProfileProvider({
     required UserProfileRepository repository,
     required AuthProvider authProvider,
-  }) : _repository = repository,
-       _authProvider = authProvider {
-    // Listen to AuthProvider changes
+  })  : _repository = repository,
+        _authProvider = authProvider {
     _authProvider.addListener(_onAuthChanged);
-    // Initial check
+
     _onAuthChanged();
   }
 
@@ -36,7 +35,7 @@ class ProfileProvider extends ChangeNotifier {
     final user = _authProvider.currentUser;
     if (user != null) {
       if (_profile?.uid != user.id) {
-         loadProfile(user.id);
+        loadProfile(user.id);
       }
     } else {
       _profile = null;
@@ -44,7 +43,6 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  // Initial load called when AuthProvider changes
   Future<void> loadProfile(String? uid) async {
     if (uid == null) {
       _profile = null;
@@ -67,13 +65,11 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  // Reload manually
   Future<void> refreshProfile() async {
     if (_profile == null) return;
     await loadProfile(_profile!.uid);
   }
 
-  // Update profile and sync with Firestore
   Future<void> updateProfile({
     String? fullName,
     String? email,
@@ -94,7 +90,8 @@ class ProfileProvider extends ChangeNotifier {
     if (updatedData.isEmpty) return;
 
     try {
-      final success = await _repository.updateUserProfile(_profile!.uid, updatedData);
+      final success =
+          await _repository.updateUserProfile(_profile!.uid, updatedData);
       if (success) {
         _profile = _profile!.copyWith(
           fullName: fullName,
@@ -111,7 +108,8 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> createProfileIfNotExists(String uid, {
+  Future<void> createProfileIfNotExists(
+    String uid, {
     required String email,
     String? fullName,
     String? photoUrl,

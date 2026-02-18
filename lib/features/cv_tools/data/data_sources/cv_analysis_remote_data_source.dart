@@ -6,14 +6,12 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
 
-/// Remote data source for CV Analysis using Gemini AI
 class CVAnalysisRemoteDataSource {
   final GeminiPoolManager _geminiPool;
   final Uuid _uuid = const Uuid();
 
   CVAnalysisRemoteDataSource(this._geminiPool);
 
-  /// Analyze CV text using Gemini AI
   Future<CvAnalysisResult> analyzeCV({
     required String cvText,
     required String jobPosition,
@@ -44,13 +42,11 @@ class CVAnalysisRemoteDataSource {
       );
 
       final rawJson = response.text ?? '';
-      final cleanJson = rawJson
-          .replaceAll('```json', '')
-          .replaceAll('```', '')
-          .trim();
-      
+      final cleanJson =
+          rawJson.replaceAll('```json', '').replaceAll('```', '').trim();
+
       final data = jsonDecode(cleanJson) as Map<String, dynamic>;
-      
+
       return CvAnalysisResultModel.fromJson(
         data,
         id: _uuid.v4(),
@@ -64,7 +60,6 @@ class CVAnalysisRemoteDataSource {
     }
   }
 
-  /// Convert applied suggestions to CVData using Gemini AI
   Future<Map<String, dynamic>> convertAppliedSuggestionsToCvJson({
     required String originalCvText,
     required List<CvSuggestion> appliedSuggestions,
@@ -141,11 +136,9 @@ Return JSON ini:
       );
 
       final rawJson = response.text ?? '';
-      final cleanJson = rawJson
-          .replaceAll('```json', '')
-          .replaceAll('```', '')
-          .trim();
-      
+      final cleanJson =
+          rawJson.replaceAll('```json', '').replaceAll('```', '').trim();
+
       return jsonDecode(cleanJson) as Map<String, dynamic>;
     } catch (e) {
       debugPrint('❌ Error converting suggestions: $e');

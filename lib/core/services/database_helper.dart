@@ -2,28 +2,23 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart';
 
-/// Database helper for offline storage using SQLite
-/// Manages local cache for CVs, analysis history, interviews, etc.
 class DatabaseHelper {
   static Database? _database;
   static const String _databaseName = 'resummy_offline.db';
   static const int _databaseVersion = 1;
 
-  // Table names
   static const String tableCVs = 'cvs';
   static const String tableAnalysisHistory = 'analysis_history';
   static const String tableInterviews = 'interviews';
   static const String tableTranslations = 'translations';
   static const String tableSyncQueue = 'sync_queue';
 
-  /// Get database instance (singleton)
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
 
-  /// Initialize database
   Future<Database> _initDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, _databaseName);
@@ -38,11 +33,9 @@ class DatabaseHelper {
     );
   }
 
-  /// Create database tables
   Future<void> _onCreate(Database db, int version) async {
     debugPrint('🔨 Creating database tables...');
 
-    // CVs table - stores CV metadata and JSON data
     await db.execute('''
       CREATE TABLE $tableCVs (
         id TEXT PRIMARY KEY,
@@ -57,7 +50,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Analysis History table
     await db.execute('''
       CREATE TABLE $tableAnalysisHistory (
         id TEXT PRIMARY KEY,
@@ -70,7 +62,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Interviews table
     await db.execute('''
       CREATE TABLE $tableInterviews (
         id TEXT PRIMARY KEY,
@@ -85,7 +76,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Translations table
     await db.execute('''
       CREATE TABLE $tableTranslations (
         id TEXT PRIMARY KEY,
@@ -100,7 +90,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Sync Queue table - for pending operations when offline
     await db.execute('''
       CREATE TABLE $tableSyncQueue (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,28 +102,23 @@ class DatabaseHelper {
       )
     ''');
 
-    // Create indexes for faster queries
     await db.execute('CREATE INDEX idx_cvs_userId ON $tableCVs(userId)');
-    await db.execute('CREATE INDEX idx_analysis_userId ON $tableAnalysisHistory(userId)');
-    await db.execute('CREATE INDEX idx_interviews_userId ON $tableInterviews(userId)');
-    await db.execute('CREATE INDEX idx_translations_userId ON $tableTranslations(userId)');
-    await db.execute('CREATE INDEX idx_sync_queue_recordId ON $tableSyncQueue(recordId)');
+    await db.execute(
+        'CREATE INDEX idx_analysis_userId ON $tableAnalysisHistory(userId)');
+    await db.execute(
+        'CREATE INDEX idx_interviews_userId ON $tableInterviews(userId)');
+    await db.execute(
+        'CREATE INDEX idx_translations_userId ON $tableTranslations(userId)');
+    await db.execute(
+        'CREATE INDEX idx_sync_queue_recordId ON $tableSyncQueue(recordId)');
 
     debugPrint('✅ Database tables created successfully');
   }
 
-  /// Handle database upgrades
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     debugPrint('⬆️ Upgrading database from v$oldVersion to v$newVersion');
-    
-    // Add migration logic here when schema changes in future versions
-    // Example:
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE $tableCVs ADD COLUMN newColumn TEXT');
-    // }
   }
 
-  /// Insert or update a record
   Future<void> upsert(String table, Map<String, dynamic> data) async {
     final db = await database;
     await db.insert(
@@ -144,7 +128,6 @@ class DatabaseHelper {
     );
   }
 
-  /// Query records with optional filters
   Future<List<Map<String, dynamic>>> query(
     String table, {
     String? where,
@@ -162,7 +145,6 @@ class DatabaseHelper {
     );
   }
 
-  /// Delete a record
   Future<int> delete(
     String table, {
     required String where,
@@ -176,13 +158,11 @@ class DatabaseHelper {
     );
   }
 
-  /// Clear all data from a table
   Future<void> clearTable(String table) async {
     final db = await database;
     await db.delete(table);
   }
 
-  /// Add operation to sync queue (for offline mode)
   Future<void> addToSyncQueue({
     required String operation,
     required String tableName,
@@ -201,7 +181,6 @@ class DatabaseHelper {
     debugPrint('📝 Added to sync queue: $operation on $tableName/$recordId');
   }
 
-  /// Get pending sync operations
   Future<List<Map<String, dynamic>>> getPendingSyncOperations() async {
     final db = await database;
     return await db.query(
@@ -210,7 +189,6 @@ class DatabaseHelper {
     );
   }
 
-  /// Remove from sync queue after successful sync
   Future<void> removeFromSyncQueue(int id) async {
     final db = await database;
     await db.delete(
@@ -220,7 +198,6 @@ class DatabaseHelper {
     );
   }
 
-  /// Close database connection
   Future<void> close() async {
     final db = await database;
     await db.close();

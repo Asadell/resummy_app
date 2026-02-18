@@ -21,7 +21,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    // Refresh history when screen opens
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HistoryProvider>().refresh();
     });
@@ -30,7 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -40,7 +40,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Consumer<HistoryProvider>(
           builder: (context, provider, child) {
             final history = provider.activities;
-            
+
             if (provider.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -53,10 +53,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     Icon(Iconsax.clock, size: 64, color: Colors.grey[300]),
                     const SizedBox(height: 16),
                     Text(
-                      l10n.noInterviewHistory, // Use generic "No history" if available
+                      l10n.noInterviewHistory,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey,
-                      ),
+                            color: Colors.grey,
+                          ),
                     ),
                   ],
                 ),
@@ -72,11 +72,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
-                       backgroundColor: _getActivityColor(context, activity.type).withValues(alpha: 0.1),
-                       child: Icon(
-                         _getActivityIcon(activity.type), 
-                         color: _getActivityColor(context, activity.type)
-                       ),
+                      backgroundColor: _getActivityColor(context, activity.type)
+                          .withValues(alpha: 0.1),
+                      child: Icon(_getActivityIcon(activity.type),
+                          color: _getActivityColor(context, activity.type)),
                     ),
                     title: Text(activity.title),
                     subtitle: Column(
@@ -84,7 +83,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       children: [
                         Text(activity.subtitle),
                         Text(
-                          DateFormat('MMM d, y • HH:mm').format(activity.timestamp),
+                          DateFormat('MMM d, y • HH:mm')
+                              .format(activity.timestamp),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -110,7 +110,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         context.router.navigate(const CvBuilderWelcomeRoute());
         break;
       case ActivityType.cvAnalyzed:
-        context.router.navigate(const CvAnalyzerUploadRoute()); 
+        context.router.navigate(const CvAnalyzerUploadRoute());
         break;
       case ActivityType.cvTranslated:
         context.router.navigate(const CvAtsConverterRoute());
@@ -123,23 +123,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void _navigateToInterview(BuildContext context, ActivityEntity activity) {
     final interviewProvider = context.read<InterviewProvider>();
     final interviewId = activity.relatedId;
-    
+
     if (interviewId != null) {
-      // Try to find the interview in the loaded history
       try {
         final interview = interviewProvider.history.firstWhere(
           (i) => i.id == interviewId,
           orElse: () => throw Exception('Not found'),
         );
-        
+
         if (interview.report != null) {
           interviewProvider.setReport(interview.report!);
           context.router.push(const InterviewFeedbackOverviewRoute());
           return;
         }
-      } catch (_) {
-        // If not found in loaded history, we could fetch it, but for now navigate to prep screen
-      }
+      } catch (_) {}
     }
     context.router.navigate(const InterviewPrepRoute());
   }

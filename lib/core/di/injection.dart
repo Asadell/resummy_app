@@ -8,16 +8,11 @@ import 'package:resummy_app/features/history/di/history_injection.dart';
 import 'package:resummy_app/features/auth/di/auth_injection.dart';
 import 'package:resummy_app/features/profile/di/profile_injection.dart';
 
-/// Global GetIt instance for dependency injection
 final getIt = GetIt.instance;
 
-/// Initialize all dependencies for the application
-/// This should be called in main() before runApp()
 Future<void> setupDI() async {
-  // Setup core services first
   await _setupCoreServices();
 
-  // Feature-specific DI
   await setupCvBuilderDI(getIt);
   await setupCvAnalysisAndConversionDI(getIt);
   await setupInterviewDI(getIt);
@@ -26,12 +21,8 @@ Future<void> setupDI() async {
   await setupProfileDI(getIt);
 }
 
-/// Setup core services (Gemini Pool Manager, Storage, etc.)
 Future<void> _setupCoreServices() async {
-  // Initialize Gemini Pool Manager as singleton
-  // This will pre-initialize all 51 GenerativeModel instances
   getIt.registerSingleton<GeminiPoolManager>(GeminiPoolManager());
 
-  // Setup storage services (Firestore, DO Spaces, SQLite)
   await setupStorageDI(getIt);
 }

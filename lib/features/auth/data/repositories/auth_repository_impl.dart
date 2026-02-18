@@ -5,7 +5,6 @@ import 'package:resummy_app/features/auth/data/data_sources/auth_remote_data_sou
 import 'package:resummy_app/features/auth/domain/entities/user_entity.dart';
 import 'package:resummy_app/features/auth/domain/repositories/auth_repository.dart';
 
-/// Implementation of Auth Repository
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
 

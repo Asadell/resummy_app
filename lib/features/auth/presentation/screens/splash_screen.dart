@@ -30,31 +30,27 @@ class _SplashScreenState extends State<SplashScreen> {
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    // Check if language has been selected (first-time only)
     if (!localeProvider.hasSelectedLanguage) {
       router.replace(const LanguageSelectionRoute());
       return;
     }
 
-    // Check if user is logged in
     if (!authProvider.isAuthenticated) {
       router.replace(const AuthRoute());
       return;
     }
 
-    // Check if onboarding is done via ProfileProvider
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     await profileProvider.loadProfile(authProvider.currentUser!.id);
-    
-    // Check onboarding logic
+
     final onboardingDone = profileProvider.profile?.onboardingDone ?? false;
-    
+
     if (!onboardingDone) {
       router.replace(const OnboardingStep1Route());
       return;
     }
 
-    // All good, go to main app
     router.replace(const MainRoute());
   }
 
@@ -67,7 +63,6 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // App Logo
               Image.asset(
                 'assets/icon/icon.png',
                 width: 120,
@@ -77,15 +72,15 @@ class _SplashScreenState extends State<SplashScreen> {
               Text(
                 'Resummy',
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 8),
               Text(
                 l10n.buildYourCareer,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
               const SizedBox(height: 48),
               const CircularProgressIndicator(),

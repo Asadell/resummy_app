@@ -6,7 +6,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
 import 'package:flutter/foundation.dart';
 
-/// Remote data source for CV Conversion using Gemini AI
 class CVConversionRemoteDataSource {
   final GeminiPoolManager _geminiPool;
   final CvAtsConverterService _converterService;
@@ -16,12 +15,11 @@ class CVConversionRemoteDataSource {
     this._converterService,
   );
 
-  /// Convert CV file (PDF/Image) to structured CVData using Gemini AI
   Future<CVData> convertFromFile(File file, {String? targetLanguage}) async {
     try {
       final bytes = await file.readAsBytes();
       final mimeType = _getMimeType(file.path);
-      
+
       debugPrint('📄 Converting file: ${file.path} ($mimeType)');
 
       final prompt = _buildConversionPrompt(targetLanguage: targetLanguage);
@@ -44,20 +42,19 @@ class CVConversionRemoteDataSource {
               responseMimeType: 'application/json',
             ),
           );
-          
+
           return result;
         },
       );
 
       final rawJson = response.text ?? '';
-      final cleanJson = rawJson
-          .replaceAll('```json', '')
-          .replaceAll('```', '')
-          .trim();
+      final cleanJson =
+          rawJson.replaceAll('```json', '').replaceAll('```', '').trim();
 
       final data = jsonDecode(cleanJson) as Map<String, dynamic>;
-      final cvData = _converterService.parseCvJson(data, source: 'ats_converter');
-      
+      final cvData =
+          _converterService.parseCvJson(data, source: 'ats_converter');
+
       debugPrint('✅ CV converted successfully: ${cvData.name}');
       return cvData;
     } catch (e) {

@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,8 @@ class InterviewSetupStep1Screen extends StatefulWidget {
   const InterviewSetupStep1Screen({super.key});
 
   @override
-  State<InterviewSetupStep1Screen> createState() => _InterviewSetupStep1ScreenState();
+  State<InterviewSetupStep1Screen> createState() =>
+      _InterviewSetupStep1ScreenState();
 }
 
 class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
@@ -35,13 +35,12 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       if (result != null) {
         final path = result.files.single.path;
         if (path != null) {
-          // Extract text using centralized PdfUtils (enforces 5-page limit)
           final text = await PdfUtils().extractText(path);
 
           setState(() {
             _uploadedCvName = result.files.single.name;
             _uploadedCvText = text;
-            _selectedCvIndex = 2; // Select the uploaded CV
+            _selectedCvIndex = 2;
           });
         }
       }
@@ -50,7 +49,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       if (e.toString().contains('MAX_PAGES_EXCEEDED')) {
         message = l10n.max5PagesInterview;
       }
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
@@ -66,7 +65,8 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Iconsax.microphone_2, color: Theme.of(context).colorScheme.primary, size: 20),
+            Icon(Iconsax.microphone_2,
+                color: Theme.of(context).colorScheme.primary, size: 20),
             const SizedBox(width: 8),
             Text(l10n.aiInterviewSimulator),
           ],
@@ -81,7 +81,6 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Hero Section
               Container(
                 margin: const EdgeInsets.all(16),
                 padding: const EdgeInsets.all(24),
@@ -90,7 +89,9 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
+                          : Colors.transparent,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -106,24 +107,24 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                     const SizedBox(height: 16),
                     Text(
                       l10n.aiInterviewSimulator,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       l10n.setupStep1Desc,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-
-              // Info Cards
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.all(16),
@@ -136,13 +137,16 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Iconsax.document_text, color: Theme.of(context).colorScheme.primary, size: 20),
+                        Icon(Iconsax.document_text,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                         const SizedBox(width: 8),
                         Text(
                           l10n.formatInterview,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ],
                     ),
@@ -164,10 +168,9 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                   ],
                 ),
               ),
-
-              // Divider
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 child: Row(
                   children: [
                     const Expanded(child: Divider()),
@@ -175,17 +178,16 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
                         l10n.step1SelectCv,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                       ),
                     ),
                     const Expanded(child: Divider()),
                   ],
                 ),
               ),
-
-              // CV Selection
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.all(16),
@@ -196,16 +198,16 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                 child: Column(
                   children: [
                     ...[0, 1].map((i) => Padding(
-                      padding: EdgeInsets.only(bottom: i == 1 ? 12 : 0),
-                      child: _buildCvItem(
-                        context,
-                        index: i,
-                        filename: i == 0 ? 'CV_Software_Engineer.pdf' : 'CV_Product_Manager.pdf',
-                        score: i == 0 ? 78 : 85,
-                      ),
-                    )),
-                    
-                    // Uploaded CV Option
+                          padding: EdgeInsets.only(bottom: i == 1 ? 12 : 0),
+                          child: _buildCvItem(
+                            context,
+                            index: i,
+                            filename: i == 0
+                                ? 'CV_Software_Engineer.pdf'
+                                : 'CV_Product_Manager.pdf',
+                            score: i == 0 ? 78 : 85,
+                          ),
+                        )),
                     if (_uploadedCvName != null)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -213,16 +215,14 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                           context,
                           index: 2,
                           filename: _uploadedCvName!,
-                          score: 0, // Score not calculated yet
+                          score: 0,
                           isUploaded: true,
                         ),
                       ),
-                      
                     _buildUploadOption(context),
                   ],
                 ),
               ),
-
               const SizedBox(height: 100),
             ],
           ),
@@ -243,25 +243,26 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         child: SafeArea(
           child: ElevatedButton(
             onPressed: () {
-              // Save CV Data
               final provider = context.read<InterviewProvider>();
               String cvText = "";
               String cvName = "";
-              
+
               if (_selectedCvIndex == 2 && _uploadedCvText != null) {
                 cvText = _uploadedCvText!;
                 cvName = _uploadedCvName ?? "Uploaded CV.pdf";
               } else if (_selectedCvIndex == 0) {
-                 cvText = "Experienced Flutter Developer with 5 years of experience in mobile app development. Proficient in Dart, BLoC pattern, and Clean Architecture. Strong background in integrating REST APIs and Firebase."; // Keep mock text as is, or localize if needed
-                 cvName = "CV_Software_Engineer.pdf";
+                cvText =
+                    "Experienced Flutter Developer with 5 years of experience in mobile app development. Proficient in Dart, BLoC pattern, and Clean Architecture. Strong background in integrating REST APIs and Firebase.";
+                cvName = "CV_Software_Engineer.pdf";
               } else {
-                 cvText = "Product Manager with 3 years experience in Fintech. Skilled in Agile methodology, user research, and roadmap planning. Experience leading cross-functional teams."; // Keep mock text
-                 cvName = "CV_Product_Manager.pdf";
+                cvText =
+                    "Product Manager with 3 years experience in Fintech. Skilled in Agile methodology, user research, and roadmap planning. Experience leading cross-functional teams.";
+                cvName = "CV_Product_Manager.pdf";
               }
-              
+
               provider.updateCvText(cvText);
               provider.updateCvFileName(cvName);
-              
+
               context.router.push(const InterviewSetupStep2Route());
             },
             style: ElevatedButton.styleFrom(
@@ -292,9 +293,10 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     );
   }
 
-  Widget _buildCvItem(BuildContext context, {
-    required int index, 
-    required String filename, 
+  Widget _buildCvItem(
+    BuildContext context, {
+    required int index,
+    required String filename,
     required int score,
     bool isUploaded = false,
   }) {
@@ -305,9 +307,13 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).cardTheme.color,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).cardTheme.color,
           border: Border.all(
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerTheme.color!,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerTheme.color!,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -316,47 +322,52 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
           children: [
             Icon(
               isSelected ? Iconsax.record_circle : Iconsax.stop_circle,
-              color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
-            Icon(
-                isUploaded ? Iconsax.document_upload : Iconsax.document_1, 
-                color: isUploaded ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.primary, 
-                size: 24
-            ),
+            Icon(isUploaded ? Iconsax.document_upload : Iconsax.document_1,
+                color: isUploaded
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.primary,
+                size: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    filename,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (isUploaded)
                     Text(
-                        filename,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      l10n.uploadedFromDevice,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 10,
+                          ),
                     ),
-                    if (isUploaded)
-                       Text(
-                        l10n.uploadedFromDevice,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                           color: Theme.of(context).colorScheme.onSurfaceVariant,
-                           fontSize: 10,
-                        ),
-                       ),
                 ],
               ),
             ),
             if (!isUploaded)
-            Text(
-              l10n.score(score),
-              style: TextStyle(
-                fontSize: 12,
-                color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
+              Text(
+                l10n.score(score),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -381,14 +392,15 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Iconsax.document_upload, color: Theme.of(context).colorScheme.primary),
+            Icon(Iconsax.document_upload,
+                color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8),
             Text(
               l10n.uploadNewCv,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
           ],
         ),

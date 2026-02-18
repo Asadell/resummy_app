@@ -20,7 +20,7 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
   @override
   void initState() {
     super.initState();
-    // Pre-fill with Google display name
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       _nameController.text = authProvider.currentUser?.displayName ?? '';
@@ -36,7 +36,7 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.stepProgress(1, 4)),
@@ -63,8 +63,8 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
               Text(
                 l10n.whatsYourFullName,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -109,13 +109,11 @@ class _OnboardingStep1ScreenState extends State<OnboardingStep1Screen> {
   Future<void> _skipOnboarding(BuildContext context) async {
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
-    // Use Google display name as fallback
-    final fullName = _nameController.text.trim().isNotEmpty 
+
+    final fullName = _nameController.text.trim().isNotEmpty
         ? _nameController.text.trim()
         : authProvider.currentUser?.displayName ?? '';
-    
-    // Skip to confirmation with just the name
+
     router.push(OnboardingConfirmationRoute(
       fullName: fullName,
       workStatus: null,

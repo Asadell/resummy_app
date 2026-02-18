@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-/// Priority level for CV suggestions
 enum SuggestionPriority { high, medium, low }
 
-/// Category of CV suggestion
 enum SuggestionCategory {
   measurableResult,
   spellingGrammar,
@@ -32,7 +30,6 @@ extension SuggestionCategoryLabel on SuggestionCategory {
   }
 }
 
-/// Individual CV improvement suggestion
 class CvSuggestion extends Equatable {
   final String id;
   final String sectionTitle;
@@ -87,7 +84,6 @@ class CvSuggestion extends Equatable {
       ];
 }
 
-/// Metrics breakdown for CV score
 class CvScoreMetrics extends Equatable {
   final int keywordMatch;
   final int quantifiableAchievements;
@@ -110,7 +106,6 @@ class CvScoreMetrics extends Equatable {
       ];
 }
 
-/// Complete CV analysis result
 class CvAnalysisResult extends Equatable {
   final String id;
   final DateTime createdAt;

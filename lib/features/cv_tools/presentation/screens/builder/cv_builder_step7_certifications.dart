@@ -22,41 +22,45 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
+    final currentStep =
+        DynamicCvSteps.getStepForSection(context, 'certifications');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: currentStep,
-
       onBack: () {
         DynamicCvSteps.navigateToPreviousStep(context, currentStep);
       },
       onNext: () {
         final provider = context.read<CVBuilderProvider>();
         provider.saveCurrentCV();
-        final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
+        final currentStep =
+            DynamicCvSteps.getStepForSection(context, 'certifications');
         DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
           final certList = provider.currentCV?.certifications ?? [];
-          
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Step Header
                 Center(
                   child: Consumer<CVBuilderProvider>(
                     builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(context, 'certifications');
-                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      final currentStep = DynamicCvSteps.getStepForSection(
+                          context, 'certifications');
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
-                          border: Border.all(color: Theme.of(context).primaryColor),
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -76,8 +80,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                   child: Text(
                     l10n.certificationHeader,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -85,14 +89,15 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                   child: Text(
                     l10n.certificationDesc,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                    ),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.color
+                              ?.withValues(alpha: 0.7),
+                        ),
                   ),
                 ),
-                
                 const SizedBox(height: 24),
-                
-                // Empty State
                 if (certList.isEmpty)
                   Center(
                     child: Container(
@@ -100,7 +105,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Theme.of(context).dividerColor),
+                        border:
+                            Border.all(color: Theme.of(context).dividerColor),
                       ),
                       child: Column(
                         children: [
@@ -112,9 +118,12 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                           const SizedBox(height: 16),
                           Text(
                             l10n.noCertificationData,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -128,8 +137,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       ),
                     ),
                   ),
-                  
-                // List of Certifications
                 if (certList.isNotEmpty) ...[
                   ReorderableListView.builder(
                     shrinkWrap: true,
@@ -140,8 +147,9 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                     },
                     itemBuilder: (context, index) {
                       final cert = certList[index];
-                      final date = '${cert.issueDate.month}/${cert.issueDate.year}';
-                      
+                      final date =
+                          '${cert.issueDate.month}/${cert.issueDate.year}';
+
                       return Card(
                         key: ValueKey(cert.id),
                         margin: const EdgeInsets.only(bottom: 12),
@@ -157,7 +165,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                             children: [
                               const SizedBox(height: 4),
                               Text('${cert.issuingOrganization} • $date'),
-                              if (cert.credentialId != null && cert.credentialId!.isNotEmpty) ...[
+                              if (cert.credentialId != null &&
+                                  cert.credentialId!.isNotEmpty) ...[
                                 const SizedBox(height: 4),
                                 Text(
                                   'ID: ${cert.credentialId}',
@@ -173,11 +182,14 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                             children: [
                               IconButton(
                                 icon: const Icon(Iconsax.edit, size: 20),
-                                onPressed: () => _editCertification(cert, index),
+                                onPressed: () =>
+                                    _editCertification(cert, index),
                               ),
                               IconButton(
-                                icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
-                                onPressed: () => provider.removeCertification(index),
+                                icon: const Icon(Iconsax.trash,
+                                    size: 20, color: Colors.red),
+                                onPressed: () =>
+                                    provider.removeCertification(index),
                               ),
                             ],
                           ),
@@ -185,16 +197,12 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                       );
                     },
                   ),
-                  
                   const SizedBox(height: 24),
                 ],
-
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 24),
-
                 _buildInlineForm(context, provider),
-                
                 const SizedBox(height: 80),
               ],
             ),
@@ -204,9 +212,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     );
   }
 
-
-
-  // Form Controllers
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _organizationController = TextEditingController();
@@ -233,7 +238,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     }
     return null;
   }
-  
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -273,23 +278,28 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   void _saveForm(CVBuilderProvider provider) {
     setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
-      if (!_doesNotExpire && (_expirationDate == null || _expirationDate!.isBefore(_issueDate))) {
+      if (!_doesNotExpire &&
+          (_expirationDate == null || _expirationDate!.isBefore(_issueDate))) {
         return;
       }
       if (_issueDate.isAfter(DateTime.now())) {
         return;
       }
       final cert = Certification(
-        id: _editingIndex != null 
-            ? provider.currentCV!.certifications[_editingIndex!].id 
+        id: _editingIndex != null
+            ? provider.currentCV!.certifications[_editingIndex!].id
             : const Uuid().v4(),
         name: _nameController.text.trim(),
         issuingOrganization: _organizationController.text.trim(),
         issueDate: _issueDate,
         expirationDate: _doesNotExpire ? null : _expirationDate,
         doesNotExpire: _doesNotExpire,
-        credentialId: _credentialIdController.text.trim().isNotEmpty ? _credentialIdController.text.trim() : null,
-        credentialUrl: _credentialUrlController.text.trim().isNotEmpty ? _credentialUrlController.text.trim() : null,
+        credentialId: _credentialIdController.text.trim().isNotEmpty
+            ? _credentialIdController.text.trim()
+            : null,
+        credentialUrl: _credentialUrlController.text.trim().isNotEmpty
+            ? _credentialUrlController.text.trim()
+            : null,
       );
 
       if (_editingIndex != null) {
@@ -297,7 +307,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
       } else {
         provider.addCertification(cert);
       }
-      
+
       _resetForm();
     }
   }
@@ -305,9 +315,10 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
   Future<void> _selectDate(BuildContext context, bool isIssueDate) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: isIssueDate ? _issueDate : (_expirationDate ?? DateTime.now()),
+      initialDate:
+          isIssueDate ? _issueDate : (_expirationDate ?? DateTime.now()),
       firstDate: DateTime(1980),
-      lastDate: DateTime.now().add(const Duration(days: 3650)), // Allow future exp dates
+      lastDate: DateTime.now().add(const Duration(days: 3650)),
     );
     if (picked != null) {
       setState(() {
@@ -333,7 +344,9 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
-        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: _showValidation
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -343,8 +356,8 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                 Text(
                   isEditing ? l10n.editCertification : l10n.addCertification,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 if (isEditing)
                   TextButton.icon(
@@ -355,8 +368,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               ],
             ),
             const SizedBox(height: 24),
-            
-            // Name
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -369,8 +380,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Organization
             TextFormField(
               controller: _organizationController,
               decoration: InputDecoration(
@@ -383,44 +392,50 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Dates
             Row(
               children: [
                 Expanded(
-                    child: InkWell(
+                  child: InkWell(
                     onTap: () => _selectDate(context, true),
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.issueDate} *',
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        errorText: _showValidation ? _validateIssueDate(l10n) : null,
+                        errorText:
+                            _showValidation ? _validateIssueDate(l10n) : null,
                       ),
-                      child: Text('${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
+                      child: Text(
+                          '${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
                     ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: InkWell(
-                    onTap: _doesNotExpire ? null : () => _selectDate(context, false),
+                    onTap: _doesNotExpire
+                        ? null
+                        : () => _selectDate(context, false),
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.expirationDate,
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_doesNotExpire,
-                        errorText: _showValidation ? _validateExpirationDate(l10n) : null,
+                        errorText: _showValidation
+                            ? _validateExpirationDate(l10n)
+                            : null,
                       ),
                       child: Text(
-                        _doesNotExpire 
-                            ? '-' 
-                            : (_expirationDate != null 
+                        _doesNotExpire
+                            ? '-'
+                            : (_expirationDate != null
                                 ? '${_expirationDate!.day}/${_expirationDate!.month}/${_expirationDate!.year}'
                                 : l10n.selectDate),
                         style: TextStyle(
-                          color: _doesNotExpire ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyMedium?.color,
+                          color: _doesNotExpire
+                              ? Theme.of(context).disabledColor
+                              : Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ),
@@ -428,7 +443,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                 ),
               ],
             ),
-            
             CheckboxListTile(
               value: _doesNotExpire,
               onChanged: (val) {
@@ -443,10 +457,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
             ),
-            
             const SizedBox(height: 8),
-            
-            // Credential ID
             TextFormField(
               controller: _credentialIdController,
               decoration: InputDecoration(
@@ -457,8 +468,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Credential URL
             TextFormField(
               controller: _credentialUrlController,
               decoration: InputDecoration(
@@ -470,13 +479,11 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               ),
               keyboardType: TextInputType.url,
               inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'\s')), // No spaces allowed
+                FilteringTextInputFormatter.deny(RegExp(r'\s')),
               ],
               maxLength: 100,
             ),
-            
             const SizedBox(height: 32),
-            
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(
@@ -495,5 +502,3 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     );
   }
 }
-
-

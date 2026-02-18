@@ -98,7 +98,7 @@ import 'package:resummy_app/features/profile/presentation/screens/profile_screen
 /// [_i1.AuthScreen]
 class AuthRoute extends _i42.PageRouteInfo<void> {
   const AuthRoute({List<_i42.PageRouteInfo>? children})
-    : super(AuthRoute.name, initialChildren: children);
+      : super(AuthRoute.name, initialChildren: children);
 
   static const String name = 'AuthRoute';
 
@@ -114,7 +114,7 @@ class AuthRoute extends _i42.PageRouteInfo<void> {
 /// [_i2.CvAnalyzerUploadScreen]
 class CvAnalyzerUploadRoute extends _i42.PageRouteInfo<void> {
   const CvAnalyzerUploadRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvAnalyzerUploadRoute.name, initialChildren: children);
+      : super(CvAnalyzerUploadRoute.name, initialChildren: children);
 
   static const String name = 'CvAnalyzerUploadRoute';
 
@@ -130,7 +130,7 @@ class CvAnalyzerUploadRoute extends _i42.PageRouteInfo<void> {
 /// [_i3.CvAtsConverterScreen]
 class CvAtsConverterRoute extends _i42.PageRouteInfo<void> {
   const CvAtsConverterRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvAtsConverterRoute.name, initialChildren: children);
+      : super(CvAtsConverterRoute.name, initialChildren: children);
 
   static const String name = 'CvAtsConverterRoute';
 
@@ -151,14 +151,14 @@ class CvBuilderCustomSectionStepRoute
     required String sectionId,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         CvBuilderCustomSectionStepRoute.name,
-         args: CvBuilderCustomSectionStepRouteArgs(
-           key: key,
-           sectionId: sectionId,
-         ),
-         rawPathParams: {'sectionId': sectionId},
-         initialChildren: children,
-       );
+          CvBuilderCustomSectionStepRoute.name,
+          args: CvBuilderCustomSectionStepRouteArgs(
+            key: key,
+            sectionId: sectionId,
+          ),
+          rawPathParams: {'sectionId': sectionId},
+          initialChildren: children,
+        );
 
   static const String name = 'CvBuilderCustomSectionStepRoute';
 
@@ -199,7 +199,7 @@ class CvBuilderCustomSectionStepRouteArgs {
 /// [_i5.CvBuilderPreviewScreen]
 class CvBuilderPreviewRoute extends _i42.PageRouteInfo<void> {
   const CvBuilderPreviewRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderPreviewRoute.name, initialChildren: children);
+      : super(CvBuilderPreviewRoute.name, initialChildren: children);
 
   static const String name = 'CvBuilderPreviewRoute';
 
@@ -215,7 +215,7 @@ class CvBuilderPreviewRoute extends _i42.PageRouteInfo<void> {
 /// [_i6.CvBuilderStep1Screen]
 class CvBuilderStep1Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep1Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep1Route.name, initialChildren: children);
+      : super(CvBuilderStep1Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep1Route';
 
@@ -231,7 +231,7 @@ class CvBuilderStep1Route extends _i42.PageRouteInfo<void> {
 /// [_i7.CvBuilderStep2Screen]
 class CvBuilderStep2Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep2Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep2Route.name, initialChildren: children);
+      : super(CvBuilderStep2Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep2Route';
 
@@ -247,7 +247,7 @@ class CvBuilderStep2Route extends _i42.PageRouteInfo<void> {
 /// [_i8.CvBuilderStep3Screen]
 class CvBuilderStep3Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep3Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep3Route.name, initialChildren: children);
+      : super(CvBuilderStep3Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep3Route';
 
@@ -263,7 +263,7 @@ class CvBuilderStep3Route extends _i42.PageRouteInfo<void> {
 /// [_i9.CvBuilderStep4Screen]
 class CvBuilderStep4Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep4Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep4Route.name, initialChildren: children);
+      : super(CvBuilderStep4Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep4Route';
 
@@ -279,7 +279,7 @@ class CvBuilderStep4Route extends _i42.PageRouteInfo<void> {
 /// [_i10.CvBuilderStep5Screen]
 class CvBuilderStep5Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep5Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep5Route.name, initialChildren: children);
+      : super(CvBuilderStep5Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep5Route';
 
@@ -295,7 +295,7 @@ class CvBuilderStep5Route extends _i42.PageRouteInfo<void> {
 /// [_i11.CvBuilderStep6Screen]
 class CvBuilderStep6Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep6Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep6Route.name, initialChildren: children);
+      : super(CvBuilderStep6Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep6Route';
 
@@ -311,7 +311,7 @@ class CvBuilderStep6Route extends _i42.PageRouteInfo<void> {
 /// [_i12.CvBuilderStep7Screen]
 class CvBuilderStep7Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep7Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep7Route.name, initialChildren: children);
+      : super(CvBuilderStep7Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep7Route';
 
@@ -327,7 +327,7 @@ class CvBuilderStep7Route extends _i42.PageRouteInfo<void> {
 /// [_i13.CvBuilderStep8Screen]
 class CvBuilderStep8Route extends _i42.PageRouteInfo<void> {
   const CvBuilderStep8Route({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderStep8Route.name, initialChildren: children);
+      : super(CvBuilderStep8Route.name, initialChildren: children);
 
   static const String name = 'CvBuilderStep8Route';
 
@@ -343,7 +343,7 @@ class CvBuilderStep8Route extends _i42.PageRouteInfo<void> {
 /// [_i14.CvBuilderWelcomeScreen]
 class CvBuilderWelcomeRoute extends _i42.PageRouteInfo<void> {
   const CvBuilderWelcomeRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvBuilderWelcomeRoute.name, initialChildren: children);
+      : super(CvBuilderWelcomeRoute.name, initialChildren: children);
 
   static const String name = 'CvBuilderWelcomeRoute';
 
@@ -359,7 +359,7 @@ class CvBuilderWelcomeRoute extends _i42.PageRouteInfo<void> {
 /// [_i15.CvHistoryScreen]
 class CvHistoryRoute extends _i42.PageRouteInfo<void> {
   const CvHistoryRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvHistoryRoute.name, initialChildren: children);
+      : super(CvHistoryRoute.name, initialChildren: children);
 
   static const String name = 'CvHistoryRoute';
 
@@ -375,7 +375,7 @@ class CvHistoryRoute extends _i42.PageRouteInfo<void> {
 /// [_i16.CvToolsHubScreen]
 class CvToolsHubRoute extends _i42.PageRouteInfo<void> {
   const CvToolsHubRoute({List<_i42.PageRouteInfo>? children})
-    : super(CvToolsHubRoute.name, initialChildren: children);
+      : super(CvToolsHubRoute.name, initialChildren: children);
 
   static const String name = 'CvToolsHubRoute';
 
@@ -391,7 +391,7 @@ class CvToolsHubRoute extends _i42.PageRouteInfo<void> {
 /// [_i17.HistoryScreen]
 class HistoryRoute extends _i42.PageRouteInfo<void> {
   const HistoryRoute({List<_i42.PageRouteInfo>? children})
-    : super(HistoryRoute.name, initialChildren: children);
+      : super(HistoryRoute.name, initialChildren: children);
 
   static const String name = 'HistoryRoute';
 
@@ -407,7 +407,7 @@ class HistoryRoute extends _i42.PageRouteInfo<void> {
 /// [_i18.HomeScreen]
 class HomeRoute extends _i42.PageRouteInfo<void> {
   const HomeRoute({List<_i42.PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
+      : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -428,13 +428,13 @@ class InterviewFeedbackDetailRoute
     int feedbackIndex = 0,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         InterviewFeedbackDetailRoute.name,
-         args: InterviewFeedbackDetailRouteArgs(
-           key: key,
-           feedbackIndex: feedbackIndex,
-         ),
-         initialChildren: children,
-       );
+          InterviewFeedbackDetailRoute.name,
+          args: InterviewFeedbackDetailRouteArgs(
+            key: key,
+            feedbackIndex: feedbackIndex,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'InterviewFeedbackDetailRoute';
 
@@ -469,7 +469,7 @@ class InterviewFeedbackDetailRouteArgs {
 /// [_i20.InterviewFeedbackOverviewScreen]
 class InterviewFeedbackOverviewRoute extends _i42.PageRouteInfo<void> {
   const InterviewFeedbackOverviewRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewFeedbackOverviewRoute.name, initialChildren: children);
+      : super(InterviewFeedbackOverviewRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackOverviewRoute';
 
@@ -485,7 +485,7 @@ class InterviewFeedbackOverviewRoute extends _i42.PageRouteInfo<void> {
 /// [_i21.InterviewFeedbackProgressScreen]
 class InterviewFeedbackProgressRoute extends _i42.PageRouteInfo<void> {
   const InterviewFeedbackProgressRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewFeedbackProgressRoute.name, initialChildren: children);
+      : super(InterviewFeedbackProgressRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackProgressRoute';
 
@@ -501,7 +501,7 @@ class InterviewFeedbackProgressRoute extends _i42.PageRouteInfo<void> {
 /// [_i22.InterviewFeedbackQuestionsScreen]
 class InterviewFeedbackQuestionsRoute extends _i42.PageRouteInfo<void> {
   const InterviewFeedbackQuestionsRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewFeedbackQuestionsRoute.name, initialChildren: children);
+      : super(InterviewFeedbackQuestionsRoute.name, initialChildren: children);
 
   static const String name = 'InterviewFeedbackQuestionsRoute';
 
@@ -519,9 +519,9 @@ class InterviewFeedbackRecommendationsRoute extends _i42.PageRouteInfo<void> {
   const InterviewFeedbackRecommendationsRoute({
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         InterviewFeedbackRecommendationsRoute.name,
-         initialChildren: children,
-       );
+          InterviewFeedbackRecommendationsRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'InterviewFeedbackRecommendationsRoute';
 
@@ -537,7 +537,7 @@ class InterviewFeedbackRecommendationsRoute extends _i42.PageRouteInfo<void> {
 /// [_i24.InterviewPrepScreen]
 class InterviewPrepRoute extends _i42.PageRouteInfo<void> {
   const InterviewPrepRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewPrepRoute.name, initialChildren: children);
+      : super(InterviewPrepRoute.name, initialChildren: children);
 
   static const String name = 'InterviewPrepRoute';
 
@@ -553,7 +553,7 @@ class InterviewPrepRoute extends _i42.PageRouteInfo<void> {
 /// [_i25.InterviewSessionClosingScreen]
 class InterviewSessionClosingRoute extends _i42.PageRouteInfo<void> {
   const InterviewSessionClosingRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSessionClosingRoute.name, initialChildren: children);
+      : super(InterviewSessionClosingRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionClosingRoute';
 
@@ -569,7 +569,7 @@ class InterviewSessionClosingRoute extends _i42.PageRouteInfo<void> {
 /// [_i26.InterviewSessionOpeningScreen]
 class InterviewSessionOpeningRoute extends _i42.PageRouteInfo<void> {
   const InterviewSessionOpeningRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSessionOpeningRoute.name, initialChildren: children);
+      : super(InterviewSessionOpeningRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionOpeningRoute';
 
@@ -585,7 +585,7 @@ class InterviewSessionOpeningRoute extends _i42.PageRouteInfo<void> {
 /// [_i27.InterviewSessionQuestionScreen]
 class InterviewSessionQuestionRoute extends _i42.PageRouteInfo<void> {
   const InterviewSessionQuestionRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSessionQuestionRoute.name, initialChildren: children);
+      : super(InterviewSessionQuestionRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSessionQuestionRoute';
 
@@ -601,7 +601,7 @@ class InterviewSessionQuestionRoute extends _i42.PageRouteInfo<void> {
 /// [_i28.InterviewSetupConfirmationScreen]
 class InterviewSetupConfirmationRoute extends _i42.PageRouteInfo<void> {
   const InterviewSetupConfirmationRoute({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSetupConfirmationRoute.name, initialChildren: children);
+      : super(InterviewSetupConfirmationRoute.name, initialChildren: children);
 
   static const String name = 'InterviewSetupConfirmationRoute';
 
@@ -617,7 +617,7 @@ class InterviewSetupConfirmationRoute extends _i42.PageRouteInfo<void> {
 /// [_i29.InterviewSetupStep1Screen]
 class InterviewSetupStep1Route extends _i42.PageRouteInfo<void> {
   const InterviewSetupStep1Route({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSetupStep1Route.name, initialChildren: children);
+      : super(InterviewSetupStep1Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep1Route';
 
@@ -633,7 +633,7 @@ class InterviewSetupStep1Route extends _i42.PageRouteInfo<void> {
 /// [_i30.InterviewSetupStep2Screen]
 class InterviewSetupStep2Route extends _i42.PageRouteInfo<void> {
   const InterviewSetupStep2Route({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSetupStep2Route.name, initialChildren: children);
+      : super(InterviewSetupStep2Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep2Route';
 
@@ -649,7 +649,7 @@ class InterviewSetupStep2Route extends _i42.PageRouteInfo<void> {
 /// [_i31.InterviewSetupStep3Screen]
 class InterviewSetupStep3Route extends _i42.PageRouteInfo<void> {
   const InterviewSetupStep3Route({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSetupStep3Route.name, initialChildren: children);
+      : super(InterviewSetupStep3Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep3Route';
 
@@ -665,7 +665,7 @@ class InterviewSetupStep3Route extends _i42.PageRouteInfo<void> {
 /// [_i32.InterviewSetupStep4Screen]
 class InterviewSetupStep4Route extends _i42.PageRouteInfo<void> {
   const InterviewSetupStep4Route({List<_i42.PageRouteInfo>? children})
-    : super(InterviewSetupStep4Route.name, initialChildren: children);
+      : super(InterviewSetupStep4Route.name, initialChildren: children);
 
   static const String name = 'InterviewSetupStep4Route';
 
@@ -681,7 +681,7 @@ class InterviewSetupStep4Route extends _i42.PageRouteInfo<void> {
 /// [_i33.LanguageSelectionScreen]
 class LanguageSelectionRoute extends _i42.PageRouteInfo<void> {
   const LanguageSelectionRoute({List<_i42.PageRouteInfo>? children})
-    : super(LanguageSelectionRoute.name, initialChildren: children);
+      : super(LanguageSelectionRoute.name, initialChildren: children);
 
   static const String name = 'LanguageSelectionRoute';
 
@@ -697,7 +697,7 @@ class LanguageSelectionRoute extends _i42.PageRouteInfo<void> {
 /// [_i34.MainScreen]
 class MainRoute extends _i42.PageRouteInfo<void> {
   const MainRoute({List<_i42.PageRouteInfo>? children})
-    : super(MainRoute.name, initialChildren: children);
+      : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -721,16 +721,16 @@ class OnboardingConfirmationRoute
     String? careerGoal,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         OnboardingConfirmationRoute.name,
-         args: OnboardingConfirmationRouteArgs(
-           key: key,
-           fullName: fullName,
-           workStatus: workStatus,
-           targetRole: targetRole,
-           careerGoal: careerGoal,
-         ),
-         initialChildren: children,
-       );
+          OnboardingConfirmationRoute.name,
+          args: OnboardingConfirmationRouteArgs(
+            key: key,
+            fullName: fullName,
+            workStatus: workStatus,
+            targetRole: targetRole,
+            careerGoal: careerGoal,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'OnboardingConfirmationRoute';
 
@@ -778,7 +778,7 @@ class OnboardingConfirmationRouteArgs {
 /// [_i36.OnboardingStep1Screen]
 class OnboardingStep1Route extends _i42.PageRouteInfo<void> {
   const OnboardingStep1Route({List<_i42.PageRouteInfo>? children})
-    : super(OnboardingStep1Route.name, initialChildren: children);
+      : super(OnboardingStep1Route.name, initialChildren: children);
 
   static const String name = 'OnboardingStep1Route';
 
@@ -799,10 +799,10 @@ class OnboardingStep2Route
     required String fullName,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         OnboardingStep2Route.name,
-         args: OnboardingStep2RouteArgs(key: key, fullName: fullName),
-         initialChildren: children,
-       );
+          OnboardingStep2Route.name,
+          args: OnboardingStep2RouteArgs(key: key, fullName: fullName),
+          initialChildren: children,
+        );
 
   static const String name = 'OnboardingStep2Route';
 
@@ -838,14 +838,14 @@ class OnboardingStep3Route
     String? workStatus,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         OnboardingStep3Route.name,
-         args: OnboardingStep3RouteArgs(
-           key: key,
-           fullName: fullName,
-           workStatus: workStatus,
-         ),
-         initialChildren: children,
-       );
+          OnboardingStep3Route.name,
+          args: OnboardingStep3RouteArgs(
+            key: key,
+            fullName: fullName,
+            workStatus: workStatus,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'OnboardingStep3Route';
 
@@ -892,15 +892,15 @@ class OnboardingStep4Route
     String? targetRole,
     List<_i42.PageRouteInfo>? children,
   }) : super(
-         OnboardingStep4Route.name,
-         args: OnboardingStep4RouteArgs(
-           key: key,
-           fullName: fullName,
-           workStatus: workStatus,
-           targetRole: targetRole,
-         ),
-         initialChildren: children,
-       );
+          OnboardingStep4Route.name,
+          args: OnboardingStep4RouteArgs(
+            key: key,
+            fullName: fullName,
+            workStatus: workStatus,
+            targetRole: targetRole,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'OnboardingStep4Route';
 
@@ -944,7 +944,7 @@ class OnboardingStep4RouteArgs {
 /// [_i40.ProfileScreen]
 class ProfileRoute extends _i42.PageRouteInfo<void> {
   const ProfileRoute({List<_i42.PageRouteInfo>? children})
-    : super(ProfileRoute.name, initialChildren: children);
+      : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -960,7 +960,7 @@ class ProfileRoute extends _i42.PageRouteInfo<void> {
 /// [_i41.SplashScreen]
 class SplashRoute extends _i42.PageRouteInfo<void> {
   const SplashRoute({List<_i42.PageRouteInfo>? children})
-    : super(SplashRoute.name, initialChildren: children);
+      : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 

@@ -7,7 +7,7 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 @RoutePage()
 class OnboardingStep2Screen extends StatefulWidget {
   final String fullName;
-  
+
   const OnboardingStep2Screen({
     super.key,
     required this.fullName,
@@ -23,7 +23,7 @@ class _OnboardingStep2ScreenState extends State<OnboardingStep2Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.stepProgress(2, 4)),
@@ -53,16 +53,19 @@ class _OnboardingStep2ScreenState extends State<OnboardingStep2Screen> {
               Text(
                 l10n.whatsYourCurrentStatus,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              _buildStatusOption(l10n.freshGraduate, 'fresh_grad', Iconsax.teacher),
+              _buildStatusOption(
+                  l10n.freshGraduate, 'fresh_grad', Iconsax.teacher),
               const SizedBox(height: 12),
-              _buildStatusOption(l10n.currentlyWorking, 'working', Iconsax.building),
+              _buildStatusOption(
+                  l10n.currentlyWorking, 'working', Iconsax.building),
               const SizedBox(height: 12),
-              _buildStatusOption(l10n.lookingForJob, 'job_seeking', Iconsax.search_normal),
+              _buildStatusOption(
+                  l10n.lookingForJob, 'job_seeking', Iconsax.search_normal),
               const SizedBox(height: 12),
               _buildStatusOption(l10n.freelancer, 'freelancer', Iconsax.code),
               const Spacer(),
@@ -112,20 +115,25 @@ class _OnboardingStep2ScreenState extends State<OnboardingStep2Screen> {
           ),
           borderRadius: BorderRadius.circular(12),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected 
-                ? Theme.of(context).colorScheme.primary 
-                : Theme.of(context).colorScheme.onSurfaceVariant),
+            Icon(icon,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant),
             const SizedBox(width: 16),
             Text(
               label,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
             ),
             const Spacer(),
             if (isSelected)

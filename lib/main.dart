@@ -13,7 +13,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Lock orientation to portrait
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -23,14 +22,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize all dependencies including 51 Gemini models
-  // and register all Providers
   await setupDI();
 
   final themeProvider = ThemeProvider();
   final localeProvider = LocaleProvider();
- 
-  
+
   await Future.wait([
     themeProvider.init(),
     localeProvider.init(),
@@ -41,21 +37,11 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
-        
-        // Auth
         ChangeNotifierProvider(create: (_) => getIt<AuthProvider>()),
-
-        // Profile (depends on Auth internally)
         ChangeNotifierProvider(create: (_) => getIt<ProfileProvider>()),
-
-        // CV Tools
         ChangeNotifierProvider(create: (_) => getIt<CvAnalyzerProvider>()),
         ChangeNotifierProvider(create: (_) => getIt<CVBuilderProvider>()),
-        
-        // Interview (depends on Auth internally)
         ChangeNotifierProvider(create: (_) => getIt<InterviewProvider>()),
-        
-        // History (depends on Auth internally)
         ChangeNotifierProvider(create: (_) => getIt<HistoryProvider>()),
       ],
       child: ResummyApp(),

@@ -9,7 +9,6 @@ enum ActivityType {
   unknown,
 }
 
-/// Unified activity entity for history timeline
 class ActivityEntity extends Equatable {
   final String id;
   final String userId;
@@ -18,7 +17,7 @@ class ActivityEntity extends Equatable {
   final String subtitle;
   final DateTime timestamp;
   final Map<String, dynamic>? metadata;
-  final String? relatedId; // CV ID or Interview ID
+  final String? relatedId;
 
   const ActivityEntity({
     required this.id,

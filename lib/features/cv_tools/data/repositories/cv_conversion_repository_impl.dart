@@ -5,7 +5,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_conversion_repository.dart';
 import 'package:flutter/foundation.dart';
 
-/// Implementation of CV Conversion Repository
 class CVConversionRepositoryImpl implements CVConversionRepository {
   final CVConversionRemoteDataSource _remoteDataSource;
   final CVLocalDataSource _localDataSource;
@@ -22,7 +21,7 @@ class CVConversionRepositoryImpl implements CVConversionRepository {
         file,
         targetLanguage: targetLanguage,
       );
-      
+
       debugPrint('✅ CV converted from file: ${cvData.name}');
       return cvData;
     } catch (e) {

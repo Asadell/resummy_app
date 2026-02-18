@@ -8,7 +8,7 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 class OnboardingStep3Screen extends StatefulWidget {
   final String fullName;
   final String? workStatus;
-  
+
   const OnboardingStep3Screen({
     super.key,
     required this.fullName,
@@ -111,7 +111,7 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.stepProgress(3, 4)),
@@ -141,8 +141,8 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
               Text(
                 l10n.whatsYourTargetRole,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -159,15 +159,18 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
                 ),
                 textCapitalization: TextCapitalization.words,
               ),
-              // Suggestions dropdown
               if (_showSuggestions) ...[
                 const SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withValues(alpha: 0.3),
                     ),
                   ),
                   child: Column(
@@ -213,8 +216,8 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
                   Text(
                     l10n.typeToSeeSuggestions,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                 ],
               ),
@@ -227,8 +230,8 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
                   context.router.push(OnboardingStep4Route(
                     fullName: widget.fullName,
                     workStatus: widget.workStatus,
-                    targetRole: _roleController.text.trim().isNotEmpty 
-                        ? _roleController.text.trim() 
+                    targetRole: _roleController.text.trim().isNotEmpty
+                        ? _roleController.text.trim()
                         : null,
                   ));
                 },
@@ -252,8 +255,8 @@ class _OnboardingStep3ScreenState extends State<OnboardingStep3Screen> {
     context.router.push(OnboardingConfirmationRoute(
       fullName: widget.fullName,
       workStatus: widget.workStatus,
-      targetRole: _roleController.text.trim().isNotEmpty 
-          ? _roleController.text.trim() 
+      targetRole: _roleController.text.trim().isNotEmpty
+          ? _roleController.text.trim()
           : null,
       careerGoal: null,
     ));

@@ -2,7 +2,6 @@ import 'package:resummy_app/features/history/data/data_sources/history_local_dat
 import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
 import 'package:resummy_app/features/history/domain/repositories/history_repository.dart';
 
-/// Implementation of History Repository
 class HistoryRepositoryImpl implements HistoryRepository {
   final HistoryLocalDataSource _localDataSource;
 

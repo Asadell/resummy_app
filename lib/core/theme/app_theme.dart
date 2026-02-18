@@ -4,47 +4,33 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  // Light Theme
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      
-      // Color Scheme
       colorScheme: ColorScheme.light(
         primary: AppColors.primary,
         onPrimary: Colors.white,
         primaryContainer: AppColors.primary100,
         onPrimaryContainer: AppColors.primary900,
-        
         secondary: AppColors.secondary,
         onSecondary: Colors.white,
         secondaryContainer: AppColors.secondary100,
         onSecondaryContainer: AppColors.secondary900,
-        
         tertiary: AppColors.info,
         onTertiary: Colors.white,
-        
         error: AppColors.error,
         onError: Colors.white,
         errorContainer: Color(0xFFFEE2E2),
         onErrorContainer: AppColors.errorDark,
-        
         surface: AppColors.surfaceLight,
         onSurface: AppColors.textPrimaryLight,
-        
         onSurfaceVariant: AppColors.textSecondaryLight,
-        
         surfaceContainerHighest: AppColors.gray100,
-        
         outline: AppColors.gray300,
         outlineVariant: AppColors.gray200,
       ),
-      
-      // Scaffold
       scaffoldBackgroundColor: AppColors.backgroundLight,
-      
-      // AppBar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surfaceLight,
         foregroundColor: AppColors.textPrimaryLight,
@@ -61,13 +47,9 @@ class AppTheme {
           color: AppColors.textPrimaryLight,
         ),
       ),
-      
-      // Action Icon Theme
       actionIconTheme: ActionIconThemeData(
         backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
-      
-      // Text Theme
       textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
         displayLarge: GoogleFonts.plusJakartaSans(
           fontSize: 32,
@@ -148,8 +130,6 @@ class AppTheme {
           color: AppColors.textSecondaryLight,
         ),
       ),
-      
-      // Card Theme
       cardTheme: CardThemeData(
         color: AppColors.surfaceLight,
         elevation: 0,
@@ -159,8 +139,6 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
-      
-      // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -176,8 +154,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
@@ -192,8 +168,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
@@ -204,8 +178,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.gray50,
@@ -239,8 +211,6 @@ class AppTheme {
           fontSize: 14,
         ),
       ),
-      
-      // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.surfaceLight,
         selectedItemColor: AppColors.primary,
@@ -256,8 +226,6 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      
-      // Divider Theme
       dividerTheme: DividerThemeData(
         color: AppColors.gray200,
         thickness: 1,
@@ -265,48 +233,34 @@ class AppTheme {
       ),
     );
   }
-  
-  // Dark Theme
+
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      
-      // Color Scheme
       colorScheme: ColorScheme.dark(
         primary: AppColors.primary400,
         onPrimary: AppColors.gray900,
         primaryContainer: AppColors.primary800,
         onPrimaryContainer: AppColors.primary100,
-        
         secondary: AppColors.secondary400,
         onSecondary: AppColors.gray900,
         secondaryContainer: AppColors.secondary800,
         onSecondaryContainer: AppColors.secondary100,
-        
         tertiary: AppColors.info,
         onTertiary: AppColors.gray900,
-        
         error: AppColors.errorLight,
         onError: AppColors.gray900,
         errorContainer: AppColors.errorDark,
         onErrorContainer: Color(0xFFFEE2E2),
-        
         surface: AppColors.surfaceDark,
         onSurface: AppColors.textPrimaryDark,
-        
         onSurfaceVariant: AppColors.textSecondaryDark,
-        
         surfaceContainerHighest: AppColors.gray800,
-        
         outline: AppColors.gray600,
         outlineVariant: AppColors.gray700,
       ),
-      
-      // Scaffold
       scaffoldBackgroundColor: AppColors.backgroundDark,
-      
-      // AppBar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surfaceDark,
         foregroundColor: AppColors.textPrimaryDark,
@@ -323,14 +277,12 @@ class AppTheme {
           color: AppColors.textPrimaryDark,
         ),
       ),
-      
-      // Action Icon Theme
       actionIconTheme: ActionIconThemeData(
         backButtonIconBuilder: (context) => const Icon(Iconsax.arrow_left),
       ),
-      
-      // Text Theme
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme).copyWith(
+      textTheme:
+          GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme)
+              .copyWith(
         displayLarge: GoogleFonts.plusJakartaSans(
           fontSize: 32,
           fontWeight: FontWeight.w700,
@@ -410,8 +362,6 @@ class AppTheme {
           color: AppColors.textSecondaryDark,
         ),
       ),
-      
-      // Card Theme
       cardTheme: CardThemeData(
         color: AppColors.surfaceDark,
         elevation: 0,
@@ -421,8 +371,6 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
-      
-      // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -438,8 +386,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary400,
@@ -454,8 +400,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary400,
@@ -466,8 +410,6 @@ class AppTheme {
           ),
         ),
       ),
-      
-      // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.gray800,
@@ -501,8 +443,6 @@ class AppTheme {
           fontSize: 14,
         ),
       ),
-      
-      // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.surfaceDark,
         selectedItemColor: AppColors.primary400,
@@ -518,8 +458,6 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      
-      // Divider Theme
       dividerTheme: DividerThemeData(
         color: AppColors.gray700,
         thickness: 1,

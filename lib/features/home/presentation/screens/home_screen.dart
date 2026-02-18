@@ -36,7 +36,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Welcome Card
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -57,8 +56,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              
-              // Quick Actions
               Text(
                 l10n.quickActions,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -71,7 +68,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.document_text,
                       title: l10n.buildCv,
                       color: Theme.of(context).colorScheme.primary,
-                      onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
+                      onTap: () =>
+                          context.router.push(const CvBuilderWelcomeRoute()),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -80,7 +78,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.chart_2,
                       title: l10n.analyzeCv,
                       color: Theme.of(context).colorScheme.secondary,
-                      onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
+                      onTap: () =>
+                          context.router.push(const CvAnalyzerUploadRoute()),
                     ),
                   ),
                 ],
@@ -93,7 +92,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.microphone,
                       title: l10n.interviewPrep,
                       color: Theme.of(context).colorScheme.tertiary,
-                      onTap: () => context.router.push(const InterviewSetupStep1Route()),
+                      onTap: () =>
+                          context.router.push(const InterviewSetupStep1Route()),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -102,14 +102,13 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.magic_star,
                       title: l10n.convertToCvAts,
                       color: Colors.purple,
-                      onTap: () => context.router.push(const CvAtsConverterRoute()),
+                      onTap: () =>
+                          context.router.push(const CvAtsConverterRoute()),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              
-              // Latest Activity
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -119,7 +118,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigate to History tab (index 3)
                       context.router.navigate(const HistoryRoute());
                     },
                     child: Text(l10n.viewAll),
@@ -127,20 +125,22 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              
               Consumer<HistoryProvider>(
                 builder: (context, provider, child) {
                   final activities = provider.activities.take(3).toList();
-                  
+
                   if (activities.isEmpty) {
                     return Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 24.0),
                         child: Text(
-                          l10n.noInterviewHistory, // Reuse or add new string "No recent activity"
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          l10n.noInterviewHistory,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       ),
                     );
@@ -154,17 +154,19 @@ class HomeScreen extends StatelessWidget {
                         subtitle: activity.subtitle,
                         time: _formatTimeAgo(context, activity.timestamp),
                         onTap: () {
-                           // For now, simpler navigation. 
-                           // Ideally we'd deep link to specific CV or Interview
-                           if (activity.type == ActivityType.interviewPrep) {
-                             context.router.navigate(const HistoryRoute());
-                           } else if (activity.type == ActivityType.cvCreated) {
-                             context.router.navigate(const CvBuilderWelcomeRoute());
-                           } else if (activity.type == ActivityType.cvAnalyzed) {
-                             context.router.navigate(const CvAnalyzerUploadRoute());
-                           } else if (activity.type == ActivityType.cvTranslated) {
-                             context.router.navigate(const CvAtsConverterRoute());
-                           }
+                          if (activity.type == ActivityType.interviewPrep) {
+                            context.router.navigate(const HistoryRoute());
+                          } else if (activity.type == ActivityType.cvCreated) {
+                            context.router
+                                .navigate(const CvBuilderWelcomeRoute());
+                          } else if (activity.type == ActivityType.cvAnalyzed) {
+                            context.router
+                                .navigate(const CvAnalyzerUploadRoute());
+                          } else if (activity.type ==
+                              ActivityType.cvTranslated) {
+                            context.router
+                                .navigate(const CvAtsConverterRoute());
+                          }
                         },
                       );
                     }).toList(),
@@ -177,6 +179,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
   IconData _getActivityIcon(ActivityType type) {
     switch (type) {
       case ActivityType.cvCreated:

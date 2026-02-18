@@ -14,7 +14,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -24,7 +24,6 @@ class AuthScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
-              // App Logo
               Image.asset(
                 'assets/icon/icon.png',
                 width: 100,
@@ -34,20 +33,19 @@ class AuthScreen extends StatelessWidget {
               Text(
                 l10n.welcomeToResummy,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
                 l10n.buildPerfectResumeWithAi,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const Spacer(),
-              // Google Sign-In Button
               Consumer<AuthProvider>(
                 builder: (context, authProvider, child) {
                   return ElevatedButton(
@@ -56,7 +54,10 @@ class AuthScreen extends StatelessWidget {
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withValues(alpha: 0.5),
                       ),
                     ),
                     onPressed: authProvider.isLoading
@@ -75,7 +76,8 @@ class AuthScreen extends StatelessWidget {
                                 'https://www.google.com/favicon.ico',
                                 width: 24,
                                 height: 24,
-                                errorBuilder: (_, __, ___) => const Icon(Iconsax.login),
+                                errorBuilder: (_, __, ___) =>
+                                    const Icon(Iconsax.login),
                               ),
                               const SizedBox(width: 12),
                               Text(l10n.loginWithGoogle),
@@ -96,33 +98,30 @@ class AuthScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+
     await authProvider.signInWithGoogle();
-    
+
     if (authProvider.isAuthenticated && context.mounted) {
-       final user = authProvider.currentUser!;
-       
-       // Ensure profile exists
-       await profileProvider.createProfileIfNotExists(
-         user.id, 
-         email: user.email, 
-         fullName: user.displayName, 
-         photoUrl: user.photoUrl
-       );
-       
-       if (context.mounted) {
-          // Check onboarding
-          if (profileProvider.profile?.onboardingDone ?? false) {
-             router.replace(const MainRoute());
-          } else {
-             router.replace(const OnboardingStep1Route());
-          }
-       }
+      final user = authProvider.currentUser!;
+
+      await profileProvider.createProfileIfNotExists(user.id,
+          email: user.email,
+          fullName: user.displayName,
+          photoUrl: user.photoUrl);
+
+      if (context.mounted) {
+        if (profileProvider.profile?.onboardingDone ?? false) {
+          router.replace(const MainRoute());
+        } else {
+          router.replace(const OnboardingStep1Route());
+        }
+      }
     } else if (authProvider.errorMessage != null && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.loginError(authProvider.errorMessage!))),
-        );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.loginError(authProvider.errorMessage!))),
+      );
     }
   }
 }

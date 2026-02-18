@@ -17,9 +17,12 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
 
     String getFocusLabel(InterviewFocus focus) {
       switch (focus) {
-        case InterviewFocus.behavioral: return l10n.focusBehavioralTitle;
-        case InterviewFocus.technical: return l10n.focusTechnicalTitle;
-        case InterviewFocus.mixed: return l10n.focusMixedTitle;
+        case InterviewFocus.behavioral:
+          return l10n.focusBehavioralTitle;
+        case InterviewFocus.technical:
+          return l10n.focusTechnicalTitle;
+        case InterviewFocus.mixed:
+          return l10n.focusMixedTitle;
       }
     }
 
@@ -38,8 +41,8 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
               child: Text(
                 l10n.stepProgress(5, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ),
@@ -52,8 +55,6 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 32),
-
-              // Success Icon
               Center(
                 child: Container(
                   width: 64,
@@ -69,29 +70,23 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Title
               Text(
                 l10n.setupComplete,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
                 l10n.readyToStartDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
-
               const SizedBox(height: 32),
-
-              // Summary Card
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -99,8 +94,8 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light 
-                          ? Colors.black.withValues(alpha: 0.05) 
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
                           : Colors.transparent,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
@@ -113,20 +108,32 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                     Text(
                       l10n.interviewSummary,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 24),
-                    
-                    _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel, provider.cvFileName ?? l10n.cvDefaultLabel),
+                    _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel,
+                        provider.cvFileName ?? l10n.cvDefaultLabel),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.briefcase, l10n.roleLabel, provider.role ?? '-'),
+                    _buildSummaryRow(context, Iconsax.briefcase, l10n.roleLabel,
+                        provider.role ?? '-'),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.radar_1, l10n.interviewFocus, getFocusLabel(provider.selectedFocus)),
+                    _buildSummaryRow(
+                        context,
+                        Iconsax.radar_1,
+                        l10n.interviewFocus,
+                        getFocusLabel(provider.selectedFocus)),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.global, l10n.languageLabel, provider.locale == 'en-US' ? l10n.english : l10n.indonesian),
+                    _buildSummaryRow(
+                        context,
+                        Iconsax.global,
+                        l10n.languageLabel,
+                        provider.locale == 'en-US'
+                            ? l10n.english
+                            : l10n.indonesian),
                     const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.message_question, l10n.questionsLabel, l10n.questionsCountDynamic(5)), // Dynamic?
+                    _buildSummaryRow(context, Iconsax.message_question,
+                        l10n.questionsLabel, l10n.questionsCountDynamic(5)),
                   ],
                 ),
               ),
@@ -140,8 +147,8 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light 
-                  ? Colors.black.withValues(alpha: 0.05) 
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black.withValues(alpha: 0.05)
                   : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
@@ -149,45 +156,50 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
           ],
         ),
         child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  onPressed: () {
-                     // Start Interview
-                     context.read<InterviewProvider>().startInterview(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                onPressed: () {
+                  context.read<InterviewProvider>().startInterview(
                         role: provider.role ?? "Candidate",
                         focus: provider.selectedFocus,
-                     );
-                     context.router.push(const InterviewSessionOpeningRoute());
-                  },
-                  child: Text(
-                    l10n.startInterviewNow,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                      );
+                  context.router.push(const InterviewSessionOpeningRoute());
+                },
+                child: Text(
+                  l10n.startInterviewNow,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSummaryRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildSummaryRow(
+      BuildContext context, IconData icon, String label, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+            color: Theme.of(context)
+                .colorScheme
+                .primaryContainer
+                .withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
+          child: Icon(icon,
+              color: Theme.of(context).colorScheme.primary, size: 20),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -197,16 +209,16 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
               const SizedBox(height: 4),
               Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ],
           ),

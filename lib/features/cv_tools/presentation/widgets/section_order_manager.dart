@@ -5,7 +5,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 
-/// Widget for managing section order, visibility, and titles
 class SectionOrderManager extends StatefulWidget {
   const SectionOrderManager({super.key});
 
@@ -27,7 +26,8 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
 
   TextEditingController _getController(SectionData section) {
     if (!_titleControllers.containsKey(section.id)) {
-      _titleControllers[section.id] = TextEditingController(text: section.title);
+      _titleControllers[section.id] =
+          TextEditingController(text: section.title);
     }
     return _titleControllers[section.id]!;
   }
@@ -75,13 +75,13 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
       ),
       body: Column(
         children: [
-          // Info banner
           Container(
             padding: const EdgeInsets.all(16),
             color: const Color(0xFFEFF6FF),
             child: Row(
               children: [
-                const Icon(Iconsax.info_circle, color: Color(0xFF0EA5E9), size: 20),
+                const Icon(Iconsax.info_circle,
+                    color: Color(0xFF0EA5E9), size: 20),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -95,8 +95,6 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               ],
             ),
           ),
-
-          // Reorderable section list
           Expanded(
             child: ReorderableListView.builder(
               padding: const EdgeInsets.all(16),
@@ -110,12 +108,11 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               },
             ),
           ),
-
-          // Add custom section button
           Padding(
             padding: const EdgeInsets.all(16),
             child: OutlinedButton.icon(
-              onPressed: () => _showAddCustomSectionDialog(context, provider, l10n),
+              onPressed: () =>
+                  _showAddCustomSectionDialog(context, provider, l10n),
               icon: const Icon(Iconsax.add),
               label: Text(l10n.addCustomSection),
               style: OutlinedButton.styleFrom(
@@ -152,23 +149,19 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
           children: [
             Row(
               children: [
-                // Drag handle
                 const Icon(
                   Iconsax.menu,
                   color: Color(0xFF9CA3AF),
                   size: 20,
                 ),
                 const SizedBox(width: 12),
-
-                // Section icon
                 Icon(
                   _getSectionIcon(section.type),
-                  color: section.isVisible ? const Color(0xFF0EA5E9) : Colors.grey,
+                  color:
+                      section.isVisible ? const Color(0xFF0EA5E9) : Colors.grey,
                   size: 20,
                 ),
                 const SizedBox(width: 12),
-
-                // Section title or edit field
                 Expanded(
                   child: isEditing
                       ? TextField(
@@ -188,7 +181,8 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                           ),
                           onSubmitted: (value) {
                             if (value.trim().isNotEmpty) {
-                              provider.updateSectionTitle(section.id, value.trim());
+                              provider.updateSectionTitle(
+                                  section.id, value.trim());
                             }
                             setState(() {
                               _editingTitleSectionId = null;
@@ -200,12 +194,12 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: section.isVisible ? Colors.black87 : Colors.grey,
+                            color: section.isVisible
+                                ? Colors.black87
+                                : Colors.grey,
                           ),
                         ),
                 ),
-
-                // Edit title button
                 if (!isEditing)
                   IconButton(
                     icon: const Icon(Iconsax.edit_2, size: 18),
@@ -216,15 +210,14 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                     },
                     tooltip: l10n.edit,
                   ),
-
-                // Save button when editing
                 if (isEditing)
                   IconButton(
                     icon: const Icon(Iconsax.tick_circle, size: 18),
                     color: const Color(0xFF10B981),
                     onPressed: () {
                       if (controller.text.trim().isNotEmpty) {
-                        provider.updateSectionTitle(section.id, controller.text.trim());
+                        provider.updateSectionTitle(
+                            section.id, controller.text.trim());
                       }
                       setState(() {
                         _editingTitleSectionId = null;
@@ -232,10 +225,7 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                     },
                     tooltip: l10n.save,
                   ),
-
                 const SizedBox(width: 8),
-
-                // Visibility toggle
                 Switch(
                   value: section.isVisible,
                   onChanged: (value) {
@@ -245,13 +235,11 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
                 ),
               ],
             ),
-
-            // Delete button for custom sections
             if (section is CustomSection) ...[
               const SizedBox(height: 12),
               TextButton.icon(
                 onPressed: () {
-                _showDeleteConfirmation(context, provider, section, l10n);
+                  _showDeleteConfirmation(context, provider, section, l10n);
                 },
                 icon: const Icon(Iconsax.trash, size: 16, color: Colors.red),
                 label: Text(
@@ -266,7 +254,8 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     );
   }
 
-  void _showAddCustomSectionDialog(BuildContext context, CVBuilderProvider provider, AppLocalizations l10n) {
+  void _showAddCustomSectionDialog(
+      BuildContext context, CVBuilderProvider provider, AppLocalizations l10n) {
     final titleController = TextEditingController();
     CustomSectionTemplate selectedTemplate = CustomSectionTemplate.bulletList;
 
@@ -339,7 +328,8 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
               const SizedBox(height: 16),
               Text(
                 '${l10n.templateLabel}:',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<CustomSectionTemplate>(
@@ -517,7 +507,8 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
     );
   }
 
-  String _getTemplateName(CustomSectionTemplate template, AppLocalizations l10n) {
+  String _getTemplateName(
+      CustomSectionTemplate template, AppLocalizations l10n) {
     switch (template) {
       case CustomSectionTemplate.experienceLike:
         return l10n.templateExperienceNameLabel;

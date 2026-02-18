@@ -14,12 +14,13 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Consumer<InterviewProvider>(
       builder: (context, provider, child) {
         final report = provider.report;
         if (report == null) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         }
 
         return Scaffold(
@@ -27,21 +28,23 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left_2),
-              onPressed: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+              onPressed: () =>
+                  context.router.push(const InterviewFeedbackOverviewRoute()),
             ),
             title: Row(
               children: [
-                Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 20),
+                Icon(Iconsax.lamp_on,
+                    color: Theme.of(context).colorScheme.primary, size: 20),
                 const SizedBox(width: 8),
                 Text(l10n.recommendations),
               ],
             ),
-             actions: [
-                IconButton(
-                  icon: const Icon(Iconsax.document_download),
-                  onPressed: () {},
-                ),
-              ],
+            actions: [
+              IconButton(
+                icon: const Icon(Iconsax.document_download),
+                onPressed: () {},
+              ),
+            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -49,16 +52,20 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Title
                   Row(
                     children: [
-                      Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 32),
+                      Icon(Iconsax.lamp_on,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 32),
                       const SizedBox(width: 12),
                       Text(
                         l10n.recommendations,
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -66,13 +73,10 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                   Text(
                     l10n.basedOnPerformance,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Strengths Card
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -85,32 +89,42 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Iconsax.weight, color: Theme.of(context).colorScheme.secondary, size: 32),
+                        Icon(Iconsax.weight,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 32),
                         const SizedBox(height: 12),
                         Text(
                           l10n.yourStrengths,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                         const SizedBox(height: 16),
                         if (report.strengths.isEmpty)
-                          Text('No specific strengths identified.', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))
+                          Text('No specific strengths identified.',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant))
                         else
                           ...report.strengths.map((s) => Column(
-                            children: [
-                              _buildListItem(context, s, Theme.of(context).colorScheme.onSurface, Iconsax.tick_circle),
-                              const SizedBox(height: 10),
-                            ],
-                          )),
+                                children: [
+                                  _buildListItem(
+                                      context,
+                                      s,
+                                      Theme.of(context).colorScheme.onSurface,
+                                      Iconsax.tick_circle),
+                                  const SizedBox(height: 10),
+                                ],
+                              )),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Improvements Card
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -123,34 +137,41 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Iconsax.direct_up, color: Theme.of(context).colorScheme.error, size: 32),
+                        Icon(Iconsax.direct_up,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 32),
                         const SizedBox(height: 12),
                         Text(
                           l10n.areasForImprovement,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         const SizedBox(height: 16),
                         if (report.improvements.isEmpty)
-                           Text('No specific improvements identified.', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))
+                          Text('No specific improvements identified.',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant))
                         else
                           ...report.improvements.map((s) => Column(
-                            children: [
-                              _buildListItem(context, s, Theme.of(context).colorScheme.onSurface, Iconsax.info_circle),
-                              const SizedBox(height: 10),
-                            ],
-                          )),
+                                children: [
+                                  _buildListItem(
+                                      context,
+                                      s,
+                                      Theme.of(context).colorScheme.onSurface,
+                                      Iconsax.info_circle),
+                                  const SizedBox(height: 10),
+                                ],
+                              )),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Readiness Assessment (Simplified based on score)
                   _buildReadinessCard(context, report.overallScore, l10n),
-
                   const SizedBox(height: 100),
                 ],
               ),
@@ -174,19 +195,19 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                        provider.resetInterview();
-                        context.router.push(const InterviewPrepRoute());
+                      provider.resetInterview();
+                      context.router.push(const InterviewPrepRoute());
                     },
                     icon: const Icon(Iconsax.refresh),
-                    label: Text(l10n.practiceAgain), // 'Practice Again'
+                    label: Text(l10n.practiceAgain),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(52),
                     ),
                   ),
                   const SizedBox(height: 12),
-                   // Dashboard button
-                   OutlinedButton.icon(
-                    onPressed: () => context.router.push(const InterviewPrepRoute()), // Or HomeRoute
+                  OutlinedButton.icon(
+                    onPressed: () =>
+                        context.router.push(const InterviewPrepRoute()),
                     icon: const Icon(Iconsax.home),
                     label: Text(l10n.dashboard),
                     style: OutlinedButton.styleFrom(
@@ -204,11 +225,16 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildListItem(BuildContext context, String text, Color color, IconData icon) {
+  Widget _buildListItem(
+      BuildContext context, String text, Color color, IconData icon) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16, color: icon == Iconsax.tick_circle ? AppColors.secondary : AppColors.warning),
+        Icon(icon,
+            size: 16,
+            color: icon == Iconsax.tick_circle
+                ? AppColors.secondary
+                : AppColors.warning),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -223,28 +249,29 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReadinessCard(BuildContext context, int score, AppLocalizations l10n) {
-      Color bgColor;
-      String title;
-      String message;
-      IconData icon;
+  Widget _buildReadinessCard(
+      BuildContext context, int score, AppLocalizations l10n) {
+    Color bgColor;
+    String title;
+    String message;
+    IconData icon;
 
-      if (score >= 80) {
-          bgColor = AppColors.secondary; // Green
-          title = l10n.readinessStatusExcellent;
-          message = l10n.readinessDescExcellent;
-          icon = Iconsax.tick_circle;
-      } else if (score >= 60) {
-          bgColor = Colors.orange;
-          title = l10n.readinessStatusGood;
-          message = l10n.readinessDescGood;
-          icon = Iconsax.timer_1;
-      } else {
-          bgColor = AppColors.error;
-          title = l10n.readinessStatusNeedsWork;
-          message = l10n.readinessDescNeedsWork;
-          icon = Iconsax.close_circle;
-      }
+    if (score >= 80) {
+      bgColor = AppColors.secondary;
+      title = l10n.readinessStatusExcellent;
+      message = l10n.readinessDescExcellent;
+      icon = Iconsax.tick_circle;
+    } else if (score >= 60) {
+      bgColor = Colors.orange;
+      title = l10n.readinessStatusGood;
+      message = l10n.readinessDescGood;
+      icon = Iconsax.timer_1;
+    } else {
+      bgColor = AppColors.error;
+      title = l10n.readinessStatusNeedsWork;
+      message = l10n.readinessDescNeedsWork;
+      icon = Iconsax.close_circle;
+    }
 
     return Container(
       padding: const EdgeInsets.all(24),

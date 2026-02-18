@@ -8,18 +8,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 
-/// Setup Dependency Injection for CV Builder feature
 Future<void> setupCvBuilderDI(GetIt getIt) async {
-  // Data Sources
   getIt.registerLazySingleton<CVLocalDataSource>(
     () => CVLocalDataSource(getIt<DatabaseHelper>()),
   );
-  
+
   getIt.registerLazySingleton<CVRemoteDataSource>(
     () => CVRemoteDataSource(getIt<FirebaseFirestore>()),
   );
 
-  // Repository
   getIt.registerLazySingleton<CVBuilderRepository>(
     () => CVBuilderRepositoryImpl(
       getIt<CVLocalDataSource>(),
@@ -28,7 +25,6 @@ Future<void> setupCvBuilderDI(GetIt getIt) async {
     ),
   );
 
-  // Provider
   getIt.registerLazySingleton<CVBuilderProvider>(
     () => CVBuilderProvider(getIt<CVBuilderRepository>()),
   );

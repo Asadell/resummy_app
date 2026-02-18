@@ -6,7 +6,6 @@ import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
 import 'package:flutter/foundation.dart';
 
-/// Implementation of CV Analysis Repository
 class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
   final CVAnalysisRemoteDataSource _remoteDataSource;
   final CVAnalysisLocalDataSource _localDataSource;
@@ -32,7 +31,7 @@ class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
         jobDescription: jobDescription,
         language: language,
       );
-      
+
       debugPrint('✅ CV analyzed successfully. Score: ${result.overallScore}');
       return result;
     } catch (e) {
@@ -54,7 +53,6 @@ class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
         jobPosition: jobPosition,
       );
 
-      // Use converter service to parse JSON to CVData
       final cvData = _converterService.parseCvJson(
         cvJson,
         source: 'analyzer',
@@ -69,7 +67,8 @@ class CVAnalysisRepositoryImpl implements CVAnalysisRepository {
   }
 
   @override
-  Future<void> saveAnalysisResult(CvAnalysisResult result, String userId) async {
+  Future<void> saveAnalysisResult(
+      CvAnalysisResult result, String userId) async {
     await _localDataSource.saveAnalysisResult(result, userId);
   }
 

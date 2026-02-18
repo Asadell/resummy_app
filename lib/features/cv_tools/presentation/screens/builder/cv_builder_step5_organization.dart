@@ -19,7 +19,6 @@ class CvBuilderStep5Screen extends StatefulWidget {
 }
 
 class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
-  // Form Controllers
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _roleController = TextEditingController();
@@ -84,12 +83,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
   void _saveForm(CVBuilderProvider provider) {
     setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
-      // If end date is not picked, assume currently active
       if (_endDate == null) {
         _isCurrentlyActive = true;
       }
 
-      if (!_isCurrentlyActive && (_endDate == null || _endDate!.isBefore(_startDate))) {
+      if (!_isCurrentlyActive &&
+          (_endDate == null || _endDate!.isBefore(_startDate))) {
         return;
       }
       if (!_isCurrentlyActive && _endDate!.isAfter(DateTime.now())) {
@@ -99,8 +98,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
         return;
       }
       final org = OrganizationExperience(
-        id: _editingIndex != null 
-            ? provider.currentCV!.organizationSection!.entries[_editingIndex!].id 
+        id: _editingIndex != null
+            ? provider
+                .currentCV!.organizationSection!.entries[_editingIndex!].id
             : const Uuid().v4(),
         organizationName: _nameController.text.trim(),
         role: _roleController.text.trim(),
@@ -115,7 +115,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
       } else {
         provider.addOrganization(org);
       }
-      
+
       _resetForm();
     }
   }
@@ -142,24 +142,25 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final currentStep = DynamicCvSteps.getStepForSection(context, 'organization');
+    final currentStep =
+        DynamicCvSteps.getStepForSection(context, 'organization');
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: currentStep,
-
       onBack: () {
         DynamicCvSteps.navigateToPreviousStep(context, currentStep);
       },
       onNext: () {
         final provider = context.read<CVBuilderProvider>();
         provider.saveCurrentCV();
-        final currentStep = DynamicCvSteps.getStepForSection(context, 'organization');
+        final currentStep =
+            DynamicCvSteps.getStepForSection(context, 'organization');
         DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
-          final organizationEntries = 
+          final organizationEntries =
               provider.currentCV?.organizationSection?.entries ?? [];
 
           return SingleChildScrollView(
@@ -170,10 +171,13 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                 Center(
                   child: Consumer<CVBuilderProvider>(
                     builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(context, 'organization');
-                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      final currentStep = DynamicCvSteps.getStepForSection(
+                          context, 'organization');
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: theme.cardColor,
                           border: Border.all(color: theme.primaryColor),
@@ -205,12 +209,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                   child: Text(
                     l10n.organizationHistoryDesc,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                      color: theme.textTheme.bodyMedium?.color
+                          ?.withValues(alpha: 0.7),
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
-
                 if (organizationEntries.isEmpty)
                   Center(
                     child: Container(
@@ -262,13 +266,10 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                       );
                     },
                   ),
-
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 24),
-
                 _buildInlineForm(context, provider),
-
                 const SizedBox(height: 80),
               ],
             ),
@@ -292,7 +293,9 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
-        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: _showValidation
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -314,7 +317,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               ],
             ),
             const SizedBox(height: 24),
-            
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -323,11 +325,11 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
-              validator: (v) => v?.trim().isEmpty == true ? l10n.requiredField : null,
+              validator: (v) =>
+                  v?.trim().isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
             TextFormField(
               controller: _roleController,
               decoration: InputDecoration(
@@ -336,11 +338,11 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                 border: const OutlineInputBorder(),
                 counterText: '',
               ),
-              validator: (v) => v?.trim().isEmpty == true ? l10n.requiredField : null,
+              validator: (v) =>
+                  v?.trim().isEmpty == true ? l10n.requiredField : null,
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
             Row(
               children: [
                 Expanded(
@@ -351,7 +353,8 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                         labelText: '${l10n.startYear} *',
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        errorText: _showValidation ? _validateStartDate(l10n) : null,
+                        errorText:
+                            _showValidation ? _validateStartDate(l10n) : null,
                       ),
                       child: Text(DateFormat('MMM yyyy').format(_startDate)),
                     ),
@@ -360,21 +363,28 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: InkWell(
-                    onTap: _isCurrentlyActive ? null : () => _selectDate(context, false),
+                    onTap: _isCurrentlyActive
+                        ? null
+                        : () => _selectDate(context, false),
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.endYear,
                         border: const OutlineInputBorder(),
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyActive,
-                        errorText: _showValidation ? _validateEndDate(l10n) : null,
+                        errorText:
+                            _showValidation ? _validateEndDate(l10n) : null,
                       ),
                       child: Text(
                         _isCurrentlyActive
                             ? l10n.present
-                            : (_endDate != null ? DateFormat('MMM yyyy').format(_endDate!) : l10n.selectDate),
+                            : (_endDate != null
+                                ? DateFormat('MMM yyyy').format(_endDate!)
+                                : l10n.selectDate),
                         style: TextStyle(
-                          color: _isCurrentlyActive ? theme.disabledColor : theme.textTheme.bodyMedium?.color,
+                          color: _isCurrentlyActive
+                              ? theme.disabledColor
+                              : theme.textTheme.bodyMedium?.color,
                         ),
                       ),
                     ),
@@ -382,7 +392,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                 ),
               ],
             ),
-            
             CheckboxListTile(
               title: Text(l10n.currentlyWorking),
               value: _isCurrentlyActive,
@@ -395,7 +404,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
             ),
-            
             TextFormField(
               controller: _descController,
               maxLines: 4,
@@ -407,9 +415,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               ),
               maxLength: 500,
             ),
-            
             const SizedBox(height: 24),
-            
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(
@@ -448,11 +454,13 @@ class _OrganizationCard extends StatelessWidget {
 
     String dateRange;
     if (entry.isCurrentlyActive) {
-        dateRange = '${dateFormat.format(entry.startDate)} - ${AppLocalizations.of(context)!.present}';
+      dateRange =
+          '${dateFormat.format(entry.startDate)} - ${AppLocalizations.of(context)!.present}';
     } else if (entry.endDate != null) {
-        dateRange = '${dateFormat.format(entry.startDate)} - ${dateFormat.format(entry.endDate!)}';
+      dateRange =
+          '${dateFormat.format(entry.startDate)} - ${dateFormat.format(entry.endDate!)}';
     } else {
-        dateRange = dateFormat.format(entry.startDate);
+      dateRange = dateFormat.format(entry.startDate);
     }
 
     return Card(

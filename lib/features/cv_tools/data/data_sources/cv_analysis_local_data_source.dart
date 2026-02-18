@@ -4,14 +4,13 @@ import 'package:resummy_app/features/cv_tools/data/models/cv_analysis_model.dart
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:flutter/foundation.dart';
 
-/// Local data source for CV Analysis results using SQLite
 class CVAnalysisLocalDataSource {
   final DatabaseHelper _dbHelper;
 
   CVAnalysisLocalDataSource(this._dbHelper);
 
-  /// Save analysis result to local database
-  Future<void> saveAnalysisResult(CvAnalysisResult result, String userId) async {
+  Future<void> saveAnalysisResult(
+      CvAnalysisResult result, String userId) async {
     try {
       final model = CvAnalysisResultModel.fromEntity(result);
       final data = {
@@ -32,7 +31,6 @@ class CVAnalysisLocalDataSource {
     }
   }
 
-  /// Get all analysis history for a user
   Future<List<CvAnalysisResult>> getAnalysisHistory(String userId) async {
     try {
       final maps = await _dbHelper.query(
@@ -47,7 +45,8 @@ class CVAnalysisLocalDataSource {
         return CvAnalysisResultModel.fromJson(
           data,
           id: map['id'] as String,
-          createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+          createdAt:
+              DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
           jobPosition: map['jobPosition'] as String,
           jobDescription: data['job_description'] as String?,
         );
@@ -58,7 +57,6 @@ class CVAnalysisLocalDataSource {
     }
   }
 
-  /// Get specific analysis result by ID
   Future<CvAnalysisResult?> getAnalysisById(String id) async {
     try {
       final maps = await _dbHelper.query(
@@ -71,7 +69,7 @@ class CVAnalysisLocalDataSource {
 
       final map = maps.first;
       final data = jsonDecode(map['data'] as String) as Map<String, dynamic>;
-      
+
       return CvAnalysisResultModel.fromJson(
         data,
         id: map['id'] as String,
@@ -85,7 +83,6 @@ class CVAnalysisLocalDataSource {
     }
   }
 
-  /// Delete analysis result
   Future<void> deleteAnalysis(String id) async {
     try {
       await _dbHelper.delete(

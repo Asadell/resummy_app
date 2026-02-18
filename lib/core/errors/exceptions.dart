@@ -1,6 +1,3 @@
-// Exception digunakan di Data Layer (Repository Implementation)
-// Akan di-convert menjadi Failure di Domain Layer (Use Case)
-
 class ServerException implements Exception {
   final String message;
   const ServerException(this.message);

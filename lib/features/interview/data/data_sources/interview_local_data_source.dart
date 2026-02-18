@@ -3,13 +3,11 @@ import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_entity.dart';
 import 'package:flutter/foundation.dart';
 
-/// Local data source for Interview sessions using SQLite
 class InterviewLocalDataSource {
   final DatabaseHelper _dbHelper;
 
   InterviewLocalDataSource(this._dbHelper);
 
-  /// Save interview session to local database
   Future<void> saveInterview(InterviewEntity interview) async {
     try {
       final data = {
@@ -31,7 +29,6 @@ class InterviewLocalDataSource {
     }
   }
 
-  /// Get all interview history for a user
   Future<List<InterviewEntity>> getInterviewHistory(String userId) async {
     try {
       final maps = await _dbHelper.query(
@@ -51,7 +48,6 @@ class InterviewLocalDataSource {
     }
   }
 
-  /// Get specific interview by ID
   Future<InterviewEntity?> getInterviewById(String id) async {
     try {
       final maps = await _dbHelper.query(
@@ -64,7 +60,7 @@ class InterviewLocalDataSource {
 
       final map = maps.first;
       final data = jsonDecode(map['data'] as String) as Map<String, dynamic>;
-      
+
       return InterviewEntity.fromJson(data);
     } catch (e) {
       debugPrint('❌ Error getting interview by ID: $e');
@@ -72,7 +68,6 @@ class InterviewLocalDataSource {
     }
   }
 
-  /// Delete interview
   Future<void> deleteInterview(String id) async {
     try {
       await _dbHelper.delete(

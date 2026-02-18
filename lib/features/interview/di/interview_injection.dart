@@ -9,9 +9,7 @@ import 'package:resummy_app/features/interview/domain/repositories/interview_rep
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
 import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
-/// Setup Dependency Injection for Interview feature
 Future<void> setupInterviewDI(GetIt getIt) async {
-  // Data Sources
   getIt.registerLazySingleton<InterviewRemoteDataSource>(
     () => InterviewRemoteDataSource(getIt<GeminiPoolManager>()),
   );
@@ -24,7 +22,6 @@ Future<void> setupInterviewDI(GetIt getIt) async {
     () => SpeechDataSource(getIt<GeminiPoolManager>()),
   );
 
-  // Repository
   getIt.registerLazySingleton<InterviewRepository>(
     () => InterviewRepositoryImpl(
       getIt<InterviewRemoteDataSource>(),
@@ -33,7 +30,6 @@ Future<void> setupInterviewDI(GetIt getIt) async {
     ),
   );
 
-  // Provider
   getIt.registerLazySingleton<InterviewProvider>(
     () => InterviewProvider(
       repository: getIt<InterviewRepository>(),

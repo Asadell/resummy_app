@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +49,6 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: currentStep,
-
       onBack: () {
         DynamicCvSteps.navigateToPreviousStep(context, currentStep);
       },
@@ -60,14 +58,16 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Step Header
             Center(
               child: Consumer<CVBuilderProvider>(
                 builder: (context, provider, _) {
-                  final currentStep = DynamicCvSteps.getStepForSection(context, 'summary');
-                  final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                  final currentStep =
+                      DynamicCvSteps.getStepForSection(context, 'summary');
+                  final totalSteps =
+                      DynamicCvSteps.getTotalSteps(provider.currentCV);
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: theme.cardColor,
                       border: Border.all(color: theme.primaryColor),
@@ -99,14 +99,12 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               child: Text(
                 l10n.summaryDesc,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                  color:
+                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-
-
-            // Summary Input
             Text(
               l10n.summaryHeader,
               style: theme.textTheme.titleMedium?.copyWith(
@@ -114,7 +112,6 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               ),
             ),
             const SizedBox(height: 8),
-            
             TextField(
               controller: _summaryController,
               maxLines: 6,
@@ -139,10 +136,7 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
               },
               maxLength: 2000,
             ),
-
             const SizedBox(height: 16),
-
-            // Character counter
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -153,7 +147,6 @@ class _CvBuilderStep2ScreenState extends State<CvBuilderStep2Screen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 80),
           ],
         ),

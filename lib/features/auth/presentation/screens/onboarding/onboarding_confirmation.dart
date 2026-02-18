@@ -13,7 +13,7 @@ class OnboardingConfirmationScreen extends StatefulWidget {
   final String? workStatus;
   final String? targetRole;
   final String? careerGoal;
-  
+
   const OnboardingConfirmationScreen({
     super.key,
     required this.fullName,
@@ -23,10 +23,12 @@ class OnboardingConfirmationScreen extends StatefulWidget {
   });
 
   @override
-  State<OnboardingConfirmationScreen> createState() => _OnboardingConfirmationScreenState();
+  State<OnboardingConfirmationScreen> createState() =>
+      _OnboardingConfirmationScreenState();
 }
 
-class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScreen> {
+class _OnboardingConfirmationScreenState
+    extends State<OnboardingConfirmationScreen> {
   bool _isLoading = false;
   final _repository = UserProfileRepository();
 
@@ -34,12 +36,11 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
-    // Use Google displayName as fallback if fullName is empty
-    final displayName = widget.fullName.isNotEmpty 
-        ? widget.fullName 
+
+    final displayName = widget.fullName.isNotEmpty
+        ? widget.fullName
         : authProvider.currentUser?.displayName ?? '';
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.confirmation),
@@ -63,8 +64,8 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
               Text(
                 l10n.yourProfileIsReady,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -76,11 +77,14 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
                     children: [
                       _buildInfoRow(context, l10n.fullName, displayName),
                       const Divider(),
-                      _buildInfoRow(context, l10n.status, _getStatusLabel(context, widget.workStatus)),
+                      _buildInfoRow(context, l10n.status,
+                          _getStatusLabel(context, widget.workStatus)),
                       const Divider(),
-                      _buildInfoRow(context, l10n.targetRole, widget.targetRole ?? '-'),
+                      _buildInfoRow(
+                          context, l10n.targetRole, widget.targetRole ?? '-'),
                       const Divider(),
-                      _buildInfoRow(context, l10n.goal, widget.careerGoal ?? '-'),
+                      _buildInfoRow(
+                          context, l10n.goal, widget.careerGoal ?? '-'),
                     ],
                   ),
                 ),
@@ -90,7 +94,9 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
-                onPressed: _isLoading ? null : () => _completeOnboarding(context, displayName),
+                onPressed: _isLoading
+                    ? null
+                    : () => _completeOnboarding(context, displayName),
                 child: _isLoading
                     ? const SizedBox(
                         height: 24,
@@ -124,8 +130,8 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ),
           Expanded(
@@ -155,18 +161,19 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
     }
   }
 
-  Future<void> _completeOnboarding(BuildContext context, String displayName) async {
+  Future<void> _completeOnboarding(
+      BuildContext context, String displayName) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
-    
+
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
+
     if (authProvider.currentUser == null) {
       setState(() => _isLoading = false);
       return;
     }
-    
+
     final success = await _repository.completeOnboarding(
       authProvider.currentUser!.id,
       fullName: displayName,
@@ -174,7 +181,7 @@ class _OnboardingConfirmationScreenState extends State<OnboardingConfirmationScr
       targetRole: widget.targetRole,
       careerGoal: widget.careerGoal,
     );
-    
+
     if (success) {
       router.replace(const MainRoute());
     } else {

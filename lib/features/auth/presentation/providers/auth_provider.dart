@@ -48,9 +48,7 @@ class AuthProvider extends ChangeNotifier {
       (failure) {
         _errorMessage = failure.message;
       },
-      (user) {
-        // User update handled by stream
-      },
+      (user) {},
     );
 
     _isLoading = false;
@@ -67,9 +65,7 @@ class AuthProvider extends ChangeNotifier {
       (failure) {
         _errorMessage = failure.message;
       },
-      (_) {
-        // User update handled by stream
-      },
+      (_) {},
     );
 
     _isLoading = false;
