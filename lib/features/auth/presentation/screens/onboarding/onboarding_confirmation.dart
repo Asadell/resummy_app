@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 
 @RoutePage()
 class OnboardingConfirmationScreen extends StatefulWidget {
@@ -30,7 +30,6 @@ class OnboardingConfirmationScreen extends StatefulWidget {
 class _OnboardingConfirmationScreenState
     extends State<OnboardingConfirmationScreen> {
   bool _isLoading = false;
-  final _repository = UserProfileRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +166,8 @@ class _OnboardingConfirmationScreenState
     setState(() => _isLoading = true);
 
     final router = context.router;
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     if (authProvider.currentUser == null) {
@@ -174,8 +175,7 @@ class _OnboardingConfirmationScreenState
       return;
     }
 
-    final success = await _repository.completeOnboarding(
-      authProvider.currentUser!.id,
+    final success = await profileProvider.completeOnboarding(
       fullName: displayName,
       workStatus: widget.workStatus,
       targetRole: widget.targetRole,

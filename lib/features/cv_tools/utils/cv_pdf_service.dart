@@ -213,8 +213,9 @@ class CvPdfService {
 
     final links = <String>[];
     if (cv.linkedin?.isNotEmpty == true) links.add('LinkedIn: ${cv.linkedin}');
-    if (cv.portfolio?.isNotEmpty == true)
+    if (cv.portfolio?.isNotEmpty == true) {
       links.add('Portfolio: ${cv.portfolio}');
+    }
 
     if (links.isNotEmpty) {
       page.graphics.drawString(

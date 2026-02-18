@@ -34,6 +34,7 @@ class InterviewRemoteDataSource {
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -103,6 +104,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -177,6 +179,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -243,6 +246,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -328,6 +332,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -413,6 +418,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -489,6 +495,7 @@ Return JSON:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(

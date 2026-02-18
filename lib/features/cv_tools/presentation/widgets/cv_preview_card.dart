@@ -115,8 +115,9 @@ class CvPreviewCard extends StatelessWidget {
     final List<String> links = [];
 
     if (cv.linkedin?.isNotEmpty == true) links.add('LinkedIn: ${cv.linkedin}');
-    if (cv.portfolio?.isNotEmpty == true)
+    if (cv.portfolio?.isNotEmpty == true) {
       links.add('Portfolio: ${cv.portfolio}');
+    }
 
     if (links.isEmpty) return const SizedBox.shrink();
 
@@ -134,11 +135,13 @@ class CvPreviewCard extends StatelessWidget {
     if (section is SummarySection) return _buildSummarySection(section);
     if (section is ExperienceSection) return _buildExperienceSection(section);
     if (section is EducationSection) return _buildEducationSection(section);
-    if (section is OrganizationSection)
+    if (section is OrganizationSection) {
       return _buildOrganizationSection(section);
+    }
     if (section is SkillsSection) return _buildSkillsSection(section);
-    if (section is CertificationsSection)
+    if (section is CertificationsSection) {
       return _buildCertificationsSection(section);
+    }
     if (section is CustomSection) return _buildCustomSection(section);
     return const SizedBox.shrink();
   }

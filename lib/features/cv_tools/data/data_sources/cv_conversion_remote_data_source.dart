@@ -25,6 +25,7 @@ class CVConversionRemoteDataSource {
       final prompt = _buildConversionPrompt(targetLanguage: targetLanguage);
 
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.cvConverter,
         task: (model) async {
           final content = [
             Content.multi([

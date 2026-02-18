@@ -27,6 +27,7 @@ class CVAnalysisRemoteDataSource {
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.cvAnalyzer,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(
@@ -121,6 +122,7 @@ Return JSON ini:
 
     try {
       final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.cvAnalyzer,
         task: (model) async {
           final content = [Content.text(prompt)];
           final result = await model.generateContent(

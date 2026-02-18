@@ -1,15 +1,21 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:resummy_app/core/di/injection.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
-import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
+import 'package:resummy_app/features/cv_tools/data/data_sources/cv_analysis_remote_data_source.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
-  final CvAnalyzerService _service;
+  final CVAnalysisRemoteDataSource _dataSource;
+  final CvAtsConverterService _converterService;
 
-  CvAnalyzerProvider({CvAnalyzerService? service})
-      : _service = service ?? CvAnalyzerService();
+  CvAnalyzerProvider({
+    CVAnalysisRemoteDataSource? dataSource,
+    CvAtsConverterService? converterService,
+  })  : _dataSource = dataSource ?? getIt<CVAnalysisRemoteDataSource>(),
+        _converterService = converterService ?? getIt<CvAtsConverterService>();
 
   PlatformFile? _selectedFile;
   String _extractedText = '';
@@ -114,7 +120,8 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _result = await _service.analyze(
+      // Use the new RemoteDataSource which uses GeminiPoolManager
+      _result = await _dataSource.analyzeCV(
         cvText: _extractedText,
         jobPosition:
             _jobPosition.isNotEmpty ? _jobPosition : 'General Position',
@@ -143,14 +150,13 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final json = await _service.convertAppliedSuggestionsToCvJson(
+      final json = await _dataSource.convertAppliedSuggestionsToCvJson(
         originalCvText: _extractedText,
         appliedSuggestions: applied,
         jobPosition: _jobPosition,
       );
 
-      final converterService = CvAtsConverterService();
-      final cvData = converterService.parseCvJson(json, source: 'analyzer');
+      final cvData = _converterService.parseCvJson(json, source: 'analyzer');
 
       _isConverting = false;
       notifyListeners();
@@ -165,28 +171,35 @@ class CvAnalyzerProvider extends ChangeNotifier {
   }
 
   void applySuggestion(String id) {
-    _findSuggestion(id)
-      ?..isApplied = true
-      ..isDismissed = false;
-    notifyListeners();
+    _updateSuggestion(id, isApplied: true, isDismissed: false);
   }
 
   void dismissSuggestion(String id) {
-    _findSuggestion(id)
-      ?..isDismissed = true
-      ..isApplied = false;
-    notifyListeners();
+    _updateSuggestion(id, isDismissed: true, isApplied: false);
   }
 
   void undoSuggestion(String id) {
-    _findSuggestion(id)
-      ?..isDismissed = false
-      ..isApplied = false;
+    _updateSuggestion(id, isDismissed: false, isApplied: false);
+  }
+
+  void _updateSuggestion(String id,
+      {required bool isApplied, required bool isDismissed}) {
+    if (_result == null) return;
+    final index = _result!.suggestions.indexWhere((s) => s.id == id);
+    if (index == -1) return;
+
+    final newSuggestion = _result!.suggestions[index].copyWith(
+      isApplied: isApplied,
+      isDismissed: isDismissed,
+    );
+
+    final newSuggestions = List<CvSuggestion>.from(_result!.suggestions);
+    newSuggestions[index] = newSuggestion;
+
+    _result = _result!.copyWith(suggestions: newSuggestions);
     notifyListeners();
   }
 
-  CvSuggestion? _findSuggestion(String id) =>
-      _result?.suggestions.where((s) => s.id == id).firstOrNull;
 
   void clearFile() {
     _selectedFile = null;

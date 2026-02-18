@@ -70,6 +70,46 @@ class ProfileProvider extends ChangeNotifier {
     await loadProfile(_profile!.uid);
   }
 
+  Future<bool> completeOnboarding({
+    required String fullName,
+    String? workStatus,
+    String? targetRole,
+    String? careerGoal,
+  }) async {
+    if (_authProvider.currentUser == null) return false;
+
+    try {
+      final success = await _repository.completeOnboarding(
+        _authProvider.currentUser!.id,
+        fullName: fullName,
+        workStatus: workStatus,
+        targetRole: targetRole,
+        careerGoal: careerGoal,
+      );
+
+      if (success) {
+        if (_profile != null) {
+          _profile = _profile!.copyWith(
+            fullName: fullName,
+            workStatus: workStatus,
+            targetRole: targetRole,
+            careerGoal: careerGoal,
+            onboardingDone: true,
+          );
+        } else {
+          // If profile was null (unlikely but safe), reload it
+          await loadProfile(_authProvider.currentUser!.id);
+        }
+        notifyListeners();
+      }
+      return success;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> updateProfile({
     String? fullName,
     String? email,

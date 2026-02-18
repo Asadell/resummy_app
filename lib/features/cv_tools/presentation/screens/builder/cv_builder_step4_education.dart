@@ -419,8 +419,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                             final endYear = int.tryParse(v);
                             if (endYear == null) return l10n.requiredField;
 
-                            if (endYear > DateTime.now().year)
+                            if (endYear > DateTime.now().year) {
                               return l10n.yearTooHigh;
+                            }
 
                             final startYear =
                                 int.tryParse(_startYearController.text);
