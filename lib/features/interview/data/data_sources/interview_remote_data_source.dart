@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
@@ -256,25 +257,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ContentQualityAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        relevanceScore: (json['relevanceScore'] is int)
-            ? json['relevanceScore']
-            : (json['relevanceScore'] ?? 0).toInt(),
-        depthScore: (json['depthScore'] is int)
-            ? json['depthScore']
-            : (json['depthScore'] ?? 0).toInt(),
-        professionalImpact: (json['professionalImpact'] is int)
-            ? json['professionalImpact']
-            : (json['professionalImpact'] ?? 0).toInt(),
-        strengths: List<String>.from(json['strengths'] ?? []),
-        weaknesses: List<String>.from(json['weaknesses'] ?? []),
-        suggestions: List<String>.from(json['suggestions'] ?? []),
-      );
+      return ContentQualityAnalysis.fromJson(json);
     } catch (e) {
+      debugPrint('Error in analyzeContentQuality: $e');
       return const ContentQualityAnalysis(
         score: 0,
         relevanceScore: 0,
@@ -341,28 +326,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return FluencyAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        wordCount: (json['wordCount'] is int)
-            ? json['wordCount']
-            : (json['wordCount'] ?? 0).toInt(),
-        wpm: (json['wpm'] ?? 0).toDouble(),
-        fillerWords: (json['fillerWords'] as List? ?? []).map((fw) {
-          return FillerWord(
-            word: fw['word'] ?? '',
-            count:
-                (fw['count'] is int) ? fw['count'] : (fw['count'] ?? 0).toInt(),
-            percentage: (fw['percentage'] ?? 0).toDouble(),
-          );
-        }).toList(),
-        fillerPercentage: (json['fillerPercentage'] ?? 0).toDouble(),
-        paceAssessment: json['paceAssessment'] ?? 'unknown',
-        suggestions: List<String>.from(json['suggestions'] ?? []),
-      );
+      return FluencyAnalysis.fromJson(json);
     } catch (e) {
+      debugPrint('Error in analyzeFluency: $e');
       return const FluencyAnalysis(
         score: 0,
         wordCount: 0,
@@ -426,19 +392,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ConfidenceAnalysis(
-        score: (json['score'] is int)
-            ? json['score']
-            : (json['score'] ?? 0).toInt(),
-        toneAssessment: json['toneAssessment'] ?? 'neutral',
-        energyLevel: json['energyLevel'] ?? 'low',
-        convictionLevel: json['convictionLevel'] ?? 'weak',
-        strengthIndicators: List<String>.from(json['strengthIndicators'] ?? []),
-        weaknessIndicators: List<String>.from(json['weaknessIndicators'] ?? []),
-        tips: List<String>.from(json['tips'] ?? []),
-      );
+      return ConfidenceAnalysis.fromJson(json);
     } catch (e) {
+      debugPrint('Error in analyzeConfidence: $e');
       return const ConfidenceAnalysis(
         score: 0,
         toneAssessment: 'neutral',
@@ -502,18 +458,9 @@ Return JSON:
 
       final responseText = response.text ?? '{}';
       final json = jsonDecode(responseText);
-
-      return ImprovedSpeechData(
-        originalText: json['originalText'] ?? transcript,
-        improvedText: json['improvedText'] ?? transcript,
-        fillerWordsRemoved: (json['fillerWordsRemoved'] is int)
-            ? json['fillerWordsRemoved']
-            : (json['fillerWordsRemoved'] ?? 0).toInt(),
-        keyChanges: List<String>.from(json['keyChanges'] ?? []),
-        wpmBefore: (json['wpmBefore'] ?? originalWpm).toDouble(),
-        wpmAfter: (json['wpmAfter'] ?? originalWpm).toDouble(),
-      );
+      return ImprovedSpeechData.fromJson(json);
     } catch (e) {
+      debugPrint('Error in generateImprovedSpeech: $e');
       return ImprovedSpeechData(
         originalText: transcript,
         improvedText: transcript,

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:resummy_app/features/interview/data/data_sources/interview_local_data_source.dart';
 import 'package:resummy_app/features/interview/data/data_sources/interview_remote_data_source.dart';
 import 'package:resummy_app/features/interview/data/data_sources/speech_data_source.dart';
@@ -109,18 +111,19 @@ class InterviewRepositoryImpl implements InterviewRepository {
             language: language,
           );
 
-          return QuestionFeedback(
-            questionId: question.id,
-            starAnalysis: starAnalysis,
-            contentAnalysis: contentAnalysis,
-            fluencyAnalysis: fluencyAnalysis,
-            confidenceAnalysis: confidenceAnalysis,
-            improvedSpeech: improvedSpeech,
-          );
-        } catch (e) {
-          return null;
-        }
-      });
+            return QuestionFeedback(
+              questionId: question.id,
+              starAnalysis: starAnalysis,
+              contentAnalysis: contentAnalysis,
+              fluencyAnalysis: fluencyAnalysis,
+              confidenceAnalysis: confidenceAnalysis,
+              improvedSpeech: improvedSpeech,
+            );
+          } catch (e) {
+            debugPrint('Error analyzing question ${question.id}: $e');
+            return null;
+          }
+        });
 
       final results = await Future.wait(futures);
       questionFeedbacks.addAll(results.whereType<QuestionFeedback>());
@@ -158,7 +161,7 @@ class InterviewRepositoryImpl implements InterviewRepository {
         improvements.addAll(qf.confidenceAnalysis.tips);
       }
 
-      return InterviewReport(
+      final finalReport = InterviewReport(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         createdAt: DateTime.now(),
         overallScore: totalScore,
@@ -172,7 +175,15 @@ class InterviewRepositoryImpl implements InterviewRepository {
         improvements: improvements.take(5).toList(),
         questionFeedbacks: questionFeedbacks,
       );
+
+      debugPrint('Generated Interview Report:');
+      debugPrint('Overall Score: ${finalReport.overallScore}');
+      debugPrint('Questions analyzed: ${questionFeedbacks.length}');
+      debugPrint('Scores - Star: $totalStar, Content: $totalContent, Fluency: $totalFluency, Confidence: $totalConfidence');
+
+      return finalReport;
     } catch (e) {
+      debugPrint('Error in generateInterviewReport: $e');
       rethrow;
     }
   }
@@ -205,14 +216,45 @@ class InterviewRepositoryImpl implements InterviewRepository {
     // Also save to Firestore for cross-device access
     try {
       final firestore = FirebaseFirestore.instance;
+      final auth = FirebaseAuth.instance;
+      final currentUser = auth.currentUser;
+      
+      // Basic validation
+      if (interview.userId.isEmpty || interview.userId == 'anonymous') {
+        debugPrint('Firestore save skipped: Invalid or anonymous userId (${interview.userId})');
+        return;
+      }
+
+      if (currentUser == null) {
+        debugPrint('Firestore save failed: No authenticated user found in FirebaseAuth.');
+        return;
+      }
+
+      if (currentUser.uid != interview.userId) {
+        debugPrint('Firestore save WARNING: Provided userId (${interview.userId}) does not match authenticated UID (${currentUser.uid})');
+        // We will still try to save, but this is a likely cause of PERMISSION_DENIED if rules are strict.
+      }
+
+      debugPrint('Attempting to save interview to Firestore:');
+      debugPrint('Path: users/${interview.userId}/interviews/${interview.id}');
+      
+      // Add a timeout to avoid hangs
       await firestore
           .collection('users')
           .doc(interview.userId)
           .collection('interviews')
           .doc(interview.id)
-          .set(interview.toJson());
+          .set(interview.toJson())
+          .timeout(const Duration(seconds: 10));
+      
+      debugPrint('Successfully saved interview to Firestore.');
     } catch (e) {
-      // Firestore save failed silently - local data is still available
+      debugPrint('Firestore save failed for interview ${interview.id}: $e');
+      if (e.toString().contains('permission-denied')) {
+        final auth = FirebaseAuth.instance;
+        debugPrint('Recommendation: Check Firestore Rules. Current Auth UID: ${auth.currentUser?.uid}');
+        debugPrint('Ensure the rule allows writing to: users/${interview.userId}/interviews/${interview.id}');
+      }
     }
   }
 

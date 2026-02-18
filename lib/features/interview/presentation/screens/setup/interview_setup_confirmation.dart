@@ -4,7 +4,9 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class InterviewSetupConfirmationScreen extends StatelessWidget {
@@ -36,7 +38,7 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: AppSizes.md),
             child: Center(
               child: Text(
                 l10n.stepProgress(5, 5),
@@ -50,99 +52,100 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSizes.sm,
             children: [
-              const SizedBox(height: 32),
-              Center(
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.setupComplete,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.readyToStartDesc,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardTheme.color,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black.withValues(alpha: 0.05)
-                          : Colors.transparent,
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+              AppSection(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.interviewSummary,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                    const SizedBox(height: AppSizes.md),
+                    Center(
+                      child: Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel,
-                        provider.cvFileName ?? l10n.cvDefaultLabel),
-                    const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.briefcase, l10n.roleLabel,
-                        provider.role ?? '-'),
-                    const SizedBox(height: 16),
-                    _buildSummaryRow(
-                        context,
-                        Iconsax.radar_1,
-                        l10n.interviewFocus,
-                        getFocusLabel(provider.selectedFocus)),
-                    const SizedBox(height: 16),
-                    _buildSummaryRow(
-                        context,
-                        Iconsax.global,
-                        l10n.languageLabel,
-                        provider.locale == 'en-US'
-                            ? l10n.english
-                            : l10n.indonesian),
-                    const SizedBox(height: 16),
-                    _buildSummaryRow(context, Iconsax.message_question,
-                        l10n.questionsLabel, l10n.questionsCountDynamic(5)),
+                    const SizedBox(height: AppSizes.md),
+                    Text(
+                      l10n.setupComplete,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSizes.xs),
+                    Text(
+                      l10n.readyToStartDesc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSizes.md),
                   ],
                 ),
               ),
+
+              AppSection(
+                child: Container(
+                  padding: const EdgeInsets.all(AppSizes.md),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardTheme.color,
+                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: AppSizes.sm,
+                    children: [
+                      Text(
+                        l10n.interviewSummary,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const SizedBox(height: AppSizes.sm),
+                      _buildSummaryRow(context, Iconsax.document_1, l10n.cvLabel,
+                          provider.cvFileName ?? l10n.cvDefaultLabel),
+                      _buildSummaryRow(context, Iconsax.briefcase, l10n.roleLabel,
+                          provider.role ?? '-'),
+                      _buildSummaryRow(
+                          context,
+                          Iconsax.radar_1,
+                          l10n.interviewFocus,
+                          getFocusLabel(provider.selectedFocus)),
+                      _buildSummaryRow(
+                          context,
+                          Iconsax.global,
+                          l10n.languageLabel,
+                          provider.locale == 'en-US'
+                              ? l10n.english
+                              : l10n.indonesian),
+                      _buildSummaryRow(context, Iconsax.message_question,
+                          l10n.questionsLabel, l10n.questionsCountDynamic(5)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSizes.md),
         decoration: BoxDecoration(
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
@@ -156,28 +159,22 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
           ],
         ),
         child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: () {
-                  context.read<InterviewProvider>().startInterview(
-                        role: provider.role ?? "Candidate",
-                        focus: provider.selectedFocus,
-                      );
-                  context.router.push(const InterviewSessionOpeningRoute());
-                },
-                child: Text(
-                  l10n.startInterviewNow,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 52),
+            ),
+            onPressed: () {
+              context.read<InterviewProvider>().startInterview(
+                    role: provider.role ?? "Candidate",
+                    focus: provider.selectedFocus,
+                  );
+              context.router.push(const InterviewSessionOpeningRoute());
+            },
+            child: Text(
+              l10n.startInterviewNow,
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),
@@ -190,21 +187,22 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(AppSizes.xs),
           decoration: BoxDecoration(
             color: Theme.of(context)
                 .colorScheme
                 .primaryContainer
                 .withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppSizes.xs),
           ),
           child: Icon(icon,
               color: Theme.of(context).colorScheme.primary, size: 20),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppSizes.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: AppSizes.xs,
             children: [
               Text(
                 label,
@@ -212,7 +210,6 @@ class InterviewSetupConfirmationScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
-              const SizedBox(height: 4),
               Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

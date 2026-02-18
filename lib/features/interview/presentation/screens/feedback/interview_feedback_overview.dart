@@ -34,25 +34,13 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
             icon: const Icon(Iconsax.arrow_left),
             onPressed: () => context.router.push(const InterviewPrepRoute()),
           ),
-          title: Row(
-            children: [
-              Icon(Iconsax.direct_up,
-                  color: Theme.of(context).colorScheme.primary, size: 20),
-              const SizedBox(width: 8),
-              Text(l10n.interviewResults),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Iconsax.share),
-              onPressed: () {},
-            ),
-          ],
+          title: Text(l10n.interviewResults),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSizes.sm,
               children: [
                 AppSection(
                   child: Column(

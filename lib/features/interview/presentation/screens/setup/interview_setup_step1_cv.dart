@@ -254,18 +254,14 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
                         ),
                       ],
                     ),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: AppSizes.sm,
-                      crossAxisSpacing: AppSizes.sm,
-                      childAspectRatio: 2.5,
+                    Wrap(
+                      spacing: AppSizes.sm,
+                      runSpacing: AppSizes.sm,
                       children: [
-                        _buildInfoChip(context, l10n.durationAprox),
-                        _buildInfoChip(context, l10n.questionsCount),
-                        _buildInfoChip(context, l10n.languageOption),
-                        _buildInfoChip(context, l10n.methodStar),
+                        _buildInfoChip(context, Iconsax.timer_1, l10n.durationAprox),
+                        _buildInfoChip(context, Iconsax.message_question, l10n.questionsCount),
+                        _buildInfoChip(context, Iconsax.global, l10n.languageOption),
+                        _buildInfoChip(context, Iconsax.star, l10n.methodStar),
                       ],
                     ),
                   ],
@@ -339,20 +335,32 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
 
   // ─── sub-widgets ─────────────────────────────────────────────────────────────
 
-  Widget _buildInfoChip(BuildContext context, String text) {
+  Widget _buildInfoChip(BuildContext context, IconData icon, String text) {
     return Container(
-      padding: const EdgeInsets.all(AppSizes.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.sm,
+        vertical: AppSizes.xs,
+      ),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(AppSizes.sm),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12,
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        textAlign: TextAlign.center,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: AppSizes.xs),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -530,6 +538,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
       icon: const Icon(Iconsax.document_upload),
       label: Text(l10n.uploadNewCv),
       style: OutlinedButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
         padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
         side: BorderSide(color: Theme.of(context).colorScheme.primary),
         foregroundColor: Theme.of(context).colorScheme.primary,
@@ -647,7 +656,7 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(24)),
+                const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
           ),
           child: Column(
             children: [
@@ -656,16 +665,16 @@ class _BrowseCvSheetState extends State<_BrowseCvSheet> {
                 child: Container(
                   width: 40,
                   height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  margin: const EdgeInsets.symmetric(vertical: AppSizes.sm),
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(2),
+                    color: Theme.of(context).dividerColor,
+                    borderRadius: BorderRadius.circular(AppSizes.xs),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.lg, vertical: AppSizes.xs),
+                padding: const EdgeInsets.only(
+                    left: AppSizes.lg, right: AppSizes.lg, bottom: AppSizes.sm),
                 child: Text(
                   l10n.step1SelectCv,
                   style: Theme.of(context)

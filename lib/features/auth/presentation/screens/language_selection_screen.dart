@@ -6,6 +6,8 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 
 @RoutePage()
 class LanguageSelectionScreen extends StatefulWidget {
@@ -83,11 +85,28 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   final router = context.router;
                   final localeProvider =
                       Provider.of<LocaleProvider>(context, listen: false);
+                  final authProvider =
+                      Provider.of<AuthProvider>(context, listen: false);
 
                   await localeProvider.setLocale(Locale(_selectedLanguage));
                   await localeProvider.markLanguageSelected();
 
-                  router.replace(const AuthRoute());
+                  if (authProvider.isAuthenticated && context.mounted) {
+                    final profileProvider =
+                        Provider.of<ProfileProvider>(context, listen: false);
+                    await profileProvider
+                        .loadProfile(authProvider.currentUser!.id);
+
+                    if (context.mounted) {
+                      if (profileProvider.profile?.onboardingDone ?? false) {
+                        router.replace(const MainRoute());
+                      } else {
+                        router.replace(const OnboardingStep1Route());
+                      }
+                    }
+                  } else {
+                    router.replace(const AuthRoute());
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

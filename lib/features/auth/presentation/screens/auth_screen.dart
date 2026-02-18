@@ -9,8 +9,28 @@ import 'package:resummy_app/features/profile/presentation/providers/profile_prov
 import 'package:resummy_app/core/theme/app_sizes.dart';
 
 @RoutePage()
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuth();
+    });
+  }
+
+  void _checkAuth() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.isAuthenticated) {
+      _navigateToNext(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,33 +120,38 @@ class AuthScreen extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.signInWithGoogle();
+
+    if (authProvider.isAuthenticated && context.mounted) {
+      _navigateToNext(context);
+    } else if (authProvider.errorMessage != null && context.mounted) {
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.loginError(authProvider.errorMessage!))),
+      );
+    }
+  }
+
+  Future<void> _navigateToNext(BuildContext context) async {
     final router = context.router;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
 
-    await authProvider.signInWithGoogle();
+    final user = authProvider.currentUser!;
 
-    if (authProvider.isAuthenticated && context.mounted) {
-      final user = authProvider.currentUser!;
+    await profileProvider.createProfileIfNotExists(user.id,
+        email: user.email,
+        fullName: user.displayName,
+        photoUrl: user.photoUrl);
 
-      await profileProvider.createProfileIfNotExists(user.id,
-          email: user.email,
-          fullName: user.displayName,
-          photoUrl: user.photoUrl);
-
-      if (context.mounted) {
-        if (profileProvider.profile?.onboardingDone ?? false) {
-          router.replace(const MainRoute());
-        } else {
-          router.replace(const OnboardingStep1Route());
-        }
+    if (context.mounted) {
+      if (profileProvider.profile?.onboardingDone ?? false) {
+        router.replace(const MainRoute());
+      } else {
+        router.replace(const OnboardingStep1Route());
       }
-    } else if (authProvider.errorMessage != null && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.loginError(authProvider.errorMessage!))),
-      );
     }
   }
 }

@@ -28,56 +28,58 @@ class _InterviewSessionOpeningScreenState
           backgroundColor: Colors.transparent,
           isScrollControlled: true,
           builder: (context) => Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppSizes.lg),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSizes.md,
               children: [
                 Center(
                   child: Container(
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
+                      color: Theme.of(context).dividerColor,
+                      borderRadius: BorderRadius.circular(AppSizes.xs),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
                 Icon(
                   Iconsax.warning_2,
                   size: 48,
                   color: Theme.of(context).colorScheme.error,
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.exitInterviewTitle,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                Column(
+                  spacing: AppSizes.xs,
+                  children: [
+                    Text(
+                      l10n.exitInterviewTitle,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      l10n.exitInterviewContent,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.exitInterviewContent,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
-                const SizedBox(height: 24),
                 Row(
+                  spacing: AppSizes.sm,
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          side: BorderSide(color: Theme.of(context).dividerColor),
                         ),
                         child: Text(
                             l10n.continueInterview,
@@ -85,7 +87,6 @@ class _InterviewSessionOpeningScreenState
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () => Navigator.pop(context, true),
@@ -100,7 +101,7 @@ class _InterviewSessionOpeningScreenState
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSizes.xs),
               ],
             ),
           ),
@@ -127,13 +128,13 @@ class _InterviewSessionOpeningScreenState
           children: [
             Icon(Iconsax.microphone_2,
                 color: Theme.of(context).colorScheme.primary, size: 20),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSizes.sm),
             Text(l10n.interviewStarted),
           ],
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: AppSizes.md),
             child: Center(
               child: Consumer<InterviewProvider>(
                 builder: (context, provider, _) => Row(
@@ -257,8 +258,9 @@ class _InterviewSessionOpeningScreenState
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg, vertical: AppSizes.md),
               child: Column(
+                spacing: AppSizes.md,
                 children: [
                   Container(
                     width: 120,
@@ -271,7 +273,7 @@ class _InterviewSessionOpeningScreenState
                           color: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withValues(alpha: 0.4),
+                              .withValues(alpha: 0.2),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
@@ -283,7 +285,6 @@ class _InterviewSessionOpeningScreenState
                       size: 48,
                     ),
                   ),
-                  const SizedBox(height: 16),
                   Text(
                     l10n.tapToAnswer,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -291,12 +292,12 @@ class _InterviewSessionOpeningScreenState
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSizes.sm),
                   ElevatedButton(
                     onPressed: () => context.router
                         .push(const InterviewSessionQuestionRoute()),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                      minimumSize: const Size.fromHeight(52),
                     ),
                     child: Text(l10n.startInterview),
                   ),
@@ -313,13 +314,14 @@ class _InterviewSessionOpeningScreenState
     final isActive = _showTranscript == isOn;
     return InkWell(
       onTap: () => setState(() => _showTranscript = isOn),
+      borderRadius: BorderRadius.circular(100),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: 8),
         decoration: BoxDecoration(
           color: isActive
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(100),
         ),
         child: Text(
           label,

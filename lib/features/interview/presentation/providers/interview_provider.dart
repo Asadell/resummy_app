@@ -242,6 +242,12 @@ class InterviewProvider extends ChangeNotifier {
 
     await Future.delayed(const Duration(seconds: 1));
 
+    // Set defaults so generateReport() has valid context
+    _role ??= 'Software Engineer';
+    _cvText ??= 'Experienced Flutter developer with 2 years of experience building mobile apps. '
+        'Proficient in Dart, Flutter, REST APIs, and state management. '
+        'Worked on e-commerce and fintech projects.';
+
     _questions = [
       const InterviewQuestion(
           id: '1',
@@ -286,6 +292,7 @@ class InterviewProvider extends ChangeNotifier {
 
     generateReport();
   }
+
 
   Future<void> _generateAndPlayQuestionAudio() async {
     if (currentQuestion == null) return;
@@ -482,11 +489,19 @@ class InterviewProvider extends ChangeNotifier {
         isCompleted: true,
       );
 
+      debugPrint('Interview Summary to Save:');
+      debugPrint('User ID: ${entity.userId}');
+      debugPrint('Report Score: ${report.overallScore}');
+      debugPrint('Questions Count: ${entity.questions.length}');
+
       if (_userId != null) {
         await _repository.saveInterview(entity);
         await loadHistory();
+      } else {
+        debugPrint('Skip Cloud Save: User is anonymous');
       }
     } catch (e) {
+      debugPrint('Error in InterviewProvider.generateReport: $e');
       _status = InterviewStatus.error;
       _errorMessage = 'Failed to generate feedback: $e';
     } finally {

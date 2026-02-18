@@ -47,19 +47,22 @@ class InterviewReport extends Equatable {
 
   factory InterviewReport.fromJson(Map<String, dynamic> json) {
     return InterviewReport(
-      id: json['id'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      overallScore: json['overallScore'] as int,
-      starAverageScore: (json['starAverageScore'] as num).toDouble(),
+      id: json['id'] as String? ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      overallScore: (json['overallScore'] as num?)?.toInt() ?? 0,
+      starAverageScore: (json['starAverageScore'] as num?)?.toDouble() ?? 0.0,
       contentQualityAverageScore:
-          (json['contentQualityAverageScore'] as num).toDouble(),
-      fluencyAverageScore: (json['fluencyAverageScore'] as num).toDouble(),
+          (json['contentQualityAverageScore'] as num?)?.toDouble() ?? 0.0,
+      fluencyAverageScore:
+          (json['fluencyAverageScore'] as num?)?.toDouble() ?? 0.0,
       confidenceAverageScore:
-          (json['confidenceAverageScore'] as num).toDouble(),
-      overallFeedback: json['overallFeedback'] as String,
-      strengths: List<String>.from(json['strengths'] as List),
-      improvements: List<String>.from(json['improvements'] as List),
-      questionFeedbacks: (json['questionFeedbacks'] as List)
+          (json['confidenceAverageScore'] as num?)?.toDouble() ?? 0.0,
+      overallFeedback: json['overallFeedback'] as String? ?? '',
+      strengths: List<String>.from(json['strengths'] as List? ?? []),
+      improvements: List<String>.from(json['improvements'] as List? ?? []),
+      questionFeedbacks: (json['questionFeedbacks'] as List? ?? [])
           .map((q) => QuestionFeedback.fromJson(q as Map<String, dynamic>))
           .toList(),
     );
@@ -112,17 +115,17 @@ class QuestionFeedback extends Equatable {
 
   factory QuestionFeedback.fromJson(Map<String, dynamic> json) {
     return QuestionFeedback(
-      questionId: json['questionId'] as String,
-      starAnalysis:
-          STARAnalysis.fromJson(json['starAnalysis'] as Map<String, dynamic>),
+      questionId: json['questionId'] as String? ?? '',
+      starAnalysis: STARAnalysis.fromJson(
+          json['starAnalysis'] as Map<String, dynamic>? ?? {}),
       contentAnalysis: ContentQualityAnalysis.fromJson(
-          json['contentAnalysis'] as Map<String, dynamic>),
+          json['contentAnalysis'] as Map<String, dynamic>? ?? {}),
       fluencyAnalysis: FluencyAnalysis.fromJson(
-          json['fluencyAnalysis'] as Map<String, dynamic>),
+          json['fluencyAnalysis'] as Map<String, dynamic>? ?? {}),
       confidenceAnalysis: ConfidenceAnalysis.fromJson(
-          json['confidenceAnalysis'] as Map<String, dynamic>),
+          json['confidenceAnalysis'] as Map<String, dynamic>? ?? {}),
       improvedSpeech: ImprovedSpeechData.fromJson(
-          json['improvedSpeech'] as Map<String, dynamic>),
+          json['improvedSpeech'] as Map<String, dynamic>? ?? {}),
     );
   }
 
@@ -170,16 +173,17 @@ class STARAnalysis extends Equatable {
 
   factory STARAnalysis.fromJson(Map<String, dynamic> json) {
     return STARAnalysis(
-      score: json['score'] as int,
+      score: (json['score'] as num?)?.toInt() ?? 0,
       situation: ComponentDetection.fromJson(
-          json['situation'] as Map<String, dynamic>),
-      task: ComponentDetection.fromJson(json['task'] as Map<String, dynamic>),
-      action:
-          ComponentDetection.fromJson(json['action'] as Map<String, dynamic>),
-      result:
-          ComponentDetection.fromJson(json['result'] as Map<String, dynamic>),
-      overallFeedback: json['overallFeedback'] as String,
-      suggestions: List<String>.from(json['suggestions'] as List),
+          json['situation'] as Map<String, dynamic>? ?? {}),
+      task: ComponentDetection.fromJson(
+          json['task'] as Map<String, dynamic>? ?? {}),
+      action: ComponentDetection.fromJson(
+          json['action'] as Map<String, dynamic>? ?? {}),
+      result: ComponentDetection.fromJson(
+          json['result'] as Map<String, dynamic>? ?? {}),
+      overallFeedback: json['overallFeedback'] as String? ?? '',
+      suggestions: List<String>.from(json['suggestions'] as List? ?? []),
     );
   }
 
@@ -209,9 +213,9 @@ class ComponentDetection extends Equatable {
 
   factory ComponentDetection.fromJson(Map<String, dynamic> json) {
     return ComponentDetection(
-      present: json['present'] as bool,
-      excerpt: json['excerpt'] as String,
-      quality: json['quality'] as String,
+      present: json['present'] as bool? ?? false,
+      excerpt: json['excerpt'] as String? ?? '',
+      quality: json['quality'] as String? ?? '',
     );
   }
 
@@ -252,13 +256,13 @@ class ContentQualityAnalysis extends Equatable {
 
   factory ContentQualityAnalysis.fromJson(Map<String, dynamic> json) {
     return ContentQualityAnalysis(
-      score: json['score'] as int,
-      relevanceScore: json['relevanceScore'] as int,
-      depthScore: json['depthScore'] as int,
-      professionalImpact: json['professionalImpact'] as int,
-      strengths: List<String>.from(json['strengths'] as List),
-      weaknesses: List<String>.from(json['weaknesses'] as List),
-      suggestions: List<String>.from(json['suggestions'] as List),
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      relevanceScore: (json['relevanceScore'] as num?)?.toInt() ?? 0,
+      depthScore: (json['depthScore'] as num?)?.toInt() ?? 0,
+      professionalImpact: (json['professionalImpact'] as num?)?.toInt() ?? 0,
+      strengths: List<String>.from(json['strengths'] as List? ?? []),
+      weaknesses: List<String>.from(json['weaknesses'] as List? ?? []),
+      suggestions: List<String>.from(json['suggestions'] as List? ?? []),
     );
   }
 
@@ -307,15 +311,15 @@ class FluencyAnalysis extends Equatable {
 
   factory FluencyAnalysis.fromJson(Map<String, dynamic> json) {
     return FluencyAnalysis(
-      score: json['score'] as int,
-      wordCount: json['wordCount'] as int,
-      wpm: (json['wpm'] as num).toDouble(),
-      fillerWords: (json['fillerWords'] as List)
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      wordCount: (json['wordCount'] as num?)?.toInt() ?? 0,
+      wpm: (json['wpm'] as num?)?.toDouble() ?? 0.0,
+      fillerWords: (json['fillerWords'] as List? ?? [])
           .map((f) => FillerWord.fromJson(f as Map<String, dynamic>))
           .toList(),
-      fillerPercentage: (json['fillerPercentage'] as num).toDouble(),
-      paceAssessment: json['paceAssessment'] as String,
-      suggestions: List<String>.from(json['suggestions'] as List),
+      fillerPercentage: (json['fillerPercentage'] as num?)?.toDouble() ?? 0.0,
+      paceAssessment: json['paceAssessment'] as String? ?? '',
+      suggestions: List<String>.from(json['suggestions'] as List? ?? []),
     );
   }
 
@@ -352,9 +356,9 @@ class FillerWord extends Equatable {
 
   factory FillerWord.fromJson(Map<String, dynamic> json) {
     return FillerWord(
-      word: json['word'] as String,
-      count: json['count'] as int,
-      percentage: (json['percentage'] as num).toDouble(),
+      word: json['word'] as String? ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
+      percentage: (json['percentage'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -395,13 +399,15 @@ class ConfidenceAnalysis extends Equatable {
 
   factory ConfidenceAnalysis.fromJson(Map<String, dynamic> json) {
     return ConfidenceAnalysis(
-      score: json['score'] as int,
-      toneAssessment: json['toneAssessment'] as String,
-      energyLevel: json['energyLevel'] as String,
-      convictionLevel: json['convictionLevel'] as String,
-      strengthIndicators: List<String>.from(json['strengthIndicators'] as List),
-      weaknessIndicators: List<String>.from(json['weaknessIndicators'] as List),
-      tips: List<String>.from(json['tips'] as List),
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      toneAssessment: json['toneAssessment'] as String? ?? '',
+      energyLevel: json['energyLevel'] as String? ?? '',
+      convictionLevel: json['convictionLevel'] as String? ?? '',
+      strengthIndicators:
+          List<String>.from(json['strengthIndicators'] as List? ?? []),
+      weaknessIndicators:
+          List<String>.from(json['weaknessIndicators'] as List? ?? []),
+      tips: List<String>.from(json['tips'] as List? ?? []),
     );
   }
 
@@ -447,12 +453,12 @@ class ImprovedSpeechData extends Equatable {
 
   factory ImprovedSpeechData.fromJson(Map<String, dynamic> json) {
     return ImprovedSpeechData(
-      originalText: json['originalText'] as String,
-      improvedText: json['improvedText'] as String,
-      fillerWordsRemoved: json['fillerWordsRemoved'] as int,
-      keyChanges: List<String>.from(json['keyChanges'] as List),
-      wpmBefore: (json['wpmBefore'] as num).toDouble(),
-      wpmAfter: (json['wpmAfter'] as num).toDouble(),
+      originalText: json['originalText'] as String? ?? '',
+      improvedText: json['improvedText'] as String? ?? '',
+      fillerWordsRemoved: (json['fillerWordsRemoved'] as num?)?.toInt() ?? 0,
+      keyChanges: List<String>.from(json['keyChanges'] as List? ?? []),
+      wpmBefore: (json['wpmBefore'] as num?)?.toDouble() ?? 0.0,
+      wpmAfter: (json['wpmAfter'] as num?)?.toDouble() ?? 0.0,
     );
   }
 

@@ -26,7 +26,7 @@ class InterviewPrepScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: AppSizes.md,
+            spacing: AppSizes.sm,
             children: [
               AppSection(
                 child: Column(

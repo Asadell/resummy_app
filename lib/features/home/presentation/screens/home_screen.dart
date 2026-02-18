@@ -7,6 +7,8 @@ import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_card.dart';
+import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
@@ -160,14 +162,17 @@ class HomeScreen extends StatelessWidget {
                         return Column(
                           spacing: AppSizes.sm,
                           children: activities.map((activity) {
-                            final (icon, title, subtitle, time, onTap) = _resolveActivity(context, activity);
-                            return _ActivityCard(
-                              icon: icon,
-                              title: title,
-                              subtitle: subtitle,
-                              time: time,
-                              onTap: onTap,
-                            );
+                            if (activity is CvActivityItem) {
+                              return CvHistoryCard(
+                                cv: activity.cvData,
+                                index: activities.indexOf(activity),
+                              );
+                            } else if (activity is InterviewActivityItem) {
+                              return InterviewHistoryCard(
+                                interview: activity.interview,
+                              );
+                            }
+                            return const SizedBox.shrink();
                           }).toList(),
                         );
                       },
@@ -182,68 +187,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-
-
-  (IconData, String, String, String, VoidCallback) _resolveActivity(
-      BuildContext context, ActivityItem activity) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (activity) {
-      case CvActivityItem(:final cvData):
-        final icon = cvData.source == 'analyzer'
-            ? Iconsax.chart_2
-            : cvData.source == 'ats_converter'
-                ? Iconsax.translate
-                : Iconsax.document_text;
-        final title = cvData.name.isNotEmpty ? cvData.name : l10n.cvSourceBuilder;
-        final subtitle = _getSourceLabel(l10n, cvData.source);
-        final time = _formatTimeAgo(context, cvData.updatedAt);
-        return (
-          icon,
-          title,
-          subtitle,
-          time,
-          () => context.router.navigate(const CvBuilderWelcomeRoute()),
-        );
-      case InterviewActivityItem(:final interview):
-        final scoreValue = interview.report?.overallScore ?? 0;
-        return (
-          Iconsax.microphone,
-          l10n.interviewResults,
-          l10n.score(scoreValue),
-          _formatTimeAgo(context, interview.createdAt),
-          () => context.router.navigate(const HistoryRoute()),
-        );
-    }
-  }
-
-  String _getSourceLabel(AppLocalizations l10n, String source) {
-    switch (source) {
-      case 'builder':
-        return l10n.cvSourceBuilder;
-      case 'ats_converter':
-        return l10n.cvSourceAtsConverter;
-      case 'analyzer':
-        return l10n.cvSourceAnalyzer;
-      default:
-        return l10n.cvSourceBuilder;
-    }
-  }
-
-  String _formatTimeAgo(BuildContext context, DateTime dateTime) {
-    final l10n = AppLocalizations.of(context)!;
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays}${l10n.timeDaysSuffix}';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}${l10n.timeHoursSuffix}';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}${l10n.timeMinutesSuffix}';
-    } else {
-      return l10n.timeJustNow;
-    }
-  }
 }
 
 class _QuickActionCard extends StatelessWidget {
@@ -285,77 +228,6 @@ class _QuickActionCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ActivityCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String time;
-  final VoidCallback onTap;
-
-  const _ActivityCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.time,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(AppSizes.sm),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppSizes.xs),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon,  size: 20, color: Theme.of(context).colorScheme.primary),
-            ),
-            const SizedBox(width: AppSizes.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: AppSizes.sm),
-            Text(
-              time,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
         ),
       ),
     );

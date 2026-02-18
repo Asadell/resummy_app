@@ -117,7 +117,7 @@ class _InterviewSessionClosingScreenState
               title: Row(
                 children: [
                   Text(l10n.interviewCompleted),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSizes.sm),
                   Icon(Iconsax.award,
                       color: Theme.of(context).colorScheme.secondary, size: 24),
                 ],
@@ -139,9 +139,9 @@ class _InterviewSessionClosingScreenState
             ),
             body: SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSizes.lg),
                 child: Column(
-                  spacing: AppSizes.md,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: AppSizes.sm,
                   children: [
                     AppSection(
                       child: Column(
@@ -163,7 +163,7 @@ class _InterviewSessionClosingScreenState
                             },
                           ),
                           Column(
-                            spacing: AppSizes.sm,
+                            spacing: AppSizes.xs,
                             children: [
                               Text(
                                 l10n.interviewCompleted,
@@ -172,6 +172,7 @@ class _InterviewSessionClosingScreenState
                                     .displaySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
+                                      fontSize: 28,
                                     ),
                                 textAlign: TextAlign.center,
                               ),
@@ -179,7 +180,7 @@ class _InterviewSessionClosingScreenState
                                 l10n.goodJobUser(''),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .titleMedium
                                     ?.copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -192,44 +193,39 @@ class _InterviewSessionClosingScreenState
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppSizes.sm),
+                    
                     AppSection(
                       child: Row(
                         spacing: AppSizes.md,
                         children: [
                           Container(
-                            width: 40,
-                            height: 40,
+                            width: 48,
+                            height: 48,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Theme.of(context).colorScheme.primary,
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withAlpha(200)
-                                ],
-                              ),
+                              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Iconsax.profile_circle,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                               size: 24,
                             ),
                           ),
                           Expanded(
                             child: Text(
                               l10n.aiClosingMessage(''),
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppSizes.sm),
+                    
                     AppSection(
                       child: Column(
+                        spacing: AppSizes.md,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +235,7 @@ class _InterviewSessionClosingScreenState
                                 l10n.generatingFeedbackProgress,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .titleMedium
                                     ?.copyWith(
                                       color:
                                           Theme.of(context).colorScheme.primary,
@@ -248,39 +244,43 @@ class _InterviewSessionClosingScreenState
                               ),
                               Icon(Iconsax.timer_1,
                                   color: Theme.of(context).colorScheme.primary,
-                                  size: 24),
+                                  size: 20),
                             ],
                           ),
-                          const SizedBox(height: AppSizes.sm),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(AppSizes.xs),
-                            child: LinearProgressIndicator(
-                              value: _progress,
-                              minHeight: 8,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHighest,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                          const SizedBox(height: AppSizes.xs),
-                          Text(
-                            '${(_progress * 100).toInt()}%',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.w600,
+                          Column(
+                            spacing: AppSizes.xs,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(AppSizes.xs),
+                                child: LinearProgressIndicator(
+                                  value: _progress,
+                                  minHeight: 12,
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Theme.of(context).colorScheme.primary),
                                 ),
+                              ),
+                              Text(
+                                '${(_progress * 100).toInt()}%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppSizes.sm),
+                    
                     AppSection(
                       child: Column(
+                        spacing: AppSizes.xs,
                         children: List.generate(_steps(l10n).length, (index) {
                           final currentStepIndex = (_progress * 4).floor();
 
@@ -291,7 +291,7 @@ class _InterviewSessionClosingScreenState
 
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: AppSizes.xs),
+                                vertical: 4),
                             child: Row(
                               spacing: AppSizes.md,
                               children: [
@@ -323,7 +323,7 @@ class _InterviewSessionClosingScreenState
                                       size: 20),
                                 Text(
                                   _steps(l10n)[index],
-                                  style: TextStyle(
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: isDone
                                         ? Theme.of(context)
                                             .colorScheme
@@ -347,12 +347,17 @@ class _InterviewSessionClosingScreenState
                         }),
                       ),
                     ),
-                    Text(
-                      l10n.estimateTime,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                    AppSection(
+                      child: Center(
+                        child: Text(
+                          l10n.estimateTime,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -371,14 +376,15 @@ class _InterviewSessionClosingScreenState
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSizes.lg),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.md)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: AppSizes.md,
           children: [
             Center(
               child: Container(
@@ -386,53 +392,53 @@ class _InterviewSessionClosingScreenState
                 height: 4,
                 decoration: BoxDecoration(
                   color: Theme.of(context).dividerColor,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppSizes.xs),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
             Icon(
               Iconsax.warning_2,
               color: Theme.of(context).colorScheme.error,
               size: 48,
             ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.stopInterviewTitle,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-              textAlign: TextAlign.center,
+            Column(
+              spacing: AppSizes.xs,
+              children: [
+                Text(
+                  l10n.stopInterviewTitle,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  l10n.stopInterviewDesc,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.stopInterviewDesc,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
             Row(
+              spacing: AppSizes.sm,
               children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: BorderSide(color: Theme.of(context).dividerColor),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text(l10n.cancel),
+                    child: Text(l10n.cancel, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
                   ),
                 ),
-                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context, true),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       elevation: 0,
                     ),
                     child: Text(l10n.exit),
@@ -440,7 +446,7 @@ class _InterviewSessionClosingScreenState
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.xs),
           ],
         ),
       ),

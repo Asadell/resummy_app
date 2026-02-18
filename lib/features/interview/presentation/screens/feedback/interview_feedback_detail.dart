@@ -6,6 +6,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/theme/app_colors.dart';
 import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/core/theme/app_sizes.dart';
+import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
 class InterviewFeedbackDetailScreen extends StatefulWidget {
@@ -82,43 +84,42 @@ class _InterviewFeedbackDetailScreenState
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: AppSizes.sm,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    color: Theme.of(context).cardTheme.color,
+                  AppSection(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppSizes.sm,
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.primary),
-                            borderRadius: BorderRadius.circular(20),
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(AppSizes.lg),
+                            border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)),
                           ),
                           child: Text(
                             '${l10n.question} ${_currentIndex + 1}/$totalQuestions',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
                         Row(
                           children: [
                             Icon(Iconsax.message_text,
                                 size: 20,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.color),
-                            const SizedBox(width: 8),
+                                color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: AppSizes.sm),
                             Expanded(
                               child: Text(
                                 questionText,
-                                style: Theme.of(context).textTheme.titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
@@ -126,304 +127,276 @@ class _InterviewFeedbackDetailScreenState
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Iconsax.info_circle,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.feedback,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          feedback.starAnalysis.overallFeedback,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Iconsax.chart_2,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color),
-                                const SizedBox(width: 8),
-                                Text(
-                                  l10n.starAnalysis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '${feedback.starAnalysis.score}/10',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color: _getScoreColor(
-                                        feedback.starAnalysis.score * 10),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        const Divider(height: 32),
-                        _buildPresenceRow(context, 'Situation',
-                            feedback.starAnalysis.situation.present),
-                        const SizedBox(height: 8),
-                        _buildPresenceRow(context, 'Task',
-                            feedback.starAnalysis.task.present),
-                        const SizedBox(height: 8),
-                        _buildPresenceRow(context, 'Action',
-                            feedback.starAnalysis.action.present),
-                        const SizedBox(height: 8),
-                        _buildPresenceRow(context, 'Result',
-                            feedback.starAnalysis.result.present),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Iconsax.microphone_2,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color),
-                                const SizedBox(width: 8),
-                                Text(
-                                  l10n.fluencyAnalysis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '${feedback.fluencyAnalysis.score}/10',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color: _getScoreColor(
-                                        feedback.fluencyAnalysis.score * 10),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Iconsax.magic_star,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                l10n.improvedSpeechTitle,
+
+                  AppSection(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(AppSizes.sm),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: AppSizes.sm,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Iconsax.info_circle,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 20),
+                              const SizedBox(width: AppSizes.sm),
+                              Text(
+                                l10n.feedback,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .titleSmall
                                     ?.copyWith(
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? const Color(0xFFFEE2E2)
-                                    : AppColors.error.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
+                            ],
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Text(
+                            feedback.starAnalysis.overallFeedback,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  AppSection(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(AppSizes.sm),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: AppSizes.md,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                l10n.originalSpeechLabel,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? const Color(0xFF991B1B)
-                                      : AppColors.error,
-                                ),
+                              Row(
+                                children: [
+                                  Icon(Iconsax.chart_2,
+                                      color: Theme.of(context).colorScheme.primary,
+                                      size: 20),
+                                  const SizedBox(width: AppSizes.sm),
+                                  Text(
+                                    l10n.starAnalysis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 8),
                               Text(
-                                userTranscript.isNotEmpty
-                                    ? userTranscript
-                                    : 'No answer recorded.',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? const Color(0xFF7F1D1D)
-                                      : AppColors.error.withValues(alpha: 0.8),
-                                  height: 1.6,
+                                '${feedback.starAnalysis.score}/10',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: _getScoreColor(
+                                          feedback.starAnalysis.score * 10),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          Divider(color: Theme.of(context).dividerColor.withValues(alpha: 0.5)),
+                          Column(
+                            spacing: AppSizes.sm,
+                            children: [
+                              _buildPresenceRow(context, 'Situation',
+                                  feedback.starAnalysis.situation.present),
+                              _buildPresenceRow(context, 'Task',
+                                  feedback.starAnalysis.task.present),
+                              _buildPresenceRow(context, 'Action',
+                                  feedback.starAnalysis.action.present),
+                              _buildPresenceRow(context, 'Result',
+                                  feedback.starAnalysis.result.present),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  AppSection(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(AppSizes.sm),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Iconsax.microphone_2,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 20),
+                              const SizedBox(width: AppSizes.sm),
+                              Text(
+                                l10n.fluencyAnalysis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '${feedback.fluencyAnalysis.score}/10',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: _getScoreColor(
+                                      feedback.fluencyAnalysis.score * 10),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  AppSection(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(AppSizes.sm),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: AppSizes.md,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Iconsax.magic_star,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 20),
+                              const SizedBox(width: AppSizes.sm),
+                              Expanded(
+                                child: Text(
+                                  l10n.improvedSpeechTitle,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        if (feedback.improvedSpeech.improvedText.isNotEmpty)
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? const Color(0xFFD1FAE5)
-                                  : AppColors.secondary.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+                          Column(
+                            spacing: AppSizes.sm,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(AppSizes.md),
+                                decoration: BoxDecoration(
+                                  color: AppColors.error.withValues(alpha: 0.05),
+                                  borderRadius: BorderRadius.circular(AppSizes.sm),
+                                  border: Border.all(color: AppColors.error.withValues(alpha: 0.1)),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 4,
                                   children: [
-                                    Icon(Iconsax.magic_star,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? const Color(0xFF065F46)
-                                            : AppColors.secondary,
-                                        size: 16),
-                                    const SizedBox(width: 8),
                                     Text(
-                                      l10n.improvedSpeechLabel,
+                                      l10n.originalSpeechLabel,
                                       style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? const Color(0xFF065F46)
-                                            : AppColors.secondary,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.error,
+                                      ),
+                                    ),
+                                    Text(
+                                      userTranscript.isNotEmpty
+                                          ? userTranscript
+                                          : 'No answer recorded.',
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: AppColors.error.withValues(alpha: 0.8),
+                                        height: 1.5,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  feedback.improvedSpeech.improvedText,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? const Color(0xFF065F46)
-                                        : AppColors.secondary
-                                            .withValues(alpha: 0.9),
-                                    height: 1.6,
-                                    fontWeight: FontWeight.w500,
+                              ),
+                              if (feedback.improvedSpeech.improvedText.isNotEmpty)
+                                Container(
+                                  padding: const EdgeInsets.all(AppSizes.md),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
+                                    borderRadius: BorderRadius.circular(AppSizes.sm),
+                                    border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    spacing: 4,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Iconsax.magic_star,
+                                              color: Theme.of(context).colorScheme.primary,
+                                              size: 14),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            l10n.improvedSpeechLabel,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).colorScheme.primary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        feedback.improvedSpeech.improvedText,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                                          height: 1.5,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                            ],
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 100),
+                  const SizedBox(height: AppSizes.lg),
                 ],
               ),
             ),
           ),
           bottomNavigationBar: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSizes.md),
             decoration: BoxDecoration(
-              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Colors.black.withValues(alpha: 0.05)
-                      : Colors.transparent,
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border(top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1))),
             ),
             child: SafeArea(
               child: Row(
+                spacing: AppSizes.sm,
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
@@ -432,11 +405,13 @@ class _InterviewFeedbackDetailScreenState
                               setState(() => _currentIndex--);
                             }
                           : null,
-                      icon: const Icon(Iconsax.arrow_left, size: 18),
+                      icon: const Icon(Iconsax.arrow_left, size: 16),
                       label: Text(l10n.previous),
+                      style: OutlinedButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _currentIndex < totalQuestions - 1
@@ -444,9 +419,12 @@ class _InterviewFeedbackDetailScreenState
                               setState(() => _currentIndex++);
                             }
                           : null,
-                      icon: const Icon(Iconsax.arrow_right_3, size: 18),
+                      icon: const Icon(Iconsax.arrow_right_3, size: 16),
                       label: Text(l10n.next),
                       iconAlignment: IconAlignment.end,
+                      style: OutlinedButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                      ),
                     ),
                   ),
                 ],
