@@ -1,36 +1,31 @@
 import 'package:equatable/equatable.dart';
 
-/// Section types available
 enum SectionType {
-  header,           // Always first, not reorderable
-  summary,          // Professional summary
-  experience,       // Work experience
-  education,        // Education
-  organization,     // Organization experience
-  skills,           // Technical & soft skills
-  certifications,   // Certifications
-  custom,           // User-defined custom section
+  header,
+  summary,
+  experience,
+  education,
+  organization,
+  skills,
+  certifications,
+  custom,
 }
 
-/// Template types for sections
-/// Template types for sections
 enum CustomSectionTemplate {
-  experienceLike, // Mirip Work Experience / Organization — ada title, subtitle, date, bullets
-  educationLike,  // Mirip Education — ada institution, degree, date, bullets
-  skillsLike,     // Mirip Skills — Category: item1, item2, item3
-  bulletList,     // Simple bullet list — hanya bullet points
-  paragraph,      // Paragraph — satu paragraf panjang
+  experienceLike,
+  educationLike,
+  skillsLike,
+  bulletList,
+  paragraph,
 }
 
-// Backward compatibility alias
 typedef SectionTemplate = CustomSectionTemplate;
 
-/// Custom entry for structured custom sections
 class CustomEntry extends Equatable {
   final String id;
-  final String title; // Bold (Company / Organization / etc)
-  final String? subtitle; // Italic (Role / Degree / etc)
-  final String? meta; // Meta info (Location, GPA, Issuer, etc)
+  final String title;
+  final String? subtitle;
+  final String? meta;
   final String? startDate;
   final String? endDate;
   final bool isPresent;
@@ -104,14 +99,12 @@ class CustomEntry extends Equatable {
       );
 }
 
-/// Custom Section
 class CustomSection extends SectionData {
   final CustomSectionTemplate template;
   final List<CustomEntry> entries;
-  final String content; // For bulletList and paragraph
-  final Map<String, List<String>> skillCategories; // Map<CategoryName, List<SkillItem>>
-  
-  // Label hints
+  final String content;
+  final Map<String, List<String>> skillCategories;
+
   final String titleLabel;
   final String subtitleLabel;
   final String metaLabel;
@@ -142,7 +135,7 @@ class CustomSection extends SectionData {
         return content.trim().isEmpty;
     }
   }
-  
+
   CustomSection copyWith({
     String? id,
     String? title,
@@ -198,7 +191,6 @@ class CustomSection extends SectionData {
       template = CustomSectionTemplate.bulletList;
     }
 
-    // Parse skillCategories
     Map<String, List<String>> skillCategories = {};
     final rawCategories = json['skillCategories'];
     if (rawCategories is Map) {
@@ -217,7 +209,8 @@ class CustomSection extends SectionData {
       template: template,
       entries: (json['entries'] as List<dynamic>?)
               ?.map((e) => CustomEntry.fromJson(e as Map<String, dynamic>))
-              .toList() ?? [],
+              .toList() ??
+          [],
       content: json['content'] as String? ?? '',
       skillCategories: skillCategories,
       titleLabel: json['titleLabel'] as String? ?? 'Title',
@@ -227,13 +220,12 @@ class CustomSection extends SectionData {
   }
 }
 
-/// Base class for section data
 abstract class SectionData {
   final String id;
   final SectionType type;
   final String title;
   final bool isVisible;
-  
+
   const SectionData({
     required this.id,
     required this.type,
@@ -244,14 +236,13 @@ abstract class SectionData {
   Map<String, dynamic> toJson();
 }
 
-/// Education entry for CV
 class Education extends Equatable {
   final String id;
-  final String degree; // 'Sarjana (S1)', 'Magister (S2)', etc.
-  final String major; // Jurusan
+  final String degree;
+  final String major;
   final String institution;
   final int startYear;
-  final int? endYear; // null if still studying
+  final int? endYear;
   final bool isCurrentlyStudying;
   final String? gpa;
   final String? achievements;
@@ -334,17 +325,16 @@ class Education extends Equatable {
   }
 }
 
-/// Work experience entry for CV
 class WorkExperience extends Equatable {
   final String id;
   final String jobTitle;
   final String companyName;
   final String? location;
-  final String employmentType; // 'Full-time', 'Part-time', 'Freelance', 'Internship'
+  final String employmentType;
   final DateTime startDate;
-  final DateTime? endDate; // null if currently working
+  final DateTime? endDate;
   final bool isCurrentlyWorking;
-  final String responsibilities; // Bullet points of responsibilities and achievements
+  final String responsibilities;
 
   const WorkExperience({
     required this.id,
@@ -417,20 +407,21 @@ class WorkExperience extends Equatable {
       location: json['location'] as String?,
       employmentType: json['employmentType'] as String,
       startDate: DateTime.parse(json['startDate'] as String),
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate'] as String) : null,
+      endDate: json['endDate'] != null
+          ? DateTime.parse(json['endDate'] as String)
+          : null,
       isCurrentlyWorking: json['isCurrentlyWorking'] as bool? ?? false,
       responsibilities: json['responsibilities'] as String,
     );
   }
 }
 
-/// Certification entry for CV
 class Certification extends Equatable {
   final String id;
   final String name;
   final String issuingOrganization;
   final DateTime issueDate;
-  final DateTime? expirationDate; // null if doesn't expire
+  final DateTime? expirationDate;
   final bool doesNotExpire;
   final String? credentialId;
   final String? credentialUrl;
@@ -499,8 +490,8 @@ class Certification extends Equatable {
       name: json['name'] as String,
       issuingOrganization: json['issuingOrganization'] as String,
       issueDate: DateTime.parse(json['issueDate'] as String),
-      expirationDate: json['expirationDate'] != null 
-          ? DateTime.parse(json['expirationDate'] as String) 
+      expirationDate: json['expirationDate'] != null
+          ? DateTime.parse(json['expirationDate'] as String)
           : null,
       doesNotExpire: json['doesNotExpire'] as bool? ?? false,
       credentialId: json['credentialId'] as String?,
@@ -509,7 +500,6 @@ class Certification extends Equatable {
   }
 }
 
-/// Organization experience entry
 class OrganizationExperience extends Equatable {
   final String id;
   final String organizationName;
@@ -584,14 +574,15 @@ class OrganizationExperience extends Equatable {
       role: json['role'] as String,
       location: json['location'] as String?,
       startDate: DateTime.parse(json['startDate'] as String),
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate'] as String) : null,
+      endDate: json['endDate'] != null
+          ? DateTime.parse(json['endDate'] as String)
+          : null,
       isCurrentlyActive: json['isCurrentlyActive'] as bool? ?? false,
       description: json['description'] as String,
     );
   }
 }
 
-/// Header Section (Personal Info)
 class HeaderSection extends SectionData {
   final String name;
   final String? email;
@@ -600,7 +591,7 @@ class HeaderSection extends SectionData {
   final String? portfolio;
   final String? github;
   final String? location;
-  
+
   const HeaderSection({
     required super.id,
     required this.name,
@@ -611,10 +602,10 @@ class HeaderSection extends SectionData {
     this.github,
     this.location,
   }) : super(
-    type: SectionType.header,
-    title: 'Personal Information',
-  );
-  
+          type: SectionType.header,
+          title: 'Personal Information',
+        );
+
   HeaderSection copyWith({
     String? name,
     String? email,
@@ -667,17 +658,16 @@ class HeaderSection extends SectionData {
   }
 }
 
-/// Summary Section
 class SummarySection extends SectionData {
   final String content;
-  
+
   const SummarySection({
     required super.id,
     required super.title,
     required this.content,
     super.isVisible,
   }) : super(type: SectionType.summary);
-  
+
   SummarySection copyWith({
     String? title,
     String? content,
@@ -712,17 +702,16 @@ class SummarySection extends SectionData {
   }
 }
 
-/// Experience Section
 class ExperienceSection extends SectionData {
   final List<WorkExperience> entries;
-  
+
   const ExperienceSection({
     required super.id,
     required super.title,
     required this.entries,
     super.isVisible,
   }) : super(type: SectionType.experience);
-  
+
   ExperienceSection copyWith({
     String? title,
     List<WorkExperience>? entries,
@@ -760,17 +749,16 @@ class ExperienceSection extends SectionData {
   }
 }
 
-/// Education Section
 class EducationSection extends SectionData {
   final List<Education> entries;
-  
+
   const EducationSection({
     required super.id,
     required super.title,
     required this.entries,
     super.isVisible,
   }) : super(type: SectionType.education);
-  
+
   EducationSection copyWith({
     String? title,
     List<Education>? entries,
@@ -808,17 +796,16 @@ class EducationSection extends SectionData {
   }
 }
 
-/// Organization Section
 class OrganizationSection extends SectionData {
   final List<OrganizationExperience> entries;
-  
+
   const OrganizationSection({
     required super.id,
     required super.title,
     required this.entries,
     super.isVisible,
   }) : super(type: SectionType.organization);
-  
+
   OrganizationSection copyWith({
     String? title,
     List<OrganizationExperience>? entries,
@@ -848,7 +835,8 @@ class OrganizationSection extends SectionData {
       id: json['id'] as String,
       title: json['title'] as String,
       entries: (json['entries'] as List<dynamic>?)
-              ?.map((e) => OrganizationExperience.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  OrganizationExperience.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       isVisible: json['isVisible'] as bool? ?? true,
@@ -856,17 +844,16 @@ class OrganizationSection extends SectionData {
   }
 }
 
-/// Skills Section
 class SkillsSection extends SectionData {
-  final Map<String, List<String>> skillCategories; // e.g., {"Programming": ["Node.js", "Python"]}
-  
+  final Map<String, List<String>> skillCategories;
+
   const SkillsSection({
     required super.id,
     required super.title,
     required this.skillCategories,
     super.isVisible,
   }) : super(type: SectionType.skills);
-  
+
   SkillsSection copyWith({
     String? title,
     Map<String, List<String>>? skillCategories,
@@ -907,17 +894,16 @@ class SkillsSection extends SectionData {
   }
 }
 
-/// Certifications Section
 class CertificationsSection extends SectionData {
   final List<Certification> entries;
-  
+
   const CertificationsSection({
     required super.id,
     required super.title,
     required this.entries,
     super.isVisible,
   }) : super(type: SectionType.certifications);
-  
+
   CertificationsSection copyWith({
     String? title,
     List<Certification>? entries,
@@ -955,25 +941,18 @@ class CertificationsSection extends SectionData {
   }
 }
 
-
-
-/// Main CV Data with ordered sections
 class CVData extends Equatable {
   final String id;
   final DateTime createdAt;
   final DateTime updatedAt;
-  
-  // Header is always first
+
   final HeaderSection header;
-  
-  // Ordered sections (can be reordered)
+
   final List<SectionData> sections;
 
-  // Template selection
-  final String template; // 'classic', 'modern', 'minimalist'
-  
-  // Source feature that created this CV
-  final String source; // 'builder', 'ats_converter', 'analyzer'
+  final String template;
+
+  final String source;
 
   const CVData({
     required this.id,
@@ -985,10 +964,8 @@ class CVData extends Equatable {
     this.source = 'builder',
   });
 
-  // Validation
   bool get isValid => header.name.isNotEmpty;
 
-  // Helper getters
   String get name => header.name;
   String? get email => header.email;
   String? get phone => header.phone;
@@ -996,46 +973,44 @@ class CVData extends Equatable {
   String? get linkedin => header.linkedin;
   String? get portfolio => header.portfolio;
 
-  // Get specific sections
-  SummarySection? get summarySection => sections
-      .whereType<SummarySection>()
-      .firstOrNull;
-      
-  ExperienceSection? get experienceSection => sections
-      .whereType<ExperienceSection>()
-      .firstOrNull;
-      
-  EducationSection? get educationSection => sections
-      .whereType<EducationSection>()
-      .firstOrNull;
-      
-  OrganizationSection? get organizationSection => sections
-      .whereType<OrganizationSection>()
-      .firstOrNull;
-      
-  SkillsSection? get skillsSection => sections
-      .whereType<SkillsSection>()
-      .firstOrNull;
-      
-  CertificationsSection? get certificationsSection => sections
-      .whereType<CertificationsSection>()
-      .firstOrNull;
+  SummarySection? get summarySection =>
+      sections.whereType<SummarySection>().firstOrNull;
 
-  // Backwards compatibility getters (untuk migration dari code lama)
+  ExperienceSection? get experienceSection =>
+      sections.whereType<ExperienceSection>().firstOrNull;
+
+  EducationSection? get educationSection =>
+      sections.whereType<EducationSection>().firstOrNull;
+
+  OrganizationSection? get organizationSection =>
+      sections.whereType<OrganizationSection>().firstOrNull;
+
+  SkillsSection? get skillsSection =>
+      sections.whereType<SkillsSection>().firstOrNull;
+
+  CertificationsSection? get certificationsSection =>
+      sections.whereType<CertificationsSection>().firstOrNull;
+
   String? get summary => summarySection?.content;
   List<WorkExperience> get workExperience => experienceSection?.entries ?? [];
   List<Education> get education => educationSection?.entries ?? [];
-  List<Certification> get certifications => certificationsSection?.entries ?? [];
-  List<String> get skills => skillsSection?.skillCategories.values
-      .expand((skills) => skills)
-      .toList() ?? [];
-  List<String> get technicalSkills => skillsSection?.skillCategories['Technical'] ?? [];
-  List<String> get softSkills => skillsSection?.skillCategories['Soft Skills'] ?? [];
+  List<Certification> get certifications =>
+      certificationsSection?.entries ?? [];
+  List<String> get skills =>
+      skillsSection?.skillCategories.values
+          .expand((skills) => skills)
+          .toList() ??
+      [];
+  List<String> get technicalSkills =>
+      skillsSection?.skillCategories['Technical'] ?? [];
+  List<String> get softSkills =>
+      skillsSection?.skillCategories['Soft Skills'] ?? [];
   Map<String, dynamic> get additionalSections => {};
   String? get professionalSummary => summary;
 
   @override
-  List<Object?> get props => [id, createdAt, updatedAt, header, sections, template, source];
+  List<Object?> get props =>
+      [id, createdAt, updatedAt, header, sections, template, source];
 
   CVData copyWith({
     DateTime? updatedAt,
@@ -1070,7 +1045,7 @@ class CVData extends Equatable {
   factory CVData.fromJson(Map<String, dynamic> json) {
     final sectionsJson = json['sections'] as List<dynamic>?;
     final sections = <SectionData>[];
-    
+
     if (sectionsJson != null) {
       for (final sectionJson in sectionsJson) {
         final type = sectionJson['type'] as String;
@@ -1107,12 +1082,11 @@ class CVData extends Equatable {
       header: HeaderSection.fromJson(json['header'] as Map<String, dynamic>),
       sections: sections,
       template: json['template'] as String? ?? 'classic',
-      source: json['source'] as String? ?? 'builder', // Default to builder for backwards compatibility
+      source: json['source'] as String? ?? 'builder',
     );
   }
 }
 
-// Extension for List<T>
 extension ListExtensions<T> on List<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }

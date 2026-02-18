@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
@@ -21,16 +20,15 @@ class CvBuilderStep1Screen extends StatefulWidget {
 
 class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _linkedinController;
   late TextEditingController _portfolioController;
   late TextEditingController _locationController;
-  
+
   String? _fullPhoneNumber;
-  bool _showValidation = false;
 
   @override
   void initState() {
@@ -38,36 +36,28 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     final provider = context.read<CVBuilderProvider>();
     final cv = provider.currentCV;
     final profile = context.read<ProfileProvider>().profile;
-    
+
     _nameController = TextEditingController(
-      text: (cv?.name?.isNotEmpty == true) 
-          ? cv!.name 
-          : (profile?.fullName ?? ''),
+      text: (cv?.name ?? '').isNotEmpty ? cv!.name : (profile?.fullName ?? ''),
     );
     _emailController = TextEditingController(
-      text: (cv?.email?.isNotEmpty == true) 
-          ? cv!.email 
-          : (profile?.email ?? ''),
+      text: (cv?.email ?? '').isNotEmpty ? cv!.email : (profile?.email ?? ''),
     );
-    // For phone, we might want to try to strip country code if possible, 
-    // but for now let's just use it as is. The user can correct it.
-     // If we really want to be smart, we could try to parse, but let's leave it simple.
-    _phoneController = TextEditingController(text: cv?.phone); 
+
+    _phoneController = TextEditingController(text: cv?.phone);
     _fullPhoneNumber = cv?.phone;
-    
+
     _linkedinController = TextEditingController(text: cv?.linkedin);
     _portfolioController = TextEditingController(text: cv?.portfolio);
     _locationController = TextEditingController(text: cv?.location);
-    
-    // Add listeners for real-time preview updates
+
     _nameController.addListener(_updatePreview);
     _emailController.addListener(_updatePreview);
-    // _phoneController.addListener(_updatePreview); // Handled by IntlPhoneField
+
     _linkedinController.addListener(_updatePreview);
     _portfolioController.addListener(_updatePreview);
     _locationController.addListener(_updatePreview);
 
-    // Force update on load to ensure provider is in sync with controllers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _updatePreview();
     });
@@ -83,7 +73,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
     _locationController.dispose();
     super.dispose();
   }
-  
+
   void _updatePreview() {
     final provider = context.read<CVBuilderProvider>();
     provider.updatePersonalInfo(
@@ -99,19 +89,15 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: 1,
-
       onBack: null,
       onNext: () {
-        setState(() => _showValidation = true);
         if (_formKey.currentState!.validate()) {
           final provider = context.read<CVBuilderProvider>();
-          
+
           provider.updatePersonalInfo(
             name: _nameController.text.trim(),
             email: _emailController.text.trim(),
@@ -120,10 +106,10 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
             portfolio: _portfolioController.text.trim(),
             location: _locationController.text.trim(),
           );
-          
-          // Auto-save progress
+
           provider.saveCurrentCV();
-          final currentStep = DynamicCvSteps.getStepForSection(context, 'header');
+          final currentStep =
+              DynamicCvSteps.getStepForSection(context, 'header');
           DynamicCvSteps.navigateToNextStep(context, currentStep);
         }
       },
@@ -132,10 +118,10 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Step Header
             Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   border: Border.all(color: Theme.of(context).primaryColor),
@@ -143,7 +129,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                 ),
                 child: Consumer<CVBuilderProvider>(
                   builder: (context, provider, _) {
-                    final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                    final totalSteps =
+                        DynamicCvSteps.getTotalSteps(provider.currentCV);
                     return Text(
                       l10n.stepHeader(1, totalSteps),
                       style: const TextStyle(
@@ -161,8 +148,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
               child: Text(
                 l10n.personalInfoHeader,
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
             const SizedBox(height: 4),
@@ -170,14 +157,15 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
               child: Text(
                 l10n.personalInfoDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                ),
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color
+                          ?.withValues(alpha: 0.7),
+                    ),
               ),
             ),
-            
             const SizedBox(height: 24),
-            
-            // Form Card
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -186,19 +174,14 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
-                      // Full Name (Required)
                       _buildTextField(
                         controller: _nameController,
                         label: l10n.fullName,
                         isRequired: true,
                         hint: l10n.namePlaceholder,
-                        // helperText: l10n.autoFillHint,
                         context: context,
                       ),
-                      
                       const SizedBox(height: 16),
-                      
-                      // Email (Required)
                       _buildTextField(
                         controller: _emailController,
                         label: l10n.emailLabel,
@@ -207,25 +190,19 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                         keyboardType: TextInputType.emailAddress,
                         context: context,
                       ),
-                      
                       const SizedBox(height: 16),
-                      
-                      // Phone (Required & Country Code)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           RichText(
                             text: TextSpan(
                               text: l10n.phoneNumber,
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                              // children: const [
-                              //   TextSpan(
-                              //     text: ' *',
-                              //     style: TextStyle(color: Colors.red),
-                              //   ),
-                              // ],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -238,15 +215,17 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                               ),
                               counterText: '',
                             ),
-                            initialCountryCode: 'ID', // Default to Indonesia (+62)
+                            initialCountryCode: 'ID',
                             disableLengthCheck: true,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             onChanged: (phone) {
                               _fullPhoneNumber = phone.completeNumber;
-                              
-                              final provider = context.read<CVBuilderProvider>();
+
+                              final provider =
+                                  context.read<CVBuilderProvider>();
                               provider.updatePersonalInfo(
-                                phone: _fullPhoneNumber!, 
+                                phone: _fullPhoneNumber!,
                                 name: _nameController.text.trim(),
                                 email: _emailController.text.trim(),
                                 linkedin: _linkedinController.text.trim(),
@@ -254,18 +233,16 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                                 location: _locationController.text.trim(),
                               );
                             },
-                            onCountryChanged: (country) {
-                                // When country changes, we might want to trigger an update too?
-                            },
+                            onCountryChanged: (country) {},
                             validator: (value) {
                               if (value == null || value.number.isEmpty) {
                                 return l10n.requiredField;
                               }
-                              // Check for leading zero in the number part
+
                               if (value.number.startsWith('0')) {
                                 return l10n.phoneNoLeadingZero;
                               }
-                              // Check length (at least 8 digits)
+
                               if (value.number.length < 8) {
                                 return l10n.phoneTooShort;
                               }
@@ -274,10 +251,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                           ),
                         ],
                       ),
-                      
                       const SizedBox(height: 16),
-                      
-                      // LinkedIn (Optional)
                       _buildTextField(
                         controller: _linkedinController,
                         label: l10n.linkedin,
@@ -290,10 +264,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                           FilteringTextInputFormatter.deny(RegExp(r'\s')),
                         ],
                       ),
-                      
                       const SizedBox(height: 16),
-                      
-                      // Portfolio (Optional)
                       _buildTextField(
                         controller: _portfolioController,
                         label: l10n.portfolio,
@@ -306,10 +277,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                           FilteringTextInputFormatter.deny(RegExp(r'\s')),
                         ],
                       ),
-                      
                       const SizedBox(height: 16),
-                      
-                      // Location (Required)
                       _buildTextField(
                         controller: _locationController,
                         label: l10n.location,
@@ -324,8 +292,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                 ),
               ),
             ),
-            
-            const SizedBox(height: 80), // Bottom padding for sticky button
+            const SizedBox(height: 80),
           ],
         ),
       ),
@@ -353,8 +320,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
           text: TextSpan(
             text: label,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+                  fontWeight: FontWeight.w600,
+                ),
             children: [
               if (isRequired)
                 const TextSpan(
@@ -407,7 +374,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Color(0xFF0EA5E9)),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             counterText: '',
           ),
         ),

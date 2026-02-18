@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
@@ -27,36 +26,39 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
     return CVBuilderStepLayout(
       title: l10n.cvBuilder,
       currentStep: currentStep,
-
       onBack: () {
         DynamicCvSteps.navigateToPreviousStep(context, currentStep);
       },
       onNext: () {
         final provider = context.read<CVBuilderProvider>();
         provider.saveCurrentCV();
-        final currentStep = DynamicCvSteps.getStepForSection(context, 'education');
+        final currentStep =
+            DynamicCvSteps.getStepForSection(context, 'education');
         DynamicCvSteps.navigateToNextStep(context, currentStep);
       },
       editContent: Consumer<CVBuilderProvider>(
         builder: (context, provider, child) {
           final educationList = provider.currentCV?.education ?? [];
-          
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Step Header
                 Center(
                   child: Consumer<CVBuilderProvider>(
                     builder: (context, provider, _) {
-                      final currentStep = DynamicCvSteps.getStepForSection(context, 'education');
-                      final totalSteps = DynamicCvSteps.getTotalSteps(provider.currentCV);
+                      final currentStep = DynamicCvSteps.getStepForSection(
+                          context, 'education');
+                      final totalSteps =
+                          DynamicCvSteps.getTotalSteps(provider.currentCV);
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
-                          border: Border.all(color: Theme.of(context).primaryColor),
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -76,8 +78,8 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                   child: Text(
                     l10n.educationHistoryHeader,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -85,14 +87,15 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                   child: Text(
                     l10n.educationHistoryDesc,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                    ),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.color
+                              ?.withValues(alpha: 0.7),
+                        ),
                   ),
                 ),
-                
                 const SizedBox(height: 24),
-                
-                // Empty State
                 if (educationList.isEmpty)
                   Center(
                     child: Container(
@@ -100,7 +103,8 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Theme.of(context).dividerColor),
+                        border:
+                            Border.all(color: Theme.of(context).dividerColor),
                       ),
                       child: Column(
                         children: [
@@ -112,9 +116,12 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                           const SizedBox(height: 16),
                           Text(
                             l10n.noEducationData,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -128,8 +135,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       ),
                     ),
                   ),
-                  
-                // List of Education
                 if (educationList.isNotEmpty) ...[
                   ReorderableListView.builder(
                     shrinkWrap: true,
@@ -140,10 +145,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                     },
                     itemBuilder: (context, index) {
                       final edu = educationList[index];
-                      final period = edu.isCurrentlyStudying 
+                      final period = edu.isCurrentlyStudying
                           ? '${edu.startYear} - ${l10n.present}'
                           : '${edu.startYear} - ${edu.endYear ?? l10n.present}';
-                          
+
                       return Card(
                         key: ValueKey(edu.id),
                         margin: const EdgeInsets.only(bottom: 12),
@@ -158,21 +163,26 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                              Text('${edu.degree} - ${edu.major}'),
+                              Text(
+                                  '${edu.degree} ${l10n.educationDegreesConnector} ${edu.major}'),
                               const SizedBox(height: 4),
                               Text(
                                 period,
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: const Color(0xFF6B7280),
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: const Color(0xFF6B7280),
+                                      fontSize: 12,
+                                    ),
                               ),
                               if (edu.gpa != null && edu.gpa!.isNotEmpty) ...[
                                 const SizedBox(height: 4),
                                 Text(
                                   '${l10n.gpaLabel}: ${edu.gpa}',
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                   ),
@@ -188,8 +198,10 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                                 onPressed: () => _editEducation(edu, index),
                               ),
                               IconButton(
-                                icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
-                                onPressed: () => provider.removeEducation(index),
+                                icon: const Icon(Iconsax.trash,
+                                    size: 20, color: Colors.red),
+                                onPressed: () =>
+                                    provider.removeEducation(index),
                               ),
                             ],
                           ),
@@ -197,16 +209,12 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                       );
                     },
                   ),
-                  
                   const SizedBox(height: 24),
                 ],
-
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 24),
-
                 _buildInlineForm(context, provider),
-                
                 const SizedBox(height: 80),
               ],
             ),
@@ -216,9 +224,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
     );
   }
 
-
-
-  // Form Controllers
   final _formKey = GlobalKey<FormState>();
   final _institutionController = TextEditingController();
   final _majorController = TextEditingController();
@@ -229,7 +234,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   bool _isCurrentlyStudying = false;
   bool _showValidation = false;
   int? _editingIndex;
-  
+
   @override
   void dispose() {
     _institutionController.dispose();
@@ -272,16 +277,20 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
     setState(() => _showValidation = true);
     if (_formKey.currentState!.validate()) {
       final edu = Education(
-        id: _editingIndex != null 
-            ? provider.currentCV!.education[_editingIndex!].id 
+        id: _editingIndex != null
+            ? provider.currentCV!.education[_editingIndex!].id
             : const Uuid().v4(),
         institution: _institutionController.text.trim(),
         major: _majorController.text.trim(),
         degree: _degreeController.text.trim(),
         gpa: _gpaController.text.trim(),
-        startYear: int.tryParse(_startYearController.text) ?? DateTime.now().year,
-        endYear: _isCurrentlyStudying || _endYearController.text.isEmpty ? null : int.tryParse(_endYearController.text),
-        isCurrentlyStudying: _isCurrentlyStudying || _endYearController.text.isEmpty,
+        startYear:
+            int.tryParse(_startYearController.text) ?? DateTime.now().year,
+        endYear: _isCurrentlyStudying || _endYearController.text.isEmpty
+            ? null
+            : int.tryParse(_endYearController.text),
+        isCurrentlyStudying:
+            _isCurrentlyStudying || _endYearController.text.isEmpty,
       );
 
       if (_editingIndex != null) {
@@ -289,7 +298,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
       } else {
         provider.addEducation(edu);
       }
-      
+
       _resetForm();
     }
   }
@@ -307,7 +316,9 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
-        autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        autovalidateMode: _showValidation
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -317,8 +328,8 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                 Text(
                   isEditing ? l10n.editEducation : l10n.addEducation,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 if (isEditing)
                   TextButton.icon(
@@ -329,8 +340,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               ],
             ),
             const SizedBox(height: 16),
-            
-            // Institution
             TextFormField(
               controller: _institutionController,
               decoration: InputDecoration(
@@ -343,8 +352,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Major
             TextFormField(
               controller: _majorController,
               decoration: InputDecoration(
@@ -357,8 +364,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Degree
             TextFormField(
               controller: _degreeController,
               decoration: InputDecoration(
@@ -370,8 +375,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               maxLength: 50,
             ),
             const SizedBox(height: 16),
-            
-            // Years
             Row(
               children: [
                 Expanded(
@@ -402,34 +405,37 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                     keyboardType: TextInputType.number,
                     enabled: !_isCurrentlyStudying,
                     decoration: InputDecoration(
-                      labelText: _isCurrentlyStudying 
-                          ? l10n.endYear 
+                      labelText: _isCurrentlyStudying
+                          ? l10n.endYear
                           : '${l10n.endYear} *',
                       hintText: l10n.endYearPlaceholder,
                       border: const OutlineInputBorder(),
                       counterText: '',
                     ),
-                    validator: _isCurrentlyStudying ? null : (v) {
-                      // Allow empty end year to imply "Currently Studying"
-                      if (v == null || v.isEmpty) return null;
-                      
-                      final endYear = int.tryParse(v);
-                      if (endYear == null) return l10n.requiredField;
-                      
-                      if (endYear > DateTime.now().year) return l10n.yearTooHigh;
-                      
-                      final startYear = int.tryParse(_startYearController.text);
-                      if (startYear != null && endYear < startYear) {
-                        return l10n.yearStartAfterEnd;
-                      }
-                      return null;
-                    },
+                    validator: _isCurrentlyStudying
+                        ? null
+                        : (v) {
+                            if (v == null || v.isEmpty) return null;
+
+                            final endYear = int.tryParse(v);
+                            if (endYear == null) return l10n.requiredField;
+
+                            if (endYear > DateTime.now().year) {
+                              return l10n.yearTooHigh;
+                            }
+
+                            final startYear =
+                                int.tryParse(_startYearController.text);
+                            if (startYear != null && endYear < startYear) {
+                              return l10n.yearStartAfterEnd;
+                            }
+                            return null;
+                          },
                     maxLength: 4,
                   ),
                 ),
               ],
             ),
-            
             CheckboxListTile(
               value: _isCurrentlyStudying,
               onChanged: (val) {
@@ -444,10 +450,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
             ),
-            
             const SizedBox(height: 8),
-            
-            // GPA
             TextFormField(
               controller: _gpaController,
               keyboardType: TextInputType.number,
@@ -459,9 +462,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               ),
               maxLength: 5,
             ),
-            
             const SizedBox(height: 24),
-            
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(
@@ -480,5 +481,3 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
     );
   }
 }
-
-

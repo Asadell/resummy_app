@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  final UserProfileRepository _repository = UserProfileRepository();
+  final UserProfileRepository _repository;
+  final AuthProvider _authProvider;
+
   UserProfile? _profile;
   bool _isLoading = false;
   String? _error;
+
+  ProfileProvider({
+    required UserProfileRepository repository,
+    required AuthProvider authProvider,
+  })  : _repository = repository,
+        _authProvider = authProvider {
+    _authProvider.addListener(_onAuthChanged);
+
+    _onAuthChanged();
+  }
 
   UserProfile? get profile => _profile;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  // Initial load called when AuthProvider changes
+  @override
+  void dispose() {
+    _authProvider.removeListener(_onAuthChanged);
+    super.dispose();
+  }
+
+  void _onAuthChanged() {
+    final user = _authProvider.currentUser;
+    if (user != null) {
+      if (_profile?.uid != user.id) {
+        loadProfile(user.id);
+      }
+    } else {
+      _profile = null;
+      notifyListeners();
+    }
+  }
+
   Future<void> loadProfile(String? uid) async {
     if (uid == null) {
       _profile = null;
@@ -35,13 +65,51 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  // Reload manually
   Future<void> refreshProfile() async {
     if (_profile == null) return;
     await loadProfile(_profile!.uid);
   }
 
-  // Update profile and sync with Firestore
+  Future<bool> completeOnboarding({
+    required String fullName,
+    String? workStatus,
+    String? targetRole,
+    String? careerGoal,
+  }) async {
+    if (_authProvider.currentUser == null) return false;
+
+    try {
+      final success = await _repository.completeOnboarding(
+        _authProvider.currentUser!.id,
+        fullName: fullName,
+        workStatus: workStatus,
+        targetRole: targetRole,
+        careerGoal: careerGoal,
+      );
+
+      if (success) {
+        if (_profile != null) {
+          _profile = _profile!.copyWith(
+            fullName: fullName,
+            workStatus: workStatus,
+            targetRole: targetRole,
+            careerGoal: careerGoal,
+            onboardingDone: true,
+          );
+        } else {
+          // If profile was null (unlikely but safe), reload it
+          await loadProfile(_authProvider.currentUser!.id);
+        }
+        notifyListeners();
+      }
+      return success;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> updateProfile({
     String? fullName,
     String? email,
@@ -62,7 +130,8 @@ class ProfileProvider extends ChangeNotifier {
     if (updatedData.isEmpty) return;
 
     try {
-      final success = await _repository.updateUserProfile(_profile!.uid, updatedData);
+      final success =
+          await _repository.updateUserProfile(_profile!.uid, updatedData);
       if (success) {
         _profile = _profile!.copyWith(
           fullName: fullName,
@@ -73,6 +142,34 @@ class ProfileProvider extends ChangeNotifier {
         );
         notifyListeners();
       }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> createProfileIfNotExists(
+    String uid, {
+    required String email,
+    String? fullName,
+    String? photoUrl,
+  }) async {
+    try {
+      final existing = await _repository.getUserProfile(uid);
+      if (existing != null) {
+        _profile = existing;
+      } else {
+        final newProfile = UserProfile(
+          uid: uid,
+          email: email,
+          fullName: fullName ?? '',
+          photoUrl: photoUrl,
+          onboardingDone: false,
+        );
+        await _repository.createUserProfile(newProfile);
+        _profile = newProfile;
+      }
+      notifyListeners();
     } catch (e) {
       _error = e.toString();
       notifyListeners();

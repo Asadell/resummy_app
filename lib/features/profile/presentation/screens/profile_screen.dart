@@ -4,7 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 import 'package:resummy_app/core/providers/theme_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -24,10 +24,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Profile is auto-loaded by ProxyProvider in main.dart
   }
 
-  Future<void> _updateProfile(BuildContext context, {
+  Future<void> _updateProfile(
+    BuildContext context, {
     String? fullName,
     String? workStatus,
     String? targetRole,
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context);
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, child) {
         final profile = profileProvider.profile;
@@ -60,14 +60,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: Text(l10n.profile),
           ),
           body: SafeArea(
-            child: isLoading 
+            child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // User Info Card
                         Card(
                           child: Padding(
                             padding: const EdgeInsets.all(16),
@@ -75,36 +74,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  backgroundImage: authProvider.photoUrl != null
-                                      ? NetworkImage(authProvider.photoUrl!)
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  backgroundImage: authProvider
+                                              .currentUser?.photoUrl !=
+                                          null
+                                      ? NetworkImage(
+                                          authProvider.currentUser!.photoUrl!)
                                       : null,
-                                  child: authProvider.photoUrl == null
-                                      ? Icon(
-                                          Iconsax.user,
-                                          size: 48,
-                                          color: Theme.of(context).colorScheme.onPrimary,
-                                        )
-                                      : null,
+                                  child:
+                                      authProvider.currentUser?.photoUrl == null
+                                          ? Icon(
+                                              Iconsax.user,
+                                              size: 48,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                            )
+                                          : null,
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  profile?.fullName ?? authProvider.displayName,
+                                  profile?.fullName ??
+                                      authProvider.currentUser?.displayName ??
+                                      '',
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  profile?.email ?? authProvider.email,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  ),
+                                  profile?.email ??
+                                      authProvider.currentUser?.email ??
+                                      '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
-                        // Profile Info Card
                         Card(
                           child: Padding(
                             padding: const EdgeInsets.all(16),
@@ -115,41 +128,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     Text(
                                       l10n.profileInfo,
-                                      style: Theme.of(context).textTheme.titleMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
                                     ),
                                     const Spacer(),
                                     IconButton(
                                       icon: const Icon(Iconsax.edit),
-                                      onPressed: () => _showEditBottomSheet(context, profile),
+                                      onPressed: () => _showEditBottomSheet(
+                                          context, profile),
                                     ),
                                   ],
                                 ),
                                 const Divider(),
-                                _buildProfileRow(context, l10n.status, _getStatusLabel(context, profile?.workStatus)),
-                                _buildProfileRow(context, l10n.targetRole, profile?.targetRole ?? '-'),
-                                _buildProfileRow(context, l10n.goal, profile?.careerGoal ?? '-'),
+                                _buildProfileRow(
+                                    context,
+                                    l10n.status,
+                                    _getStatusLabel(
+                                        context, profile?.workStatus)),
+                                _buildProfileRow(context, l10n.targetRole,
+                                    profile?.targetRole ?? '-'),
+                                _buildProfileRow(context, l10n.goal,
+                                    profile?.careerGoal ?? '-'),
                               ],
                             ),
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
-                        // Settings Section
                         Text(
                           l10n.settings,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 12),
-                        
-                        // Theme Toggle
                         Card(
                           child: SwitchListTile(
                             title: Text(l10n.darkMode),
-                            subtitle: Text(
-                              themeProvider.isDarkMode ? l10n.darkThemeEnabled : l10n.lightThemeEnabled
-                            ),
+                            subtitle: Text(themeProvider.isDarkMode
+                                ? l10n.darkThemeEnabled
+                                : l10n.lightThemeEnabled),
                             secondary: Icon(
-                              themeProvider.isDarkMode ? Iconsax.moon : Iconsax.sun_1,
+                              themeProvider.isDarkMode
+                                  ? Iconsax.moon
+                                  : Iconsax.sun_1,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                             value: themeProvider.isDarkMode,
@@ -157,14 +177,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        
-                        // Language Toggle  
                         Card(
                           child: SwitchListTile(
                             title: Text(l10n.language),
-                            subtitle: Text(
-                              localeProvider.isIndonesian ? l10n.bahasaIndonesia : l10n.english
-                            ),
+                            subtitle: Text(localeProvider.isIndonesian
+                                ? l10n.bahasaIndonesia
+                                : l10n.english),
                             secondary: Icon(
                               Iconsax.global,
                               color: Theme.of(context).colorScheme.primary,
@@ -174,30 +192,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
-                        // Logout Button
                         OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Theme.of(context).colorScheme.error,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.error,
                             padding: const EdgeInsets.all(16),
                           ),
                           icon: const Icon(Iconsax.logout),
                           label: Text(l10n.logout),
                           onPressed: () => _showLogoutDialog(context),
                         ),
-
                         if (kDebugMode) ...[
                           const SizedBox(height: 50),
                           OutlinedButton(
                             onPressed: () {
-                              context.read<InterviewProvider>().startInterviewWithDummyData();
-                              context.router.push(const InterviewSessionClosingRoute());
+                              context
+                                  .read<InterviewProvider>()
+                                  .startInterviewWithDummyData();
+                              context.router
+                                  .push(const InterviewSessionClosingRoute());
                             },
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.all(16),
-                              side: BorderSide(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+                              side: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 0.5)),
                             ),
-                            child: const Text('DEBUG: Skip with 5 Questions'),
+                            child: Text(l10n.debugSkipQuestions),
                           ),
                         ],
                       ],
@@ -220,8 +243,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ),
           Expanded(
@@ -254,8 +277,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showEditBottomSheet(BuildContext context, UserProfile? profile) {
     final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController(text: profile?.fullName ?? '');
-    final roleController = TextEditingController(text: profile?.targetRole ?? '');
-    final goalController = TextEditingController(text: profile?.careerGoal ?? '');
+    final roleController =
+        TextEditingController(text: profile?.targetRole ?? '');
+    final goalController =
+        TextEditingController(text: profile?.careerGoal ?? '');
     String? selectedStatus = profile?.workStatus;
 
     showModalBottomSheet(
@@ -278,78 +303,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Handle Bar
               Center(
                 child: Container(
                   width: 40,
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 24),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
+                    color:
+                        Theme.of(context).dividerColor.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              
               Text(
                 l10n.edit,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
                   labelText: l10n.fullName,
                   prefixIcon: const Icon(Iconsax.user),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               const SizedBox(height: 16),
-
               DropdownButtonFormField<String>(
-                value: selectedStatus,
+                initialValue: selectedStatus,
                 decoration: InputDecoration(
                   labelText: l10n.status,
                   prefixIcon: const Icon(Iconsax.status),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
                 items: [
-                  DropdownMenuItem(value: 'fresh_grad', child: Text(l10n.freshGraduate)),
-                  DropdownMenuItem(value: 'working', child: Text(l10n.currentlyWorking)),
-                  DropdownMenuItem(value: 'job_seeking', child: Text(l10n.lookingForJob)),
-                  DropdownMenuItem(value: 'freelancer', child: Text(l10n.freelancer)),
+                  DropdownMenuItem(
+                      value: 'fresh_grad', child: Text(l10n.freshGraduate)),
+                  DropdownMenuItem(
+                      value: 'working', child: Text(l10n.currentlyWorking)),
+                  DropdownMenuItem(
+                      value: 'job_seeking', child: Text(l10n.lookingForJob)),
+                  DropdownMenuItem(
+                      value: 'freelancer', child: Text(l10n.freelancer)),
                 ],
                 onChanged: (value) {
                   setBottomSheetState(() => selectedStatus = value);
                 },
               ),
               const SizedBox(height: 16),
-
               TextField(
                 controller: roleController,
                 decoration: InputDecoration(
                   labelText: l10n.targetRole,
                   prefixIcon: const Icon(Iconsax.briefcase),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               const SizedBox(height: 16),
-
               TextField(
                 controller: goalController,
                 decoration: InputDecoration(
                   labelText: l10n.goal,
                   prefixIcon: const Icon(Iconsax.direct_up),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
                 maxLines: 3,
               ),
               const SizedBox(height: 32),
-
               Row(
                 children: [
                   Expanded(
@@ -357,7 +384,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(l10n.cancel),
                     ),
@@ -377,7 +405,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(l10n.save),
                     ),
@@ -475,7 +504,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: FilledButton(
                     onPressed: () async {
                       Navigator.pop(context);
-                      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                      final authProvider =
+                          Provider.of<AuthProvider>(context, listen: false);
                       await authProvider.signOut();
                       if (context.mounted) {
                         context.router.replaceAll([const AuthRoute()]);

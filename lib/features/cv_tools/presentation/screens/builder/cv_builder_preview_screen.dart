@@ -28,14 +28,14 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     try {
       final service = CvPdfService();
       final path = await service.saveToDownloads(cv);
-      
+
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.cvSavedTo(path)),
             action: SnackBarAction(
-              label: 'OK',
+              label: l10n.ok,
               onPressed: () {},
             ),
             duration: const Duration(seconds: 5),
@@ -80,7 +80,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
 
   void _showPdfOptions() {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -91,7 +91,6 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Handle bar
             Container(
               width: 40,
               height: 4,
@@ -101,22 +100,21 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            
-            // Title
             Text(
-              'Export CV',
+              l10n.exportCv,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 24),
-            
-            // Download option
             ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -125,20 +123,18 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 ),
               ),
               title: Text(l10n.downloadPdf),
-              subtitle: const Text('Save to Downloads folder'),
+              subtitle: Text(l10n.saveToDownloads),
               onTap: () {
                 Navigator.pop(context);
                 _downloadPdf();
               },
             ),
             const SizedBox(height: 8),
-            
-            // Share option
             ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -146,8 +142,8 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                   color: Colors.green,
                 ),
               ),
-              title: const Text('Share'),
-              subtitle: const Text('Share via WhatsApp, Email, etc.'),
+              title: Text(l10n.share),
+              subtitle: Text(l10n.shareDesc),
               onTap: () {
                 Navigator.pop(context);
                 _sharePdf();
@@ -163,7 +159,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -211,10 +207,9 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       ),
       body: Column(
         children: [
-          // Banner - Success
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            color: Colors.green.withOpacity(0.1),
+            color: Colors.green.withValues(alpha: 0.1),
             child: Row(
               children: [
                 const Icon(Icons.check_circle, color: Colors.green, size: 20),
@@ -222,14 +217,13 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 Expanded(
                   child: Text(
                     l10n.cvConvertedSuccess,
-                    style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        color: Colors.green, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
             ),
           ),
-          
-          // Preview Area
           Expanded(
             child: Consumer<CVBuilderProvider>(
               builder: (context, provider, child) {
@@ -237,15 +231,13 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               },
             ),
           ),
-          
-          // Action Buttons
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   offset: const Offset(0, -4),
                   blurRadius: 16,
                 ),
@@ -256,10 +248,8 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Row with Edit and Save
                   Row(
                     children: [
-                      // Edit Button
                       Expanded(
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
@@ -268,17 +258,19 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () => context.router.push(const CvBuilderStep1Route()),
+                          onPressed: () =>
+                              context.router.push(const CvBuilderStep1Route()),
                           child: Text(l10n.edit),
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Save Button
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.primary,
-                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
                             padding: const EdgeInsets.all(16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -287,7 +279,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                           onPressed: () async {
                             final provider = context.read<CVBuilderProvider>();
                             final success = await provider.saveCurrentCV();
-                            
+
                             if (context.mounted) {
                               if (success) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -296,7 +288,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                                     backgroundColor: Colors.green,
                                   ),
                                 );
-                                // Navigate to hub to see saved CV
+
                                 context.router.replaceAll([const HomeRoute()]);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -313,14 +305,11 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                       ),
                     ],
                   ),
-                  
                   const SizedBox(height: 12),
-                  
-                  // Download PDF Button
                   TextButton.icon(
                     onPressed: _isGenerating ? null : _showPdfOptions,
                     icon: const Icon(Iconsax.export_1, size: 20),
-                    label: const Text('Export PDF'),
+                    label: Text(l10n.exportPdf),
                   ),
                 ],
               ),

@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_builder_step_layout.dart';
@@ -26,7 +25,6 @@ class CvBuilderStep6Screen extends StatelessWidget {
         }
 
         final currentStep = DynamicCvSteps.getStepForSection(context, 'skills');
-        final totalSteps = DynamicCvSteps.getTotalSteps(cv);
 
         return CVBuilderStepLayout(
           title: l10n.cvBuilder,
@@ -88,12 +86,11 @@ class _SkillsFormState extends State<_SkillsForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Consumer<CVBuilderProvider>(
       builder: (context, provider, child) {
-        final skillsSection = provider.currentCV?.sections
-            .whereType<SkillsSection>()
-            .firstOrNull;
+        final skillsSection =
+            provider.currentCV?.sections.whereType<SkillsSection>().firstOrNull;
 
         if (skillsSection == null) {
           return Center(child: Text(l10n.sectionNotFound));
@@ -108,10 +105,10 @@ class _SkillsFormState extends State<_SkillsForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Step Header
               Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
                     border: Border.all(color: Theme.of(context).primaryColor),
@@ -128,7 +125,6 @@ class _SkillsFormState extends State<_SkillsForm> {
                 ),
               ),
               const SizedBox(height: 12),
-
               Center(
                 child: Text(
                   l10n.skillsHeader,
@@ -138,26 +134,26 @@ class _SkillsFormState extends State<_SkillsForm> {
                 ),
               ),
               const SizedBox(height: 4),
-
               Center(
                 child: Text(
                   l10n.skillsDesc,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.color
+                            ?.withValues(alpha: 0.7),
                       ),
                   textAlign: TextAlign.center,
                 ),
               ),
-
               const SizedBox(height: 24),
-
-              // Existing Categories List
               if (categories.isNotEmpty) ...[
-                 Text(
+                Text(
                   l10n.addedCategories,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 12),
                 ReorderableListView.builder(
@@ -192,16 +188,13 @@ class _SkillsFormState extends State<_SkillsForm> {
                 const Divider(thickness: 1),
                 const SizedBox(height: 24),
               ],
-
-              // Add New Category Form (Inline)
               Text(
                 l10n.addNewCategory,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 16),
-              
               Form(
                 key: _formKey,
                 child: Container(
@@ -222,7 +215,9 @@ class _SkillsFormState extends State<_SkillsForm> {
                           prefixIcon: const Icon(Iconsax.tag),
                         ),
                         textCapitalization: TextCapitalization.words,
-                        validator: (value) => value == null || value.isEmpty ? l10n.categoryRequired : null,
+                        validator: (value) => value == null || value.isEmpty
+                            ? l10n.categoryRequired
+                            : null,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -234,7 +229,9 @@ class _SkillsFormState extends State<_SkillsForm> {
                           prefixIcon: const Icon(Iconsax.code),
                         ),
                         maxLines: 3,
-                        validator: (value) => value == null || value.isEmpty ? l10n.skillsRequired : null,
+                        validator: (value) => value == null || value.isEmpty
+                            ? l10n.skillsRequired
+                            : null,
                       ),
                       const SizedBox(height: 16),
                       SizedBox(
@@ -252,7 +249,6 @@ class _SkillsFormState extends State<_SkillsForm> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 80),
             ],
           ),
@@ -269,7 +265,8 @@ class _SkillsFormState extends State<_SkillsForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final categoryController = TextEditingController(text: oldCategory);
-    final skillsController = TextEditingController(text: currentSkills.join(', '));
+    final skillsController =
+        TextEditingController(text: currentSkills.join(', '));
 
     showModalBottomSheet(
       context: context,

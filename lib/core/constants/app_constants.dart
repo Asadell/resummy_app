@@ -4,31 +4,31 @@ part 'app_constants.g.dart';
 
 @Envied(path: '.env')
 class AppConstants {
-  @EnviedField(varName: 'GEMINI_API_KEY')
+  @EnviedField(varName: 'GEMINI_API_KEY_01')
   static const String geminiApiKey = _AppConstants.geminiApiKey;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_2', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_02', defaultValue: '')
   static const String geminiApiKey2 = _AppConstants.geminiApiKey2;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_3', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_03', defaultValue: '')
   static const String geminiApiKey3 = _AppConstants.geminiApiKey3;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_4', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_04', defaultValue: '')
   static const String geminiApiKey4 = _AppConstants.geminiApiKey4;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_5', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_05', defaultValue: '')
   static const String geminiApiKey5 = _AppConstants.geminiApiKey5;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_6', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_06', defaultValue: '')
   static const String geminiApiKey6 = _AppConstants.geminiApiKey6;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_7', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_07', defaultValue: '')
   static const String geminiApiKey7 = _AppConstants.geminiApiKey7;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_8', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_08', defaultValue: '')
   static const String geminiApiKey8 = _AppConstants.geminiApiKey8;
 
-  @EnviedField(varName: 'GEMINI_API_KEY_9', defaultValue: '')
+  @EnviedField(varName: 'GEMINI_API_KEY_09', defaultValue: '')
   static const String geminiApiKey9 = _AppConstants.geminiApiKey9;
 
   @EnviedField(varName: 'GEMINI_API_KEY_10', defaultValue: '')
@@ -96,4 +96,82 @@ class AppConstants {
 
   @EnviedField(varName: 'GEMINI_API_KEY_31', defaultValue: '')
   static const String geminiApiKey31 = _AppConstants.geminiApiKey31;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_32', defaultValue: '')
+  static const String geminiApiKey32 = _AppConstants.geminiApiKey32;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_33', defaultValue: '')
+  static const String geminiApiKey33 = _AppConstants.geminiApiKey33;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_34', defaultValue: '')
+  static const String geminiApiKey34 = _AppConstants.geminiApiKey34;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_35', defaultValue: '')
+  static const String geminiApiKey35 = _AppConstants.geminiApiKey35;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_36', defaultValue: '')
+  static const String geminiApiKey36 = _AppConstants.geminiApiKey36;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_37', defaultValue: '')
+  static const String geminiApiKey37 = _AppConstants.geminiApiKey37;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_38', defaultValue: '')
+  static const String geminiApiKey38 = _AppConstants.geminiApiKey38;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_39', defaultValue: '')
+  static const String geminiApiKey39 = _AppConstants.geminiApiKey39;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_40', defaultValue: '')
+  static const String geminiApiKey40 = _AppConstants.geminiApiKey40;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_41', defaultValue: '')
+  static const String geminiApiKey41 = _AppConstants.geminiApiKey41;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_42', defaultValue: '')
+  static const String geminiApiKey42 = _AppConstants.geminiApiKey42;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_43', defaultValue: '')
+  static const String geminiApiKey43 = _AppConstants.geminiApiKey43;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_44', defaultValue: '')
+  static const String geminiApiKey44 = _AppConstants.geminiApiKey44;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_45', defaultValue: '')
+  static const String geminiApiKey45 = _AppConstants.geminiApiKey45;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_46', defaultValue: '')
+  static const String geminiApiKey46 = _AppConstants.geminiApiKey46;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_47', defaultValue: '')
+  static const String geminiApiKey47 = _AppConstants.geminiApiKey47;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_48', defaultValue: '')
+  static const String geminiApiKey48 = _AppConstants.geminiApiKey48;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_49', defaultValue: '')
+  static const String geminiApiKey49 = _AppConstants.geminiApiKey49;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_50', defaultValue: '')
+  static const String geminiApiKey50 = _AppConstants.geminiApiKey50;
+
+  @EnviedField(varName: 'GEMINI_API_KEY_51', defaultValue: '')
+  static const String geminiApiKey51 = _AppConstants.geminiApiKey51;
+
+  @EnviedField(varName: 'DO_SPACES_ENDPOINT')
+  static const String doSpacesEndpoint = _AppConstants.doSpacesEndpoint;
+
+  @EnviedField(varName: 'DO_SPACES_BUCKET')
+  static const String doSpacesBucket = _AppConstants.doSpacesBucket;
+
+  @EnviedField(varName: 'DO_SPACES_ACCESS_KEY')
+  static const String doSpacesAccessKey = _AppConstants.doSpacesAccessKey;
+
+  @EnviedField(varName: 'DO_SPACES_SECRET_KEY')
+  static const String doSpacesSecretKey = _AppConstants.doSpacesSecretKey;
+
+  @EnviedField(varName: 'DO_SPACES_REGION')
+  static const String doSpacesRegion = _AppConstants.doSpacesRegion;
+
+  @EnviedField(varName: 'DO_SPACES_CDN_ENDPOINT')
+  static const String doSpacesCdnEndpoint = _AppConstants.doSpacesCdnEndpoint;
 }

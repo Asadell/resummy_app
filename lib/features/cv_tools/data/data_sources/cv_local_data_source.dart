@@ -1,89 +1,95 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+import 'package:flutter/foundation.dart';
 
-/// Local data source for CV storage using SharedPreferences
 class CVLocalDataSource {
-  static const String _kSavedCVsKey = 'saved_cvs';
-  final SharedPreferences _prefs;
+  final DatabaseHelper _dbHelper;
 
-  CVLocalDataSource(this._prefs);
+  CVLocalDataSource(this._dbHelper);
 
-  /// Get all saved CVs
-  Future<List<CVData>> getAllCVs() async {
+  Future<List<CVData>> getAllCVs(String userId) async {
     try {
-      final String? cvsJson = _prefs.getString(_kSavedCVsKey);
-      if (cvsJson == null || cvsJson.isEmpty) {
-        return [];
-      }
+      final List<Map<String, dynamic>> maps = await _dbHelper.query(
+        DatabaseHelper.tableCVs,
+        where: 'userId = ?',
+        whereArgs: [userId],
+        orderBy: 'updatedAt DESC',
+      );
 
-      final List<dynamic> cvsList = jsonDecode(cvsJson) as List<dynamic>;
-      return cvsList
-          .where((json) => json != null && json is Map<String, dynamic>)
-          .map((json) {
-            try {
-              return CVData.fromJson(json as Map<String, dynamic>);
-            } catch (e) {
-              // Ignore corrupt CV data
-              return null;
-            }
-          })
-          .whereType<CVData>()
-          .toList();
+      return maps.map((map) {
+        final Map<String, dynamic> data = jsonDecode(map['data'] as String);
+        return CVData.fromJson(data);
+      }).toList();
     } catch (e) {
-      throw Exception('Failed to load CVs: $e');
+      debugPrint('❌ Error getting CVs from local DB: $e');
+      throw Exception('Failed to load CVs from local storage');
     }
   }
 
-  /// Get a specific CV by ID
   Future<CVData?> getCVById(String id) async {
-    final cvs = await getAllCVs();
     try {
-      return cvs.firstWhere((cv) => cv.id == id);
+      final List<Map<String, dynamic>> maps = await _dbHelper.query(
+        DatabaseHelper.tableCVs,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      if (maps.isEmpty) return null;
+
+      final Map<String, dynamic> data =
+          jsonDecode(maps.first['data'] as String);
+      return CVData.fromJson(data);
     } catch (e) {
+      debugPrint('❌ Error getting CV by ID from local DB: $e');
       return null;
     }
   }
 
-  /// Save a new CV or update existing one
-  Future<void> saveCV(CVData cv) async {
+  Future<void> saveCV(CVData cv, String userId,
+      {String syncStatus = 'synced'}) async {
     try {
-      final cvs = await getAllCVs();
-      
-      // Check if CV with this ID already exists
-      final existingIndex = cvs.indexWhere((c) => c.id == cv.id);
-      
-      if (existingIndex != -1) {
-        // Update existing CV
-        cvs[existingIndex] = cv.copyWith(updatedAt: DateTime.now());
-      } else {
-        // Add new CV
-        cvs.add(cv);
-      }
+      final cvMap = {
+        'id': cv.id,
+        'userId': userId,
+        'title': cv.header.name,
+        'source': cv.source,
+        'data': jsonEncode(cv.toJson()),
+        'createdAt': cv.createdAt.millisecondsSinceEpoch,
+        'updatedAt': cv.updatedAt.millisecondsSinceEpoch,
+        'syncStatus': syncStatus,
+      };
 
-      // Save to SharedPreferences
-      final cvsJson = jsonEncode(cvs.map((c) => c.toJson()).toList());
-      await _prefs.setString(_kSavedCVsKey, cvsJson);
+      await _dbHelper.upsert(DatabaseHelper.tableCVs, cvMap);
     } catch (e) {
-      throw Exception('Failed to save CV: $e');
+      debugPrint('❌ Error saving CV to local DB: $e');
+      throw Exception('Failed to save CV to local storage');
     }
   }
 
-  /// Delete a CV by ID
   Future<void> deleteCV(String id) async {
     try {
-      final cvs = await getAllCVs();
-      cvs.removeWhere((cv) => cv.id == id);
-
-      final cvsJson = jsonEncode(cvs.map((c) => c.toJson()).toList());
-      await _prefs.setString(_kSavedCVsKey, cvsJson);
+      await _dbHelper.delete(
+        DatabaseHelper.tableCVs,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
     } catch (e) {
-      throw Exception('Failed to delete CV: $e');
+      debugPrint('❌ Error deleting CV from local DB: $e');
+      throw Exception('Failed to delete CV from local storage');
     }
   }
 
-  /// Clear all CVs (for testing/debugging)
-  Future<void> clearAllCVs() async {
-    await _prefs.remove(_kSavedCVsKey);
+  Future<void> clearAllCVs(String userId) async {
+    try {
+      await _dbHelper.delete(
+        DatabaseHelper.tableCVs,
+        where: 'userId = ?',
+        whereArgs: [userId],
+      );
+    } catch (e) {
+      debugPrint('❌ Error clearing CVs from local DB: $e');
+      throw Exception('Failed to clear local CV storage');
+    }
   }
 }

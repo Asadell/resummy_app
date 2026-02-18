@@ -3,34 +3,27 @@ import 'package:uuid/uuid.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_builder_repository.dart';
 
-/// Provider for CV Builder state management
 class CVBuilderProvider extends ChangeNotifier {
   final CVBuilderRepository _repository;
   final Uuid _uuid = const Uuid();
 
   CVBuilderProvider(this._repository);
 
-  // Current CV being edited
   CVData? _currentCV;
   CVData? get currentCV => _currentCV;
 
-  // Current step (0-7: Welcome, Step1-7)
   int _currentStep = 0;
   int get currentStep => _currentStep;
 
-  // Loading state
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  // Error message
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // List of all saved CVs
   List<CVData> _savedCVs = [];
   List<CVData> get savedCVs => _savedCVs;
 
-  /// Initialize a new CV with default section order
   void startNewCV({
     String? name,
     String? email,
@@ -39,7 +32,7 @@ class CVBuilderProvider extends ChangeNotifier {
   }) {
     final now = DateTime.now();
     final headerId = _uuid.v4();
-    
+
     _currentCV = CVData(
       id: _uuid.v4(),
       createdAt: now,
@@ -96,13 +89,11 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update entire CV (for template changes or reordering)
   void updateCV(CVData updatedCV) {
     _currentCV = updatedCV;
     notifyListeners();
   }
 
-  /// Load existing CVData for editing (e.g. from CV Analyzer)
   void loadCvData(CVData cvData) {
     _currentCV = cvData;
     _currentStep = 1;
@@ -110,7 +101,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update header (personal info)
   void updateHeader({
     String? name,
     String? email,
@@ -137,16 +127,15 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder sections (drag & drop)
   void reorderSections(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
     final sections = List<SectionData>.from(_currentCV!.sections);
-    
+
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    
+
     final item = sections.removeAt(oldIndex);
     sections.insert(newIndex, item);
 
@@ -154,7 +143,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Toggle section visibility
   void toggleSectionVisibility(String sectionId) {
     if (_currentCV == null) return;
 
@@ -183,7 +171,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update section title
   void updateSectionTitle(String sectionId, String newTitle) {
     if (_currentCV == null) return;
 
@@ -212,7 +199,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update summary section
   void updateSummary(String content) {
     if (_currentCV == null) return;
 
@@ -227,13 +213,13 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add work experience
   void addWorkExperience(WorkExperience experience) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is ExperienceSection) {
-        final entries = List<WorkExperience>.from(section.entries)..add(experience);
+        final entries = List<WorkExperience>.from(section.entries)
+          ..add(experience);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -243,7 +229,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update work experience
   void updateWorkExperience(int index, WorkExperience experience) {
     if (_currentCV == null) return;
 
@@ -261,14 +246,14 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove work experience
   void removeWorkExperience(int index) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is ExperienceSection) {
         if (index >= section.entries.length) return section;
-        final entries = List<WorkExperience>.from(section.entries)..removeAt(index);
+        final entries = List<WorkExperience>.from(section.entries)
+          ..removeAt(index);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -278,7 +263,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder work experience
   void reorderWorkExperience(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
@@ -297,7 +281,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add education
   void addEducation(Education education) {
     if (_currentCV == null) return;
 
@@ -313,7 +296,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update education
   void updateEducation(int index, Education education) {
     if (_currentCV == null) return;
 
@@ -331,7 +313,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove education
   void removeEducation(int index) {
     if (_currentCV == null) return;
 
@@ -348,7 +329,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder education
   void reorderEducation(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
@@ -367,13 +347,13 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add organization experience
   void addOrganization(OrganizationExperience org) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is OrganizationSection) {
-        final entries = List<OrganizationExperience>.from(section.entries)..add(org);
+        final entries = List<OrganizationExperience>.from(section.entries)
+          ..add(org);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -383,7 +363,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update organization experience
   void updateOrganization(int index, OrganizationExperience org) {
     if (_currentCV == null) return;
 
@@ -401,14 +380,14 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove organization
   void removeOrganization(int index) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is OrganizationSection) {
         if (index >= section.entries.length) return section;
-        final entries = List<OrganizationExperience>.from(section.entries)..removeAt(index);
+        final entries = List<OrganizationExperience>.from(section.entries)
+          ..removeAt(index);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -418,7 +397,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder organization
   void reorderOrganization(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
@@ -437,14 +415,15 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add skill to category
   void addSkillToCategory(String category, String skill) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
-        categories[category] = List.from(categories[category] ?? [])..add(skill);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
+        categories[category] = List.from(categories[category] ?? [])
+          ..add(skill);
         return section.copyWith(skillCategories: categories);
       }
       return section;
@@ -454,14 +433,15 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove skill from category
   void removeSkillFromCategory(String category, String skill) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
-        categories[category] = List.from(categories[category] ?? [])..remove(skill);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
+        categories[category] = List.from(categories[category] ?? [])
+          ..remove(skill);
         return section.copyWith(skillCategories: categories);
       }
       return section;
@@ -471,13 +451,13 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add new skill category
   void addSkillCategory(String categoryName, List<String> skills) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
+        final updatedCategories =
+            Map<String, List<String>>.from(section.skillCategories);
         updatedCategories[categoryName] = skills;
         return section.copyWith(skillCategories: updatedCategories);
       }
@@ -488,19 +468,19 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update skill category (rename and/or update skills)
-  void updateSkillCategory(String oldCategory, String newCategory, List<String> skills) {
+  void updateSkillCategory(
+      String oldCategory, String newCategory, List<String> skills) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
-        
-        // Remove old category if name changed
+        final updatedCategories =
+            Map<String, List<String>>.from(section.skillCategories);
+
         if (oldCategory != newCategory) {
           updatedCategories.remove(oldCategory);
         }
-        
+
         updatedCategories[newCategory] = skills;
         return section.copyWith(skillCategories: updatedCategories);
       }
@@ -511,13 +491,13 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove skill category
   void removeSkillCategory(String categoryName) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final updatedCategories = Map<String, List<String>>.from(section.skillCategories);
+        final updatedCategories =
+            Map<String, List<String>>.from(section.skillCategories);
         updatedCategories.remove(categoryName);
         return section.copyWith(skillCategories: updatedCategories);
       }
@@ -528,7 +508,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder skill categories
   void reorderSkillCategories(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
@@ -538,7 +517,7 @@ class CVBuilderProvider extends ChangeNotifier {
         if (newIndex > oldIndex) newIndex -= 1;
         final key = keys.removeAt(oldIndex);
         keys.insert(newIndex, key);
-        
+
         final updatedCategories = <String, List<String>>{};
         for (var k in keys) {
           updatedCategories[k] = section.skillCategories[k]!;
@@ -552,7 +531,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add certification
   void addCertification(Certification cert) {
     if (_currentCV == null) return;
 
@@ -568,7 +546,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update certification
   void updateCertification(int index, Certification cert) {
     if (_currentCV == null) return;
 
@@ -586,14 +563,14 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove certification
   void removeCertification(int index) {
     if (_currentCV == null) return;
 
     final sections = _currentCV!.sections.map((section) {
       if (section is CertificationsSection) {
         if (index >= section.entries.length) return section;
-        final entries = List<Certification>.from(section.entries)..removeAt(index);
+        final entries = List<Certification>.from(section.entries)
+          ..removeAt(index);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -603,7 +580,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reorder certifications
   void reorderCertifications(int oldIndex, int newIndex) {
     if (_currentCV == null) return;
 
@@ -622,14 +598,12 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add custom section with proper template
   void addCustomSection(
     String title, {
     CustomSectionTemplate template = CustomSectionTemplate.bulletList,
   }) {
     if (_currentCV == null) return;
 
-    // Determine field labels based on template
     String titleLabel = 'Title';
     String subtitleLabel = 'Subtitle';
     String metaLabel = 'Detail';
@@ -660,12 +634,12 @@ class CVBuilderProvider extends ChangeNotifier {
       metaLabel: metaLabel,
     );
 
-    final List<SectionData> sections = List<SectionData>.from(_currentCV!.sections)..add(newSection);
+    final List<SectionData> sections =
+        List<SectionData>.from(_currentCV!.sections)..add(newSection);
     _currentCV = _currentCV!.copyWith(sections: sections);
     notifyListeners();
   }
 
-  /// Update custom section content (for bulletList & paragraph templates)
   void updateCustomSectionContent({
     required String sectionId,
     required String content,
@@ -683,7 +657,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add entry to custom section (for experienceLike & educationLike templates)
   void addCustomEntry({
     required String sectionId,
     required CustomEntry entry,
@@ -702,7 +675,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update entry in custom section
   void updateCustomEntry({
     required String sectionId,
     required int entryIndex,
@@ -724,7 +696,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove entry from custom section
   void removeCustomEntry({
     required String sectionId,
     required int entryIndex,
@@ -734,7 +705,8 @@ class CVBuilderProvider extends ChangeNotifier {
     final sections = _currentCV!.sections.map((section) {
       if (section.id == sectionId && section is CustomSection) {
         if (entryIndex >= section.entries.length) return section;
-        final entries = List<CustomEntry>.from(section.entries)..removeAt(entryIndex);
+        final entries = List<CustomEntry>.from(section.entries)
+          ..removeAt(entryIndex);
         return section.copyWith(entries: entries);
       }
       return section;
@@ -744,7 +716,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Add skill category to custom section (for skillsLike template)
   void addCustomSkillCategory({
     required String sectionId,
     required String categoryName,
@@ -754,7 +725,8 @@ class CVBuilderProvider extends ChangeNotifier {
 
     final sections = _currentCV!.sections.map((section) {
       if (section.id == sectionId && section is CustomSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
         categories[categoryName] = skills;
         return section.copyWith(skillCategories: categories);
       }
@@ -765,7 +737,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update skill category in custom section
   void updateCustomSkillCategory({
     required String sectionId,
     required String oldName,
@@ -776,7 +747,8 @@ class CVBuilderProvider extends ChangeNotifier {
 
     final sections = _currentCV!.sections.map((section) {
       if (section.id == sectionId && section is CustomSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
         categories.remove(oldName);
         categories[newName] = skills;
         return section.copyWith(skillCategories: categories);
@@ -788,7 +760,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Remove skill category from custom section
   void removeCustomSkillCategory({
     required String sectionId,
     required String categoryName,
@@ -797,7 +768,8 @@ class CVBuilderProvider extends ChangeNotifier {
 
     final sections = _currentCV!.sections.map((section) {
       if (section.id == sectionId && section is CustomSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
         categories.remove(categoryName);
         return section.copyWith(skillCategories: categories);
       }
@@ -808,12 +780,10 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Legacy updateCustomSection → redirect ke updateCustomSectionContent
   void updateCustomSection(String sectionId, String content) {
     updateCustomSectionContent(sectionId: sectionId, content: content);
   }
 
-  /// Delete custom section
   void deleteCustomSection(String sectionId) {
     if (_currentCV == null) return;
 
@@ -825,7 +795,6 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Backwards compatibility methods
   void updatePersonalInfo({
     String? name,
     String? email,
@@ -863,7 +832,8 @@ class CVBuilderProvider extends ChangeNotifier {
 
     final sections = _currentCV!.sections.map((section) {
       if (section is SkillsSection) {
-        final categories = Map<String, List<String>>.from(section.skillCategories);
+        final categories =
+            Map<String, List<String>>.from(section.skillCategories);
         if (technicalSkills != null) {
           categories['Technical'] = technicalSkills;
         }
@@ -879,12 +849,8 @@ class CVBuilderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateAdditionalSections(Map<String, dynamic> sections) {
-    // Handle legacy additional sections by converting to custom sections
-    // This is for backwards compatibility
-  }
+  void updateAdditionalSections(Map<String, dynamic> sections) {}
 
-  // Navigation
   void nextStep() {
     if (_currentStep < 7) {
       _currentStep++;
@@ -906,7 +872,6 @@ class CVBuilderProvider extends ChangeNotifier {
     }
   }
 
-  // Persistence
   Future<bool> saveCurrentCV() async {
     if (_currentCV == null || !_currentCV!.isValid) {
       _errorMessage = 'Name is required to save CV';

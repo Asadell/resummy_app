@@ -22,7 +22,8 @@ class InterviewSetupStep4Screen extends StatelessWidget {
         title: Text(l10n.interviewFocus),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => context.router.push(const InterviewSetupStep3Route()),
+          onPressed: () =>
+              context.router.push(const InterviewSetupStep3Route()),
         ),
         actions: [
           Padding(
@@ -31,8 +32,8 @@ class InterviewSetupStep4Screen extends StatelessWidget {
               child: Text(
                 l10n.stepProgress(4, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ),
@@ -47,18 +48,17 @@ class InterviewSetupStep4Screen extends StatelessWidget {
               Text(
                 l10n.selectInterviewFocus,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
               const SizedBox(height: 8),
               Text(
                 l10n.interviewFocusDesc,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
               const SizedBox(height: 24),
-
               _buildFocusCard(
                 context,
                 title: l10n.focusBehavioralTitle,
@@ -88,19 +88,20 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                 groupValue: provider.selectedFocus,
                 onChanged: (val) => provider.updateFocus(val!),
               ),
-              
               const SizedBox(height: 100),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-         padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.transparent,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black.withValues(alpha: 0.05)
+                  : Colors.transparent,
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -111,7 +112,8 @@ class InterviewSetupStep4Screen extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => context.router.push(const InterviewSetupStep3Route()),
+                  onPressed: () =>
+                      context.router.push(const InterviewSetupStep3Route()),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),
@@ -122,7 +124,8 @@ class InterviewSetupStep4Screen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.router.push(const InterviewSetupConfirmationRoute());
+                    context.router
+                        .push(const InterviewSetupConfirmationRoute());
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
@@ -154,19 +157,29 @@ class InterviewSetupStep4Screen extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.2) : Theme.of(context).cardTheme.color,
+          color: isSelected
+              ? Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withValues(alpha: 0.2)
+              : Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerColor,
             width: isSelected ? 2 : 1,
           ),
         ),
         child: Row(
           children: [
-            Radio<InterviewFocus>(
-              value: value,
-              groupValue: groupValue,
-              onChanged: onChanged,
+            Icon(
+              isSelected
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -175,14 +188,21 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(icon, size: 20, color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant),
+                      Icon(icon,
+                          size: 20,
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurfaceVariant),
                       const SizedBox(width: 8),
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
                       ),
                     ],
                   ),
@@ -190,8 +210,8 @@ class InterviewSetupStep4Screen extends StatelessWidget {
                   Text(
                     description,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                 ],
               ),

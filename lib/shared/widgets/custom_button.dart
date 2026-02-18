@@ -49,9 +49,7 @@ class CustomButton extends StatelessWidget {
         child: CircularProgressIndicator(
           strokeWidth: 2,
           valueColor: AlwaysStoppedAnimation<Color>(
-            isOutlined
-                ? Theme.of(context).colorScheme.primary
-                : Colors.white,
+            isOutlined ? Theme.of(context).colorScheme.primary : Colors.white,
           ),
         ),
       );

@@ -22,11 +22,11 @@ class CvBuilderPreviewScreen extends StatefulWidget {
 class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
   bool _isGenerating = false;
   Uint8List? _pdfBytes;
-  
+
   @override
   void initState() {
     super.initState();
-    // Verify initial load
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadPdf();
     });
@@ -54,7 +54,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     try {
       final service = CvPdfService();
       final path = await service.saveToDownloads(cv);
-      
+
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -91,7 +91,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to share PDF: $e')),
+          SnackBar(content: Text(l10n.failedToGeneratePdf(e.toString()))),
         );
       }
     } finally {
@@ -103,7 +103,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
 
   void _showPdfOptions(CVData cv) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -114,7 +114,6 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Handle bar
             Container(
               width: 40,
               height: 4,
@@ -124,22 +123,21 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            
-            // Title
             Text(
               'Export CV',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 24),
-            
-            // Download option
             ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -155,13 +153,11 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               },
             ),
             const SizedBox(height: 8),
-            
-            // Share option
             ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -197,7 +193,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         }
 
         return Scaffold(
-          backgroundColor: Colors.grey[100], // distinct background
+          backgroundColor: Colors.grey[100],
           appBar: AppBar(
             title: Text(l10n.previewCV),
             centerTitle: true,
@@ -215,7 +211,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
               ),
             ],
           ),
-          body: _isGenerating 
+          body: _isGenerating
               ? const Center(child: CircularProgressIndicator())
               : _pdfBytes != null
                   ? SfPdfViewer.memory(

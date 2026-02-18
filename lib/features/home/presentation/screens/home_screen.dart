@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
+import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -33,7 +36,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Welcome Card
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -54,8 +56,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              
-              // Quick Actions
               Text(
                 l10n.quickActions,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -68,7 +68,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.document_text,
                       title: l10n.buildCv,
                       color: Theme.of(context).colorScheme.primary,
-                      onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
+                      onTap: () =>
+                          context.router.push(const CvBuilderWelcomeRoute()),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -77,7 +78,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.chart_2,
                       title: l10n.analyzeCv,
                       color: Theme.of(context).colorScheme.secondary,
-                      onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
+                      onTap: () =>
+                          context.router.push(const CvAnalyzerUploadRoute()),
                     ),
                   ),
                 ],
@@ -90,7 +92,8 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.microphone,
                       title: l10n.interviewPrep,
                       color: Theme.of(context).colorScheme.tertiary,
-                      onTap: () => context.router.push(const InterviewSetupStep1Route()),
+                      onTap: () =>
+                          context.router.push(const InterviewSetupStep1Route()),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -99,14 +102,13 @@ class HomeScreen extends StatelessWidget {
                       icon: Iconsax.magic_star,
                       title: l10n.convertToCvAts,
                       color: Colors.purple,
-                      onTap: () => context.router.push(const CvAtsConverterRoute()),
+                      onTap: () =>
+                          context.router.push(const CvAtsConverterRoute()),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              
-              // Latest Activity
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -116,7 +118,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigate to History tab (index 3)
                       context.router.navigate(const HistoryRoute());
                     },
                     child: Text(l10n.viewAll),
@@ -124,26 +125,90 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              _ActivityCard(
-                icon: Iconsax.tick_circle,
-                title: l10n.cvAnalysisCompleted,
-                subtitle: l10n.score(85),
-                time: l10n.hoursAgo(2),
-                onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
-              ),
-              const SizedBox(height: 8),
-              _ActivityCard(
-                icon: Iconsax.microphone,
-                title: l10n.interviewPractice,
-                subtitle: l10n.softwareEngineer,
-                time: l10n.daysAgo(1),
-                onTap: () => context.router.push(const InterviewFeedbackOverviewRoute()),
+              Consumer<HistoryProvider>(
+                builder: (context, provider, child) {
+                  final activities = provider.activities.take(3).toList();
+
+                  if (activities.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24.0),
+                        child: Text(
+                          l10n.noInterviewHistory,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: activities.map((activity) {
+                      return _ActivityCard(
+                        icon: _getActivityIcon(activity.type),
+                        title: activity.title,
+                        subtitle: activity.subtitle,
+                        time: _formatTimeAgo(context, activity.timestamp),
+                        onTap: () {
+                          if (activity.type == ActivityType.interviewPrep) {
+                            context.router.navigate(const HistoryRoute());
+                          } else if (activity.type == ActivityType.cvCreated) {
+                            context.router
+                                .navigate(const CvBuilderWelcomeRoute());
+                          } else if (activity.type == ActivityType.cvAnalyzed) {
+                            context.router
+                                .navigate(const CvAnalyzerUploadRoute());
+                          } else if (activity.type ==
+                              ActivityType.cvTranslated) {
+                            context.router
+                                .navigate(const CvAtsConverterRoute());
+                          }
+                        },
+                      );
+                    }).toList(),
+                  );
+                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  IconData _getActivityIcon(ActivityType type) {
+    switch (type) {
+      case ActivityType.cvCreated:
+        return Iconsax.document_text;
+      case ActivityType.cvAnalyzed:
+        return Iconsax.chart_2;
+      case ActivityType.interviewPrep:
+        return Iconsax.microphone;
+      case ActivityType.cvTranslated:
+        return Iconsax.translate;
+      default:
+        return Iconsax.activity;
+    }
+  }
+
+  String _formatTimeAgo(BuildContext context, DateTime dateTime) {
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}${l10n.timeDaysSuffix}';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}${l10n.timeHoursSuffix}';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}${l10n.timeMinutesSuffix}';
+    } else {
+      return l10n.timeJustNow;
+    }
   }
 }
 

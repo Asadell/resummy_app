@@ -18,13 +18,9 @@ class ResummyApp extends StatelessWidget {
       builder: (context, themeProvider, localeProvider, child) {
         return MaterialApp.router(
           title: 'Resummy App',
-          
-          // Theme
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeProvider.themeMode,
-          
-          // Localization
           locale: localeProvider.locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,
@@ -36,10 +32,7 @@ class ResummyApp extends StatelessWidget {
             Locale('en'),
             Locale('id'),
           ],
-          
-          // Routing
           routerConfig: _appRouter.config(),
-          
           debugShowCheckedModeBanner: false,
         );
       },

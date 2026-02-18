@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:resummy_app/core/providers/auth_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
@@ -30,8 +30,9 @@ class _CvBuilderWelcomeScreenState extends State<CvBuilderWelcomeScreen> {
 
   Future<void> _loadProfile() async {
     final authProvider = context.read<AuthProvider>();
-    if (authProvider.user != null) {
-      final profile = await _profileRepository.getUserProfile(authProvider.user!.uid);
+    if (authProvider.currentUser != null) {
+      final profile =
+          await _profileRepository.getUserProfile(authProvider.currentUser!.id);
       if (mounted) {
         setState(() {
           _profile = profile;
@@ -85,17 +86,19 @@ class _CvBuilderWelcomeScreenState extends State<CvBuilderWelcomeScreen> {
                     padding: const EdgeInsets.all(16),
                   ),
                   onPressed: () {
-                    // Pre-fill from profile (prioritize Firestore fullName)
-                    final name = _profile?.fullName ?? authProvider.displayName;
-                    final email = _profile?.email ?? authProvider.email;
-                    final phone = authProvider.phoneNumber;
+                    final name = _profile?.fullName ??
+                        authProvider.currentUser?.displayName ??
+                        '';
+                    final email = _profile?.email ??
+                        authProvider.currentUser?.email ??
+                        '';
+                    final phone = null;
 
-                    // Initialize new CV before navigating
                     context.read<CVBuilderProvider>().startNewCV(
-                      name: name,
-                      email: email,
-                      phone: phone,
-                    );
+                          name: name,
+                          email: email,
+                          phone: phone,
+                        );
                     context.router.push(const CvBuilderStep1Route());
                   },
                   child: Text(l10n.startCreatingCv),

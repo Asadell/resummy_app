@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
@@ -12,11 +11,10 @@ import 'package:intl/intl.dart';
 class InterviewPrepScreen extends StatelessWidget {
   const InterviewPrepScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -28,7 +26,6 @@ class InterviewPrepScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Hero section
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -56,10 +53,9 @@ class InterviewPrepScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              
-              // Start button
               ElevatedButton.icon(
-                onPressed: () => context.router.push(const InterviewSetupStep1Route()),
+                onPressed: () =>
+                    context.router.push(const InterviewSetupStep1Route()),
                 icon: const Icon(Iconsax.play),
                 label: Text(l10n.startNewInterview),
                 style: ElevatedButton.styleFrom(
@@ -67,26 +63,23 @@ class InterviewPrepScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              
-              // Recent Interviews Headers
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     l10n.recentInterviews,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   TextButton(
-                    onPressed: () => context.router.navigate(const HistoryRoute()),
+                    onPressed: () =>
+                        context.router.navigate(const HistoryRoute()),
                     child: Text(l10n.viewAll),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
-              
-              // Recent Interviews List
               Consumer<InterviewProvider>(
                 builder: (context, provider, _) {
                   if (provider.history.isEmpty) {
@@ -95,41 +88,46 @@ class InterviewPrepScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
                           l10n.noInterviewHistory,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.grey,
+                                  ),
                         ),
                       ),
                     );
                   }
-                  
-                  // Show top 3
+
                   final recent = provider.history.take(3).toList();
-                  
+
                   return Column(
-                    children: recent.map((report) {
+                    children: recent.map((interview) {
+                      final score = interview.report?.overallScore ?? 0;
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: _getScoreColor(context, report.overallScore).withValues(alpha: 0.1),
+                            backgroundColor: _getScoreColor(context, score)
+                                .withValues(alpha: 0.1),
                             child: Text(
-                              report.overallScore.toString(),
+                              score.toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: _getScoreColor(context, report.overallScore),
+                                color: _getScoreColor(context, score),
                               ),
                             ),
                           ),
-                          title: Text(l10n.interviewResults), // Context? Position?
+                          title: Text(l10n.interviewResults),
                           subtitle: Text(
-                            DateFormat.yMMMd().format(report.createdAt),
+                            DateFormat.yMMMd().format(interview.createdAt),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           trailing: const Icon(Iconsax.arrow_right_3, size: 16),
                           onTap: () {
-                            provider.setReport(report);
-                            context.router.push(const InterviewFeedbackOverviewRoute());
+                            if (interview.report != null) {
+                              provider.setReport(interview.report!);
+                              context.router
+                                  .push(const InterviewFeedbackOverviewRoute());
+                            }
                           },
                         ),
                       );

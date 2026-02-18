@@ -22,16 +22,14 @@ class CvAtsConverterScreen extends StatefulWidget {
 class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   final _service = CvAtsConverterService();
 
-  // States
   File? _selectedFile;
   String? _selectedFileName;
   bool _isLoading = false;
   String _loadingMessage = '';
   CVData? _convertedCv;
   String? _errorMessage;
-  String _targetLanguage = 'Original'; // 'Original', 'English', 'Indonesian'
+  String _targetLanguage = 'Original';
 
-  // Step: 0 = upload, 1 = preview result
   int _step = 0;
 
   @override
@@ -56,9 +54,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     );
   }
 
-  // ──────────────────────────────────────────────
-  // STEP 0: Upload
-  // ──────────────────────────────────────────────
   Widget _buildUploadStep(ThemeData theme, AppLocalizations l10n) {
     return SingleChildScrollView(
       key: const ValueKey('upload'),
@@ -66,31 +61,32 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  theme.primaryColor.withOpacity(0.15),
-                  theme.primaryColor.withOpacity(0.05),
+                  theme.primaryColor.withValues(alpha: 0.15),
+                  theme.primaryColor.withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: theme.primaryColor.withOpacity(0.2)),
+              border:
+                  Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.15),
+                    color: theme.primaryColor.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Iconsax.magic_star, size: 40, color: theme.primaryColor),
+                  child: Icon(Iconsax.magic_star,
+                      size: 40, color: theme.primaryColor),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -104,57 +100,62 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                 Text(
                   l10n.aiConvertingDesc,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                    color: theme.textTheme.bodyMedium?.color
+                        ?.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
-
           const SizedBox(height: 32),
-
-          // How it works
           Text(
             l10n.howItWorks,
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           ...[
             ('1', Iconsax.document_upload, l10n.uploadCvStep, l10n.photoOrPdf),
-            ('2', Iconsax.magic_star, l10n.geminiAnalysis, l10n.aiExtractedInfo),
+            (
+              '2',
+              Iconsax.magic_star,
+              l10n.geminiAnalysis,
+              l10n.aiExtractedInfo
+            ),
             ('3', Iconsax.document_text, l10n.autoPopulate, l10n.dataIntoForms),
             ('4', Iconsax.edit, l10n.editAndExport, l10n.reviewEditExport),
           ].map((item) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(item.$2 as IconData, size: 18, color: theme.primaryColor),
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(item.$2, size: 18, color: theme.primaryColor),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.$3,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 14)),
+                          Text(item.$4,
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[600])),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.$3 as String, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                      Text(item.$4 as String, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )).toList(),
-
+              )),
           const SizedBox(height: 32),
-
-          // File picker area
           GestureDetector(
             onTap: _pickFile,
             child: AnimatedContainer(
@@ -163,7 +164,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
               decoration: BoxDecoration(
                 color: _selectedFile != null
-                    ? theme.primaryColor.withOpacity(0.05)
+                    ? theme.primaryColor.withValues(alpha: 0.05)
                     : theme.cardColor,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
@@ -171,13 +172,16 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                       ? theme.primaryColor
                       : theme.dividerColor,
                   width: _selectedFile != null ? 2 : 1.5,
-                  style: _selectedFile != null ? BorderStyle.solid : BorderStyle.solid,
+                  style: _selectedFile != null
+                      ? BorderStyle.solid
+                      : BorderStyle.solid,
                 ),
               ),
               child: _selectedFile == null
                   ? Column(
                       children: [
-                        Icon(Iconsax.document_upload, size: 48, color: Colors.grey[400]),
+                        Icon(Iconsax.document_upload,
+                            size: 48, color: Colors.grey[400]),
                         const SizedBox(height: 12),
                         Text(
                           l10n.tapToSelectFile,
@@ -190,7 +194,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                         const SizedBox(height: 4),
                         Text(
                           l10n.supportedFormats,
-                          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.grey[500]),
                         ),
                       ],
                     )
@@ -199,7 +204,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: theme.primaryColor.withOpacity(0.1),
+                            color: theme.primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -227,7 +232,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 l10n.tapToChangeFile,
-                                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[500]),
                               ),
                             ],
                           ),
@@ -237,37 +243,31 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
                     ),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Scale effect or simple label
           Text(
             l10n.optionalTranslateCv,
-            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              _buildLangChip('Original', theme),
+              _buildLangChip(l10n.originalLanguage, theme, value: 'Original'),
               const SizedBox(width: 8),
-              _buildLangChip('English', theme),
+              _buildLangChip(l10n.english, theme, value: 'English'),
               const SizedBox(width: 8),
-              _buildLangChip('Indonesian', theme),
+              _buildLangChip(l10n.indonesian, theme, value: 'Indonesian'),
             ],
           ),
-
           if (_errorMessage != null)
-             Padding(
+            Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
                 _errorMessage!,
                 style: const TextStyle(color: Colors.red, fontSize: 13),
               ),
             ),
-
           const SizedBox(height: 24),
-
-          // Action Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -283,7 +283,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
               ),
               child: Text(
                 l10n.startConversion,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ),
@@ -292,55 +293,45 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     );
   }
 
-  // ──────────────────────────────────────────────
-  // STEP 1: Preview (Mockup of what result might look like)
-  // ──────────────────────────────────────────────
   Widget _buildPreviewStep(ThemeData theme, AppLocalizations l10n) {
     if (_convertedCv == null) return const SizedBox.shrink();
 
     return Column(
       key: const ValueKey('preview'),
       children: [
-        // Preview Header
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          color: Colors.green.withOpacity(0.1),
+          color: Colors.green.withValues(alpha: 0.1),
           child: Row(
             children: [
               const Icon(Icons.check_circle, color: Colors.green, size: 20),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'CV berhasil dikonversi! Silakan cek preview di bawah.',
-                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                  l10n.cvConvertedSuccess,
+                  style: const TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
           ),
         ),
-
-        // Preview Content
         Expanded(
           child: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.all(16),
-              // Use Key to force rebuild if CV changes
               key: ValueKey(_convertedCv!.id),
-              // We reuse the professional preview widget 
-              // Make sure to wrap in a constrained box or similar if needed
               child: CvPreviewCard(cvData: _convertedCv!),
             ),
           ),
         ),
-
-        // Bottom Bar
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: theme.cardColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, -5),
               ),
@@ -382,9 +373,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     );
   }
 
-  // ──────────────────────────────────────────────
-  // Loading View
-  // ──────────────────────────────────────────────
   Widget _buildLoadingView(ThemeData theme, AppLocalizations l10n) {
     return Center(
       key: const ValueKey('loading'),
@@ -394,8 +382,9 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           const CircularProgressIndicator(),
           const SizedBox(height: 24),
           Text(
-            'Sedang Menganalisis CV...',
-            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            l10n.analyzingCv,
+            style: theme.textTheme.titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -410,10 +399,6 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       ),
     );
   }
-
-  // ──────────────────────────────────────────────
-  // Logic
-  // ──────────────────────────────────────────────
 
   Future<void> _pickFile() async {
     try {
@@ -430,7 +415,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
         });
       }
     } catch (e) {
-      setState(() => _errorMessage = '${AppLocalizations.of(context)!.failedToSelectFile}: $e');
+      setState(() => _errorMessage =
+          '${AppLocalizations.of(context)!.failedToSelectFile}: $e');
     }
   }
 
@@ -443,11 +429,11 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     });
 
     try {
-      // Simulate loading messages for better UX
       _updateLoadingMessages();
 
       final targetLang = _targetLanguage == 'Original' ? null : _targetLanguage;
-      final cvData = await _service.convertFromFile(_selectedFile!, targetLanguage: targetLang);
+      final cvData = await _service.convertFromFile(_selectedFile!,
+          targetLanguage: targetLang);
 
       if (mounted) {
         setState(() {
@@ -460,7 +446,8 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Gagal memproses CV: $e';
+          final currentL10n = AppLocalizations.of(context)!;
+          _errorMessage = '${currentL10n.failedToProcessCv}: $e';
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
@@ -492,12 +479,10 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     if (_convertedCv == null) return;
 
     final provider = context.read<CVBuilderProvider>();
-    
-    // Save to provider
-    provider.updateCV(_convertedCv!);
-    provider.saveCurrentCV(); // Persist to storage
 
-    // Navigate to step 1 (Personal Info) to start editing
+    provider.updateCV(_convertedCv!);
+    provider.saveCurrentCV();
+
     context.router.push(const CvBuilderStep1Route());
   }
 
@@ -505,56 +490,51 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
     final l10n = AppLocalizations.of(context)!;
     if (_convertedCv == null) return;
 
-    // Debugging info as requested
     debugPrint('CV name: "${_convertedCv?.header.name}"');
     debugPrint('CV isValid: ${_convertedCv?.isValid}');
 
     final provider = context.read<CVBuilderProvider>();
 
-    // Save to provider
     provider.updateCV(_convertedCv!);
-    
+
     final success = await provider.saveCurrentCV();
 
     if (!mounted) return;
 
     if (!success) {
-      // Tampilkan error jika gagal (misal name kosong)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.errorMessage ?? 'Gagal menyimpan CV'),
+          content: Text(provider.errorMessage ?? l10n.failedToSaveCv),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    // Load updated list
     await provider.loadAllCVs();
 
     if (!mounted) return;
 
-    // Show success and go back to library/home
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(l10n.cvSavedToLibrary),
         backgroundColor: Colors.green,
       ),
     );
-    
-    // Navigate back to home or library
+
     context.router.replaceAll([const HomeRoute()]);
   }
 
-  Widget _buildLangChip(String label, ThemeData theme) {
-    final isSelected = _targetLanguage == label;
+  Widget _buildLangChip(String label, ThemeData theme, {String? value}) {
+    final chipValue = value ?? label;
+    final isSelected = _targetLanguage == chipValue;
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
       onSelected: (val) {
-        if (val) setState(() => _targetLanguage = label);
+        if (val) setState(() => _targetLanguage = chipValue);
       },
-      selectedColor: theme.primaryColor.withOpacity(0.2),
+      selectedColor: theme.primaryColor.withValues(alpha: 0.2),
       labelStyle: TextStyle(
         color: isSelected ? theme.primaryColor : Colors.grey[700],
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

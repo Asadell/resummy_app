@@ -12,7 +12,8 @@ class InterviewSetupStep3Screen extends StatefulWidget {
   const InterviewSetupStep3Screen({super.key});
 
   @override
-  State<InterviewSetupStep3Screen> createState() => _InterviewSetupStep3ScreenState();
+  State<InterviewSetupStep3Screen> createState() =>
+      _InterviewSetupStep3ScreenState();
 }
 
 class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
@@ -28,7 +29,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
         title: Text(l10n.jobDescription),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => context.router.push(const InterviewSetupStep2Route()),
+          onPressed: () =>
+              context.router.push(const InterviewSetupStep2Route()),
         ),
         actions: [
           Padding(
@@ -37,8 +39,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
               child: Text(
                 l10n.stepProgress(3, 5),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ),
@@ -50,24 +52,20 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
               Text(
                 l10n.step3PasteJd,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
               const SizedBox(height: 4),
               Text(
                 '(${l10n.optional})',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
-
               const SizedBox(height: 16),
-
-              // Info Card
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -77,24 +75,24 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Iconsax.lamp_on, color: Theme.of(context).colorScheme.primary, size: 24),
+                    Icon(Iconsax.lamp_on,
+                        color: Theme.of(context).colorScheme.primary, size: 24),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         l10n.jdDetailHelpsAi,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.w500,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // JD Input
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -107,8 +105,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                     Text(
                       l10n.pasteJobDescriptionLabel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -136,17 +134,14 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                       child: Text(
                         '${_jdController.text.length}/2000',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.gray400,
-                        ),
+                              color: AppColors.gray400,
+                            ),
                       ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // AI Extract Button
               ElevatedButton.icon(
                 onPressed: () {
                   setState(() => _showExtracted = true);
@@ -157,7 +152,6 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                   minimumSize: const Size.fromHeight(48),
                 ),
               ),
-
               if (_showExtracted) ...[
                 const SizedBox(height: 12),
                 Container(
@@ -172,9 +166,11 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                       Text(
                         l10n.extractedRequirements,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
-                          fontWeight: FontWeight.w600,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                       const SizedBox(height: 12),
                       Wrap(
@@ -193,27 +189,24 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
                   ),
                 ),
               ],
-
               const SizedBox(height: 24),
-
-              // Skip Option
               Center(
                 child: Column(
                   children: [
                     Text(
                       l10n.noJdQuestion,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.gray600,
-                      ),
+                            color: AppColors.gray600,
+                          ),
                     ),
                     TextButton(
-                      onPressed: () => context.router.push(const InterviewSetupStep4Route()),
+                      onPressed: () =>
+                          context.router.push(const InterviewSetupStep4Route()),
                       child: Text(l10n.skipThisStep),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 100),
             ],
           ),
@@ -236,7 +229,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => context.router.push(const InterviewSetupStep2Route()),
+                  onPressed: () =>
+                      context.router.push(const InterviewSetupStep2Route()),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                   ),
@@ -245,7 +239,8 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
               ),
               const SizedBox(width: 12),
               TextButton(
-                onPressed: () => context.router.push(const InterviewSetupStep4Route()),
+                onPressed: () =>
+                    context.router.push(const InterviewSetupStep4Route()),
                 child: Text(l10n.skip),
               ),
               const SizedBox(width: 12),

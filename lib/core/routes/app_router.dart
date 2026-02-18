@@ -6,19 +6,14 @@ import 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-        // Splash & Auth (No Bottom Nav)
         AutoRoute(page: SplashRoute.page, initial: true),
         AutoRoute(page: AuthRoute.page),
         AutoRoute(page: LanguageSelectionRoute.page),
-
-        // Onboarding (No Bottom Nav)
         AutoRoute(page: OnboardingStep1Route.page),
         AutoRoute(page: OnboardingStep2Route.page),
         AutoRoute(page: OnboardingStep3Route.page),
         AutoRoute(page: OnboardingStep4Route.page),
         AutoRoute(page: OnboardingConfirmationRoute.page),
-
-        // Main App with Bottom Nav
         AutoRoute(
           page: MainRoute.page,
           children: [
@@ -29,11 +24,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: ProfileRoute.page),
           ],
         ),
-
-        // CV Analyzer (No Bottom Nav)
         AutoRoute(page: CvAnalyzerUploadRoute.page),
-
-        // CV Builder (No Bottom Nav)
         AutoRoute(page: CvBuilderWelcomeRoute.page),
         AutoRoute(page: CvBuilderStep1Route.page),
         AutoRoute(page: CvBuilderStep2Route.page),
@@ -46,24 +37,15 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CvBuilderCustomSectionStepRoute.page),
         AutoRoute(page: CvBuilderPreviewRoute.page),
         AutoRoute(page: CvAtsConverterRoute.page),
-
-        // CV History (No Bottom Nav)
         AutoRoute(page: CvHistoryRoute.page),
-
-        // Interview Setup (No Bottom Nav)
         AutoRoute(page: InterviewSetupStep1Route.page),
         AutoRoute(page: InterviewSetupStep2Route.page),
         AutoRoute(page: InterviewSetupStep3Route.page),
         AutoRoute(page: InterviewSetupStep4Route.page),
         AutoRoute(page: InterviewSetupConfirmationRoute.page),
-
-        // Interview Session (No Bottom Nav)
         AutoRoute(page: InterviewSessionOpeningRoute.page),
         AutoRoute(page: InterviewSessionQuestionRoute.page),
-
         AutoRoute(page: InterviewSessionClosingRoute.page),
-
-        // Interview Feedback (No Bottom Nav)
         AutoRoute(page: InterviewFeedbackOverviewRoute.page),
         AutoRoute(page: InterviewFeedbackQuestionsRoute.page),
         AutoRoute(page: InterviewFeedbackDetailRoute.page),

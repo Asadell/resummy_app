@@ -1,20 +1,15 @@
 import 'package:equatable/equatable.dart';
 
-// ============================================================================
-// Interview Report - Main Result Entity
-// ============================================================================
-
 class InterviewReport extends Equatable {
   final String id;
   final DateTime createdAt;
-  final int overallScore; // 0-10 (average of 4 categories)
-  
-  // 4 Category Average Scores
+  final int overallScore;
+
   final double starAverageScore;
   final double contentQualityAverageScore;
   final double fluencyAverageScore;
   final double confidenceAverageScore;
-  
+
   final String overallFeedback;
   final List<String> strengths;
   final List<String> improvements;
@@ -56,9 +51,11 @@ class InterviewReport extends Equatable {
       createdAt: DateTime.parse(json['createdAt'] as String),
       overallScore: json['overallScore'] as int,
       starAverageScore: (json['starAverageScore'] as num).toDouble(),
-      contentQualityAverageScore: (json['contentQualityAverageScore'] as num).toDouble(),
+      contentQualityAverageScore:
+          (json['contentQualityAverageScore'] as num).toDouble(),
       fluencyAverageScore: (json['fluencyAverageScore'] as num).toDouble(),
-      confidenceAverageScore: (json['confidenceAverageScore'] as num).toDouble(),
+      confidenceAverageScore:
+          (json['confidenceAverageScore'] as num).toDouble(),
       overallFeedback: json['overallFeedback'] as String,
       strengths: List<String>.from(json['strengths'] as List),
       improvements: List<String>.from(json['improvements'] as List),
@@ -84,14 +81,9 @@ class InterviewReport extends Equatable {
       ];
 }
 
-// ============================================================================
-// Question Feedback - Per Question Analysis
-// ============================================================================
-
 class QuestionFeedback extends Equatable {
   final String questionId;
-  
-  // 5 Analysis Components (from 5 separate API calls)
+
   final STARAnalysis starAnalysis;
   final ContentQualityAnalysis contentAnalysis;
   final FluencyAnalysis fluencyAnalysis;
@@ -121,11 +113,16 @@ class QuestionFeedback extends Equatable {
   factory QuestionFeedback.fromJson(Map<String, dynamic> json) {
     return QuestionFeedback(
       questionId: json['questionId'] as String,
-      starAnalysis: STARAnalysis.fromJson(json['starAnalysis'] as Map<String, dynamic>),
-      contentAnalysis: ContentQualityAnalysis.fromJson(json['contentAnalysis'] as Map<String, dynamic>),
-      fluencyAnalysis: FluencyAnalysis.fromJson(json['fluencyAnalysis'] as Map<String, dynamic>),
-      confidenceAnalysis: ConfidenceAnalysis.fromJson(json['confidenceAnalysis'] as Map<String, dynamic>),
-      improvedSpeech: ImprovedSpeechData.fromJson(json['improvedSpeech'] as Map<String, dynamic>),
+      starAnalysis:
+          STARAnalysis.fromJson(json['starAnalysis'] as Map<String, dynamic>),
+      contentAnalysis: ContentQualityAnalysis.fromJson(
+          json['contentAnalysis'] as Map<String, dynamic>),
+      fluencyAnalysis: FluencyAnalysis.fromJson(
+          json['fluencyAnalysis'] as Map<String, dynamic>),
+      confidenceAnalysis: ConfidenceAnalysis.fromJson(
+          json['confidenceAnalysis'] as Map<String, dynamic>),
+      improvedSpeech: ImprovedSpeechData.fromJson(
+          json['improvedSpeech'] as Map<String, dynamic>),
     );
   }
 
@@ -140,12 +137,8 @@ class QuestionFeedback extends Equatable {
       ];
 }
 
-// ============================================================================
-// API Call #1: STAR Structure Analysis
-// ============================================================================
-
 class STARAnalysis extends Equatable {
-  final int score; // 0-10
+  final int score;
   final ComponentDetection situation;
   final ComponentDetection task;
   final ComponentDetection action;
@@ -178,23 +171,27 @@ class STARAnalysis extends Equatable {
   factory STARAnalysis.fromJson(Map<String, dynamic> json) {
     return STARAnalysis(
       score: json['score'] as int,
-      situation: ComponentDetection.fromJson(json['situation'] as Map<String, dynamic>),
+      situation: ComponentDetection.fromJson(
+          json['situation'] as Map<String, dynamic>),
       task: ComponentDetection.fromJson(json['task'] as Map<String, dynamic>),
-      action: ComponentDetection.fromJson(json['action'] as Map<String, dynamic>),
-      result: ComponentDetection.fromJson(json['result'] as Map<String, dynamic>),
+      action:
+          ComponentDetection.fromJson(json['action'] as Map<String, dynamic>),
+      result:
+          ComponentDetection.fromJson(json['result'] as Map<String, dynamic>),
       overallFeedback: json['overallFeedback'] as String,
       suggestions: List<String>.from(json['suggestions'] as List),
     );
   }
 
   @override
-  List<Object?> get props => [score, situation, task, action, result, overallFeedback, suggestions];
+  List<Object?> get props =>
+      [score, situation, task, action, result, overallFeedback, suggestions];
 }
 
 class ComponentDetection extends Equatable {
   final bool present;
   final String excerpt;
-  final String quality; // "weak", "good", "excellent"
+  final String quality;
 
   const ComponentDetection({
     required this.present,
@@ -222,15 +219,11 @@ class ComponentDetection extends Equatable {
   List<Object?> get props => [present, excerpt, quality];
 }
 
-// ============================================================================
-// API Call #2: Content Quality Analysis
-// ============================================================================
-
 class ContentQualityAnalysis extends Equatable {
-  final int score; // 0-10 (overall content quality score)
-  final int relevanceScore; // 0-10
-  final int depthScore; // 0-10
-  final int professionalImpact; // 0-10
+  final int score;
+  final int relevanceScore;
+  final int depthScore;
+  final int professionalImpact;
   final List<String> strengths;
   final List<String> weaknesses;
   final List<String> suggestions;
@@ -281,17 +274,13 @@ class ContentQualityAnalysis extends Equatable {
       ];
 }
 
-// ============================================================================
-// API Call #3: Fluency Analysis (Estimated from Transcript)
-// ============================================================================
-
 class FluencyAnalysis extends Equatable {
-  final int score; // 0-10
+  final int score;
   final int wordCount;
-  final double wpm; // Words per minute
+  final double wpm;
   final List<FillerWord> fillerWords;
   final double fillerPercentage;
-  final String paceAssessment; // "too slow" | "good pace" | "too fast"
+  final String paceAssessment;
   final List<String> suggestions;
 
   const FluencyAnalysis({
@@ -373,15 +362,11 @@ class FillerWord extends Equatable {
   List<Object?> get props => [word, count, percentage];
 }
 
-// ============================================================================
-// API Call #4: Confidence Assessment
-// ============================================================================
-
 class ConfidenceAnalysis extends Equatable {
-  final int score; // 0-10
-  final String toneAssessment; // "positive", "neutral", "hesitant", "defensive"
-  final String energyLevel; // "high", "medium", "low"
-  final String convictionLevel; // "strong", "moderate", "weak"
+  final int score;
+  final String toneAssessment;
+  final String energyLevel;
+  final String convictionLevel;
   final List<String> strengthIndicators;
   final List<String> weaknessIndicators;
   final List<String> tips;
@@ -431,10 +416,6 @@ class ConfidenceAnalysis extends Equatable {
         tips,
       ];
 }
-
-// ============================================================================
-// API Call #5: Improved Speech Generation
-// ============================================================================
 
 class ImprovedSpeechData extends Equatable {
   final String originalText;

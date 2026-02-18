@@ -4,7 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/cv_tools/data/services/cv_analyzer_service.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
@@ -32,25 +32,22 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
-    
-    // Initialize with provider state if exists, else fallback to profile
-    _jobPositionController = TextEditingController(text: provider.jobPosition.isNotEmpty 
-        ? provider.jobPosition 
-        : (profile?.targetRole ?? ''));
+
+    _jobPositionController = TextEditingController(
+        text: provider.jobPosition.isNotEmpty
+            ? provider.jobPosition
+            : (profile?.targetRole ?? ''));
     _jobDescController = TextEditingController(text: provider.jobDescription);
-    
-    // Set initial position in provider if from profile
+
     if (provider.jobPosition.isEmpty && profile?.targetRole != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         provider.setJobPosition(profile!.targetRole!);
       });
     }
 
-    // Listener to sync from profile if it loads late
-    // Only sync if the provider/controller is still empty
     context.read<ProfileProvider>().addListener(_onProfileChanged);
   }
 
@@ -82,23 +79,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.cvAnalyzer),
-        // actions: [
-        //   Consumer<CvAnalyzerProvider>(
-        //     builder: (context, provider, _) {
-        //       if (provider.hasResult) {
-        //         return IconButton(
-        //           icon: const Icon(Iconsax.refresh),
-        //           onPressed: () {
-        //             provider.clearAll();
-        //             setState(() => _tabController.index = 0);
-        //           },
-        //           tooltip: 'Analisis CV Baru',
-        //         );
-        //       }
-        //       return const SizedBox.shrink();
-        //     },
-        //   ),
-        // ],
       ),
       body: Consumer<CvAnalyzerProvider>(
         builder: (context, provider, _) {
@@ -116,17 +96,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE 1: INPUT
-  // ═══════════════════════════════════════════════════════════════
-
   Widget _buildInputState(CvAnalyzerProvider provider) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header
           Text(
             l10n.uploadYourCv,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -141,12 +116,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
           ),
           const SizedBox(height: 24),
-
-          // PDF Upload Card
           _buildUploadCard(provider),
           const SizedBox(height: 16),
-
-          // Job Position
           TextField(
             controller: _jobPositionController,
             decoration: InputDecoration(
@@ -160,8 +131,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             onChanged: provider.setJobPosition,
           ),
           const SizedBox(height: 16),
-
-          // Job Description (Expandable)
           Card(
             child: Column(
               children: [
@@ -197,8 +166,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
           ),
           const SizedBox(height: 16),
-
-          // Language Selector
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -239,8 +206,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
           ),
           const SizedBox(height: 24),
-
-          // Error Message
           if (provider.errorMessage != null)
             Container(
               padding: const EdgeInsets.all(12),
@@ -263,8 +228,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
             ),
           if (provider.errorMessage != null) const SizedBox(height: 16),
-
-          // Analyze Button
           FilledButton.icon(
             onPressed: provider.hasFile && provider.jobPosition.isNotEmpty
                 ? () => provider.analyze(_selectedLanguage)
@@ -342,10 +305,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE 2: LOADING
-  // ═══════════════════════════════════════════════════════════════
-
   Widget _buildLoadingState(CvAnalyzerProvider provider) {
     final isConverting = provider.isConverting;
     return Center(
@@ -360,9 +319,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            isConverting
-                ? l10n.applyingSuggestions
-                : l10n.estimateTime,
+            isConverting ? l10n.applyingSuggestions : l10n.estimateTime,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -372,10 +329,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE 3: RESULTS
-  // ═══════════════════════════════════════════════════════════════
-
   Widget _buildResultState(CvAnalyzerProvider provider) {
     final result = provider.result!;
 
@@ -383,18 +336,18 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       children: [
         Column(
           children: [
-            // Tab Bar
             Container(
               color: Theme.of(context).colorScheme.surface,
               child: TabBar(
                 controller: _tabController,
                 tabs: [
                   Tab(text: l10n.report, icon: const Icon(Iconsax.chart_1)),
-                  Tab(text: l10n.suggestion, icon: const Icon(Iconsax.message_edit)),
+                  Tab(
+                      text: l10n.suggestion,
+                      icon: const Icon(Iconsax.message_edit)),
                 ],
               ),
             ),
-            // Tab Views
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -411,23 +364,16 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ─── Report Tab ──────────────────────────────────────────────
-
   Widget _buildReportTab(CvAnalysisResult result) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Score Circle
           _buildScoreCircle(result),
           const SizedBox(height: 24),
-
-          // Metrics
           _buildMetricsSection(result.metrics),
           const SizedBox(height: 24),
-
-          // Summary Feedback
           if (result.summaryFeedback.isNotEmpty) ...[
             _buildSectionCard(
               title: l10n.summary,
@@ -436,8 +382,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
             const SizedBox(height: 16),
           ],
-
-          // Highlights
           if (result.highlights.isNotEmpty) ...[
             _buildSectionCard(
               title: l10n.strengths,
@@ -451,8 +395,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
             const SizedBox(height: 16),
           ],
-
-          // Improvements
           if (result.improvements.isNotEmpty) ...[
             _buildSectionCard(
               title: l10n.improvements,
@@ -466,8 +408,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ),
             const SizedBox(height: 16),
           ],
-
-          // Missing Keywords
           if (result.missingKeywords.isNotEmpty) ...[
             _buildSectionCard(
               title: l10n.missingKeywords,
@@ -565,16 +505,17 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   ),
             ),
             const SizedBox(height: 16),
-            _buildMetricBar(l10n.keywordMatch, metrics.keywordMatch, Colors.blue),
+            _buildMetricBar(
+                l10n.keywordMatch, metrics.keywordMatch, Colors.blue),
             const SizedBox(height: 12),
             _buildMetricBar(l10n.quantifiableAchievements,
                 metrics.quantifiableAchievements, Colors.green),
             const SizedBox(height: 12),
-            _buildMetricBar(
-                l10n.structureCompleteness, metrics.structureCompleteness, Colors.purple),
+            _buildMetricBar(l10n.structureCompleteness,
+                metrics.structureCompleteness, Colors.purple),
             const SizedBox(height: 12),
-            _buildMetricBar(l10n.languageProfessionalism, metrics.languageProfessionalism,
-                Colors.orange),
+            _buildMetricBar(l10n.languageProfessionalism,
+                metrics.languageProfessionalism, Colors.orange),
           ],
         ),
       ),
@@ -656,8 +597,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     );
   }
 
-  // ─── Suggestions Tab ─────────────────────────────────────────
-
   Widget _buildSuggestionsTab(
       CvAnalysisResult result, CvAnalyzerProvider provider) {
     final filteredSuggestions = _filterPriority == null
@@ -668,24 +607,21 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
     return Column(
       children: [
-        // Filter & Stats
         Container(
           padding: const EdgeInsets.all(16),
           color: Theme.of(context).colorScheme.surface,
           child: Column(
             children: [
-              // Stats
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatChip('Pending', result.pendingCount, Colors.blue),
-                  _buildStatChip('Applied', result.appliedCount, Colors.green),
+                  _buildStatChip(l10n.pendingStatus, result.pendingCount, Colors.blue),
+                  _buildStatChip(l10n.appliedStatus, result.appliedCount, Colors.green),
                   _buildStatChip(
-                      'Dismissed', result.dismissedCount, Colors.grey),
+                      l10n.dismissedStatus, result.dismissedCount, Colors.grey),
                 ],
               ),
               const SizedBox(height: 12),
-              // Priority Filter
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -693,15 +629,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     FilterChip(
                       label: Text(l10n.filterAll),
                       selected: _filterPriority == null,
-                      onSelected: (_) =>
-                          setState(() => _filterPriority = null),
+                      onSelected: (_) => setState(() => _filterPriority = null),
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
                       label: Text(l10n.filterHigh),
                       selected: _filterPriority == SuggestionPriority.high,
-                      onSelected: (_) =>
-                          setState(() => _filterPriority = SuggestionPriority.high),
+                      onSelected: (_) => setState(
+                          () => _filterPriority = SuggestionPriority.high),
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
@@ -714,8 +649,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     FilterChip(
                       label: Text(l10n.filterLow),
                       selected: _filterPriority == SuggestionPriority.low,
-                      onSelected: (_) =>
-                          setState(() => _filterPriority = SuggestionPriority.low),
+                      onSelected: (_) => setState(
+                          () => _filterPriority = SuggestionPriority.low),
                     ),
                   ],
                 ),
@@ -723,7 +658,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ],
           ),
         ),
-        // Suggestions List
         Expanded(
           child: filteredSuggestions.isEmpty
               ? Center(
@@ -737,7 +671,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   itemCount: filteredSuggestions.length,
                   itemBuilder: (context, index) {
                     final suggestion = filteredSuggestions[index];
-                    // Add extra padding for the last item to avoid FAB overlap
+
                     if (index == filteredSuggestions.length - 1) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 80),
@@ -787,7 +721,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Row(
               children: [
                 Container(
@@ -799,7 +732,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     border: Border.all(color: priorityColor),
                   ),
                   child: Text(
-                    suggestion.priority.name.toUpperCase(),
+                    _getPriorityLabel(suggestion.priority).toUpperCase(),
                     style: TextStyle(
                       color: priorityColor,
                       fontSize: 10,
@@ -824,8 +757,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ],
             ),
             const SizedBox(height: 12),
-
-            // Original Text
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -857,8 +788,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
             ),
             const SizedBox(height: 8),
-
-            // Suggested Text
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -890,8 +819,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
             ),
             const SizedBox(height: 8),
-
-            // Reason
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -900,7 +827,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
               child: Row(
                 children: [
-                  Icon(Iconsax.info_circle, size: 14, color: Colors.blue.shade700),
+                  Icon(Iconsax.info_circle,
+                      size: 14, color: Colors.blue.shade700),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -915,14 +843,13 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               ),
             ),
             const SizedBox(height: 12),
-
-            // Actions
             if (!suggestion.isApplied && !suggestion.isDismissed)
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () => provider.dismissSuggestion(suggestion.id),
+                      onPressed: () =>
+                          provider.dismissSuggestion(suggestion.id),
                       icon: const Icon(Iconsax.close_circle, size: 16),
                       label: Text(l10n.dismiss),
                       style: OutlinedButton.styleFrom(
@@ -944,7 +871,8 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
               OutlinedButton.icon(
                 onPressed: () => provider.undoSuggestion(suggestion.id),
                 icon: const Icon(Iconsax.refresh, size: 16),
-                label: Text(suggestion.isApplied ? l10n.undoApply : l10n.undoDismiss),
+                label: Text(
+                    suggestion.isApplied ? l10n.undoApply : l10n.undoDismiss),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.blue,
                 ),
@@ -954,7 +882,6 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
       ),
     );
   }
-
 
   Widget _buildCvFab(CvAnalysisResult result, CvAnalyzerProvider provider) {
     if (result.appliedCount == 0) return const SizedBox.shrink();
@@ -1043,22 +970,19 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   flex: 2,
                   child: FilledButton(
                     onPressed: () async {
-                      Navigator.pop(modalContext); // Tutup bottom sheet
+                      Navigator.pop(modalContext);
 
-                      // Proses convert
                       final cvData = await provider.convertAppliedToCv();
 
                       if (cvData != null && mounted) {
-                        // Masukkan ke CV Builder Provider
                         context.read<CVBuilderProvider>().loadCvData(cvData);
-                        
-                        // Navigasi ke Step 1 CV Builder
+
                         context.router.push(const CvBuilderStep1Route());
                       } else if (mounted) {
-                        // Tampilkan error jika gagal
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(provider.errorMessage ?? l10n.errorSavingProfile),
+                            content: Text(provider.errorMessage ??
+                                l10n.errorSavingProfile),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -1079,5 +1003,15 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         ),
       ),
     );
+  }
+  String _getPriorityLabel(SuggestionPriority priority) {
+    switch (priority) {
+      case SuggestionPriority.high:
+        return l10n.priorityHigh;
+      case SuggestionPriority.medium:
+        return l10n.priorityMedium;
+      case SuggestionPriority.low:
+        return l10n.priorityLow;
+    }
   }
 }

@@ -4153,6 +4153,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Analyzer'**
   String get cvSourceAnalyzer;
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get timeJustNow;
+
+  /// No description provided for @timeDaysSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'d'**
+  String get timeDaysSuffix;
+
+  /// No description provided for @timeHoursSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get timeHoursSuffix;
+
+  /// No description provided for @timeMinutesSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'m'**
+  String get timeMinutesSuffix;
+
+  /// No description provided for @debugSkipQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'DEBUG: Skip with 5 Questions'**
+  String get debugSkipQuestions;
+
+  /// No description provided for @priorityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get priorityLow;
+
+  /// No description provided for @priorityMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get priorityMedium;
+
+  /// No description provided for @priorityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get priorityHigh;
+
+  /// No description provided for @pendingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingStatus;
+
+  /// No description provided for @appliedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied'**
+  String get appliedStatus;
+
+  /// No description provided for @dismissedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismissed'**
+  String get dismissedStatus;
+
+  /// No description provided for @originalLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get originalLanguage;
+
+  /// No description provided for @linkedinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get linkedinLabel;
+
+  /// No description provided for @portfolioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Portfolio'**
+  String get portfolioLabel;
+
+  /// No description provided for @credentialIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ID'**
+  String get credentialIdLabel;
+
+  /// No description provided for @educationDegreesConnector.
+  ///
+  /// In en, this message translates to:
+  /// **'in'**
+  String get educationDegreesConnector;
+
+  /// No description provided for @exportCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CV'**
+  String get exportCv;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @shareDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Share via WhatsApp, Email, etc.'**
+  String get shareDesc;
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdf;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @saveToDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Downloads folder'**
+  String get saveToDownloads;
 }
 
 class _AppLocalizationsDelegate

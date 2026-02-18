@@ -1,5 +1,3 @@
-// lib/features/cv_tools/presentation/screens/builder/cv_builder_custom_section_step.dart
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +38,8 @@ class CvBuilderCustomSectionStepScreen extends StatelessWidget {
           return Scaffold(body: Center(child: Text(l10n.invalidSectionType)));
         }
 
-        final currentStep = DynamicCvSteps.getStepForSectionIndex(sectionIndex, cv);
+        final currentStep =
+            DynamicCvSteps.getStepForSectionIndex(sectionIndex, cv);
 
         return CVBuilderStepLayout(
           title: l10n.cvBuilder,
@@ -50,7 +49,8 @@ class CvBuilderCustomSectionStepScreen extends StatelessWidget {
             sectionId: sectionId,
             currentStep: currentStep,
           ),
-          onBack: () => DynamicCvSteps.navigateToPreviousStep(context, currentStep),
+          onBack: () =>
+              DynamicCvSteps.navigateToPreviousStep(context, currentStep),
           onNext: () {
             provider.saveCurrentCV();
             DynamicCvSteps.navigateToNextStep(context, currentStep);
@@ -61,9 +61,6 @@ class CvBuilderCustomSectionStepScreen extends StatelessWidget {
   }
 }
 
-// ============================================================
-// FORM WIDGET (StatefulWidget for local state)
-// ============================================================
 class _CustomSectionForm extends StatefulWidget {
   final CustomSection section;
   final String sectionId;
@@ -80,31 +77,25 @@ class _CustomSectionForm extends StatefulWidget {
 }
 
 class _CustomSectionFormState extends State<_CustomSectionForm> {
-  // For bulletList / paragraph templates
   late TextEditingController _contentController;
-  
-  // For Experience/Education/Entry
+
   final _titleCtrl = TextEditingController();
   final _subtitleCtrl = TextEditingController();
   final _metaCtrl = TextEditingController();
   final _startDateCtrl = TextEditingController();
   final _endDateCtrl = TextEditingController();
-  final _bulletCtrl = TextEditingController(); // For adding a bullet to the list
+  final _bulletCtrl = TextEditingController();
   List<String> _bullets = [];
   bool _isPresent = false;
 
-  // For Skills
   final _categoryNameCtrl = TextEditingController();
   final _categorySkillsCtrl = TextEditingController();
 
-  // For Bullet List Item
   final _bulletItemCtrl = TextEditingController();
 
-  // State
-  int? _editingIndex; // For entries and bullet list items
-  String? _editingCategoryName; // For skills categories
+  int? _editingIndex;
+  String? _editingCategoryName;
   bool _showValidation = false;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -139,7 +130,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Step Badge
           Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -159,28 +149,23 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ),
           ),
           const SizedBox(height: 12),
-
           Center(
             child: Text(
               widget.section.title,
-              style: theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: theme.textTheme.headlineLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 4),
-
           Center(
             child: Text(
               _getTemplateDisplayName(context, widget.section.template),
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+              style:
+                  theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
             ),
           ),
-
           const SizedBox(height: 24),
-
-          // ============================================================
-          // RENDER BASED ON TEMPLATE
-          // ============================================================
           if (widget.section.template == CustomSectionTemplate.experienceLike ||
               widget.section.template == CustomSectionTemplate.educationLike)
             _buildEntryListTemplate(context, provider, theme)
@@ -190,16 +175,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             _buildBulletListTemplate(context, provider, theme)
           else
             _buildParagraphTemplate(context, provider, theme),
-
           const SizedBox(height: 80),
         ],
       ),
     );
   }
 
-  // ============================================================
-  // TEMPLATE 1: Experience-like / Education-like (List of entries)
-  // ============================================================
   Widget _buildEntryListTemplate(
     BuildContext context,
     CVBuilderProvider provider,
@@ -207,21 +188,18 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final section = _getCurrentSection(provider);
-    final isExperienceLike = section.template == CustomSectionTemplate.experienceLike;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-
-        // Entry list
         if (section.entries.isEmpty)
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Column(
                 children: [
-                  Icon(Iconsax.document_text, size: 56, color: Colors.grey[300]),
+                  Icon(Iconsax.document_text,
+                      size: 56, color: Colors.grey[300]),
                   const SizedBox(height: 16),
                   Text(
                     l10n.noItems,
@@ -239,22 +217,18 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               entry: entry,
               section: section,
               onEdit: () => _editEntry(index, entry),
-              onDelete: () => provider.removeCustomEntry(sectionId: section.id, entryIndex: index),
+              onDelete: () => provider.removeCustomEntry(
+                  sectionId: section.id, entryIndex: index),
             );
           }),
-
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 16),
-
         _buildInlineEntryForm(context, provider, section),
       ],
     );
   }
 
-  // ============================================================
-  // TEMPLATE: Skills-Like (Category: skill1, skill2)
-  // ============================================================
   Widget _buildSkillsLikeTemplate(
     BuildContext context,
     CVBuilderProvider provider,
@@ -267,9 +241,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-
-        // Category cards
         if (categories.isEmpty)
           Center(
             child: Padding(
@@ -293,159 +264,193 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           )
         else
           ...categories.entries.map((entry) => Card(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          entry.key,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Iconsax.edit_2, size: 18),
-                        onPressed: () => _editSkillCategory(entry.key, entry.value),
-                        tooltip: l10n.edit,
-                      ),
-                      IconButton(
-                        icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
-                      onPressed: () => showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (ctx) => Container(
-                          padding: const EdgeInsets.only(
-                            bottom: 32,
-                            top: 8,
-                            left: 24,
-                            right: 24,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Center(
-                                child: Container(
-                                  width: 40,
-                                  height: 4,
-                                  margin: const EdgeInsets.only(bottom: 24),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              entry.key,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.errorContainer,
-                                      borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Iconsax.edit_2, size: 18),
+                            onPressed: () =>
+                                _editSkillCategory(entry.key, entry.value),
+                            tooltip: l10n.edit,
+                          ),
+                          IconButton(
+                            icon: const Icon(Iconsax.trash,
+                                size: 18, color: Colors.red),
+                            onPressed: () => showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (ctx) => Container(
+                                padding: const EdgeInsets.only(
+                                  bottom: 32,
+                                  top: 8,
+                                  left: 24,
+                                  right: 24,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(24)),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: 40,
+                                        height: 4,
+                                        margin:
+                                            const EdgeInsets.only(bottom: 24),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                        ),
+                                      ),
                                     ),
-                                    child: Icon(
-                                      Iconsax.trash,
-                                      color: Theme.of(context).colorScheme.error,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .errorContainer,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Icon(
+                                            Iconsax.trash,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: Text(
+                                            l10n.deleteItem,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Text(
-                                      l10n.deleteItem,
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                            fontWeight: FontWeight.bold,
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      l10n.deleteItemConfirmation(entry.key),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            height: 1.5,
                                           ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                l10n.deleteItemConfirmation(entry.key),
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                      height: 1.5,
-                                    ),
-                              ),
-                              const SizedBox(height: 32),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: () => Navigator.pop(ctx),
-                                      style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                    const SizedBox(height: 32),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton(
+                                            onPressed: () => Navigator.pop(ctx),
+                                            style: OutlinedButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(l10n.cancel),
+                                          ),
                                         ),
-                                      ),
-                                      child: Text(l10n.cancel),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    flex: 2,
-                                    child: FilledButton(
-                                      onPressed: () {
-                                        provider.removeCustomSkillCategory(
-                                          sectionId: section.id,
-                                          categoryName: entry.key,
-                                        );
-                                        Navigator.pop(ctx);
-                                      },
-                                      style: FilledButton.styleFrom(
-                                        backgroundColor: Theme.of(context).colorScheme.error,
-                                        foregroundColor: Theme.of(context).colorScheme.onError,
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          flex: 2,
+                                          child: FilledButton(
+                                            onPressed: () {
+                                              provider
+                                                  .removeCustomSkillCategory(
+                                                sectionId: section.id,
+                                                categoryName: entry.key,
+                                              );
+                                              Navigator.pop(ctx);
+                                            },
+                                            style: FilledButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              foregroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onError,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(l10n.delete),
+                                          ),
                                         ),
-                                      ),
-                                      child: Text(l10n.delete),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
+                            tooltip: l10n.delete,
                           ),
-                        ),
+                        ],
                       ),
-                        tooltip: l10n.delete,
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: entry.value
+                            .map((skill) => Chip(
+                                  label: Text(skill,
+                                      style: const TextStyle(fontSize: 11)),
+                                  backgroundColor: Colors.blue.shade50,
+                                  side: BorderSide(color: Colors.blue.shade200),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ))
+                            .toList(),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: entry.value.map((skill) => Chip(
-                      label: Text(skill, style: const TextStyle(fontSize: 11)),
-                      backgroundColor: Colors.blue.shade50,
-                      side: BorderSide(color: Colors.blue.shade200),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    )).toList(),
-                  ),
-                ],
-              ),
-            ),
-          )).toList(),
-
+                ),
+              )),
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 16),
-
         _buildInlineSkillsForm(context, provider, section),
       ],
     );
@@ -474,13 +479,18 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
-    if (_categoryNameCtrl.text.trim().isEmpty || _categorySkillsCtrl.text.trim().isEmpty) {
+    if (_categoryNameCtrl.text.trim().isEmpty ||
+        _categorySkillsCtrl.text.trim().isEmpty) {
       return;
     }
 
     final name = _categoryNameCtrl.text.trim();
     final skillsText = _categorySkillsCtrl.text.trim();
-    final skills = skillsText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+    final skills = skillsText
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
 
     if (skills.isEmpty) return;
 
@@ -519,14 +529,16 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                isEditing ? '${l10n.edit} ${l10n.categoryName}' : '${l10n.addItem} ${l10n.categoryName}',
+                isEditing
+                    ? '${l10n.edit} ${l10n.categoryName}'
+                    : '${l10n.addItem} ${l10n.categoryName}',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               if (isEditing)
                 TextButton.icon(
@@ -537,7 +549,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ],
           ),
           const SizedBox(height: 16),
-
           TextFormField(
             controller: _categoryNameCtrl,
             decoration: InputDecoration(
@@ -545,8 +556,11 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               hintText: l10n.categoryNamePlaceholder,
               border: const OutlineInputBorder(),
             ),
-             autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-            validator: (v) => v?.trim().isEmpty == true ? l10n.requiredField : null,
+            autovalidateMode: _showValidation
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            validator: (v) =>
+                v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -556,8 +570,11 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               hintText: l10n.skillsPlaceholder,
               border: const OutlineInputBorder(),
             ),
-             autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-            validator: (v) => v?.trim().isEmpty == true ? l10n.requiredField : null,
+            autovalidateMode: _showValidation
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            validator: (v) =>
+                v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
           const SizedBox(height: 24),
           ElevatedButton(
@@ -574,9 +591,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     );
   }
 
-  // ============================================================
-  // TEMPLATE 2: Bullet List
-  // ============================================================
   Widget _buildBulletListTemplate(
     BuildContext context,
     CVBuilderProvider provider,
@@ -584,12 +598,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final section = _getCurrentSection(provider);
-    final lines = section.content.split('\n').where((l) => l.trim().isNotEmpty).toList();
+    final lines =
+        section.content.split('\n').where((l) => l.trim().isNotEmpty).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Existing items
         if (lines.isNotEmpty) ...[
           Text(
             l10n.itemsCount(lines.length),
@@ -602,7 +616,9 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             return Card(
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
-                leading: const Text('•', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                leading: const Text('•',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 title: Text(line, style: const TextStyle(fontSize: 14)),
                 trailing: IconButton(
                   icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
@@ -619,7 +635,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           }),
           const SizedBox(height: 16),
         ],
-
         _buildInlineBulletForm(context, provider, section),
       ],
     );
@@ -646,7 +661,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     CustomSection section,
   ) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -661,8 +675,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           Text(
             l10n.addItem,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 16),
           Row(
@@ -682,9 +696,9 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               ElevatedButton(
                 onPressed: () => _saveBulletItem(provider, section),
                 style: ElevatedButton.styleFrom(
-                   minimumSize: const Size(0, 56), // Match text field height
-                   backgroundColor: Theme.of(context).primaryColor,
-                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  minimumSize: const Size(0, 56),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
                 child: Text(l10n.add),
               ),
@@ -695,9 +709,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     );
   }
 
-  // ============================================================
-  // TEMPLATE 3: Paragraph
-  // ============================================================
   Widget _buildParagraphTemplate(
     BuildContext context,
     CVBuilderProvider provider,
@@ -709,7 +720,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       children: [
         Text(
           l10n.contentLabel,
-          style: TextStyle(fontWeight: FontWeight.bold, color: theme.primaryColor),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: theme.primaryColor),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -739,9 +751,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     );
   }
 
-  // ============================================================
-  // DIALOG: Add/Edit Entry
-  // ============================================================
   void _editEntry(int index, CustomEntry entry) {
     setState(() {
       _editingIndex = index;
@@ -777,18 +786,25 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     setState(() => _showValidation = true);
 
     if (_titleCtrl.text.trim().isEmpty) {
-       return; // Validator in UI will show error
+      return;
     }
-    
-    // Additional validation if needed
-    
+
     final newEntry = CustomEntry(
-      id: _editingIndex != null ? section.entries[_editingIndex!].id : const Uuid().v4(),
+      id: _editingIndex != null
+          ? section.entries[_editingIndex!].id
+          : const Uuid().v4(),
       title: _titleCtrl.text.trim(),
-      subtitle: _subtitleCtrl.text.trim().isEmpty ? null : _subtitleCtrl.text.trim(),
+      subtitle:
+          _subtitleCtrl.text.trim().isEmpty ? null : _subtitleCtrl.text.trim(),
       meta: _metaCtrl.text.trim().isEmpty ? null : _metaCtrl.text.trim(),
-      startDate: _startDateCtrl.text.trim().isEmpty ? null : _startDateCtrl.text.trim(),
-      endDate: _isPresent ? null : (_endDateCtrl.text.trim().isEmpty ? null : _endDateCtrl.text.trim()),
+      startDate: _startDateCtrl.text.trim().isEmpty
+          ? null
+          : _startDateCtrl.text.trim(),
+      endDate: _isPresent
+          ? null
+          : (_endDateCtrl.text.trim().isEmpty
+              ? null
+              : _endDateCtrl.text.trim()),
       isPresent: _isPresent,
       bullets: _bullets,
     );
@@ -816,7 +832,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isEditing = _editingIndex != null;
-    final isExperienceLike = section.template == CustomSectionTemplate.experienceLike;
+    final isExperienceLike =
+        section.template == CustomSectionTemplate.experienceLike;
 
     return Container(
       decoration: BoxDecoration(
@@ -832,10 +849,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                isEditing ? '${l10n.edit} ${section.titleLabel}' : '${l10n.addItem} ${section.titleLabel}',
+                isEditing
+                    ? '${l10n.edit} ${section.titleLabel}'
+                    : '${l10n.addItem} ${section.titleLabel}',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               if (isEditing)
                 TextButton.icon(
@@ -846,46 +865,45 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             ],
           ),
           const SizedBox(height: 16),
-
-          // Title
           TextFormField(
             controller: _titleCtrl,
             decoration: InputDecoration(
               labelText: '${section.titleLabel} *',
-              hintText: isExperienceLike ? l10n.exampleSoftwareEngineer : l10n.exampleBachelor,
+              hintText: isExperienceLike
+                  ? l10n.exampleSoftwareEngineer
+                  : l10n.exampleBachelor,
               border: const OutlineInputBorder(),
             ),
-            autovalidateMode: _showValidation ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-            validator: (v) => v?.trim().isEmpty == true ? l10n.requiredField : null,
+            autovalidateMode: _showValidation
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            validator: (v) =>
+                v?.trim().isEmpty == true ? l10n.requiredField : null,
           ),
           const SizedBox(height: 16),
-
-          // Subtitle
           TextFormField(
             controller: _subtitleCtrl,
             decoration: InputDecoration(
               labelText: section.subtitleLabel,
-              hintText: isExperienceLike ? l10n.exampleGoogle : l10n.exampleUniversity,
+              hintText: isExperienceLike
+                  ? l10n.exampleGoogle
+                  : l10n.exampleUniversity,
               border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 16),
-
-          // Meta (Location/City)
           TextFormField(
             controller: _metaCtrl,
             decoration: InputDecoration(
-              labelText: l10n.location, // Assuming meta is location based on context usually
+              labelText: l10n.location,
               hintText: l10n.exampleLocation,
               border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 16),
-
-          // Dates
           Row(
             children: [
-               Expanded(
+              Expanded(
                 child: TextFormField(
                   controller: _startDateCtrl,
                   decoration: InputDecoration(
@@ -900,7 +918,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 child: TextFormField(
                   controller: _endDateCtrl,
                   enabled: !_isPresent,
-                   decoration: InputDecoration(
+                  decoration: InputDecoration(
                     labelText: _isPresent ? l10n.present : l10n.endDate,
                     hintText: l10n.exampleYearEnd,
                     border: const OutlineInputBorder(),
@@ -922,42 +940,41 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             controlAffinity: ListTileControlAffinity.leading,
           ),
           const SizedBox(height: 16),
-
-          // Bullets
-          Text(l10n.bulletPoints, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(l10n.bulletPoints,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
-             children: [
-               Expanded(
-                 child: TextField(
-                   controller: _bulletCtrl,
-                   decoration: InputDecoration(
-                     hintText: l10n.addBulletPoint,
-                     border: const OutlineInputBorder(),
-                   ),
-                   onSubmitted: (value) {
-                     if (value.trim().isNotEmpty) {
-                       setState(() {
-                         _bullets.add(value.trim());
-                         _bulletCtrl.clear();
-                       });
-                     }
-                   },
-                 ),
-               ),
-               const SizedBox(width: 8),
-               IconButton.filled(
-                 onPressed: () {
-                    if (_bulletCtrl.text.trim().isNotEmpty) {
-                       setState(() {
-                         _bullets.add(_bulletCtrl.text.trim());
-                         _bulletCtrl.clear();
-                       });
-                     }
-                 },
-                 icon: const Icon(Icons.add),
-               ),
-             ],
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _bulletCtrl,
+                  decoration: InputDecoration(
+                    hintText: l10n.addBulletPoint,
+                    border: const OutlineInputBorder(),
+                  ),
+                  onSubmitted: (value) {
+                    if (value.trim().isNotEmpty) {
+                      setState(() {
+                        _bullets.add(value.trim());
+                        _bulletCtrl.clear();
+                      });
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              IconButton.filled(
+                onPressed: () {
+                  if (_bulletCtrl.text.trim().isNotEmpty) {
+                    setState(() {
+                      _bullets.add(_bulletCtrl.text.trim());
+                      _bulletCtrl.clear();
+                    });
+                  }
+                },
+                icon: const Icon(Icons.add),
+              ),
+            ],
           ),
           if (_bullets.isNotEmpty) ...[
             const SizedBox(height: 8),
@@ -969,7 +986,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   ListTile(
                     key: ValueKey('bullet_$i'),
                     dense: true,
-                    leading: const Icon(Icons.drag_handle, size: 20, color: Colors.grey),
+                    leading: const Icon(Icons.drag_handle,
+                        size: 20, color: Colors.grey),
                     title: Text(_bullets[i]),
                     trailing: IconButton(
                       icon: const Icon(Icons.close, size: 18),
@@ -988,7 +1006,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               },
             ),
           ],
-          
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => _saveEntryForm(provider, section),
@@ -1009,7 +1026,8 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         .firstWhere((s) => s.id == widget.sectionId) as CustomSection;
   }
 
-  String _getTemplateDisplayName(BuildContext context, CustomSectionTemplate template) {
+  String _getTemplateDisplayName(
+      BuildContext context, CustomSectionTemplate template) {
     final l10n = AppLocalizations.of(context)!;
     switch (template) {
       case CustomSectionTemplate.experienceLike:
@@ -1026,9 +1044,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 }
 
-// ============================================================
-// ENTRY CARD WIDGET
-// ============================================================
 class _EntryCard extends StatelessWidget {
   final CustomEntry entry;
   final CustomSection section;
@@ -1102,7 +1117,8 @@ class _EntryCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(24)),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -1124,7 +1140,9 @@ class _EntryCard extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
@@ -1136,7 +1154,10 @@ class _EntryCard extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     l10n.deleteItem,
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
                                   ),
@@ -1146,8 +1167,13 @@ class _EntryCard extends StatelessWidget {
                             const SizedBox(height: 20),
                             Text(
                               l10n.deleteItemConfirmation(entry.title),
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                     height: 1.5,
                                   ),
                             ),
@@ -1158,7 +1184,8 @@ class _EntryCard extends StatelessWidget {
                                   child: OutlinedButton(
                                     onPressed: () => Navigator.pop(ctx),
                                     style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
@@ -1175,9 +1202,12 @@ class _EntryCard extends StatelessWidget {
                                       Navigator.pop(ctx);
                                     },
                                     style: FilledButton.styleFrom(
-                                      backgroundColor: Theme.of(context).colorScheme.error,
-                                      foregroundColor: Theme.of(context).colorScheme.onError,
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
+                                      foregroundColor:
+                                          Theme.of(context).colorScheme.onError,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
@@ -1203,12 +1233,14 @@ class _EntryCard extends StatelessWidget {
                   if (entry.meta?.isNotEmpty == true)
                     Text(
                       entry.meta!,
-                      style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                      style: const TextStyle(
+                          fontSize: 12, color: Color(0xFF6B7280)),
                     ),
                   if (dateStr.isNotEmpty)
                     Text(
                       dateStr,
-                      style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
+                      style: const TextStyle(
+                          fontSize: 11, color: Color(0xFF9CA3AF)),
                     ),
                 ],
               ),
@@ -1223,7 +1255,9 @@ class _EntryCard extends StatelessWidget {
                     children: [
                       const Text('• ', style: TextStyle(fontSize: 12)),
                       Expanded(
-                        child: Text(b, style: const TextStyle(fontSize: 12, color: Color(0xFF374151))),
+                        child: Text(b,
+                            style: const TextStyle(
+                                fontSize: 12, color: Color(0xFF374151))),
                       ),
                     ],
                   ),
@@ -1236,7 +1270,3 @@ class _EntryCard extends StatelessWidget {
     );
   }
 }
-
-// ============================================================
-// ENTRY DIALOG — Add / Edit
-// ============================================================

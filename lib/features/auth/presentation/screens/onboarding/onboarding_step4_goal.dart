@@ -9,7 +9,7 @@ class OnboardingStep4Screen extends StatefulWidget {
   final String fullName;
   final String? workStatus;
   final String? targetRole;
-  
+
   const OnboardingStep4Screen({
     super.key,
     required this.fullName,
@@ -33,7 +33,7 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.stepProgress(4, 4)),
@@ -57,8 +57,8 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
               Text(
                 l10n.whatsYourCareerGoal,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -88,8 +88,8 @@ class _OnboardingStep4ScreenState extends State<OnboardingStep4Screen> {
                     fullName: widget.fullName,
                     workStatus: widget.workStatus,
                     targetRole: widget.targetRole,
-                    careerGoal: _goalController.text.trim().isNotEmpty 
-                        ? _goalController.text.trim() 
+                    careerGoal: _goalController.text.trim().isNotEmpty
+                        ? _goalController.text.trim()
                         : null,
                   ));
                 },

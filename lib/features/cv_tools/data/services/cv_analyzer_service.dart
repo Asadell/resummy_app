@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 
-// ─── MODELS ──────────────────────────────────────────────────────
-
 enum SuggestionPriority { high, medium, low }
 
 enum SuggestionCategory {
@@ -164,8 +162,6 @@ class CvAnalysisResult {
   }
 }
 
-// ─── SERVICE ─────────────────────────────────────────────────────
-
 class CvAnalyzerService {
   static const List<String> _apiKeys = [
     AppConstants.geminiApiKey22,
@@ -183,8 +179,6 @@ class CvAnalyzerService {
   static int _keyIndex = 0;
   static String _nextKey() => _apiKeys[(_keyIndex++) % _apiKeys.length];
 
-  /// Kirim CV asli + saran yang di-apply ke Gemini,
-  /// minta Gemini return JSON format CVData
   Future<Map<String, dynamic>> convertAppliedSuggestionsToCvJson({
     required String originalCvText,
     required List<CvSuggestion> appliedSuggestions,
@@ -331,47 +325,62 @@ Return JSON ini:
 ''';
 
     Future<Response> doRequest(String key) => Dio().post(
-      'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3-flash-preview:generateContent',
-      options: Options(
-        headers: {
-          'x-goog-api-key': key,
-          'Content-Type': 'application/json',
-        },
-        receiveTimeout: const Duration(seconds: 120),
-        sendTimeout: const Duration(seconds: 30),
-      ),
-      data: {
-        'contents': [
-          {
-            'parts': [{'text': prompt}]
-          }
-        ],
-        'generationConfig': {
-          'temperature': 0.1,
-          'maxOutputTokens': 16384,
-          'responseMimeType': 'application/json',
-        },
-        'safetySettings': [
-          {'category': 'HARM_CATEGORY_HARASSMENT', 'threshold': 'BLOCK_NONE'},
-          {'category': 'HARM_CATEGORY_HATE_SPEECH', 'threshold': 'BLOCK_NONE'},
-          {'category': 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'threshold': 'BLOCK_NONE'},
-          {'category': 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold': 'BLOCK_NONE'},
-        ],
-      },
-    );
+          'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3-flash-preview:generateContent',
+          options: Options(
+            headers: {
+              'x-goog-api-key': key,
+              'Content-Type': 'application/json',
+            },
+            receiveTimeout: const Duration(seconds: 120),
+            sendTimeout: const Duration(seconds: 30),
+          ),
+          data: {
+            'contents': [
+              {
+                'parts': [
+                  {'text': prompt}
+                ]
+              }
+            ],
+            'generationConfig': {
+              'temperature': 0.1,
+              'maxOutputTokens': 16384,
+              'responseMimeType': 'application/json',
+            },
+            'safetySettings': [
+              {
+                'category': 'HARM_CATEGORY_HARASSMENT',
+                'threshold': 'BLOCK_NONE'
+              },
+              {
+                'category': 'HARM_CATEGORY_HATE_SPEECH',
+                'threshold': 'BLOCK_NONE'
+              },
+              {
+                'category': 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                'threshold': 'BLOCK_NONE'
+              },
+              {
+                'category': 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                'threshold': 'BLOCK_NONE'
+              },
+            ],
+          },
+        );
 
     try {
       final response = await doRequest(_nextKey());
-      
+
       final candidate = response.data['candidates'][0];
       String raw = candidate['content']['parts'][0]['text'] as String;
-      
+
       raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
       return jsonDecode(raw) as Map<String, dynamic>;
     } on DioException catch (e) {
       if (e.response?.statusCode == 429) {
         final response = await doRequest(_nextKey());
-        String raw = response.data['candidates'][0]['content']['parts'][0]['text'] as String;
+        String raw = response.data['candidates'][0]['content']['parts'][0]
+            ['text'] as String;
         raw = raw.replaceAll('```json', '').replaceAll('```', '').trim();
         return jsonDecode(raw) as Map<String, dynamic>;
       }

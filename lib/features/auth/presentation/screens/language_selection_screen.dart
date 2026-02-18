@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/providers/locale_provider.dart';
 
 @RoutePage()
@@ -10,7 +11,8 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -18,6 +20,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,7 +29,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 48),
-              // Welcome header
               Icon(
                 Iconsax.language_square,
                 size: 64,
@@ -34,30 +36,34 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
               const SizedBox(height: 24),
               Text(
-                'Choose Your Language',
+                _selectedLanguage == 'en'
+                    ? 'Choose Your Language'
+                    : 'Pilih Bahasa Anda',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Pilih Bahasa Anda',
+                _selectedLanguage == 'en'
+                    ? 'Please select your preferred language'
+                    : 'Silakan pilih bahasa yang Anda inginkan',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
               _buildLanguageOption(
                 '🇬🇧',
-                'English',
+                l10n.english,
                 'en',
               ),
               const SizedBox(height: 16),
               _buildLanguageOption(
                 '🇮🇩',
-                'Bahasa Indonesia',
+                l10n.bahasaIndonesia,
                 'id',
               ),
               const Spacer(),
@@ -67,13 +73,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 ),
                 onPressed: () async {
                   final router = context.router;
-                  final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
-                  
-                  // Save language preference and mark as selected
+                  final localeProvider =
+                      Provider.of<LocaleProvider>(context, listen: false);
+
                   await localeProvider.setLocale(Locale(_selectedLanguage));
                   await localeProvider.markLanguageSelected();
-                  
-                  // Navigate to Auth screen
+
                   router.replace(const AuthRoute());
                 },
                 child: Row(
@@ -112,7 +117,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           ),
           borderRadius: BorderRadius.circular(16),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
@@ -122,8 +130,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             Text(
               language,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
             ),
             const Spacer(),
             if (isSelected)

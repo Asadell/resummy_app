@@ -5,18 +5,14 @@ import 'package:uuid/uuid.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
-
 class CvAtsConverterService {
   final Uuid _uuid = const Uuid();
 
-  /// Main method: upload file → Gemini 3 → return CVData
   Future<CVData> convertFromFile(File file, {String? targetLanguage}) async {
     final bytes = await file.readAsBytes();
     final base64Data = base64Encode(bytes);
     final mimeType = _getMimeType(file.path);
 
-    // Gemini 3: media_resolution diletakkan sebagai field terpisah di part,
-    // BUKAN di dalam inline_data
     final Map<String, dynamic> mediaPart = {
       'inline_data': {
         'mime_type': mimeType,
@@ -36,7 +32,6 @@ class CvAtsConverterService {
         }
       ],
       'generationConfig': {
-        // Gemini 3: WAJIB temperature 1.0
         'temperature': 1.0,
         'topP': 0.95,
         'maxOutputTokens': 65536,
@@ -45,7 +40,6 @@ class CvAtsConverterService {
     };
 
     final response = await _postWithRetry(
-      // v1alpha untuk fitur media_resolution
       'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3-flash-preview:generateContent',
       Options(
         headers: {
@@ -54,13 +48,11 @@ class CvAtsConverterService {
         },
         receiveTimeout: const Duration(seconds: 90),
         sendTimeout: const Duration(seconds: 60),
-        // validateStatus: true agar kita bisa print error body sebelum throw
         validateStatus: (status) => true,
       ),
       requestBody,
     );
 
-    // Handle error dengan pesan yang informatif
     if (response.statusCode != 200) {
       final errorBody = response.data?.toString() ?? 'no body';
       throw Exception(
@@ -72,7 +64,6 @@ class CvAtsConverterService {
     return parseCvJson(jsonDecode(rawJson) as Map<String, dynamic>);
   }
 
-  // ─── Retry logic untuk 503 / 429 ────────────────────────────
   Future<Response> _postWithRetry(
     String url,
     Options options,
@@ -83,9 +74,8 @@ class CvAtsConverterService {
       final response = await Dio().post(url, options: options, data: body);
       final statusCode = response.statusCode ?? 0;
 
-      // Retry untuk 503 (server overload) atau 429 (rate limit)
       if ((statusCode == 503 || statusCode == 429) && i < maxRetry - 1) {
-        final waitSeconds = 2 * (i + 1); // 2s, 4s, 6s
+        final waitSeconds = 2 * (i + 1);
         await Future.delayed(Duration(seconds: waitSeconds));
         continue;
       }
@@ -95,7 +85,6 @@ class CvAtsConverterService {
     throw Exception('Gemini API: max retries exceeded');
   }
 
-  // ─── Extract JSON string from Gemini response ───────────────
   String _extractJsonFromResponse(dynamic responseData) {
     try {
       final candidates = responseData['candidates'] as List;
@@ -105,7 +94,6 @@ class CvAtsConverterService {
       final parts = content['parts'] as List;
       if (parts.isEmpty) throw Exception('No parts in response');
 
-      // Gemini 3 bisa punya thoughtSignature di parts, cari yang ada 'text'
       String? text;
       for (final part in parts) {
         if (part is Map && part.containsKey('text')) {
@@ -121,7 +109,6 @@ class CvAtsConverterService {
         throw Exception('No text content in response parts');
       }
 
-      // Strip markdown code blocks jika ada
       text = text.trim();
       if (text.startsWith('```')) {
         final lines = text.split('\n');
@@ -136,9 +123,8 @@ class CvAtsConverterService {
     }
   }
 
-  // ─── Parse JSON → CVData ─────────────────────────────────────
-  CVData parseCvJson(Map<String, dynamic> data, {String source = 'ats_converter'}) {
-    
+  CVData parseCvJson(Map<String, dynamic> data,
+      {String source = 'ats_converter'}) {
     final now = DateTime.now();
     final List<SectionData> sections = [];
     final rawSections = data['sections'] as List<dynamic>? ?? [];
@@ -382,14 +368,25 @@ class CvAtsConverterService {
     );
   }
 
-  // ─── Helpers ─────────────────────────────────────────────────
   DateTime _parseDate(String dateStr) {
     try {
       final months = {
-        'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4,
-        'may': 5, 'jun': 6, 'jul': 7, 'aug': 8,
-        'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
-        'mei': 5, 'agu': 8, 'okt': 10, 'des': 12,
+        'jan': 1,
+        'feb': 2,
+        'mar': 3,
+        'apr': 4,
+        'may': 5,
+        'jun': 6,
+        'jul': 7,
+        'aug': 8,
+        'sep': 9,
+        'oct': 10,
+        'nov': 11,
+        'dec': 12,
+        'mei': 5,
+        'agu': 8,
+        'okt': 10,
+        'des': 12,
       };
       final parts = dateStr.trim().split(' ');
       if (parts.length >= 2) {
@@ -413,7 +410,6 @@ class CvAtsConverterService {
     return 'image/jpeg';
   }
 
-  // ─── Gemini Prompt ───────────────────────────────────────────
   String _buildPrompt({String? targetLanguage}) => '''
 You are an expert CV/Resume parser and ATS specialist.
 ${targetLanguage != null ? 'CRITICAL: You MUST translate all extracted content into $targetLanguage. The output JSON values must be in $targetLanguage.' : ''}
