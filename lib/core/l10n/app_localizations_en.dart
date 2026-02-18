@@ -2253,4 +2253,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noActivityFound => 'No activity found yet';
+
+  @override
+  String get deleteExperienceTitle => 'Delete Experience?';
+
+  @override
+  String get deleteExperienceContent =>
+      'Are you sure you want to delete this experience? This action cannot be undone.';
+
+  @override
+  String get deleteEducationTitle => 'Delete Education?';
+
+  @override
+  String get deleteEducationContent =>
+      'Are you sure you want to delete this education? This action cannot be undone.';
 }

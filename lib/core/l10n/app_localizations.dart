@@ -4351,6 +4351,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No activity found yet'**
   String get noActivityFound;
+
+  /// No description provided for @deleteExperienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Experience?'**
+  String get deleteExperienceTitle;
+
+  /// No description provided for @deleteExperienceContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this experience? This action cannot be undone.'**
+  String get deleteExperienceContent;
+
+  /// No description provided for @deleteEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Education?'**
+  String get deleteEducationTitle;
+
+  /// No description provided for @deleteEducationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this education? This action cannot be undone.'**
+  String get deleteEducationContent;
 }
 
 class _AppLocalizationsDelegate

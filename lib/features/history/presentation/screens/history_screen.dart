@@ -7,7 +7,6 @@ import 'package:resummy_app/core/theme/app_sizes.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_item.dart';
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/features/history/presentation/widgets/suggestion_card.dart';
-import 'package:resummy_app/features/history/presentation/widgets/weekly_insight_card.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_card.dart';
 import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
 
@@ -34,6 +33,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           l10n.activityHistory,
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -42,12 +42,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
           icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.maybePop(),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.filter),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Consumer<HistoryProvider>(
         builder: (context, provider, child) {
@@ -75,12 +69,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                       ),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSizes.md),
-                    child: const WeeklyInsightCard(),
                   ),
                 ),
                 SliverPersistentHeader(
@@ -171,22 +159,21 @@ class _FilterTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      color: Colors.white,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.lg,
         vertical: AppSizes.md,
       ),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border(
           bottom: BorderSide(color: Colors.grey[200] ?? Colors.grey),
         ),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildTab(context, l10n.filterAll, HistoryFilter.all),
-          const SizedBox(width: AppSizes.lg),
           _buildTab(context, l10n.filterCv, HistoryFilter.cv),
-          const SizedBox(width: AppSizes.lg),
           _buildTab(context, l10n.filterInterview, HistoryFilter.interview),
         ],
       ),
@@ -198,16 +185,11 @@ class _FilterTabs extends StatelessWidget {
     return GestureDetector(
       onTap: () => onFilterChanged(filter),
       child: Container(
-        padding: const EdgeInsets.only(bottom: 4),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          border: isSelected
-              ? Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 2,
-                  ),
-                )
-              : null,
+          color: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.1) : null,
+          borderRadius: BorderRadius.circular(20),
+          border: isSelected ? Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.2)) : null,
         ),
         child: Text(
           label,
@@ -235,10 +217,10 @@ class _StickyFilterDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 50;
+  double get maxExtent => 72; // Increased height to accommodate padding
 
   @override
-  double get minExtent => 50;
+  double get minExtent => 72;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

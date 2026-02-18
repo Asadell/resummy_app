@@ -780,5 +780,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "deleteExperienceTitle": "Hapus Pengalaman?",
+  "deleteExperienceContent": "Apakah Anda yakin ingin menghapus pengalaman ini? Tindakan ini tidak dapat dibatalkan.",
+  "deleteEducationTitle": "Hapus Pendidikan?",
+  "deleteEducationContent": "Apakah Anda yakin ingin menghapus pendidikan ini? Tindakan ini tidak dapat dibatalkan."
 }

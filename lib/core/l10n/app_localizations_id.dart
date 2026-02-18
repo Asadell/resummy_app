@@ -2265,4 +2265,18 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get noActivityFound => 'Belum ada aktivitas ditemukan';
+
+  @override
+  String get deleteExperienceTitle => 'Hapus Pengalaman?';
+
+  @override
+  String get deleteExperienceContent =>
+      'Apakah Anda yakin ingin menghapus pengalaman ini? Tindakan ini tidak dapat dibatalkan.';
+
+  @override
+  String get deleteEducationTitle => 'Hapus Pendidikan?';
+
+  @override
+  String get deleteEducationContent =>
+      'Apakah Anda yakin ingin menghapus pendidikan ini? Tindakan ini tidak dapat dibatalkan.';
 }

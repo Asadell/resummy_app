@@ -204,7 +204,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                                   icon: const Icon(Iconsax.trash,
                                       size: 20, color: Colors.red),
                                   onPressed: () =>
-                                      provider.removeEducation(index),
+                                      _showDeleteConfirmation(context, provider, index),
                                 ),
                               ],
                             ),
@@ -238,6 +238,98 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
   bool _isCurrentlyStudying = false;
   bool _showValidation = false;
   int? _editingIndex;
+  Future<void> _showDeleteConfirmation(
+      BuildContext context, CVBuilderProvider provider, int index) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shouldDelete = await showModalBottomSheet<bool>(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Icon(
+                  Iconsax.trash,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.deleteEducationTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.deleteEducationContent,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          side: BorderSide(color: Theme.of(context).dividerColor),
+                        ),
+                        child: Text(
+                            l10n.cancel,
+                            style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          elevation: 0,
+                        ),
+                        child: Text(l10n.delete),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ) ??
+        false;
+
+    if (shouldDelete && context.mounted) {
+      provider.removeEducation(index);
+    }
+  }
+
 
   @override
   void dispose() {

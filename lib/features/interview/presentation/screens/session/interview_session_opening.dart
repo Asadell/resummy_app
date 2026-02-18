@@ -20,23 +20,88 @@ class _InterviewSessionOpeningScreenState
     extends State<InterviewSessionOpeningScreen> {
   bool _showTranscript = true;
 
-  Future<void> _showExitDialog() async {
+  Future<void> _showExitBottomSheet() async {
     final l10n = AppLocalizations.of(context)!;
-    final shouldExit = await showDialog<bool>(
+    final shouldExit = await showModalBottomSheet<bool>(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Text(l10n.exitInterviewTitle),
-            content: Text(l10n.exitInterviewContent),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n.continueInterview),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(l10n.exitYes),
-              ),
-            ],
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Icon(
+                  Iconsax.warning_2,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.exitInterviewTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.exitInterviewContent,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          side: BorderSide(color: Theme.of(context).dividerColor),
+                        ),
+                        child: Text(
+                            l10n.continueInterview,
+                            style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          foregroundColor: Theme.of(context).colorScheme.onError,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          elevation: 0,
+                        ),
+                        child: Text(l10n.exitYes),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ) ??
         false;
@@ -55,7 +120,7 @@ class _InterviewSessionOpeningScreenState
         leading: IconButton(
           icon: Icon(Iconsax.close_circle,
               color: Theme.of(context).colorScheme.error),
-          onPressed: _showExitDialog,
+          onPressed: _showExitBottomSheet,
         ),
         title: Row(
           children: [
