@@ -103,7 +103,7 @@ class _InterviewFeedbackDetailScreenState
                           ),
                           child: Text(
                             '${l10n.question} ${_currentIndex + 1}/$totalQuestions',
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
@@ -150,7 +150,7 @@ class _InterviewFeedbackDetailScreenState
                                 l10n.feedback,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleSmall
+                                    .titleMedium
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).colorScheme.primary,
@@ -160,7 +160,7 @@ class _InterviewFeedbackDetailScreenState
                           ),
                           Text(
                             feedback.starAnalysis.overallFeedback,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               height: 1.5,
                             ),
                           ),
@@ -193,7 +193,7 @@ class _InterviewFeedbackDetailScreenState
                                     l10n.starAnalysis,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleSmall
+                                        .titleMedium
                                         ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -204,7 +204,7 @@ class _InterviewFeedbackDetailScreenState
                                 '${feedback.starAnalysis.score}/10',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium
+                                    .headlineSmall
                                     ?.copyWith(
                                       color: _getScoreColor(context,
                                           feedback.starAnalysis.score * 10),
@@ -252,7 +252,7 @@ class _InterviewFeedbackDetailScreenState
                                 l10n.fluencyAnalysis,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleSmall
+                                    .titleMedium
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -263,7 +263,7 @@ class _InterviewFeedbackDetailScreenState
                             '${feedback.fluencyAnalysis.score}/10',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleMedium
+                                .headlineSmall
                                 ?.copyWith(
                                   color: _getScoreColor(context,
                                       feedback.fluencyAnalysis.score * 10),
@@ -297,7 +297,7 @@ class _InterviewFeedbackDetailScreenState
                                   l10n.improvedSpeechTitle,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
+                                      .titleMedium
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -333,7 +333,7 @@ class _InterviewFeedbackDetailScreenState
                                       userTranscript.isNotEmpty
                                           ? userTranscript
                                           : 'No answer recorded.',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: AppColors.error.withValues(alpha: 0.8),
                                         height: 1.5,
                                       ),
@@ -375,7 +375,7 @@ class _InterviewFeedbackDetailScreenState
                                       ),
                                       Text(
                                         feedback.improvedSpeech.improvedText,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
                                           height: 1.5,
                                           fontWeight: FontWeight.w500,
@@ -406,31 +406,31 @@ class _InterviewFeedbackDetailScreenState
                 spacing: AppSizes.sm,
                 children: [
                   Expanded(
-                    child: OutlinedButton.icon(
+                    child: ElevatedButton.icon(
                       onPressed: _currentIndex > 0
                           ? () {
                               setState(() => _currentIndex--);
                             }
                           : null,
-                      icon: const Icon(Iconsax.arrow_left, size: 16),
+                      icon: const Icon(Iconsax.arrow_left, size: 20),
                       label: Text(l10n.previous),
-                      style: OutlinedButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(52),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: OutlinedButton.icon(
+                    child: ElevatedButton.icon(
                       onPressed: _currentIndex < totalQuestions - 1
                           ? () {
                               setState(() => _currentIndex++);
                             }
                           : null,
-                      icon: const Icon(Iconsax.arrow_right_3, size: 16),
+                      icon: const Icon(Iconsax.arrow_right_3, size: 20),
                       label: Text(l10n.next),
                       iconAlignment: IconAlignment.end,
-                      style: OutlinedButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(52),
                       ),
                     ),
                   ),

@@ -101,163 +101,158 @@ class _InterviewFeedbackQuestionsScreenState
                         _getScoreColor(context, feedback.starAnalysis.score * 10);
 
                     return Container(
-                      margin: const EdgeInsets.only(bottom: AppSizes.sm),
+                      margin: const EdgeInsets.only(bottom: AppSizes.md),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(AppSizes.sm),
-                          border: Border(
-                            left: BorderSide(
-                              color: scoreColor,
-                              width: 4,
-                            ),
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Theme.of(context).dividerColor.withValues(alpha: 0.25),
+                            width: 1.5,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.02),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _expandedIndex = isExpanded ? -1 : index;
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(AppSizes.sm),
-                          child: Padding(
-                            padding: const EdgeInsets.all(AppSizes.md),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _expandedIndex = isExpanded ? -1 : index;
+                              });
+                            },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              spacing: AppSizes.sm,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      isExpanded
-                                          ? Iconsax.arrow_up_2
-                                          : Iconsax.arrow_down_2,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      size: 18,
-                                    ),
-                                    const SizedBox(width: AppSizes.xs),
-                                    Expanded(
-                                      child: Text(
-                                        questionTitle,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                        maxLines: isExpanded ? null : 1,
-                                        overflow: isExpanded
-                                            ? null
-                                            : TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const SizedBox(width: AppSizes.sm),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: scoreColor.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(AppSizes.lg),
-                                        border: Border.all(color: scoreColor.withValues(alpha: 0.2)),
-                                      ),
-                                      child: Text(
-                                        '${feedback.starAnalysis.score}/10',
-                                        style: TextStyle(
-                                          color: scoreColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    spacing: AppSizes.xs,
-                                    children: [
-                                      _buildScoreChip(context, 'STAR',
-                                          feedback.starAnalysis.score.toDouble()),
-                                      _buildScoreChip(
-                                          context,
-                                          l10n.fluency,
-                                          feedback.fluencyAnalysis.score
-                                              .toDouble()),
-                                    ],
-                                  ),
-                                ),
-                                if (isExpanded) ...[
-                                  Divider(color: Theme.of(context).dividerColor.withValues(alpha: 0.5)),
-                                  Column(
+                                Padding(
+                                  padding: const EdgeInsets.all(AppSizes.md),
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    spacing: 4,
+                                    spacing: AppSizes.sm,
                                     children: [
                                       Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Icon(Iconsax.info_circle,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              size: 14),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            l10n.feedback,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context).colorScheme.primary,
-                                                ),
+                                          Expanded(
+                                            child: Text(
+                                              questionTitle,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                    height: 1.3,
+                                                  ),
+                                              maxLines: isExpanded ? null : 2,
+                                              overflow: isExpanded
+                                                  ? null
+                                                  : TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          const SizedBox(width: AppSizes.sm),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 6,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: scoreColor.withValues(alpha: 0.1),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Text(
+                                              '${feedback.starAnalysis.score}/10',
+                                              style: TextStyle(
+                                                color: scoreColor,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        feedback.starAnalysis.overallFeedback,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                              height: 1.5,
-                                            ),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          spacing: AppSizes.xs,
+                                          children: [
+                                            _buildScoreChip(context, 'STAR',
+                                                feedback.starAnalysis.score.toDouble()),
+                                            _buildScoreChip(
+                                                context,
+                                                l10n.fluency,
+                                                feedback.fluencyAnalysis.score
+                                                    .toDouble()),
+                                          ],
+                                        ),
                                       ),
+                                      if (isExpanded) ...[
+                                        const SizedBox(height: 4),
+                                        Container(
+                                          padding: const EdgeInsets.all(AppSizes.md),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.surfaceContainerLow,
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: Theme.of(context).dividerColor.withValues(alpha: 0.15),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            feedback.starAnalysis.overallFeedback,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                  height: 1.5,
+                                                ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton.icon(
+                                            onPressed: () => context.router.push(
+                                                InterviewFeedbackDetailRoute(
+                                                    feedbackIndex: index)),
+                                            icon: const Icon(Iconsax.arrow_right_3,
+                                                size: 14),
+                                            label: Text(l10n.viewDetail, 
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              )
+                                            ),
+                                            iconAlignment: IconAlignment.end,
+                                          ),
+                                        ),
+                                      ] else ...[
+                                        Text(
+                                          feedback.starAnalysis.overallFeedback,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                     ],
                                   ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton.icon(
-                                      onPressed: () => context.router.push(
-                                          InterviewFeedbackDetailRoute(
-                                              feedbackIndex: index)),
-                                      icon: const Icon(Iconsax.arrow_right_3,
-                                          size: 14),
-                                      label: Text(l10n.viewDetail, style: const TextStyle(fontSize: 12)),
-                                      iconAlignment: IconAlignment.end,
-                                      style: TextButton.styleFrom(
-                                        visualDensity: VisualDensity.compact,
-                                      ),
-                                    ),
-                                  ),
-                                ] else ...[
-                                  Text(
-                                    feedback.starAnalysis.overallFeedback,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                                ),
+                                Container(
+                                  height: 4,
+                                  width: double.infinity,
+                                  color: scoreColor,
+                                ),
                               ],
                             ),
                           ),
@@ -268,29 +263,6 @@ class _InterviewFeedbackQuestionsScreenState
                 ),
               ),
             ],
-          ),
-        ),
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.all(AppSizes.md),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border(top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1))),
-          ),
-          child: SafeArea(
-            child: ElevatedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.downloadPdfUnavailable),
-                  ),
-                );
-              },
-              icon: const Icon(Iconsax.document_download),
-              label: Text(l10n.downloadPdf),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(52),
-              ),
-            ),
           ),
         ),
       );

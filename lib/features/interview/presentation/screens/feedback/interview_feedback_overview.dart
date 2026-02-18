@@ -261,17 +261,6 @@ class InterviewFeedbackOverviewScreen extends StatelessWidget {
                               Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          provider.resetInterview();
-                          context.router.push(const InterviewPrepRoute());
-                        },
-                        icon: const Icon(Iconsax.rotate_left, size: 20),
-                        label: Text(l10n.startNewInterview),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                        ),
-                      ),
                     ],
                   ),
                 ),

@@ -112,35 +112,63 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                 minHeight: 4,
               ),
               Container(
-                height: 48,
+                margin: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                      width: 1,
-                    ),
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
                   ),
                 ),
                 child: TabBar(
                   controller: _tabController,
-                  indicatorColor: const Color(0xFF0EA5E9),
-                  indicatorWeight: 3,
-                  labelColor: const Color(0xFF0EA5E9),
-                  unselectedLabelColor: const Color(0xFF6B7280),
+                  indicator: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  labelColor: Theme.of(context).colorScheme.onPrimary,
+                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                   labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
                   ),
                   unselectedLabelStyle: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: Colors.transparent,
                   tabs: [
-                    Tab(text: l10n.edit),
-                    Tab(text: l10n.previewCV),
+                    Tab(
+                      height: 36,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Iconsax.edit_2, size: 16),
+                          const SizedBox(width: 8),
+                          Text(l10n.edit),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      height: 36,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Iconsax.eye, size: 16),
+                          const SizedBox(width: 8),
+                          Text(l10n.previewCV),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
