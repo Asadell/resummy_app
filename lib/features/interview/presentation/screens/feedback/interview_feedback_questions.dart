@@ -80,8 +80,10 @@ class _InterviewFeedbackQuestionsScreenState
                   ],
                 ),
               ),
+              const SizedBox(height: AppSizes.sm),
               Expanded(
-                child: ListView.builder(
+                child: AppSection(
+                  child: ListView.builder(
                   padding: const EdgeInsets.only(bottom: AppSizes.lg),
                   itemCount: feedbacks.length,
                   itemBuilder: (context, index) {
@@ -264,6 +266,7 @@ class _InterviewFeedbackQuestionsScreenState
                       ),
                     );
                   },
+                ),
                 ),
               ),
             ],

@@ -123,6 +123,115 @@ Return JSON:
     }
   }
 
+  /// Combines STAR, Content Quality, Fluency, and Confidence analysis into
+  /// a single Gemini request. Reduces per-question requests from 4 to 1.
+  Future<ComprehensiveAnalysis> analyzeComprehensivePerformance({
+    required String question,
+    required String transcript,
+    required String jobContext,
+    required int audioDurationSeconds,
+    String language = 'en',
+  }) async {
+    final langPrompt = language == 'id' ? 'Bahasa Indonesia' : 'English';
+    final prompt = '''
+You are an expert HR interview coach. Analyze this interview answer comprehensively.
+
+**Question:** $question
+**Candidate's Answer:** $transcript
+**Job Context:** $jobContext
+**Audio Duration:** $audioDurationSeconds seconds
+
+Perform ALL of the following analyses in ONE response:
+
+### 1. STAR Structure Analysis
+Identify which STAR components are present and their quality.
+
+### 2. Content Quality Analysis
+Assess relevance (0-10), depth (0-10), and professional impact (0-10).
+
+### 3. Fluency Analysis
+- Count total words
+- Calculate WPM = (words / seconds) x 60
+- Detect filler words: um, uh, eh, jadi, seperti, ya, soalnya, gitu, kayak, like, you know
+- Assess pace (ideal: 130-150 WPM)
+- Calculate fluency score (0-10)
+
+### 4. Confidence Analysis
+Assess tone, energy, conviction, and language strength. Score 0-10.
+
+Language: Respond entirely in $langPrompt.
+
+Return a single JSON object:
+{
+  "star": {
+    "score": 0-10,
+    "situation": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "task": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "action": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "result": { "present": true/false, "excerpt": "...", "quality": "good/fair/missing" },
+    "overallFeedback": "...",
+    "suggestions": ["...", "..."]
+  },
+  "content": {
+    "score": 0-10,
+    "relevanceScore": 0-10,
+    "depthScore": 0-10,
+    "professionalImpact": 0-10,
+    "strengths": ["...", "..."],
+    "weaknesses": ["...", "..."],
+    "suggestions": ["...", "..."]
+  },
+  "fluency": {
+    "score": 0-10,
+    "wordCount": 150,
+    "wpm": 142.5,
+    "fillerWords": [{"word": "um", "count": 3, "percentage": 2.0}],
+    "fillerPercentage": 3.33,
+    "paceAssessment": "good pace",
+    "suggestions": ["...", "..."]
+  },
+  "confidence": {
+    "score": 0-10,
+    "toneAssessment": "positive",
+    "energyLevel": "medium",
+    "convictionLevel": "strong",
+    "strengthIndicators": ["...", "..."],
+    "weaknessIndicators": ["...", "..."],
+    "tips": ["...", "..."]
+  }
+}
+''';
+
+    try {
+      final response = await _geminiPool.executeWithRetry(
+        poolType: GeminiPoolType.interview,
+        task: (model) async {
+          final content = [Content.text(prompt)];
+          final result = await model.generateContent(
+            content,
+            generationConfig: GenerationConfig(
+              responseMimeType: 'application/json',
+              maxOutputTokens: 4096,
+            ),
+          );
+          return result;
+        },
+      );
+
+      final responseText = response.text ?? '{}';
+      final data = jsonDecode(responseText) as Map<String, dynamic>;
+      return ComprehensiveAnalysis(
+        starAnalysis: STARAnalysis.fromJson(data['star'] as Map<String, dynamic>? ?? {}),
+        contentAnalysis: ContentQualityAnalysis.fromJson(data['content'] as Map<String, dynamic>? ?? {}),
+        fluencyAnalysis: FluencyAnalysis.fromJson(data['fluency'] as Map<String, dynamic>? ?? {}),
+        confidenceAnalysis: ConfidenceAnalysis.fromJson(data['confidence'] as Map<String, dynamic>? ?? {}),
+      );
+    } catch (e) {
+      debugPrint('Error in analyzeComprehensivePerformance: $e');
+      rethrow;
+    }
+  }
+
   Future<InterviewFeedback> generateFeedback({
     required List<InterviewQuestion> questions,
     required String jobContext,

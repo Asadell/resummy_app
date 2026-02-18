@@ -472,3 +472,19 @@ class ImprovedSpeechData extends Equatable {
         wpmAfter,
       ];
 }
+
+/// Holds the combined result of a single comprehensive Gemini analysis request,
+/// replacing the 4 separate STAR/Content/Fluency/Confidence requests.
+class ComprehensiveAnalysis {
+  final STARAnalysis starAnalysis;
+  final ContentQualityAnalysis contentAnalysis;
+  final FluencyAnalysis fluencyAnalysis;
+  final ConfidenceAnalysis confidenceAnalysis;
+
+  const ComprehensiveAnalysis({
+    required this.starAnalysis,
+    required this.contentAnalysis,
+    required this.fluencyAnalysis,
+    required this.confidenceAnalysis,
+  });
+}

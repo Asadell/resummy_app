@@ -216,6 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSizes.sm),
+                        const SizedBox(height: AppSizes.sm),
                         AppSection(
                           padding: const EdgeInsets.all(AppSizes.lg),
                           child: OutlinedButton.icon(

@@ -244,47 +244,130 @@ class InterviewProvider extends ChangeNotifier {
 
     // Set defaults so generateReport() has valid context
     _role ??= 'Software Engineer';
-    _cvText ??= 'Experienced Flutter developer with 2 years of experience building mobile apps. '
+    _cvText ??=
+        'Experienced Flutter developer with 2 years of experience building mobile apps. '
         'Proficient in Dart, Flutter, REST APIs, and state management. '
         'Worked on e-commerce and fintech projects.';
 
-    _questions = [
-      const InterviewQuestion(
+    final isIndonesian = _locale.startsWith('id');
+
+    if (isIndonesian) {
+      _questions = [
+        const InterviewQuestion(
+          id: '1',
+          text: 'Ceritakan tentang tantangan terbesar yang pernah Anda hadapi dalam pekerjaan.',
+          difficulty: 'Medium',
+          userAnswerTranscript:
+              "Saya pernah menghadapi situasi di mana API backend belum siap padahal deadline rilis sudah sangat dekat (Situation). "
+              "Tugas saya adalah memastikan pengembangan frontend tetap berjalan agar tidak ada keterlambatan (Task). "
+              "Saya berinisiatif membuat mock data menggunakan file JSON lokal yang strukturnya sudah disepakati dengan tim backend, sehingga saya bisa menyelesaikan UI dan logic (Action). "
+              "Hasilnya, ketika API siap, integrasi hanya memakan waktu 2 hari dan aplikasi berhasil rilis tepat waktu tanpa bug major (Result).",
+          audioDurationSeconds: 45,
+        ),
+        const InterviewQuestion(
+          id: '2',
+          text: 'Gambarkan situasi di mana Anda menunjukkan kepemimpinan.',
+          difficulty: 'Medium',
+          userAnswerTranscript:
+              "Pada proyek aplikasi e-commerce terakhir, tim kami yang terdiri dari 4 orang mengalami kemacetan progress (Situation). "
+              "Sebagai developer senior, saya mengambil tanggung jawab untuk mengembalikan tim ke jalur yang benar (Task). "
+              "Saya menginisiasi daily standup singkat 15 menit untuk sinkronisasi dan menggunakan Trello untuk visualisasi progress. Saya juga aktif membantu member yang kesulitan dengan logic kompleks (Action). "
+              "Dampaknya, produktivitas tim meningkat drastis dan kami berhasil menyelesaikan proyek 2 minggu lebih awal dari jadwal dengan feedback klien yang sangat positif (Result).",
+          audioDurationSeconds: 50,
+        ),
+        const InterviewQuestion(
+          id: '3',
+          text: 'Bagaimana Anda menangani konflik dengan rekan kerja?',
+          difficulty: 'Hard',
+          userAnswerTranscript:
+              "Saya pernah berbeda pendapat dengan desainer UI mengenai animasi yang sangat kompleks yang bisa memberatkan performa aplikasi (Situation). "
+              "Tujuan saya adalah menjaga performa aplikasi tetap smooth 60fps tanpa mengorbankan estetika terlalu banyak (Task). "
+              "Saya membuatkan prototipe cepat untuk mendemonstrasikan masalah lag yang terjadi, lalu mengajukan solusi alternatif animasi yang lebih ringan namun tetap terlihat premium (Action). "
+              "Desainer setuju dengan data yang saya sajikan, dan kami berhasil mencapai kompromi di mana aplikasi tetap cantik tapi juga sangat responsif (Result).",
+          audioDurationSeconds: 55,
+        ),
+        const InterviewQuestion(
+          id: '4',
+          text: 'Ceritakan pengalaman Anda mempelajari hal baru dengan cepat.',
+          difficulty: 'Easy',
+          userAnswerTranscript:
+              "Saat pindah ke proyek baru, mereka menggunakan Riverpod untuk state management, sedangkan saya terbiasa dengan Provider (Situation). "
+              "Saya harus menguasai Riverpod dalam waktu 3 hari untuk memperbaiki bug kritis (Task). "
+              "Saya mendedikasikan waktu malam untuk membaca dokumentasi resmi, membedah source code proyek, dan membuat aplikasi mini untuk latihan (Action). "
+              "Dalam 2 hari saya sudah paham konsepnya dan berhasil memperbaiki bug tersebut. Sekarang saya bahkan menjadi referensi tim untuk best practice Riverpod (Result).",
+          audioDurationSeconds: 40,
+        ),
+        const InterviewQuestion(
+          id: '5',
+          text: 'Di mana Anda melihat diri Anda 5 tahun ke depan?',
+          difficulty: 'Easy',
+          userAnswerTranscript:
+              "Saat ini saya sudah nyaman sebagai Mid-level developer, tapi saya punya ambisi lebih (Situation). "
+              "Dalam 5 tahun, saya menargetkan diri menjadi Tech Lead atau Principal Engineer (Task). "
+              "Untuk mencapainya, saya mulai fokus mendalami arsitektur software, aktif mentoring developer junior, dan mulai berkontribusi pada proyek open source komunitas Flutter (Action). "
+              "Saya ingin berada di posisi di mana saya bisa memimpin tim teknis skala besar dan membuat keputusan arsitektur yang berdampak luas bagi perusahaan (Result).",
+          audioDurationSeconds: 45,
+        ),
+      ];
+    } else {
+      _questions = [
+        const InterviewQuestion(
           id: '1',
           text: 'Tell me about a time you faced a challenge at work.',
           difficulty: 'Medium',
           userAnswerTranscript:
-              "I once faced a tight deadline where the backend API wasn't ready. I mocked the data using JSON files to continue frontend development, which allowed us to meet the deadline.",
-          audioDurationSeconds: 15),
-      const InterviewQuestion(
+              "I once faced a critical situation where the backend API was delayed, putting our release deadline at risk (Situation). "
+              "My task was to ensure the frontend development continued without blockers to meet the launch date (Task). "
+              "I took the initiative to mock the entire data layer using local JSON files based on the agreed swagger specs. I also coordinated closely with the backend team to ensure strict adherence to the contract (Action). "
+              "As a result, when the API was finally deployed, integration took only 2 days, and we launched the application on schedule with zero critical bugs (Result).",
+          audioDurationSeconds: 45,
+        ),
+        const InterviewQuestion(
           id: '2',
           text: 'Describe a project where you demonstrated leadership.',
           difficulty: 'Medium',
           userAnswerTranscript:
-              "In my final year project, I led a team of 4. I organized daily standups and used Trello to track progress. We finished the project 2 weeks early.",
-          audioDurationSeconds: 20),
-      const InterviewQuestion(
+              "In my previous e-commerce project, our team of four was falling behind schedule due to unclear requirements (Situation). "
+              "I stepped up to lead the technical direction and streamline our workflow (Task). "
+              "I implemented daily 15-minute stand-ups, introduced Kanban for task tracking, and personally mentored junior developers on complex logic (Action). "
+              "This turnaround improved our velocity by 40%, and we delivered the project two weeks early, receiving a special commendation from the client for quality (Result).",
+          audioDurationSeconds: 50,
+        ),
+        const InterviewQuestion(
           id: '3',
           text: 'How do you handle conflict with a team member?',
           difficulty: 'Hard',
           userAnswerTranscript:
-              "I once had a disagreement with a colleague about the architecture of a feature. I proposed we each write a brief doc on our approach and present it to the team. We ended up combining both ideas and the result was better than either original proposal.",
-          audioDurationSeconds: 25),
-      const InterviewQuestion(
+              "I had a disagreement with a UI/UX designer regarding a complex animation that was causing significant frame drops on older devices (Situation). "
+              "My goal was to maintain a smooth 60fps performance while respecting the design intent (Task). "
+              "I built a quick prototype to demonstrate the performance impact to the designer. I then proposed an optimized alternative that achieved a similar visual effect but was much lighter on the GPU (Action). "
+              "The designer appreciated the data-driven approach and accepted the alternative. The final app was both visually stunning and highly performant (Result).",
+          audioDurationSeconds: 55,
+        ),
+        const InterviewQuestion(
           id: '4',
           text: 'Tell me about a time you had to learn something quickly.',
           difficulty: 'Easy',
           userAnswerTranscript:
-              "When I joined my internship, I had to learn Flutter in two weeks. I dedicated 3 hours each evening to tutorials and built a small app to practice. By the end of the second week, I was contributing to the main codebase.",
-          audioDurationSeconds: 18),
-      const InterviewQuestion(
+              "When I joined a new project, the team was using Riverpod for state management, while I was only proficient in Provider (Situation). "
+              "I had to ramp up within 3 days to fix a critical production bug (Task). "
+              "I immersed myself in the official documentation, dissected the project's codebase, and built a small sandbox app to test edge cases (Action). "
+              "I mastered the core concepts in just 2 days, fixed the bug, and subsequently refactored a legacy module to improve code maintainability, becoming the go-to person for Riverpod queries (Result).",
+          audioDurationSeconds: 40,
+        ),
+        const InterviewQuestion(
           id: '5',
           text: 'Where do you see yourself in 5 years?',
           difficulty: 'Easy',
           userAnswerTranscript:
-              "I see myself as a senior mobile developer, possibly leading a small team. I want to deepen my expertise in Flutter and also explore cross-platform performance optimization. I am also interested in contributing to open source projects.",
-          audioDurationSeconds: 22),
-    ];
+              "I currently have a strong foundation in mobile development, but I aim to expand my impact (Situation). "
+              "In five years, I envision myself as a Technical Lead or Principal Architect (Task). "
+              "To achieve this, I am actively deepening my knowledge of system design, mentoring junior engineers, and contributing to the open-source Flutter community (Action). "
+              "I want to lead high-performing teams and drive technical strategy that solves complex business problems at scale (Result).",
+          audioDurationSeconds: 45,
+        ),
+      ];
+    }
 
     _currentQuestionIndex = _questions.length - 1;
     _status = InterviewStatus.analyzing;

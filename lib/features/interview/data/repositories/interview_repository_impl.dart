@@ -74,49 +74,28 @@ class InterviewRepositoryImpl implements InterviewRepository {
           final transcript = question.userAnswerTranscript!;
           final duration = question.audioDurationSeconds ?? 60;
 
-          final results = await Future.wait([
-            _remoteDataSource.analyzeSTARStructure(
-              question: question.text,
-              transcript: transcript,
-              jobContext: jobContext,
-              language: language,
-            ),
-            _remoteDataSource.analyzeContentQuality(
-              question: question.text,
-              transcript: transcript,
-              jobContext: jobContext,
-              language: language,
-            ),
-            _remoteDataSource.analyzeFluency(
-              transcript: transcript,
-              audioDurationSeconds: duration,
-              language: language,
-            ),
-            _remoteDataSource.analyzeConfidence(
-              transcript: transcript,
-              questionContext: question.text,
-              language: language,
-            ),
-          ]);
-
-          final starAnalysis = results[0] as STARAnalysis;
-          final contentAnalysis = results[1] as ContentQualityAnalysis;
-          final fluencyAnalysis = results[2] as FluencyAnalysis;
-          final confidenceAnalysis = results[3] as ConfidenceAnalysis;
+          // Single combined request replaces 4 separate STAR/Content/Fluency/Confidence calls
+          final comprehensive = await _remoteDataSource.analyzeComprehensivePerformance(
+            question: question.text,
+            transcript: transcript,
+            jobContext: jobContext,
+            audioDurationSeconds: duration,
+            language: language,
+          );
 
           final improvedSpeech = await _remoteDataSource.generateImprovedSpeech(
             transcript: transcript,
-            detectedFillers: fluencyAnalysis.fillerWords,
-            originalWpm: fluencyAnalysis.wpm,
+            detectedFillers: comprehensive.fluencyAnalysis.fillerWords,
+            originalWpm: comprehensive.fluencyAnalysis.wpm,
             language: language,
           );
 
             return QuestionFeedback(
               questionId: question.id,
-              starAnalysis: starAnalysis,
-              contentAnalysis: contentAnalysis,
-              fluencyAnalysis: fluencyAnalysis,
-              confidenceAnalysis: confidenceAnalysis,
+              starAnalysis: comprehensive.starAnalysis,
+              contentAnalysis: comprehensive.contentAnalysis,
+              fluencyAnalysis: comprehensive.fluencyAnalysis,
+              confidenceAnalysis: comprehensive.confidenceAnalysis,
               improvedSpeech: improvedSpeech,
             );
           } catch (e) {
