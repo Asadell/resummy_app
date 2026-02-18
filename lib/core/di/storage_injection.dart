@@ -1,21 +1,22 @@
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:resummy_app/core/services/gemini_pool_manager.dart';
+import 'package:resummy_app/core/services/do_spaces_service.dart';
+import 'package:resummy_app/core/services/database_helper.dart';
 
-/// Setup Gemini-related dependencies
-Future<void> setupGeminiDI(GetIt getIt) async {
-  // GeminiPoolManager is already registered in core injection.dart
-  // This file is for future Gemini-specific configurations if needed
-}
-
-/// Setup storage-related dependencies (Firestore, DO Spaces, local storage)
+/// Setup storage-related dependencies (Firestore, DO Spaces, SQLite)
 Future<void> setupStorageDI(GetIt getIt) async {
   // Register Firestore instance
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
 
-  // DO Spaces and local storage will be added here
-  // - MinioClient for DO Spaces
-  // - Hive/SharedPreferences for local cache
+  // Register DO Spaces service for PDF storage
+  getIt.registerLazySingleton<DOSpacesService>(
+    () => DOSpacesService(),
+  );
+
+  // Register SQLite database helper for offline storage
+  getIt.registerLazySingleton<DatabaseHelper>(
+    () => DatabaseHelper(),
+  );
 }

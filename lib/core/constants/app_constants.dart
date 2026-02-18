@@ -156,4 +156,22 @@ class AppConstants {
 
   @EnviedField(varName: 'GEMINI_API_KEY_51', defaultValue: '')
   static const String geminiApiKey51 = _AppConstants.geminiApiKey51;
+
+  @EnviedField(varName: 'DO_SPACES_ENDPOINT')
+  static const String doSpacesEndpoint = _AppConstants.doSpacesEndpoint;
+
+  @EnviedField(varName: 'DO_SPACES_BUCKET')
+  static const String doSpacesBucket = _AppConstants.doSpacesBucket;
+
+  @EnviedField(varName: 'DO_SPACES_ACCESS_KEY')
+  static const String doSpacesAccessKey = _AppConstants.doSpacesAccessKey;
+
+  @EnviedField(varName: 'DO_SPACES_SECRET_KEY')
+  static const String doSpacesSecretKey = _AppConstants.doSpacesSecretKey;
+
+  @EnviedField(varName: 'DO_SPACES_REGION')
+  static const String doSpacesRegion = _AppConstants.doSpacesRegion;
+
+  @EnviedField(varName: 'DO_SPACES_CDN_ENDPOINT')
+  static const String doSpacesCdnEndpoint = _AppConstants.doSpacesCdnEndpoint;
 }
