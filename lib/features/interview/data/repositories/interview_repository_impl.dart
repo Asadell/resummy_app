@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:resummy_app/features/interview/data/data_sources/interview_local_data_source.dart';
 import 'package:resummy_app/features/interview/data/data_sources/interview_remote_data_source.dart';
 import 'package:resummy_app/features/interview/data/data_sources/speech_data_source.dart';
@@ -198,7 +199,21 @@ class InterviewRepositoryImpl implements InterviewRepository {
 
   @override
   Future<void> saveInterview(InterviewEntity interview) async {
+    // Save locally first
     await _localDataSource.saveInterview(interview);
+
+    // Also save to Firestore for cross-device access
+    try {
+      final firestore = FirebaseFirestore.instance;
+      await firestore
+          .collection('users')
+          .doc(interview.userId)
+          .collection('interviews')
+          .doc(interview.id)
+          .set(interview.toJson());
+    } catch (e) {
+      // Firestore save failed silently - local data is still available
+    }
   }
 
   @override

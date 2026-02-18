@@ -216,12 +216,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSizes.sm),
-                        Padding(
+                        AppSection(
                           padding: const EdgeInsets.all(AppSizes.lg),
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              foregroundColor:
-                                  Theme.of(context).colorScheme.error,
+                              foregroundColor: Theme.of(context).colorScheme.error,
+                              side: BorderSide(
+                                  color: Theme.of(context).colorScheme.error),
                               padding: const EdgeInsets.all(AppSizes.md),
                             ),
                             icon: const Icon(Iconsax.logout),

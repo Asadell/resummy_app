@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static Database? _database;
   static const String _databaseName = 'resummy_offline.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
 
   static const String tableCVs = 'cvs';
   static const String tableAnalysisHistory = 'analysis_history';
@@ -63,12 +63,11 @@ class DatabaseHelper {
       CREATE TABLE $tableInterviews (
         id TEXT PRIMARY KEY,
         userId TEXT NOT NULL,
-        cvId TEXT,
-        sessionData TEXT NOT NULL,
-        reportData TEXT,
-        status TEXT,
+        jobPosition TEXT,
+        data TEXT NOT NULL,
         createdAt INTEGER NOT NULL,
-        updatedAt INTEGER NOT NULL,
+        completedAt INTEGER,
+        isCompleted INTEGER DEFAULT 0,
         syncStatus TEXT DEFAULT 'synced'
       )
     ''');
@@ -112,6 +111,24 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Recreate interviews table with correct schema
+      await db.execute('DROP TABLE IF EXISTS $tableInterviews');
+      await db.execute('''
+        CREATE TABLE $tableInterviews (
+          id TEXT PRIMARY KEY,
+          userId TEXT NOT NULL,
+          jobPosition TEXT,
+          data TEXT NOT NULL,
+          createdAt INTEGER NOT NULL,
+          completedAt INTEGER,
+          isCompleted INTEGER DEFAULT 0,
+          syncStatus TEXT DEFAULT 'synced'
+        )
+      ''');
+      await db.execute(
+          'CREATE INDEX IF NOT EXISTS idx_interviews_userId ON $tableInterviews(userId)');
+    }
   }
 
   Future<void> upsert(String table, Map<String, dynamic> data) async {

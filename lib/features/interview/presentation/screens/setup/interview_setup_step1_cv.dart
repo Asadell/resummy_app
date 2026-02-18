@@ -63,14 +63,7 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Iconsax.microphone_2,
-                color: Theme.of(context).colorScheme.primary, size: 20),
-            const SizedBox(width: 8),
-            Text(l10n.aiInterviewSimulator),
-          ],
-        ),
+        title: Text(l10n.aiInterviewSimulator),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
           onPressed: () => context.router.push(const InterviewPrepRoute()),

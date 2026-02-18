@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
@@ -35,7 +36,7 @@ class InterviewHistoryCard extends StatelessWidget {
         ),
         title: Text(l10n.interviewResults),
         subtitle: Text(
-          l10n.score(score),
+          DateFormat.yMMMd().format(interview.createdAt),
           style: Theme.of(context).textTheme.bodySmall,
         ),
         trailing: const Icon(Iconsax.arrow_right_3, size: 16),

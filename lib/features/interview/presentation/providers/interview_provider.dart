@@ -245,7 +245,7 @@ class InterviewProvider extends ChangeNotifier {
     _questions = [
       const InterviewQuestion(
           id: '1',
-          text: 'Tell me about a time you faced a challenge.',
+          text: 'Tell me about a time you faced a challenge at work.',
           difficulty: 'Medium',
           userAnswerTranscript:
               "I once faced a tight deadline where the backend API wasn't ready. I mocked the data using JSON files to continue frontend development, which allowed us to meet the deadline.",
@@ -257,6 +257,27 @@ class InterviewProvider extends ChangeNotifier {
           userAnswerTranscript:
               "In my final year project, I led a team of 4. I organized daily standups and used Trello to track progress. We finished the project 2 weeks early.",
           audioDurationSeconds: 20),
+      const InterviewQuestion(
+          id: '3',
+          text: 'How do you handle conflict with a team member?',
+          difficulty: 'Hard',
+          userAnswerTranscript:
+              "I once had a disagreement with a colleague about the architecture of a feature. I proposed we each write a brief doc on our approach and present it to the team. We ended up combining both ideas and the result was better than either original proposal.",
+          audioDurationSeconds: 25),
+      const InterviewQuestion(
+          id: '4',
+          text: 'Tell me about a time you had to learn something quickly.',
+          difficulty: 'Easy',
+          userAnswerTranscript:
+              "When I joined my internship, I had to learn Flutter in two weeks. I dedicated 3 hours each evening to tutorials and built a small app to practice. By the end of the second week, I was contributing to the main codebase.",
+          audioDurationSeconds: 18),
+      const InterviewQuestion(
+          id: '5',
+          text: 'Where do you see yourself in 5 years?',
+          difficulty: 'Easy',
+          userAnswerTranscript:
+              "I see myself as a senior mobile developer, possibly leading a small team. I want to deepen my expertise in Flutter and also explore cross-platform performance optimization. I am also interested in contributing to open source projects.",
+          audioDurationSeconds: 22),
     ];
 
     _currentQuestionIndex = _questions.length - 1;
