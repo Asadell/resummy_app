@@ -18,7 +18,7 @@ class CVRemoteDataSource {
 
       return querySnapshot.docs.map((doc) {
         final data = doc.data();
-        return CVData.fromJson(data);
+        return CVData.fromJson(_convertTimestamps(data));
       }).toList();
     } catch (e) {
       debugPrint('❌ Error getting CVs from Firestore: $e');
@@ -33,7 +33,7 @@ class CVRemoteDataSource {
 
       if (!docSnapshot.exists) return null;
 
-      return CVData.fromJson(docSnapshot.data()!);
+      return CVData.fromJson(_convertTimestamps(docSnapshot.data()!));
     } catch (e) {
       debugPrint('❌ Error getting CV by ID from Firestore: $e');
       return null;
@@ -44,6 +44,12 @@ class CVRemoteDataSource {
     try {
       final data = cv.toJson();
       data['userId'] = userId;
+      
+      // Convert string timestamps to Firestore Timestamps to satisfy security rules
+      if (data['createdAt'] is String) {
+        data['createdAt'] = Timestamp.fromDate(DateTime.parse(data['createdAt']));
+      }
+      data['updatedAt'] = FieldValue.serverTimestamp();
 
       await _firestore
           .collection(_collectionPath)
@@ -62,5 +68,19 @@ class CVRemoteDataSource {
       debugPrint('❌ Error deleting CV from Firestore: $e');
       throw Exception('Failed to delete CV from cloud storage');
     }
+  }
+
+
+  Map<String, dynamic> _convertTimestamps(Map<String, dynamic> data) {
+    final newData = Map<String, dynamic>.from(data);
+    if (newData['createdAt'] is Timestamp) {
+      newData['createdAt'] =
+          (newData['createdAt'] as Timestamp).toDate().toIso8601String();
+    }
+    if (newData['updatedAt'] is Timestamp) {
+      newData['updatedAt'] =
+          (newData['updatedAt'] as Timestamp).toDate().toIso8601String();
+    }
+    return newData;
   }
 }
