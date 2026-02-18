@@ -4,7 +4,6 @@ import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_question.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_report.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_feedback_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class InterviewRemoteDataSource {
   final GeminiPoolManager _geminiPool;

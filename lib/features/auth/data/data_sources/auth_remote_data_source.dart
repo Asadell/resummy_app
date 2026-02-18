@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
 import 'package:resummy_app/core/error/exceptions.dart';
 import 'package:resummy_app/features/auth/domain/entities/user_entity.dart';
 

@@ -110,7 +110,7 @@ class InterviewProvider extends ChangeNotifier {
       _history = await _repository.getInterviewHistory(_userId!);
       notifyListeners();
     } catch (e) {
-      // ignore
+      // ignore: empty_catches
     }
   }
 
@@ -283,6 +283,7 @@ class InterviewProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
+      // ignore: empty_catches
     }
   }
 
@@ -350,6 +351,7 @@ class InterviewProvider extends ChangeNotifier {
       _currentAudioDuration = 0;
       notifyListeners();
     } catch (e) {
+      // ignore: empty_catches
     }
   }
 
@@ -514,7 +516,7 @@ class InterviewProvider extends ChangeNotifier {
           });
         }
       } catch (e) {
-        // ignore
+        // ignore: empty_catches
         if (!_isDisposed) {
           _isPlayingQuestion = false;
           notifyListeners();

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/interview/domain/entities/interview_entity.dart';
-import 'package:flutter/foundation.dart';
 
 class InterviewLocalDataSource {
   final DatabaseHelper _dbHelper;

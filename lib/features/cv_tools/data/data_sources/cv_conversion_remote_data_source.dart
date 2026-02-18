@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/services/gemini_pool_manager.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';

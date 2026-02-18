@@ -43,6 +43,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         final bytes = await service.generatePDFBytes(cv);
         if (mounted) setState(() => _pdfBytes = bytes);
       } catch (e) {
+        // ignore: empty_catches
       } finally {
         if (mounted) setState(() => _isGenerating = false);
       }

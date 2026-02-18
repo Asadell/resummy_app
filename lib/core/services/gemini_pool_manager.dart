@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:resummy_app/core/constants/app_constants.dart';
 
@@ -124,7 +123,6 @@ class GeminiPoolManager {
     final int maxAttempts = pool.length;
 
     while (attempts < maxAttempts) {
-      final int index = _indices[poolType]!;
       final model = _getModel(poolType);
       attempts++;
 
