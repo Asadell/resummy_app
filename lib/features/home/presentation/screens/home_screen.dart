@@ -19,48 +19,144 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context, l10n),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: AppSizes.md),
-                  _buildSectionHeader(
-                    context,
-                    title: l10n.quickActions,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: AppSizes.sm),
+                AppSection(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.quickActions,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: AppSizes.md),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _QuickActionCard(
+                              icon: Iconsax.document_text,
+                              title: l10n.buildCv,
+                              color: Theme.of(context).colorScheme.primary,
+                              onTap: () => context.router
+                                  .push(const CvBuilderWelcomeRoute()),
+                            ),
+                          ),
+                          const SizedBox(width: AppSizes.md),
+                          Expanded(
+                            child: _QuickActionCard(
+                              icon: Iconsax.chart_2,
+                              title: l10n.analyzeCv,
+                              color: Theme.of(context).colorScheme.secondary,
+                              onTap: () => context.router
+                                  .push(const CvAnalyzerUploadRoute()),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSizes.md),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _QuickActionCard(
+                              icon: Iconsax.microphone,
+                              title: l10n.interviewPrep,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              onTap: () => context.router
+                                  .push(const InterviewSetupStep1Route()),
+                            ),
+                          ),
+                          const SizedBox(width: AppSizes.md),
+                          Expanded(
+                            child: _QuickActionCard(
+                              icon: Iconsax.magic_star,
+                              title: l10n.convertToCvAts,
+                              color: Colors.purple,
+                              onTap: () => context.router
+                                  .push(const CvAtsConverterRoute()),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSizes.md),
-                ],
-              ),
-            ),
-          ),
-          _buildQuickActionsGrid(context, l10n),
-          SliverPadding(
-            padding: const EdgeInsets.all(AppSizes.md),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  _buildSectionHeader(
-                    context,
-                    title: l10n.recentActivity,
-                    onViewAll: () =>
-                        context.router.navigate(const HistoryRoute()),
+                ),
+                const SizedBox(height: AppSizes.sm),
+                AppSection(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.recentActivity,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.router.navigate(const HistoryRoute());
+                            },
+                            child: Text(l10n.viewAll),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSizes.sm),
+                      Consumer<HistoryProvider>(
+                        builder: (context, provider, child) {
+                          final activities =
+                              provider.activities.take(3).toList();
+
+                          if (activities.isEmpty) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: AppSizes.lg),
+                                child: Text(
+                                  l10n.noInterviewHistory,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                            );
+                          }
+
+                          return Column(
+                            spacing: AppSizes.sm,
+                            children: activities.map((activity) {
+                              if (activity is CvActivityItem) {
+                                return CvHistoryCard(
+                                  cv: activity.cvData,
+                                  index: activities.indexOf(activity),
+                                );
+                              } else if (activity is InterviewActivityItem) {
+                                return InterviewHistoryCard(
+                                  interview: activity.interview,
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }).toList(),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSizes.md),
-                  _buildRecentActivity(context, l10n),
-                ],
-              ),
+                ),
+                const SizedBox(height: AppSizes.xl),
+              ],
             ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: AppSizes.xl),
           ),
         ],
       ),
@@ -165,161 +261,6 @@ class HomeScreen extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildSectionHeader(
-    BuildContext context, {
-    required String title,
-    VoidCallback? onViewAll,
-  }) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: -0.5,
-          ),
-        ),
-        if (onViewAll != null)
-          TextButton(
-            onPressed: onViewAll,
-            style: TextButton.styleFrom(
-              visualDensity: VisualDensity.compact,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(AppLocalizations.of(context)!.viewAll),
-                const SizedBox(width: 4),
-                const Icon(Iconsax.arrow_right_1, size: 14),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildQuickActionsGrid(BuildContext context, AppLocalizations l10n) {
-    final theme = Theme.of(context);
-    final actions = [
-      _QuickActionData(
-        icon: Iconsax.document_text,
-        title: l10n.buildCv,
-        color: theme.colorScheme.primary,
-        onTap: () => context.router.push(const CvBuilderWelcomeRoute()),
-      ),
-      _QuickActionData(
-        icon: Iconsax.chart_2,
-        title: l10n.analyzeCv,
-        color: theme.colorScheme.secondary,
-        onTap: () => context.router.push(const CvAnalyzerUploadRoute()),
-      ),
-      _QuickActionData(
-        icon: Iconsax.microphone,
-        title: l10n.interviewPrep,
-        color: theme.colorScheme.tertiary,
-        onTap: () => context.router.push(const InterviewSetupStep1Route()),
-      ),
-      _QuickActionData(
-        icon: Iconsax.magic_star,
-        title: l10n.convertToCvAts,
-        color: Colors.purple,
-        onTap: () => context.router.push(const CvAtsConverterRoute()),
-      ),
-    ];
-
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: AppSizes.md,
-          crossAxisSpacing: AppSizes.md,
-          childAspectRatio: 1.1,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final action = actions[index];
-            return _QuickActionCard(
-              icon: action.icon,
-              title: action.title,
-              color: action.color,
-              onTap: action.onTap,
-            );
-          },
-          childCount: actions.length,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecentActivity(BuildContext context, AppLocalizations l10n) {
-    return Consumer<HistoryProvider>(
-      builder: (context, provider, child) {
-        final activities = provider.activities.take(3).toList();
-
-        if (activities.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSizes.lg),
-              child: Column(
-                children: [
-                  Icon(
-                    Iconsax.document_filter,
-                    size: 48,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurfaceVariant
-                        .withValues(alpha: 0.2),
-                  ),
-                  const SizedBox(height: AppSizes.sm),
-                  Text(
-                    l10n.noInterviewHistory,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        return Column(
-          spacing: AppSizes.sm,
-          children: activities.map((activity) {
-            if (activity is CvActivityItem) {
-              return CvHistoryCard(
-                cv: activity.cvData,
-                index: activities.indexOf(activity),
-              );
-            } else if (activity is InterviewActivityItem) {
-              return InterviewHistoryCard(
-                interview: activity.interview,
-              );
-            }
-            return const SizedBox.shrink();
-          }).toList(),
-        );
-      },
-    );
-  }
-}
-
-class _QuickActionData {
-  final IconData icon;
-  final String title;
-  final Color color;
-  final VoidCallback onTap;
-
-  _QuickActionData({
-    required this.icon,
-    required this.title,
-    required this.color,
-    required this.onTap,
-  });
 }
 
 class _QuickActionCard extends StatelessWidget {
@@ -337,50 +278,29 @@ class _QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withValues(alpha: 0.1),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
         ),
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.md),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(AppSizes.sm),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, size: 28, color: color),
-                ),
-                const SizedBox(height: AppSizes.sm),
-                Text(
-                  title,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSizes.md),
+          child: Column(
+            children: [
+              Icon(icon, size: 32, color: color),
+              const SizedBox(height: AppSizes.sm),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.labelLarge,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),

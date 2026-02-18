@@ -111,28 +111,20 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                               border: Border.all(
                                   color: Colors.grey.withValues(alpha: 0.2)),
                             ),
-                            child: Column(
-                              children: [
-                                Icon(Iconsax.folder_open,
-                                    size: 48, color: Colors.grey[400]),
-                                const SizedBox(height: AppSizes.md),
-                                Text(
-                                  l10n.noSavedCvs,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        color: Colors.grey[600],
-                                      ),
-                                ),
-                                const SizedBox(height: AppSizes.md),
-                                OutlinedButton.icon(
-                                  onPressed: () => context.router
-                                      .push(const CvBuilderWelcomeRoute()),
-                                  icon: const Icon(Iconsax.add),
-                                  label: Text(l10n.startCreatingCv),
-                                ),
-                              ],
+                            child: Center(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(AppSizes.md),
+                                  child: Text(
+                                    l10n.noSavedCvs,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                  )),
                             ),
                           );
                         }
