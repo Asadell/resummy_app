@@ -6,6 +6,7 @@ import 'package:resummy_app/features/cv_tools/di/cv_analysis_injection.dart';
 import 'package:resummy_app/features/interview/di/interview_injection.dart';
 import 'package:resummy_app/features/history/di/history_injection.dart';
 import 'package:resummy_app/features/auth/di/auth_injection.dart';
+import 'package:resummy_app/features/profile/di/profile_injection.dart';
 
 /// Global GetIt instance for dependency injection
 final getIt = GetIt.instance;
@@ -22,9 +23,7 @@ Future<void> setupDI() async {
   await setupInterviewDI(getIt);
   await setupHistoryDI(getIt);
   await setupAuthDI(getIt);
-  
-  // TODO: Add other features
-  // await setupProfileDI(getIt);
+  await setupProfileDI(getIt);
 }
 
 /// Setup core services (Gemini Pool Manager, Storage, etc.)

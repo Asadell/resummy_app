@@ -6,6 +6,8 @@ import 'package:resummy_app/features/interview/data/data_sources/interview_remot
 import 'package:resummy_app/features/interview/data/data_sources/speech_data_source.dart';
 import 'package:resummy_app/features/interview/data/repositories/interview_repository_impl.dart';
 import 'package:resummy_app/features/interview/domain/repositories/interview_repository.dart';
+import 'package:resummy_app/features/interview/presentation/providers/interview_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 /// Setup Dependency Injection for Interview feature
 Future<void> setupInterviewDI(GetIt getIt) async {
@@ -28,6 +30,14 @@ Future<void> setupInterviewDI(GetIt getIt) async {
       getIt<InterviewRemoteDataSource>(),
       getIt<InterviewLocalDataSource>(),
       getIt<SpeechDataSource>(),
+    ),
+  );
+
+  // Provider
+  getIt.registerLazySingleton<InterviewProvider>(
+    () => InterviewProvider(
+      repository: getIt<InterviewRepository>(),
+      authProvider: getIt<AuthProvider>(),
     ),
   );
 }

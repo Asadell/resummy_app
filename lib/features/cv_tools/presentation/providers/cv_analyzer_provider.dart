@@ -6,7 +6,10 @@ import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_ser
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
-  final _service = CvAnalyzerService();
+  final CvAnalyzerService _service;
+
+  CvAnalyzerProvider({CvAnalyzerService? service}) 
+      : _service = service ?? CvAnalyzerService();
 
   // ── File state ──
   PlatformFile? _selectedFile;

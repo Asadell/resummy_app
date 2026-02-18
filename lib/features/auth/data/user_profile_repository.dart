@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
 
 class UserProfileRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
   static const String _collection = 'users';
+
+  UserProfileRepository([FirebaseFirestore? firestore]) 
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<UserProfile?> getUserProfile(String uid) async {
     try {

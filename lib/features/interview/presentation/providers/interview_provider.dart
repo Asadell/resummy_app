@@ -15,8 +15,12 @@ import 'package:uuid/uuid.dart';
 enum InterviewStatus { initial, loading, inProgress, analyzing, completed, error }
 enum InterviewFocus { behavioral, technical, mixed }
 
+
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
+
 class InterviewProvider extends ChangeNotifier {
   final InterviewRepository _repository;
+  final AuthProvider _authProvider;
   
   // State
   InterviewStatus _status = InterviewStatus.initial;
@@ -27,7 +31,7 @@ class InterviewProvider extends ChangeNotifier {
   // History
   List<InterviewEntity> _history = [];
   List<InterviewEntity> get history => _history;
-  String? _userId;
+  String? get _userId => _authProvider.currentUser?.id;
 
   // Interview Data
   String? _cvText;
@@ -68,13 +72,33 @@ class InterviewProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  InterviewProvider(this._repository) {
+  InterviewProvider({
+    required InterviewRepository repository,
+    required AuthProvider authProvider,
+  }) : _repository = repository,
+       _authProvider = authProvider {
     // Suppress verbose audio logs
     AudioLogger.logLevel = AudioLogLevel.none;
+    
+    // Listen to Auth
+    _authProvider.addListener(_onAuthChanged);
+    _onAuthChanged();
   }
 
-  void updateUserId(String? userId) {
-    _userId = userId;
+  @override
+  void dispose() {
+    _authProvider.removeListener(_onAuthChanged);
+    _isDisposed = true;
+    _playerCompleteSubscription?.cancel();
+    _audioPlayer.dispose();
+    _stopSessionTimer();
+    if (_isRecorderInitialized) {
+        _audioRecorder.closeRecorder();
+    }
+    super.dispose();
+  }
+
+  void _onAuthChanged() {
     if (_userId != null) {
       loadHistory();
     } else {

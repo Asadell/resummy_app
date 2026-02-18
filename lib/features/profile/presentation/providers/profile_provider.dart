@@ -1,16 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:resummy_app/features/auth/domain/user_profile_model.dart';
 import 'package:resummy_app/features/auth/data/user_profile_repository.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  final UserProfileRepository _repository = UserProfileRepository();
+  final UserProfileRepository _repository;
+  final AuthProvider _authProvider;
+  
   UserProfile? _profile;
   bool _isLoading = false;
   String? _error;
 
+  ProfileProvider({
+    required UserProfileRepository repository,
+    required AuthProvider authProvider,
+  }) : _repository = repository,
+       _authProvider = authProvider {
+    // Listen to AuthProvider changes
+    _authProvider.addListener(_onAuthChanged);
+    // Initial check
+    _onAuthChanged();
+  }
+
   UserProfile? get profile => _profile;
   bool get isLoading => _isLoading;
   String? get error => _error;
+
+  @override
+  void dispose() {
+    _authProvider.removeListener(_onAuthChanged);
+    super.dispose();
+  }
+
+  void _onAuthChanged() {
+    final user = _authProvider.currentUser;
+    if (user != null) {
+      if (_profile?.uid != user.id) {
+         loadProfile(user.id);
+      }
+    } else {
+      _profile = null;
+      notifyListeners();
+    }
+  }
 
   // Initial load called when AuthProvider changes
   Future<void> loadProfile(String? uid) async {
