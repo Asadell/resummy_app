@@ -954,6 +954,67 @@ class CVData extends Equatable {
 
   final String source;
 
+  String toPlainText() {
+    final buffer = StringBuffer();
+    buffer.writeln('Name: ${header.name}');
+    if (header.email != null) buffer.writeln('Email: ${header.email}');
+    if (header.phone != null) buffer.writeln('Phone: ${header.phone}');
+    if (header.location != null) buffer.writeln('Location: ${header.location}');
+    buffer.writeln();
+
+    for (final section in sections) {
+      if (!section.isVisible) continue;
+      buffer.writeln('--- ${section.title} ---');
+
+      if (section is SummarySection) {
+        buffer.writeln(section.content);
+      } else if (section is ExperienceSection) {
+        for (final e in section.entries) {
+          buffer.writeln('${e.jobTitle} at ${e.companyName}');
+          buffer.writeln('Period: ${e.startDate.year} - ${e.isCurrentlyWorking ? "Present" : e.endDate?.year}');
+          buffer.writeln(e.responsibilities);
+          buffer.writeln();
+        }
+      } else if (section is EducationSection) {
+        for (final e in section.entries) {
+          buffer.writeln('${e.degree} in ${e.major}');
+          buffer.writeln('${e.institution}, ${e.startYear} - ${e.isCurrentlyStudying ? "Present" : e.endYear}');
+          if (e.achievements != null) buffer.writeln(e.achievements);
+          buffer.writeln();
+        }
+      } else if (section is SkillsSection) {
+        section.skillCategories.forEach((cat, skills) {
+          buffer.writeln('$cat: ${skills.join(", ")}');
+        });
+      } else if (section is CertificationsSection) {
+        for (final e in section.entries) {
+          buffer.writeln(e.name);
+          buffer.writeln(e.issuingOrganization);
+          buffer.writeln();
+        }
+      } else if (section is CustomSection) {
+        if (section.template == CustomSectionTemplate.paragraph ||
+            section.template == CustomSectionTemplate.bulletList) {
+          buffer.writeln(section.content);
+        } else if (section.template == CustomSectionTemplate.skillsLike) {
+          section.skillCategories.forEach((cat, skills) {
+            buffer.writeln("$cat: ${skills.join(', ')}");
+          });
+        } else {
+          for (final e in section.entries) {
+            buffer.writeln(e.title);
+            if (e.subtitle != null) buffer.writeln(e.subtitle);
+            if (e.bullets.isNotEmpty) buffer.writeln(e.bullets.join('\n'));
+            buffer.writeln();
+          }
+        }
+      }
+      buffer.writeln();
+    }
+
+    return buffer.toString();
+  }
+
   const CVData({
     required this.id,
     required this.createdAt,

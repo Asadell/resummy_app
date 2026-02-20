@@ -21,7 +21,11 @@ class HistoryProvider extends ChangeNotifier {
   })  : _repository = repository,
         _authProvider = authProvider {
     _authProvider.addListener(_onAuthChanged);
-    _onAuthChanged();
+    
+    if (_authProvider.isAuthenticated) {
+      _currentUserId = _authProvider.currentUser!.id;
+      loadActivities();
+    }
   }
 
   List<ActivityItem> get activities => _filteredActivities;

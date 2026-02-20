@@ -455,7 +455,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -489,7 +488,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.jobTitle} *',
                 hintText: l10n.jobTitlePlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -500,7 +499,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.companyName} *',
                 hintText: l10n.companyPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -510,7 +509,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               initialValue: _employmentType,
               decoration: InputDecoration(
                 labelText: l10n.employmentTypeLabel,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
               ),
               items: [
                 DropdownMenuItem(
@@ -538,7 +537,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.location} ${l10n.optionalField}',
                 hintText: l10n.locationPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 prefixIcon: const Icon(Iconsax.location),
                 counterText: '',
               ),
@@ -553,7 +552,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.startDate} *',
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         errorText:
                             _showValidation ? _validateStartDate(l10n) : null,
@@ -571,7 +570,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.endDate,
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyWorking,
                         errorText:
@@ -616,7 +615,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
                   decoration: InputDecoration(
                     labelText: l10n.responsibilities,
                     hintText: l10n.responsibilitiesHint,
-                    border: const OutlineInputBorder(),
+                    border: InputBorder.none,
                     alignLabelWithHint: true,
                     counterText: '',
                   ),

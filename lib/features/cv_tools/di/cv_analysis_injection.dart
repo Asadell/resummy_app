@@ -11,6 +11,7 @@ import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_ser
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_conversion_repository.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 
 Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
   getIt.registerLazySingleton<CvAtsConverterService>(
@@ -49,8 +50,8 @@ Future<void> setupCvAnalysisAndConversionDI(GetIt getIt) async {
 
   getIt.registerLazySingleton<CvAnalyzerProvider>(
     () => CvAnalyzerProvider(
-      dataSource: getIt<CVAnalysisRemoteDataSource>(),
-      converterService: getIt<CvAtsConverterService>(),
+      repository: getIt<CVAnalysisRepository>(),
+      authProvider: getIt<AuthProvider>(),
     ),
   );
 }

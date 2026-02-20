@@ -36,6 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
+
+    await authProvider.waitForAuthState();
+    if (!mounted) return;
+
     if (!authProvider.isAuthenticated) {
       router.replace(const AuthRoute());
       return;

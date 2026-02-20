@@ -369,7 +369,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.certificationName} *',
                 hintText: l10n.certificationPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -380,7 +380,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.issuingOrganization} *',
                 hintText: l10n.issuingOrgPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -395,7 +395,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.issueDate} *',
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         errorText:
                             _showValidation ? _validateIssueDate(l10n) : null,
@@ -413,7 +413,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.expirationDate,
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_doesNotExpire,
                         errorText: _showValidation
@@ -456,7 +456,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               controller: _credentialIdController,
               decoration: InputDecoration(
                 labelText: l10n.credentialId,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               maxLength: 50,
@@ -465,7 +465,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               controller: _credentialUrlController,
               decoration: InputDecoration(
                 labelText: l10n.credentialUrl,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 helperText: l10n.credentialUrlHelper,
                 prefixIcon: const Icon(Iconsax.link_1),
                 counterText: '',

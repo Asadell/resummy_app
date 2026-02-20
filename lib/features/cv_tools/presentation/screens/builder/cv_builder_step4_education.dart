@@ -405,7 +405,6 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -439,7 +438,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.institutionName} *',
                 hintText: l10n.institutionPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -450,7 +449,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.major} *',
                 hintText: l10n.majorPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
@@ -461,7 +460,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.degree} ${l10n.optionalField}',
                 hintText: l10n.degreePlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               maxLength: 50,
@@ -476,7 +475,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                     decoration: InputDecoration(
                       labelText: '${l10n.startYear} *',
                       hintText: l10n.startYearPlaceholder,
-                      border: const OutlineInputBorder(),
+                      border: InputBorder.none,
                       counterText: '',
                     ),
                     validator: (v) {
@@ -500,7 +499,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
                           ? l10n.endYear
                           : '${l10n.endYear} *',
                       hintText: l10n.endYearPlaceholder,
-                      border: const OutlineInputBorder(),
+                      border: InputBorder.none,
                       counterText: '',
                     ),
                     validator: _isCurrentlyStudying
@@ -547,7 +546,7 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
               decoration: InputDecoration(
                 labelText: l10n.gpaOptional,
                 hintText: l10n.gpaPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               maxLength: 5,

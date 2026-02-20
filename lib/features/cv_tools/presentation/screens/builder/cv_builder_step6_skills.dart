@@ -212,7 +212,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                         decoration: InputDecoration(
                           labelText: l10n.categoryName,
                           hintText: l10n.categoryNamePlaceholder,
-                          border: const OutlineInputBorder(),
+                          border: InputBorder.none,
                           prefixIcon: const Icon(Iconsax.tag),
                         ),
                         textCapitalization: TextCapitalization.words,
@@ -225,7 +225,7 @@ class _SkillsFormState extends State<_SkillsForm> {
                         decoration: InputDecoration(
                           labelText: l10n.skills,
                           hintText: l10n.skillsHint,
-                          border: const OutlineInputBorder(),
+                          border: InputBorder.none,
                           prefixIcon: const Icon(Iconsax.code),
                         ),
                         maxLines: 3,
@@ -327,7 +327,7 @@ class _SkillsFormState extends State<_SkillsForm> {
               controller: categoryController,
               decoration: InputDecoration(
                 labelText: '${l10n.categoryName} *',
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 prefixIcon: const Icon(Iconsax.tag),
               ),
               textCapitalization: TextCapitalization.words,
@@ -338,7 +338,7 @@ class _SkillsFormState extends State<_SkillsForm> {
               decoration: InputDecoration(
                 labelText: '${l10n.skills} *',
                 hintText: l10n.skillsHint,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 prefixIcon: const Icon(Iconsax.code),
               ),
               maxLines: 3,

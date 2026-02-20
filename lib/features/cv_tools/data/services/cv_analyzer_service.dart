@@ -331,7 +331,7 @@ Return JSON ini:
               'x-goog-api-key': key,
               'Content-Type': 'application/json',
             },
-            receiveTimeout: const Duration(seconds: 120),
+            receiveTimeout: const Duration(seconds: 300),
             sendTimeout: const Duration(seconds: 30),
           ),
           data: {
@@ -410,7 +410,7 @@ Return JSON ini:
               'x-goog-api-key': key,
               'Content-Type': 'application/json',
             },
-            receiveTimeout: const Duration(seconds: 90),
+            receiveTimeout: const Duration(seconds: 300),
             sendTimeout: const Duration(seconds: 30),
           ),
           data: {

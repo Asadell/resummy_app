@@ -368,7 +368,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppSizes.md),
-        border: Border.all(color: Theme.of(context).dividerColor),
+
       ),
       padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
@@ -399,7 +399,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             decoration: InputDecoration(
               labelText: l10n.categoryName,
               hintText: l10n.categoryNamePlaceholder,
-              border: const OutlineInputBorder(),
+              border: InputBorder.none,
             ),
             autovalidateMode: _showValidation
                 ? AutovalidateMode.onUserInteraction
@@ -412,7 +412,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             decoration: InputDecoration(
               labelText: l10n.skills,
               hintText: l10n.skillsPlaceholder,
-              border: const OutlineInputBorder(),
+              border: InputBorder.none,
             ),
             autovalidateMode: _showValidation
                 ? AutovalidateMode.onUserInteraction
@@ -525,7 +525,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
+
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -544,7 +544,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   controller: _bulletItemCtrl,
                   decoration: InputDecoration(
                     hintText: l10n.typeAndAddHint,
-                    border: const OutlineInputBorder(),
+                    border: InputBorder.none,
                     prefixIcon: const Icon(Iconsax.add_circle),
                   ),
                   onSubmitted: (_) => _saveBulletItem(provider, section),
@@ -586,7 +586,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           maxLines: 10,
           decoration: InputDecoration(
             hintText: l10n.contentHint,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            border: InputBorder.none,
             alignLabelWithHint: true,
           ),
           onChanged: (value) {
@@ -694,7 +694,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
+
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -727,7 +727,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               hintText: isExperienceLike
                   ? l10n.exampleSoftwareEngineer
                   : l10n.exampleBachelor,
-              border: const OutlineInputBorder(),
+              border: InputBorder.none,
             ),
             autovalidateMode: _showValidation
                 ? AutovalidateMode.onUserInteraction
@@ -743,7 +743,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
               hintText: isExperienceLike
                   ? l10n.exampleGoogle
                   : l10n.exampleUniversity,
-              border: const OutlineInputBorder(),
+              border: InputBorder.none,
             ),
           ),
           const SizedBox(height: 16),
@@ -752,7 +752,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             decoration: InputDecoration(
               labelText: l10n.location,
               hintText: l10n.exampleLocation,
-              border: const OutlineInputBorder(),
+              border: InputBorder.none,
             ),
           ),
           const SizedBox(height: 16),
@@ -764,7 +764,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   decoration: InputDecoration(
                     labelText: l10n.startDate,
                     hintText: l10n.exampleYear,
-                    border: const OutlineInputBorder(),
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -776,7 +776,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   decoration: InputDecoration(
                     labelText: _isPresent ? l10n.present : l10n.endDate,
                     hintText: l10n.exampleYearEnd,
-                    border: const OutlineInputBorder(),
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -805,7 +805,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                   controller: _bulletCtrl,
                   decoration: InputDecoration(
                     hintText: l10n.addBulletPoint,
-                    border: const OutlineInputBorder(),
+                    border: InputBorder.none,
                   ),
                   onSubmitted: (value) {
                     if (value.trim().isNotEmpty) {

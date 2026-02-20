@@ -50,8 +50,10 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       title: l10n.cvBuilder,
                       description: l10n.cvBuilderDesc,
                       color: Theme.of(context).colorScheme.primary,
-                      onTap: () =>
-                          context.router.push(const CvBuilderWelcomeRoute()),
+                      onTap: () {
+                        context.read<CVBuilderProvider>().startNewCV();
+                        context.router.push(const CvBuilderStep1Route());
+                      },
                     ),
                     _FeatureCard(
                       icon: Iconsax.chart_2,

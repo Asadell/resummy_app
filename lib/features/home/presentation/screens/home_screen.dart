@@ -10,6 +10,7 @@ import 'package:resummy_app/features/history/presentation/providers/history_prov
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_card.dart';
 import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
@@ -38,52 +39,60 @@ class HomeScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: AppSizes.md),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _QuickActionCard(
-                              icon: Iconsax.document_text,
-                              title: l10n.buildCv,
-                              color: Theme.of(context).colorScheme.primary,
-                              onTap: () => context.router
-                                  .push(const CvBuilderWelcomeRoute()),
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: _QuickActionCard(
+                                icon: Iconsax.document_text,
+                                title: l10n.buildCv,
+                                color: Theme.of(context).colorScheme.primary,
+                                onTap: () {
+                                  context.read<CVBuilderProvider>().startNewCV();
+                                  context.router.push(const CvBuilderStep1Route());
+                                },
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: AppSizes.md),
-                          Expanded(
-                            child: _QuickActionCard(
-                              icon: Iconsax.chart_2,
-                              title: l10n.analyzeCv,
-                              color: Theme.of(context).colorScheme.secondary,
-                              onTap: () => context.router
-                                  .push(const CvAnalyzerUploadRoute()),
+                            const SizedBox(width: AppSizes.md),
+                            Expanded(
+                              child: _QuickActionCard(
+                                icon: Iconsax.chart_2,
+                                title: l10n.analyzeCv,
+                                color: Theme.of(context).colorScheme.secondary,
+                                onTap: () => context.router
+                                    .push(const CvAnalyzerUploadRoute()),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(height: AppSizes.md),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _QuickActionCard(
-                              icon: Iconsax.microphone,
-                              title: l10n.interviewPrep,
-                              color: Theme.of(context).colorScheme.tertiary,
-                              onTap: () => context.router
-                                  .push(const InterviewSetupStep1Route()),
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: _QuickActionCard(
+                                icon: Iconsax.microphone,
+                                title: l10n.interviewPrep,
+                                color: Theme.of(context).colorScheme.tertiary,
+                                onTap: () => context.router
+                                    .push(const InterviewSetupStep1Route()),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: AppSizes.md),
-                          Expanded(
-                            child: _QuickActionCard(
-                              icon: Iconsax.magic_star,
-                              title: l10n.convertToCvAts,
-                              color: Colors.purple,
-                              onTap: () => context.router
-                                  .push(const CvAtsConverterRoute()),
+                            const SizedBox(width: AppSizes.md),
+                            Expanded(
+                              child: _QuickActionCard(
+                                icon: Iconsax.magic_star,
+                                title: l10n.convertToCvAts,
+                                color: Colors.purple,
+                                onTap: () => context.router
+                                    .push(const CvAtsConverterRoute()),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -292,6 +301,8 @@ class _QuickActionCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppSizes.md),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Icon(icon, size: 32, color: color),
               const SizedBox(height: AppSizes.sm),

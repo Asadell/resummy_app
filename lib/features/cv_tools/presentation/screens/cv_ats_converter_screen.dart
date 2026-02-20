@@ -462,6 +462,20 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           _step = 1;
           _isLoading = false;
         });
+
+        final provider = context.read<CVBuilderProvider>();
+        provider.updateCV(cvData);
+        final success = await provider.saveCurrentCV();
+
+        if (mounted && success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.cvSavedToLibrary),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {

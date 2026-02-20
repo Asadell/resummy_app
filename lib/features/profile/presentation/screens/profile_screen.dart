@@ -541,10 +541,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pop(context);
                       final authProvider =
                           Provider.of<AuthProvider>(context, listen: false);
-                      await authProvider.signOut();
                       if (context.mounted) {
                         context.router.replaceAll([const AuthRoute()]);
                       }
+                      await authProvider.signOut();
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,

@@ -322,7 +322,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.organizationName} *',
                 hintText: l10n.organizationPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) =>
@@ -334,7 +334,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.organizationRole} *',
                 hintText: l10n.rolePlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) =>
@@ -350,7 +350,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.startYear} *',
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         errorText:
                             _showValidation ? _validateStartDate(l10n) : null,
@@ -367,7 +367,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.endYear,
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyActive,
                         errorText:
@@ -408,7 +408,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: l10n.responsibilities,
                 alignLabelWithHint: true,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               maxLength: 500,
