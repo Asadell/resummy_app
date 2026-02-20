@@ -1,10 +1,11 @@
+import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
@@ -19,14 +20,29 @@ class CvBuilderPreviewScreen extends StatefulWidget {
 }
 
 class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
-  bool _isGenerating = false;
+  bool _isExporting = false;
+  Future<Uint8List>? _pdfFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPdf();
+  }
+
+  void _loadPdf() {
+    final provider = context.read<CVBuilderProvider>();
+    final cv = provider.currentCV;
+    if (cv != null) {
+      _pdfFuture = CvPdfService().generatePDFBytes(cv);
+    }
+  }
 
   Future<void> _downloadPdf() async {
     final provider = context.read<CVBuilderProvider>();
     final cv = provider.currentCV;
     if (cv == null) return;
 
-    setState(() => _isGenerating = true);
+    setState(() => _isExporting = true);
     try {
       final service = CvPdfService();
       final path = await service.saveToDownloads(cv);
@@ -53,7 +69,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isGenerating = false);
+        setState(() => _isExporting = false);
       }
     }
   }
@@ -63,7 +79,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     final cv = provider.currentCV;
     if (cv == null) return;
 
-    setState(() => _isGenerating = true);
+    setState(() => _isExporting = true);
     try {
       final service = CvPdfService();
       await service.sharePdf(cv);
@@ -76,7 +92,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isGenerating = false);
+        setState(() => _isExporting = false);
       }
     }
   }
@@ -230,11 +246,44 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 ),
               ),
               Expanded(
-                child: Consumer<CVBuilderProvider>(
-                  builder: (context, provider, child) {
-                    return CvPreviewCard(cvData: provider.currentCV);
-                  },
-                ),
+                child: _pdfFuture == null
+                    ? Center(
+                        child: Text(
+                          l10n.noCvData,
+                          style: const TextStyle(color: Color(0xFF9CA3AF)),
+                        ),
+                      )
+                    : FutureBuilder<Uint8List>(
+                        future: _pdfFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Text(
+                                  l10n.failedToGeneratePdf(snapshot.error.toString()),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            return SfPdfViewer.memory(
+                              snapshot.data!,
+                              canShowScrollHead: false,
+                              canShowScrollStatus: false,
+                              enableDoubleTapZooming: true,
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
               ),
               Container(
                 padding: const EdgeInsets.all(AppSizes.md),
@@ -275,8 +324,6 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     Theme.of(context).colorScheme.primary,
-                                foregroundColor:
-                                    Theme.of(context).colorScheme.onPrimary,
                                 padding: const EdgeInsets.all(AppSizes.md),
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -309,16 +356,32 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                                   }
                                 }
                               },
-                              child: Text(l10n.save),
+                              child: Text(
+                                l10n.save,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: AppSizes.sm),
                       TextButton.icon(
-                        onPressed: _isGenerating ? null : _showPdfOptions,
-                        icon: const Icon(Iconsax.export_1, size: 20),
-                        label: Text(l10n.exportPdf),
+                        onPressed: _isExporting ? null : _showPdfOptions,
+                        icon: _isExporting
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Iconsax.export_1, size: 20),
+                        label: Text(_isExporting
+                            ? l10n.exportPdf // Assume exporting string or similar if available, just use exportPdf for now
+                            : l10n.exportPdf),
                       ),
                     ],
                   ),
@@ -331,3 +394,4 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     );
   }
 }
+

@@ -346,6 +346,7 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
             : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: AppSizes.md,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -451,7 +452,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
             ),
-            const SizedBox(height: AppSizes.xs),
             TextFormField(
               controller: _credentialIdController,
               decoration: InputDecoration(
@@ -476,7 +476,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
               ],
               maxLength: 100,
             ),
-            const SizedBox(height: AppSizes.xl),
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(
