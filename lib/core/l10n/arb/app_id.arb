@@ -788,4 +788,17 @@
   "deleteExperienceContent": "Apakah Anda yakin ingin menghapus pengalaman ini? Tindakan ini tidak dapat dibatalkan.",
   "deleteEducationTitle": "Hapus Pendidikan?",
   "deleteEducationContent": "Apakah Anda yakin ingin menghapus pendidikan ini? Tindakan ini tidak dapat dibatalkan."
+,
+  "chooseYourLanguage": "Pilih Bahasa Anda",
+  "pleaseSelectLanguage": "Silakan pilih bahasa yang Anda inginkan",
+  "noFeedbackData": "Tidak ada data umpan balik tersedia.",
+  "situationLabel": "Situasi",
+  "taskLabel": "Tugas",
+  "actionLabel": "Aksi",
+  "resultLabel": "Hasil",
+  "presentLabel": "Ada",
+  "missingLabel": "Tidak Ada",
+  "noStrengthsIdentified": "Tidak ada kekuatan spesifik yang teridentifikasi.",
+  "noImprovementsIdentified": "Tidak ada peningkatan spesifik yang teridentifikasi.",
+  "unknown": "Tidak Diketahui"
 }

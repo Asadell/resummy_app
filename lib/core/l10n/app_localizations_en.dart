@@ -2232,7 +2232,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activityHistory => 'Activity History';
 
   @override
-  String get historySubtitle => 'Monitor your career progress here';
+  String get historySubtitle => 'Track your career progress here';
 
   @override
   String get weeklyInsight => 'Weekly Insight';
@@ -2276,4 +2276,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteEducationContent =>
       'Are you sure you want to delete this education? This action cannot be undone.';
+
+  @override
+  String get chooseYourLanguage => 'Choose Your Language';
+
+  @override
+  String get pleaseSelectLanguage => 'Please select your preferred language';
+
+  @override
+  String get noFeedbackData => 'No feedback data available.';
+
+  @override
+  String get situationLabel => 'Situation';
+
+  @override
+  String get taskLabel => 'Task';
+
+  @override
+  String get actionLabel => 'Action';
+
+  @override
+  String get resultLabel => 'Result';
+
+  @override
+  String get presentLabel => 'Present';
+
+  @override
+  String get missingLabel => 'Missing';
+
+  @override
+  String get noStrengthsIdentified => 'No specific strengths identified.';
+
+  @override
+  String get noImprovementsIdentified => 'No specific improvements identified.';
+
+  @override
+  String get unknown => 'Unknown';
 }

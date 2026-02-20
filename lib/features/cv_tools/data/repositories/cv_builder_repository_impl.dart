@@ -66,7 +66,9 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       if (_currentUserId != 'anonymous') {
         try {
           await _remoteDataSource.deleteCV(id);
-        } catch (e) {}
+        } catch (e) {
+          // Ignore remote deletion errors as local is already deleted
+        }
       }
     } catch (e) {
       rethrow;
@@ -84,6 +86,8 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
       for (final cv in remoteCVs) {
         await _localDataSource.saveCV(cv, _currentUserId);
       }
-    } catch (e) {}
+    } catch (e) {
+      // Failed to sync from remote, will try again next time
+    }
   }
 }

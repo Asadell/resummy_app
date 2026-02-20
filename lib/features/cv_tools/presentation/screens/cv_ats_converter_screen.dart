@@ -465,13 +465,15 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final currentL10n = AppLocalizations.of(context)!;
         setState(() {
           _isLoading = false;
-          final currentL10n = AppLocalizations.of(context)!;
           _errorMessage = '${currentL10n.failedToProcessCv}: $e';
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(
+              content: Text(currentL10n.loginError(e.toString())),
+              backgroundColor: Colors.red),
         );
       }
     }

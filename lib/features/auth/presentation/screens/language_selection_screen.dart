@@ -41,18 +41,14 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 spacing: AppSizes.xs,
                 children: [
                   Text(
-                    _selectedLanguage == 'en'
-                        ? 'Choose Your Language'
-                        : 'Pilih Bahasa Anda',
+                    l10n.chooseYourLanguage,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    _selectedLanguage == 'en'
-                        ? 'Please select your preferred language'
-                        : 'Silakan pilih bahasa yang Anda inginkan',
+                    l10n.pleaseSelectLanguage,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -112,7 +108,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: AppSizes.sm,
                   children: [
-                    Text(_selectedLanguage == 'en' ? 'Continue' : 'Lanjutkan'),
+                    Text(l10n.continueText),
                     const Icon(Iconsax.arrow_right),
                   ],
                 ),

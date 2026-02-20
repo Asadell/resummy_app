@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resummy_app/core/l10n/app_localizations.dart';
 
 class ErrorDisplay extends StatelessWidget {
   final String message;
@@ -36,7 +37,7 @@ class ErrorDisplay extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(AppLocalizations.of(context)!.retry),
               ),
             ],
           ],

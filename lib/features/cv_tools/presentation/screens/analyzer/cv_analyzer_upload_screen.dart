@@ -229,7 +229,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                           child: ListTile(
                             leading: Icon(Iconsax.document,
                                 color: Theme.of(context).colorScheme.primary),
-                            title: Text(analyzerProvider.fileName ?? 'Unknown'),
+                            title: Text(analyzerProvider.fileName ?? l10n.unknown),
                             subtitle: Text(analyzerProvider.fileSize ?? ''),
                             trailing: IconButton(
                               icon: const Icon(Iconsax.close_circle,
@@ -386,9 +386,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   ? () async {
                       if (_selectedCvIndex != null && _selectedCvIndex! >= 0) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                               content: Text(
-                                  'Analyzing saved CV not fully wired yet')),
+                                  l10n.featureComingSoon)),
                         );
                       } else {
                         provider.analyze(_selectedLanguage);

@@ -66,7 +66,9 @@ class HistoryLocalDataSource {
         try {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
-        } catch (e) {}
+        } catch (e) {
+          // sessionData might be malformed or missing
+        }
 
         activities.add(ActivityEntity(
           id: interview['id'] as String,

@@ -4313,7 +4313,7 @@ abstract class AppLocalizations {
   /// No description provided for @historySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Monitor your career progress here'**
+  /// **'Track your career progress here'**
   String get historySubtitle;
 
   /// No description provided for @weeklyInsight.
@@ -4393,6 +4393,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this education? This action cannot be undone.'**
   String get deleteEducationContent;
+
+  /// No description provided for @chooseYourLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Your Language'**
+  String get chooseYourLanguage;
+
+  /// No description provided for @pleaseSelectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your preferred language'**
+  String get pleaseSelectLanguage;
+
+  /// No description provided for @noFeedbackData.
+  ///
+  /// In en, this message translates to:
+  /// **'No feedback data available.'**
+  String get noFeedbackData;
+
+  /// No description provided for @situationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Situation'**
+  String get situationLabel;
+
+  /// No description provided for @taskLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Task'**
+  String get taskLabel;
+
+  /// No description provided for @actionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Action'**
+  String get actionLabel;
+
+  /// No description provided for @resultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get resultLabel;
+
+  /// No description provided for @presentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get presentLabel;
+
+  /// No description provided for @missingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get missingLabel;
+
+  /// No description provided for @noStrengthsIdentified.
+  ///
+  /// In en, this message translates to:
+  /// **'No specific strengths identified.'**
+  String get noStrengthsIdentified;
+
+  /// No description provided for @noImprovementsIdentified.
+  ///
+  /// In en, this message translates to:
+  /// **'No specific improvements identified.'**
+  String get noImprovementsIdentified;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
 }
 
 class _AppLocalizationsDelegate

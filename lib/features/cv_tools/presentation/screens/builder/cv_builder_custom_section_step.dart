@@ -322,7 +322,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveSkillForm(CVBuilderProvider provider, CustomSection section) {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
     if (_categoryNameCtrl.text.trim().isEmpty ||
@@ -639,7 +638,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveEntryForm(CVBuilderProvider provider, CustomSection section) {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
     if (_titleCtrl.text.trim().isEmpty) {

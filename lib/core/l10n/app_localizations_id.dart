@@ -2288,4 +2288,42 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get deleteEducationContent =>
       'Apakah Anda yakin ingin menghapus pendidikan ini? Tindakan ini tidak dapat dibatalkan.';
+
+  @override
+  String get chooseYourLanguage => 'Pilih Bahasa Anda';
+
+  @override
+  String get pleaseSelectLanguage => 'Silakan pilih bahasa yang Anda inginkan';
+
+  @override
+  String get noFeedbackData => 'Tidak ada data umpan balik tersedia.';
+
+  @override
+  String get situationLabel => 'Situasi';
+
+  @override
+  String get taskLabel => 'Tugas';
+
+  @override
+  String get actionLabel => 'Aksi';
+
+  @override
+  String get resultLabel => 'Hasil';
+
+  @override
+  String get presentLabel => 'Ada';
+
+  @override
+  String get missingLabel => 'Tidak Ada';
+
+  @override
+  String get noStrengthsIdentified =>
+      'Tidak ada kekuatan spesifik yang teridentifikasi.';
+
+  @override
+  String get noImprovementsIdentified =>
+      'Tidak ada peningkatan spesifik yang teridentifikasi.';
+
+  @override
+  String get unknown => 'Tidak Diketahui';
 }

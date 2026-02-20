@@ -507,7 +507,7 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
               maxLength: 50,
             ),
             DropdownButtonFormField<String>(
-              value: _employmentType,
+              initialValue: _employmentType,
               decoration: InputDecoration(
                 labelText: l10n.employmentTypeLabel,
                 border: const OutlineInputBorder(),

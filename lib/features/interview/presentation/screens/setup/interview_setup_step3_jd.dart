@@ -19,7 +19,6 @@ class InterviewSetupStep3Screen extends StatefulWidget {
 
 class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
   final _jdController = TextEditingController();
-  bool _showExtracted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -196,25 +195,6 @@ class _InterviewSetupStep3ScreenState extends State<InterviewSetupStep3Screen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChip(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.sm, vertical: AppSizes.xs),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSecondary,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );

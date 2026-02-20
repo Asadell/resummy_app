@@ -69,8 +69,9 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
       await service.sharePdf(cv);
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to share PDF: $e')),
+          SnackBar(content: Text(l10n.failedToGeneratePdf(e.toString()))),
         );
       }
     } finally {

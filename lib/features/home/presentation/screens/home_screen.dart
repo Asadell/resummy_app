@@ -191,7 +191,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Text(
-              context.watch<ProfileProvider>().profile?.fullName ?? 'User',
+              context.watch<ProfileProvider>().profile?.fullName ?? l10n.unknown,
               style: theme.textTheme.headlineSmall?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

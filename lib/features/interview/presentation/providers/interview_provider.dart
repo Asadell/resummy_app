@@ -109,7 +109,9 @@ class InterviewProvider extends ChangeNotifier {
     try {
       _history = await _repository.getInterviewHistory(_userId!);
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      debugPrint('Error loading history: $e');
+    }
   }
 
   InterviewStatus get status => _status;
@@ -390,7 +392,9 @@ class InterviewProvider extends ChangeNotifier {
           await playQuestionAudio();
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint('Error generating question audio: $e');
+    }
   }
 
   StreamSubscription? _playerCompleteSubscription;
@@ -456,7 +460,9 @@ class InterviewProvider extends ChangeNotifier {
       _recordingStartTime = null;
       _currentAudioDuration = 0;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      debugPrint('Error cancelling recording: $e');
+    }
   }
 
   Future<void> _transcribeAudio(File audioFile, int questionIndex) async {
