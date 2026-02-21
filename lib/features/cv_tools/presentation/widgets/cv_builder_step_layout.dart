@@ -1,10 +1,12 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
+import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 
@@ -37,15 +39,36 @@ class CVBuilderStepLayout extends StatefulWidget {
 class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  Future<Uint8List>? _pdfFuture;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    if (_tabController.index == 1 && !_tabController.indexIsChanging) {
+      _generatePdfPreview();
+    }
+  }
+
+  void _generatePdfPreview() {
+    final provider = context.read<CVBuilderProvider>();
+    final cv = provider.currentCV;
+    if (cv != null) {
+      if (mounted) {
+        setState(() {
+          _pdfFuture = CvPdfService().generatePDFBytes(cv);
+        });
+      }
+    }
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
     super.dispose();
   }
@@ -201,7 +224,36 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                   controller: _tabController,
                   children: [
                     widget.editContent,
-                    CvPreviewCard(cvData: provider.currentCV),
+                    Container(
+                      color: const Color(0xFFF5F5F5),
+                      child: FutureBuilder<Uint8List>(
+                        future: _pdfFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text('Failed to load PDF: ${snapshot.error}', textAlign: TextAlign.center),
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            return SfPdfViewer.memory(
+                              snapshot.data!,
+                              enableDoubleTapZooming: true,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Tap the Preview tab to load CV',
+                                style: TextStyle(color: Colors.grey.shade600),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

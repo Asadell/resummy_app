@@ -188,13 +188,16 @@ class CvPdfService {
 
   ({PdfPage page, double y}) _drawHeader(
       PdfPage page, CVData cv, double y, double width) {
-    page.graphics.drawString(
-      cv.name.toUpperCase(),
-      _nameFont,
-      bounds: ui.Rect.fromLTWH(0, y, width, 30),
-      brush: PdfBrushes.black,
-    );
-    y += 36;
+    if (cv.name.isNotEmpty) {
+      final nameElement = PdfTextElement(
+          text: cv.name.toUpperCase(),
+          font: _nameFont,
+          brush: PdfBrushes.black);
+      final layoutResult = nameElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, width, 0))!;
+      y = layoutResult.bounds.bottom + 6;
+    }
 
     final contacts = <String>[];
     if (cv.email?.isNotEmpty == true) contacts.add(cv.email!);
@@ -202,13 +205,14 @@ class CvPdfService {
     if (cv.location?.isNotEmpty == true) contacts.add(cv.location!);
 
     if (contacts.isNotEmpty) {
-      page.graphics.drawString(
-        contacts.join(' | '),
-        _contactFont,
-        bounds: ui.Rect.fromLTWH(0, y, width, 14),
-        brush: PdfSolidBrush(_textColor),
-      );
-      y += 16;
+      final contactElement = PdfTextElement(
+          text: contacts.join(' | '),
+          font: _contactFont,
+          brush: PdfSolidBrush(_textColor));
+      final layoutResult = contactElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, width, 0))!;
+      y = layoutResult.bounds.bottom + 2;
     }
 
     final links = <String>[];
@@ -218,13 +222,14 @@ class CvPdfService {
     }
 
     if (links.isNotEmpty) {
-      page.graphics.drawString(
-        links.join(' | '),
-        _smallFont,
-        bounds: ui.Rect.fromLTWH(0, y, width, 12),
-        brush: PdfSolidBrush(_lightTextColor),
-      );
-      y += 14;
+      final linkElement = PdfTextElement(
+          text: links.join(' | '),
+          font: _smallFont,
+          brush: PdfSolidBrush(_lightTextColor));
+      final layoutResult = linkElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, width, 0))!;
+      y = layoutResult.bounds.bottom + 2;
     }
 
     return (page: page, y: y);
@@ -242,13 +247,14 @@ class CvPdfService {
       y = 0;
     }
 
-    page.graphics.drawString(
-      title.toUpperCase(),
-      _sectionHeaderFont,
-      bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 16),
-      brush: PdfSolidBrush(_primaryColor),
-    );
-    y += 18;
+    final headerElement = PdfTextElement(
+        text: title.toUpperCase(),
+        font: _sectionHeaderFont,
+        brush: PdfSolidBrush(_primaryColor));
+    final layoutResult = headerElement.draw(
+        page: page,
+        bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+    y = layoutResult.bounds.bottom + 2;
 
     page.graphics.drawLine(
       PdfPen(_primaryColor, width: 1.5),
@@ -301,12 +307,13 @@ class CvPdfService {
           ? 'Present'
           : (exp.endDate != null ? dateFormat.format(exp.endDate!) : 'Present');
 
-      page.graphics.drawString(
-        exp.companyName,
-        _entryTitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 14),
-        brush: PdfBrushes.black,
-      );
+      final titleElement = PdfTextElement(
+          text: exp.companyName,
+          font: _entryTitleFont,
+          brush: PdfBrushes.black);
+      final layoutResultTitle = titleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 0))!;
 
       final dateText = '$startDate - $endDate';
       final dateSize = _smallFont.measureString(dateText);
@@ -317,24 +324,26 @@ class CvPdfService {
             pageSize.width - dateSize.width, y, dateSize.width, 12),
         brush: PdfSolidBrush(_lightTextColor),
       );
-      y += 16;
+      y = layoutResultTitle.bounds.bottom + 2;
 
-      page.graphics.drawString(
-        exp.jobTitle,
-        _entrySubtitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
-        brush: PdfSolidBrush(_textColor),
-      );
-      y += 15;
+      final subtitleElement = PdfTextElement(
+          text: exp.jobTitle,
+          font: _entrySubtitleFont,
+          brush: PdfSolidBrush(_textColor));
+      final layoutResultSubtitle = subtitleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+      y = layoutResultSubtitle.bounds.bottom + 2;
 
       if (exp.location?.isNotEmpty == true) {
-        page.graphics.drawString(
-          exp.location ?? '',
-          _smallFont,
-          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-          brush: PdfSolidBrush(_lightTextColor),
-        );
-        y += 13;
+        final locationElement = PdfTextElement(
+            text: exp.location!,
+            font: _smallFont,
+            brush: PdfSolidBrush(_lightTextColor));
+        final layoutResultLoc = locationElement.draw(
+            page: page,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+        y = layoutResultLoc.bounds.bottom + 2;
       }
 
       y += 4;
@@ -382,12 +391,13 @@ class CvPdfService {
       final endYear =
           edu.isCurrentlyStudying ? 'Present' : edu.endYear?.toString() ?? '';
 
-      page.graphics.drawString(
-        edu.institution,
-        _entryTitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 14),
-        brush: PdfBrushes.black,
-      );
+      final titleElement = PdfTextElement(
+          text: edu.institution,
+          font: _entryTitleFont,
+          brush: PdfBrushes.black);
+      final layoutResultTitle = titleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 0))!;
 
       final yearText = '${edu.startYear} - $endYear';
       final yearSize = _smallFont.measureString(yearText);
@@ -398,15 +408,16 @@ class CvPdfService {
             pageSize.width - yearSize.width, y, yearSize.width, 12),
         brush: PdfSolidBrush(_lightTextColor),
       );
-      y += 16;
+      y = layoutResultTitle.bounds.bottom + 2;
 
-      page.graphics.drawString(
-        '${edu.degree} in ${edu.major}',
-        _entrySubtitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
-        brush: PdfSolidBrush(_textColor),
-      );
-      y += 15;
+      final subtitleElement = PdfTextElement(
+          text: '${edu.degree} in ${edu.major}',
+          font: _entrySubtitleFont,
+          brush: PdfSolidBrush(_textColor));
+      final layoutResultSubtitle = subtitleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+      y = layoutResultSubtitle.bounds.bottom + 2;
 
       if (edu.gpa?.isNotEmpty == true) {
         page.graphics.drawString(
@@ -468,12 +479,13 @@ class CvPdfService {
           ? 'Present'
           : (org.endDate != null ? dateFormat.format(org.endDate!) : 'Present');
 
-      page.graphics.drawString(
-        org.organizationName,
-        _entryTitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 14),
-        brush: PdfBrushes.black,
-      );
+      final titleElement = PdfTextElement(
+          text: org.organizationName,
+          font: _entryTitleFont,
+          brush: PdfBrushes.black);
+      final layoutResultTitle = titleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 100, 0))!;
 
       final dateText = '$startDate - $endDate';
       final dateSize = _smallFont.measureString(dateText);
@@ -484,15 +496,16 @@ class CvPdfService {
             pageSize.width - dateSize.width, y, dateSize.width, 12),
         brush: PdfSolidBrush(_lightTextColor),
       );
-      y += 16;
+      y = layoutResultTitle.bounds.bottom + 2;
 
-      page.graphics.drawString(
-        org.role,
-        _entrySubtitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
-        brush: PdfSolidBrush(_textColor),
-      );
-      y += 15;
+      final subtitleElement = PdfTextElement(
+          text: org.role,
+          font: _entrySubtitleFont,
+          brush: PdfSolidBrush(_textColor));
+      final layoutResultSubtitle = subtitleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+      y = layoutResultSubtitle.bounds.bottom + 2;
 
       y += 4;
 
@@ -585,12 +598,13 @@ class CvPdfService {
       final dateFormat = DateFormat('MMM yyyy');
       final issueDate = dateFormat.format(cert.issueDate);
 
-      page.graphics.drawString(
-        cert.name,
-        _entryTitleFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 80, 14),
-        brush: PdfBrushes.black,
-      );
+      final titleElement = PdfTextElement(
+          text: cert.name,
+          font: _entryTitleFont,
+          brush: PdfBrushes.black);
+      final layoutResultTitle = titleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 80, 0))!;
 
       final dateSize = _smallFont.measureString(issueDate);
       page.graphics.drawString(
@@ -600,24 +614,26 @@ class CvPdfService {
             pageSize.width - dateSize.width, y, dateSize.width, 12),
         brush: PdfSolidBrush(_lightTextColor),
       );
-      y += 15;
+      y = layoutResultTitle.bounds.bottom + 2;
 
-      page.graphics.drawString(
-        cert.issuingOrganization,
-        _smallFont,
-        bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-        brush: PdfSolidBrush(_lightTextColor),
-      );
-      y += 13;
+      final subtitleElement = PdfTextElement(
+          text: cert.issuingOrganization,
+          font: _smallFont,
+          brush: PdfSolidBrush(_lightTextColor));
+      final layoutResultSubtitle = subtitleElement.draw(
+          page: page,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+      y = layoutResultSubtitle.bounds.bottom + 2;
 
       if (cert.credentialId?.isNotEmpty == true) {
-        page.graphics.drawString(
-          'ID: ${cert.credentialId}',
-          _smallFont,
-          bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-          brush: PdfSolidBrush(_lightTextColor),
-        );
-        y += 13;
+        final idElement = PdfTextElement(
+            text: 'ID: ${cert.credentialId}',
+            font: _smallFont,
+            brush: PdfSolidBrush(_lightTextColor));
+        final layoutResultId = idElement.draw(
+            page: page,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+        y = layoutResultId.bounds.bottom + 2;
       }
 
       y += 8;
@@ -696,12 +712,13 @@ class CvPdfService {
           y = 0;
         }
 
-        page.graphics.drawString(
-          entry.title,
-          _entryTitleFont,
-          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 80, 14),
-          brush: PdfBrushes.black,
-        );
+        final titleElement = PdfTextElement(
+            text: entry.title,
+            font: _entryTitleFont,
+            brush: PdfBrushes.black);
+        final layoutResultTitle = titleElement.draw(
+            page: page,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 80, 0))!;
 
         if (entry.startDate?.isNotEmpty == true) {
           final dateSize = _smallFont.measureString(entry.startDate!);
@@ -713,26 +730,28 @@ class CvPdfService {
             brush: PdfSolidBrush(_lightTextColor),
           );
         }
-        y += 15;
+        y = layoutResultTitle.bounds.bottom + 2;
 
         if (entry.subtitle?.isNotEmpty == true) {
-          page.graphics.drawString(
-            entry.subtitle!,
-            _smallFont,
-            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-            brush: PdfSolidBrush(_lightTextColor),
-          );
-          y += 13;
+          final subtitleElement = PdfTextElement(
+              text: entry.subtitle!,
+              font: _smallFont,
+              brush: PdfSolidBrush(_lightTextColor));
+          final layoutResultSubtitle = subtitleElement.draw(
+              page: page,
+              bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+          y = layoutResultSubtitle.bounds.bottom + 2;
         }
 
         if (entry.meta?.isNotEmpty == true) {
-          page.graphics.drawString(
-            'ID: ${entry.meta}',
-            _smallFont,
-            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-            brush: PdfSolidBrush(_lightTextColor),
-          );
-          y += 13;
+          final idElement = PdfTextElement(
+              text: 'ID: ${entry.meta}',
+              font: _smallFont,
+              brush: PdfSolidBrush(_lightTextColor));
+          final layoutResultId = idElement.draw(
+              page: page,
+              bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+          y = layoutResultId.bounds.bottom + 2;
         }
 
         y += 8;
@@ -752,12 +771,13 @@ class CvPdfService {
         final dateSize = _smallFont.measureString(dateStr);
         final titleWidth = pageSize.width - dateSize.width - 20;
 
-        page.graphics.drawString(
-          entry.title,
-          _entryTitleFont,
-          bounds: ui.Rect.fromLTWH(0, y, titleWidth, 14),
-          brush: PdfBrushes.black,
-        );
+        final titleElement = PdfTextElement(
+            text: entry.title,
+            font: _entryTitleFont,
+            brush: PdfBrushes.black);
+        final layoutResultTitle = titleElement.draw(
+            page: page,
+            bounds: ui.Rect.fromLTWH(0, y, titleWidth, 0))!;
 
         if (dateStr.isNotEmpty) {
           page.graphics.drawString(
@@ -768,26 +788,28 @@ class CvPdfService {
             brush: PdfSolidBrush(_lightTextColor),
           );
         }
-        y += 16;
+        y = layoutResultTitle.bounds.bottom + 2;
 
         if (entry.subtitle?.isNotEmpty == true) {
-          page.graphics.drawString(
-            entry.subtitle ?? '',
-            _entrySubtitleFont,
-            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 13),
-            brush: PdfSolidBrush(_textColor),
-          );
-          y += 15;
+          final subtitleElement = PdfTextElement(
+              text: entry.subtitle ?? '',
+              font: _entrySubtitleFont,
+              brush: PdfSolidBrush(_textColor));
+          final layoutResultSubtitle = subtitleElement.draw(
+              page: page,
+              bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+          y = layoutResultSubtitle.bounds.bottom + 2;
         }
 
         if (entry.meta?.isNotEmpty == true) {
-          page.graphics.drawString(
-            entry.meta ?? '',
-            _smallFont,
-            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
-            brush: PdfSolidBrush(_lightTextColor),
-          );
-          y += 13;
+          final linkElement = PdfTextElement(
+              text: entry.meta ?? '',
+              font: _smallFont,
+              brush: PdfSolidBrush(_lightTextColor));
+          final layoutResultLink = linkElement.draw(
+              page: page,
+              bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 0))!;
+          y = layoutResultLink.bounds.bottom + 2;
         }
 
         y += 4;

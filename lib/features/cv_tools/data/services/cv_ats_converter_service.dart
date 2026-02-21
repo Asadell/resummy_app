@@ -419,6 +419,7 @@ No explanation, no markdown, no backticks — pure JSON only.
 IMPORTANT: Ensure all strings are properly escaped. DO NOT include literal newlines within string values; use "\\n" instead.
 
 Rules:
+- CRITICAL: DO NOT OMIT ANY SECTIONS. Every single section and piece of text from the original CV MUST be extracted and included in the JSON. If a section doesn't fit standard categories, you MUST create a "custom" section for it.
 - Dates format: "MMM yyyy" e.g. "Jan 2022", "Aug 2024"
 - If date says "Present/Sekarang/Now/Current" → isPresent: true, endDate: null
 - Extract bullet points as separate array items, strip bullet characters
