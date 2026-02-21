@@ -184,7 +184,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                                 horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: theme.cardColor,
-                              border: Border.all(color: theme.primaryColor),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -285,19 +284,12 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
     final theme = Theme.of(context);
     final isEditing = _editingIndex != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerColor),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _showValidation
+    return Form(
+      key: _formKey,
+      autovalidateMode: _showValidation
             ? AutovalidateMode.onUserInteraction
             : AutovalidateMode.disabled,
-        child: Column(
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: AppSizes.md,
           children: [
@@ -428,7 +420,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
             ),
           ],
         ),
-      ),
     );
   }
 

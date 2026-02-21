@@ -401,171 +401,165 @@ class _CvBuilderStep4ScreenState extends State<CvBuilderStep4Screen> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingIndex != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _showValidation
-            ? AutovalidateMode.onUserInteraction
-            : AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppSizes.md,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isEditing ? l10n.editEducation : l10n.addEducation,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                if (isEditing)
-                  TextButton.icon(
-                    onPressed: _resetForm,
-                    icon: const Icon(Icons.close),
-                    label: Text(l10n.cancel),
-                  ),
-              ],
-            ),
-            TextFormField(
-              controller: _institutionController,
-              decoration: InputDecoration(
-                labelText: '${l10n.institutionName} *',
-                hintText: l10n.institutionPlaceholder,
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            TextFormField(
-              controller: _majorController,
-              decoration: InputDecoration(
-                labelText: '${l10n.major} *',
-                hintText: l10n.majorPlaceholder,
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            TextFormField(
-              controller: _degreeController,
-              decoration: InputDecoration(
-                labelText: '${l10n.degree} ${l10n.optionalField}',
-                hintText: l10n.degreePlaceholder,
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              maxLength: 50,
-            ),
-            Row(
-              spacing: AppSizes.md,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _startYearController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '${l10n.startYear} *',
-                      hintText: l10n.startYearPlaceholder,
-                      border: InputBorder.none,
-                      counterText: '',
+    return Form(
+      key: _formKey,
+      autovalidateMode: _showValidation
+          ? AutovalidateMode.onUserInteraction
+          : AutovalidateMode.disabled,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: AppSizes.md,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                isEditing ? l10n.editEducation : l10n.addEducation,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return l10n.requiredField;
-                      final year = int.tryParse(v);
-                      if (year == null) return l10n.requiredField;
-                      if (year < 1945) return l10n.invalidYearMin1945;
-                      if (year > DateTime.now().year) return l10n.yearTooHigh;
-                      return null;
-                    },
-                    maxLength: 4,
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _endYearController,
-                    keyboardType: TextInputType.number,
-                    enabled: !_isCurrentlyStudying,
-                    decoration: InputDecoration(
-                      labelText: _isCurrentlyStudying
-                          ? l10n.endYear
-                          : '${l10n.endYear} *',
-                      hintText: l10n.endYearPlaceholder,
-                      border: InputBorder.none,
-                      counterText: '',
-                    ),
-                    validator: _isCurrentlyStudying
-                        ? null
-                        : (v) {
-                            if (v == null || v.isEmpty) return null;
-
-                            final endYear = int.tryParse(v);
-                            if (endYear == null) return l10n.requiredField;
-
-                            if (endYear > DateTime.now().year) {
-                              return l10n.yearTooHigh;
-                            }
-
-                            final startYear =
-                                int.tryParse(_startYearController.text);
-                            if (startYear != null && endYear < startYear) {
-                              return l10n.yearStartAfterEnd;
-                            }
-                            return null;
-                          },
-                    maxLength: 4,
-                  ),
-                ),
-              ],
-            ),
-            CheckboxListTile(
-              value: _isCurrentlyStudying,
-              onChanged: (val) {
-                setState(() {
-                  _isCurrentlyStudying = val ?? false;
-                  if (_isCurrentlyStudying) {
-                    _endYearController.clear();
-                  }
-                });
-              },
-              title: Text(l10n.currentlyStudying),
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-            TextFormField(
-              controller: _gpaController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: l10n.gpaOptional,
-                hintText: l10n.gpaPlaceholder,
-                border: InputBorder.none,
-                counterText: '',
               ),
-              maxLength: 5,
+              if (isEditing)
+                TextButton.icon(
+                  onPressed: _resetForm,
+                  icon: const Icon(Icons.close),
+                  label: Text(l10n.cancel),
+                ),
+            ],
+          ),
+          TextFormField(
+            controller: _institutionController,
+            decoration: InputDecoration(
+              labelText: '${l10n.institutionName} *',
+              hintText: l10n.institutionPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
             ),
-            ElevatedButton(
-              onPressed: () => _saveForm(provider),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          TextFormField(
+            controller: _majorController,
+            decoration: InputDecoration(
+              labelText: '${l10n.major} *',
+              hintText: l10n.majorPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          TextFormField(
+            controller: _degreeController,
+            decoration: InputDecoration(
+              labelText: '${l10n.degree} ${l10n.optionalField}',
+              hintText: l10n.degreePlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            maxLength: 50,
+          ),
+          Row(
+            spacing: AppSizes.md,
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _startYearController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '${l10n.startYear} *',
+                    hintText: l10n.startYearPlaceholder,
+                    border: InputBorder.none,
+                    counterText: '',
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return l10n.requiredField;
+                    final year = int.tryParse(v);
+                    if (year == null) return l10n.requiredField;
+                    if (year < 1945) return l10n.invalidYearMin1945;
+                    if (year > DateTime.now().year) return l10n.yearTooHigh;
+                    return null;
+                  },
+                  maxLength: 4,
                 ),
               ),
-              child: Text(isEditing ? l10n.save : l10n.addEducation),
+              Expanded(
+                child: TextFormField(
+                  controller: _endYearController,
+                  keyboardType: TextInputType.number,
+                  enabled: !_isCurrentlyStudying,
+                  decoration: InputDecoration(
+                    labelText: _isCurrentlyStudying
+                        ? l10n.endYear
+                        : '${l10n.endYear} *',
+                    hintText: l10n.endYearPlaceholder,
+                    border: InputBorder.none,
+                    counterText: '',
+                  ),
+                  validator: _isCurrentlyStudying
+                      ? null
+                      : (v) {
+                          if (v == null || v.isEmpty) return null;
+
+                          final endYear = int.tryParse(v);
+                          if (endYear == null) return l10n.requiredField;
+
+                          if (endYear > DateTime.now().year) {
+                            return l10n.yearTooHigh;
+                          }
+
+                          final startYear =
+                              int.tryParse(_startYearController.text);
+                          if (startYear != null && endYear < startYear) {
+                            return l10n.yearStartAfterEnd;
+                          }
+                          return null;
+                        },
+                  maxLength: 4,
+                ),
+              ),
+            ],
+          ),
+          CheckboxListTile(
+            value: _isCurrentlyStudying,
+            onChanged: (val) {
+              setState(() {
+                _isCurrentlyStudying = val ?? false;
+                if (_isCurrentlyStudying) {
+                  _endYearController.clear();
+                }
+              });
+            },
+            title: Text(l10n.currentlyStudying),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+          TextFormField(
+            controller: _gpaController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: l10n.gpaOptional,
+              hintText: l10n.gpaPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
             ),
-          ],
-        ),
+            maxLength: 5,
+          ),
+          ElevatedButton(
+            onPressed: () => _saveForm(provider),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(isEditing ? l10n.save : l10n.addEducation),
+          ),
+        ],
       ),
     );
   }
+
 }

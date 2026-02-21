@@ -364,73 +364,65 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingCategoryName != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(AppSizes.md),
-
-      ),
-      padding: const EdgeInsets.all(AppSizes.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: AppSizes.md,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isEditing
-                    ? '${l10n.edit} ${l10n.categoryName}'
-                    : '${l10n.addItem} ${l10n.categoryName}',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: AppSizes.md,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing
+                  ? '${l10n.edit} ${l10n.categoryName}'
+                  : '${l10n.addItem} ${l10n.categoryName}',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetSkillForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
               ),
-              if (isEditing)
-                TextButton.icon(
-                  onPressed: _resetSkillForm,
-                  icon: const Icon(Icons.close),
-                  label: Text(l10n.cancel),
-                ),
-            ],
+          ],
+        ),
+        TextFormField(
+          controller: _categoryNameCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.categoryName,
+            hintText: l10n.categoryNamePlaceholder,
+            border: InputBorder.none,
           ),
-          TextFormField(
-            controller: _categoryNameCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.categoryName,
-              hintText: l10n.categoryNamePlaceholder,
-              border: InputBorder.none,
-            ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        TextFormField(
+          controller: _categorySkillsCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.skills,
+            hintText: l10n.skillsPlaceholder,
+            border: InputBorder.none,
           ),
-          TextFormField(
-            controller: _categorySkillsCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.skills,
-              hintText: l10n.skillsPlaceholder,
-              border: InputBorder.none,
-            ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        ElevatedButton(
+          onPressed: () => _saveSkillForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
-          ElevatedButton(
-            onPressed: () => _saveSkillForm(provider, section),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            ),
-            child: Text(isEditing ? l10n.save : l10n.add),
-          ),
-        ],
-      ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
     );
   }
 
@@ -521,48 +513,40 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.addItem,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _bulletItemCtrl,
-                  decoration: InputDecoration(
-                    hintText: l10n.typeAndAddHint,
-                    border: InputBorder.none,
-                    prefixIcon: const Icon(Iconsax.add_circle),
-                  ),
-                  onSubmitted: (_) => _saveBulletItem(provider, section),
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.addItem,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              ElevatedButton(
-                onPressed: () => _saveBulletItem(provider, section),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(0, 56),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _bulletItemCtrl,
+                decoration: InputDecoration(
+                  hintText: l10n.typeAndAddHint,
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Iconsax.add_circle),
                 ),
-                child: Text(l10n.add),
+                onSubmitted: (_) => _saveBulletItem(provider, section),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            ElevatedButton(
+              onPressed: () => _saveBulletItem(provider, section),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(0, 56),
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
+              child: Text(l10n.add),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -690,136 +674,118 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final isExperienceLike =
         section.template == CustomSectionTemplate.experienceLike;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isEditing
-                    ? '${l10n.edit} ${section.titleLabel}'
-                    : '${l10n.addItem} ${section.titleLabel}',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing
+                  ? '${l10n.edit} ${section.titleLabel}'
+                  : '${l10n.addItem} ${section.titleLabel}',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              if (isEditing)
-                TextButton.icon(
-                  onPressed: _resetEntryForm,
-                  icon: const Icon(Icons.close),
-                  label: Text(l10n.cancel),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.md),
-          TextFormField(
-            controller: _titleCtrl,
-            decoration: InputDecoration(
-              labelText: '${section.titleLabel} *',
-              hintText: isExperienceLike
-                  ? l10n.exampleSoftwareEngineer
-                  : l10n.exampleBachelor,
-              border: InputBorder.none,
             ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetEntryForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _titleCtrl,
+          decoration: InputDecoration(
+            labelText: '${section.titleLabel} *',
+            hintText: isExperienceLike
+                ? l10n.exampleSoftwareEngineer
+                : l10n.exampleBachelor,
+            border: InputBorder.none,
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _subtitleCtrl,
-            decoration: InputDecoration(
-              labelText: section.subtitleLabel,
-              hintText: isExperienceLike
-                  ? l10n.exampleGoogle
-                  : l10n.exampleUniversity,
-              border: InputBorder.none,
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _subtitleCtrl,
+          decoration: InputDecoration(
+            labelText: section.subtitleLabel,
+            hintText: isExperienceLike
+                ? l10n.exampleGoogle
+                : l10n.exampleUniversity,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _metaCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.location,
+            hintText: l10n.exampleLocation,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _startDateCtrl,
+                decoration: InputDecoration(
+                  labelText: l10n.startDate,
+                  hintText: l10n.exampleYear,
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _metaCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.location,
-              hintText: l10n.exampleLocation,
-              border: InputBorder.none,
+            const SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                controller: _endDateCtrl,
+                enabled: !_isPresent,
+                decoration: InputDecoration(
+                  labelText: _isPresent ? l10n.present : l10n.endDate,
+                  hintText: l10n.exampleYearEnd,
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _startDateCtrl,
-                  decoration: InputDecoration(
-                    labelText: l10n.startDate,
-                    hintText: l10n.exampleYear,
-                    border: InputBorder.none,
-                  ),
+          ],
+        ),
+        CheckboxListTile(
+          value: _isPresent,
+          onChanged: (val) {
+            setState(() {
+              _isPresent = val ?? false;
+              if (_isPresent) _endDateCtrl.clear();
+            });
+          },
+          title: Text(l10n.present),
+          contentPadding: EdgeInsets.zero,
+          controlAffinity: ListTileControlAffinity.leading,
+        ),
+        const SizedBox(height: 16),
+        Text(l10n.bulletPoints,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _bulletCtrl,
+                decoration: InputDecoration(
+                  hintText: l10n.addBulletPointHint,
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Iconsax.add_circle),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: TextFormField(
-                  controller: _endDateCtrl,
-                  enabled: !_isPresent,
-                  decoration: InputDecoration(
-                    labelText: _isPresent ? l10n.present : l10n.endDate,
-                    hintText: l10n.exampleYearEnd,
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          CheckboxListTile(
-            value: _isPresent,
-            onChanged: (val) {
-              setState(() {
-                _isPresent = val ?? false;
-                if (_isPresent) _endDateCtrl.clear();
-              });
-            },
-            title: Text(l10n.present),
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.bulletPoints,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _bulletCtrl,
-                  decoration: InputDecoration(
-                    hintText: l10n.addBulletPoint,
-                    border: InputBorder.none,
-                  ),
-                  onSubmitted: (value) {
-                    if (value.trim().isNotEmpty) {
-                      setState(() {
-                        _bullets.add(value.trim());
-                        _bulletCtrl.clear();
-                      });
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton.filled(
-                onPressed: () {
+                onSubmitted: (_) {
                   if (_bulletCtrl.text.trim().isNotEmpty) {
                     setState(() {
                       _bullets.add(_bulletCtrl.text.trim());
@@ -827,51 +793,61 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                     });
                   }
                 },
-                icon: const Icon(Icons.add),
               ),
-            ],
-          ),
-          if (_bullets.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            ReorderableListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (int i = 0; i < _bullets.length; i++)
-                  ListTile(
-                    key: ValueKey('bullet_$i'),
-                    dense: true,
-                    leading: const Icon(Icons.drag_handle,
-                        size: 20, color: Colors.grey),
-                    title: Text(_bullets[i]),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.close, size: 18),
-                      onPressed: () => setState(() => _bullets.removeAt(i)),
-                    ),
-                  ),
-              ],
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (oldIndex < newIndex) {
-                    newIndex -= 1;
-                  }
-                  final item = _bullets.removeAt(oldIndex);
-                  _bullets.insert(newIndex, item);
-                });
+            ),
+            IconButton(
+              onPressed: () {
+                if (_bulletCtrl.text.trim().isNotEmpty) {
+                  setState(() {
+                    _bullets.add(_bulletCtrl.text.trim());
+                    _bulletCtrl.clear();
+                  });
+                }
               },
+              icon: const Icon(Icons.add),
             ),
           ],
-          ElevatedButton(
-            onPressed: () => _saveEntryForm(provider, section),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: theme.primaryColor,
-              foregroundColor: theme.colorScheme.onPrimary,
-            ),
-            child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+        if (_bullets.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          ReorderableListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              for (int i = 0; i < _bullets.length; i++)
+                ListTile(
+                  key: ValueKey('bullet_$i'),
+                  dense: true,
+                  leading: const Icon(Icons.drag_handle,
+                      size: 20, color: Colors.grey),
+                  title: Text(_bullets[i]),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _bullets.removeAt(i)),
+                  ),
+                ),
+            ],
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = _bullets.removeAt(oldIndex);
+                _bullets.insert(newIndex, item);
+              });
+            },
           ),
         ],
-      ),
+        ElevatedButton(
+          onPressed: () => _saveEntryForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: theme.primaryColor,
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
     );
   }
 

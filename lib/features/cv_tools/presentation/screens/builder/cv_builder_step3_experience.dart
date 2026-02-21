@@ -451,208 +451,202 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingIndex != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _showValidation
-            ? AutovalidateMode.onUserInteraction
-            : AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppSizes.md,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isEditing ? l10n.editExperience : l10n.addExperience,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                if (isEditing)
-                  TextButton.icon(
-                    onPressed: _resetForm,
-                    icon: const Icon(Icons.close),
-                    label: Text(l10n.cancel),
-                  ),
-              ],
-            ),
-            TextFormField(
-              controller: _jobTitleController,
-              decoration: InputDecoration(
-                labelText: '${l10n.jobTitle} *',
-                hintText: l10n.jobTitlePlaceholder,
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            TextFormField(
-              controller: _companyController,
-              decoration: InputDecoration(
-                labelText: '${l10n.companyName} *',
-                hintText: l10n.companyPlaceholder,
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            DropdownButtonFormField<String>(
-              initialValue: _employmentType,
-              decoration: InputDecoration(
-                labelText: l10n.employmentTypeLabel,
-                border: InputBorder.none,
-              ),
-              items: [
-                DropdownMenuItem(
-                    value: 'Full-time',
-                    child: Text(l10n.employmentTypeFullTime)),
-                DropdownMenuItem(
-                    value: 'Part-time',
-                    child: Text(l10n.employmentTypePartTime)),
-                DropdownMenuItem(
-                    value: 'Contract',
-                    child: Text(l10n.employmentTypeContract)),
-                DropdownMenuItem(
-                    value: 'Freelance',
-                    child: Text(l10n.employmentTypeFreelance)),
-                DropdownMenuItem(
-                    value: 'Internship',
-                    child: Text(l10n.employmentTypeInternship)),
-              ],
-              onChanged: (val) {
-                if (val != null) setState(() => _employmentType = val);
-              },
-            ),
-            TextFormField(
-              controller: _locationController,
-              decoration: InputDecoration(
-                labelText: '${l10n.location} ${l10n.optionalField}',
-                hintText: l10n.locationPlaceholder,
-                border: InputBorder.none,
-                prefixIcon: const Icon(Iconsax.location),
-                counterText: '',
-              ),
-              maxLength: 50,
-            ),
-            Row(
-              spacing: AppSizes.md,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _selectDate(context, true),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: '${l10n.startDate} *',
-                        border: InputBorder.none,
-                        suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        errorText:
-                            _showValidation ? _validateStartDate(l10n) : null,
-                      ),
-                      child: Text(
-                          '${_startDate.day}/${_startDate.month}/${_startDate.year}'),
+    return Form(
+      key: _formKey,
+      autovalidateMode: _showValidation
+          ? AutovalidateMode.onUserInteraction
+          : AutovalidateMode.disabled,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: AppSizes.md,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                isEditing ? l10n.editExperience : l10n.addExperience,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+              ),
+              if (isEditing)
+                TextButton.icon(
+                  onPressed: _resetForm,
+                  icon: const Icon(Icons.close),
+                  label: Text(l10n.cancel),
+                ),
+            ],
+          ),
+          TextFormField(
+            controller: _jobTitleController,
+            decoration: InputDecoration(
+              labelText: '${l10n.jobTitle} *',
+              hintText: l10n.jobTitlePlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          TextFormField(
+            controller: _companyController,
+            decoration: InputDecoration(
+              labelText: '${l10n.companyName} *',
+              hintText: l10n.companyPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          DropdownButtonFormField<String>(
+            initialValue: _employmentType,
+            decoration: InputDecoration(
+              labelText: l10n.employmentTypeLabel,
+              border: InputBorder.none,
+            ),
+            items: [
+              DropdownMenuItem(
+                  value: 'Full-time',
+                  child: Text(l10n.employmentTypeFullTime)),
+              DropdownMenuItem(
+                  value: 'Part-time',
+                  child: Text(l10n.employmentTypePartTime)),
+              DropdownMenuItem(
+                  value: 'Contract',
+                  child: Text(l10n.employmentTypeContract)),
+              DropdownMenuItem(
+                  value: 'Freelance',
+                  child: Text(l10n.employmentTypeFreelance)),
+              DropdownMenuItem(
+                  value: 'Internship',
+                  child: Text(l10n.employmentTypeInternship)),
+            ],
+            onChanged: (val) {
+              if (val != null) setState(() => _employmentType = val);
+            },
+          ),
+          TextFormField(
+            controller: _locationController,
+            decoration: InputDecoration(
+              labelText: '${l10n.location} ${l10n.optionalField}',
+              hintText: l10n.locationPlaceholder,
+              border: InputBorder.none,
+              prefixIcon: const Icon(Iconsax.location),
+              counterText: '',
+            ),
+            maxLength: 50,
+          ),
+          Row(
+            spacing: AppSizes.md,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => _selectDate(context, true),
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: '${l10n.startDate} *',
+                      border: InputBorder.none,
+                      suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                      errorText:
+                          _showValidation ? _validateStartDate(l10n) : null,
+                    ),
+                    child: Text(
+                        '${_startDate.day}/${_startDate.month}/${_startDate.year}'),
                   ),
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: _isCurrentlyWorking
-                        ? null
-                        : () => _selectDate(context, false),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: l10n.endDate,
-                        border: InputBorder.none,
-                        suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        enabled: !_isCurrentlyWorking,
-                        errorText:
-                            _showValidation ? _validateEndDate(l10n) : null,
-                      ),
-                      child: Text(
-                        _isCurrentlyWorking
-                            ? l10n.present
-                            : (_endDate != null
-                                ? '${_endDate!.day}/${_endDate!.month}/${_endDate!.year}'
-                                : l10n.selectDate),
-                        style: TextStyle(
-                          color: _isCurrentlyWorking
-                              ? Colors.grey
-                              : Theme.of(context).textTheme.bodyMedium?.color,
-                        ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: _isCurrentlyWorking
+                      ? null
+                      : () => _selectDate(context, false),
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.endDate,
+                      border: InputBorder.none,
+                      suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                      enabled: !_isCurrentlyWorking,
+                      errorText:
+                          _showValidation ? _validateEndDate(l10n) : null,
+                    ),
+                    child: Text(
+                      _isCurrentlyWorking
+                          ? l10n.present
+                          : (_endDate != null
+                              ? '${_endDate!.day}/${_endDate!.month}/${_endDate!.year}'
+                              : l10n.selectDate),
+                      style: TextStyle(
+                        color: _isCurrentlyWorking
+                            ? Colors.grey
+                            : Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            CheckboxListTile(
-              value: _isCurrentlyWorking,
-              onChanged: (val) {
-                setState(() {
-                  _isCurrentlyWorking = val ?? false;
-                  if (_isCurrentlyWorking) {
-                    _endDate = null;
-                  }
-                });
-              },
-              title: Text(l10n.currentlyWorking),
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-            Stack(
-              children: [
-                TextFormField(
-                  controller: _descriptionController,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    labelText: l10n.responsibilities,
-                    hintText: l10n.responsibilitiesHint,
-                    border: InputBorder.none,
-                    alignLabelWithHint: true,
-                    counterText: '',
-                  ),
-                  maxLength: 1000,
+              ),
+            ],
+          ),
+          CheckboxListTile(
+            value: _isCurrentlyWorking,
+            onChanged: (val) {
+              setState(() {
+                _isCurrentlyWorking = val ?? false;
+                if (_isCurrentlyWorking) {
+                  _endDate = null;
+                }
+              });
+            },
+            title: Text(l10n.currentlyWorking),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+          Stack(
+            children: [
+              TextFormField(
+                controller: _descriptionController,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  labelText: l10n.responsibilities,
+                  hintText: l10n.responsibilitiesHint,
+                  border: InputBorder.none,
+                  alignLabelWithHint: true,
+                  counterText: '',
                 ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Tooltip(
-                    message: l10n.generateWithAi,
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.purple.withValues(alpha: 0.1),
-                      child: const Icon(Iconsax.magic_star,
-                          size: 16, color: Colors.purple),
-                    ),
+                maxLength: 1000,
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Tooltip(
+                  message: l10n.generateWithAi,
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Colors.purple.withValues(alpha: 0.1),
+                    child: const Icon(Iconsax.magic_star,
+                        size: 16, color: Colors.purple),
                   ),
-                ),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () => _saveForm(provider),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(isEditing ? l10n.save : l10n.addExperience),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () => _saveForm(provider),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-          ],
-        ),
+            child: Text(isEditing ? l10n.save : l10n.addExperience),
+          ),
+        ],
       ),
     );
   }
+
 
   String _getEmploymentTypeLabel(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
