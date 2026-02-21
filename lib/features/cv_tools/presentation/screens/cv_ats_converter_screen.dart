@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,8 @@ import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 
@@ -33,6 +35,15 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   String _targetLanguage = 'Original';
 
   int _step = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CVBuilderProvider>().loadAllCVs();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -338,11 +349,31 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              key: ValueKey(_convertedCv!.id),
-              child: CvPreviewCard(cvData: _convertedCv!),
+          child: Container(
+            color: Colors.grey[200],
+            key: ValueKey(_convertedCv!.id),
+            child: FutureBuilder<Uint8List>(
+              future: CvPdfService().generatePDFBytes(_convertedCv!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Failed to load PDF preview: ${snapshot.error}',
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('PDF is empty'));
+                }
+
+                return SfPdfViewer.memory(snapshot.data!);
+              },
             ),
           ),
         ),
@@ -462,16 +493,32 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
           _step = 1;
           _isLoading = false;
         });
+
+        final provider = context.read<CVBuilderProvider>();
+        provider.updateCV(cvData);
+        final success = await provider.saveCurrentCV();
+
+        if (mounted && success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.cvSavedToLibrary),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
+        final currentL10n = AppLocalizations.of(context)!;
         setState(() {
           _isLoading = false;
-          final currentL10n = AppLocalizations.of(context)!;
           _errorMessage = '${currentL10n.failedToProcessCv}: $e';
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(
+              content: Text(currentL10n.loginError(e.toString())),
+              backgroundColor: Colors.red),
         );
       }
     }

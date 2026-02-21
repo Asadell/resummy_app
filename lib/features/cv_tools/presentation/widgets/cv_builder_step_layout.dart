@@ -1,10 +1,12 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
-import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_preview_card.dart';
 import 'package:resummy_app/features/cv_tools/presentation/utils/dynamic_cv_steps.dart';
+import 'package:resummy_app/features/cv_tools/utils/cv_pdf_service.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 
@@ -37,15 +39,36 @@ class CVBuilderStepLayout extends StatefulWidget {
 class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  Future<Uint8List>? _pdfFuture;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    if (_tabController.index == 1 && !_tabController.indexIsChanging) {
+      _generatePdfPreview();
+    }
+  }
+
+  void _generatePdfPreview() {
+    final provider = context.read<CVBuilderProvider>();
+    final cv = provider.currentCV;
+    if (cv != null) {
+      if (mounted) {
+        setState(() {
+          _pdfFuture = CvPdfService().generatePDFBytes(cv);
+        });
+      }
+    }
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
     super.dispose();
   }
@@ -67,7 +90,27 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
               icon: const Icon(Iconsax.arrow_left),
               onPressed: () => _showExitConfirmation(context, l10n),
             ),
-            title: Text(stepTitle),
+            title: InkWell(
+              onTap: () => _showStepSelector(context, provider, l10n),
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        stepTitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.keyboard_arrow_down, size: 20),
+                  ],
+                ),
+              ),
+            ),
             centerTitle: true,
             actions: [
               Padding(
@@ -181,7 +224,36 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
                   controller: _tabController,
                   children: [
                     widget.editContent,
-                    CvPreviewCard(cvData: provider.currentCV),
+                    Container(
+                      color: const Color(0xFFF5F5F5),
+                      child: FutureBuilder<Uint8List>(
+                        future: _pdfFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text('Failed to load PDF: ${snapshot.error}', textAlign: TextAlign.center),
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            return SfPdfViewer.memory(
+                              snapshot.data!,
+                              enableDoubleTapZooming: true,
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                'Tap the Preview tab to load CV',
+                                style: TextStyle(color: Colors.grey.shade600),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -240,6 +312,113 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
           ),
         );
       },
+    );
+  }
+
+  void _showStepSelector(
+      BuildContext context, CVBuilderProvider provider, AppLocalizations l10n) {
+    final cv = provider.currentCV;
+    if (cv == null) return;
+
+    final totalSteps = DynamicCvSteps.getTotalSteps(cv);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.8,
+        builder: (context, scrollController) => Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  l10n.selectSectionFormat, // Reusing existing key if appropriate or just 'Select Step'
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: totalSteps,
+                  itemBuilder: (context, index) {
+                    final step = index + 1;
+                    final stepTitle = DynamicCvSteps.getStepTitle(step, cv);
+                    final isCurrent = step == widget.currentStep;
+
+                    return ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        if (!isCurrent) {
+                          DynamicCvSteps.navigateToStep(context, step);
+                        }
+                      },
+                      leading: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: isCurrent
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context)
+                                  .primaryColor
+                                  .withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$step',
+                            style: TextStyle(
+                              color: isCurrent
+                                  ? Colors.white
+                                  : Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        stepTitle,
+                        style: TextStyle(
+                          fontWeight:
+                              isCurrent ? FontWeight.bold : FontWeight.normal,
+                          color: isCurrent
+                              ? Theme.of(context).primaryColor
+                              : null,
+                        ),
+                      ),
+                      trailing: isCurrent
+                          ? Icon(Icons.check_circle,
+                              color: Theme.of(context).primaryColor)
+                          : null,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

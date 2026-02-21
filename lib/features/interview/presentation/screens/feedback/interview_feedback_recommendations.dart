@@ -125,7 +125,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                             ],
                           ),
                           if (report.strengths.isEmpty)
-                            Text('No specific strengths identified.',
+                            Text(l10n.noStrengthsIdentified,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -180,7 +180,7 @@ class InterviewFeedbackRecommendationsScreen extends StatelessWidget {
                             ],
                           ),
                           if (report.improvements.isEmpty)
-                            Text('No specific improvements identified.',
+                            Text(l10n.noImprovementsIdentified,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme

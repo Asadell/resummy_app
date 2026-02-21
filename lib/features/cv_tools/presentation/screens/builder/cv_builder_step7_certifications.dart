@@ -333,164 +333,156 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingIndex != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(AppSizes.md),
-      ),
-      padding: const EdgeInsets.all(AppSizes.md),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _showValidation
-            ? AutovalidateMode.onUserInteraction
-            : AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isEditing ? l10n.editCertification : l10n.addCertification,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                if (isEditing)
-                  TextButton.icon(
-                    onPressed: _resetForm,
-                    icon: const Icon(Icons.close),
-                    label: Text(l10n.cancel),
-                  ),
-              ],
-            ),
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: '${l10n.certificationName} *',
-                hintText: l10n.certificationPlaceholder,
-                border: const OutlineInputBorder(),
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            TextFormField(
-              controller: _organizationController,
-              decoration: InputDecoration(
-                labelText: '${l10n.issuingOrganization} *',
-                hintText: l10n.issuingOrgPlaceholder,
-                border: const OutlineInputBorder(),
-                counterText: '',
-              ),
-              validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
-              maxLength: 50,
-            ),
-            Row(
-              spacing: AppSizes.md,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _selectDate(context, true),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: '${l10n.issueDate} *',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        errorText:
-                            _showValidation ? _validateIssueDate(l10n) : null,
-                      ),
-                      child: Text(
-                          '${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
+    return Form(
+      key: _formKey,
+      autovalidateMode: _showValidation
+          ? AutovalidateMode.onUserInteraction
+          : AutovalidateMode.disabled,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: AppSizes.md,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                isEditing ? l10n.editCertification : l10n.addCertification,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+              ),
+              if (isEditing)
+                TextButton.icon(
+                  onPressed: _resetForm,
+                  icon: const Icon(Icons.close),
+                  label: Text(l10n.cancel),
+                ),
+            ],
+          ),
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: '${l10n.certificationName} *',
+              hintText: l10n.certificationPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          TextFormField(
+            controller: _organizationController,
+            decoration: InputDecoration(
+              labelText: '${l10n.issuingOrganization} *',
+              hintText: l10n.issuingOrgPlaceholder,
+              border: InputBorder.none,
+              counterText: '',
+            ),
+            validator: (v) => v?.isEmpty == true ? l10n.requiredField : null,
+            maxLength: 50,
+          ),
+          Row(
+            spacing: AppSizes.md,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => _selectDate(context, true),
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: '${l10n.issueDate} *',
+                      border: InputBorder.none,
+                      suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                      errorText:
+                          _showValidation ? _validateIssueDate(l10n) : null,
+                    ),
+                    child: Text(
+                        '${_issueDate.day}/${_issueDate.month}/${_issueDate.year}'),
                   ),
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: _doesNotExpire
-                        ? null
-                        : () => _selectDate(context, false),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: l10n.expirationDate,
-                        border: const OutlineInputBorder(),
-                        suffixIcon: const Icon(Icons.calendar_today, size: 16),
-                        enabled: !_doesNotExpire,
-                        errorText: _showValidation
-                            ? _validateExpirationDate(l10n)
-                            : null,
-                      ),
-                      child: Text(
-                        _doesNotExpire
-                            ? '-'
-                            : (_expirationDate != null
-                                ? '${_expirationDate!.day}/${_expirationDate!.month}/${_expirationDate!.year}'
-                                : l10n.selectDate),
-                        style: TextStyle(
-                          color: _doesNotExpire
-                              ? Theme.of(context).disabledColor
-                              : Theme.of(context).textTheme.bodyMedium?.color,
-                        ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: _doesNotExpire
+                      ? null
+                      : () => _selectDate(context, false),
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.expirationDate,
+                      border: InputBorder.none,
+                      suffixIcon: const Icon(Icons.calendar_today, size: 16),
+                      enabled: !_doesNotExpire,
+                      errorText: _showValidation
+                          ? _validateExpirationDate(l10n)
+                          : null,
+                    ),
+                    child: Text(
+                      _doesNotExpire
+                          ? '-'
+                          : (_expirationDate != null
+                              ? '${_expirationDate!.day}/${_expirationDate!.month}/${_expirationDate!.year}'
+                              : l10n.selectDate),
+                      style: TextStyle(
+                        color: _doesNotExpire
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            CheckboxListTile(
-              value: _doesNotExpire,
-              onChanged: (val) {
-                setState(() {
-                  _doesNotExpire = val ?? false;
-                  if (_doesNotExpire) {
-                    _expirationDate = null;
-                  }
-                });
-              },
-              title: Text(l10n.doesNotExpire),
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-            const SizedBox(height: AppSizes.xs),
-            TextFormField(
-              controller: _credentialIdController,
-              decoration: InputDecoration(
-                labelText: l10n.credentialId,
-                border: const OutlineInputBorder(),
-                counterText: '',
               ),
-              maxLength: 50,
+            ],
+          ),
+          CheckboxListTile(
+            value: _doesNotExpire,
+            onChanged: (val) {
+              setState(() {
+                _doesNotExpire = val ?? false;
+                if (_doesNotExpire) {
+                  _expirationDate = null;
+                }
+              });
+            },
+            title: Text(l10n.doesNotExpire),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+          TextFormField(
+            controller: _credentialIdController,
+            decoration: InputDecoration(
+              labelText: l10n.credentialId,
+              border: InputBorder.none,
+              counterText: '',
             ),
-            TextFormField(
-              controller: _credentialUrlController,
-              decoration: InputDecoration(
-                labelText: l10n.credentialUrl,
-                border: const OutlineInputBorder(),
-                helperText: l10n.credentialUrlHelper,
-                prefixIcon: const Icon(Iconsax.link_1),
-                counterText: '',
+            maxLength: 50,
+          ),
+          TextFormField(
+            controller: _credentialUrlController,
+            decoration: InputDecoration(
+              labelText: l10n.credentialUrl,
+              border: InputBorder.none,
+              helperText: l10n.credentialUrlHelper,
+              prefixIcon: const Icon(Iconsax.link_1),
+              counterText: '',
+            ),
+            keyboardType: TextInputType.url,
+            inputFormatters: [
+              FilteringTextInputFormatter.deny(RegExp(r'\s')),
+            ],
+            maxLength: 100,
+          ),
+          ElevatedButton(
+            onPressed: () => _saveForm(provider),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              keyboardType: TextInputType.url,
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'\s')),
-              ],
-              maxLength: 100,
             ),
-            const SizedBox(height: AppSizes.xl),
-            ElevatedButton(
-              onPressed: () => _saveForm(provider),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(isEditing ? l10n.save : l10n.addCertification),
-            ),
-          ],
-        ),
+            child: Text(isEditing ? l10n.save : l10n.addCertification),
+          ),
+        ],
       ),
     );
   }

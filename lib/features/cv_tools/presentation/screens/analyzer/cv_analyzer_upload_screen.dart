@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
+import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
@@ -26,6 +28,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   late TextEditingController _jobDescController;
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
+  bool _wasAnalyzing = false;
   SuggestionPriority? _filterPriority;
 
   int? _selectedCvIndex;
@@ -40,6 +43,10 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CVBuilderProvider>().loadAllCVs();
+    });
+
     _jobPositionController = TextEditingController(
         text: provider.jobPosition.isNotEmpty
             ? provider.jobPosition
@@ -53,6 +60,22 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     }
 
     context.read<ProfileProvider>().addListener(_onProfileChanged);
+    context.read<CvAnalyzerProvider>().addListener(_onAnalyzerChanged);
+  }
+
+  void _onAnalyzerChanged() {
+    if (!mounted) return;
+    final provider = context.read<CvAnalyzerProvider>();
+
+    if (_wasAnalyzing && !provider.isAnalyzing && provider.hasResult) {
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<HistoryProvider>().loadActivities();
+        }
+      });
+    }
+    _wasAnalyzing = provider.isAnalyzing;
   }
 
   void _onProfileChanged() {
@@ -75,6 +98,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     _jobPositionController.dispose();
     _jobDescController.dispose();
     context.read<ProfileProvider>().removeListener(_onProfileChanged);
+    context.read<CvAnalyzerProvider>().removeListener(_onAnalyzerChanged);
     super.dispose();
   }
 
@@ -102,12 +126,11 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
   Widget _buildInputState(CvAnalyzerProvider provider) {
     return SingleChildScrollView(
-      child: AppSection(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppSizes.md,
-          children: [
-            Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppSection(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: AppSizes.sm,
               children: [
@@ -125,239 +148,222 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ],
             ),
-            Consumer<CvAnalyzerProvider>(
+          ),
+          const SizedBox(height: AppSizes.sm),
+          AppSection(
+            child: Consumer<CvAnalyzerProvider>(
               builder: (context, analyzerProvider, _) {
                 final cvBuilderProvider = context.watch<CVBuilderProvider>();
                 final allCvs = cvBuilderProvider.savedCVs;
                 final recentCvs = allCvs.take(2).toList();
-
                 final hasFile = analyzerProvider.hasFile;
 
-                return AppSection(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    spacing: AppSizes.sm,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.selectCvToAnalyze,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          if (allCvs.length > 2)
-                            TextButton(
-                              onPressed: () =>
-                                  _showBrowseSheet(context, allCvs),
-                              child: Text(l10n.viewAll),
-                            ),
-                        ],
-                      ),
-                      Text(
-                        l10n.cvAnalyzerSetupDesc,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
-                      ),
-                      const SizedBox(height: AppSizes.sm),
-                      if (recentCvs.isEmpty && !hasFile)
-                        Container(
-                          padding: const EdgeInsets.all(AppSizes.md),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(AppSizes.sm),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Iconsax.info_circle,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  size: 20),
-                              const SizedBox(width: AppSizes.sm),
-                              Expanded(
-                                child: Text(
-                                  l10n.noCvFound,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      else ...[
-                        ...recentCvs.asMap().entries.map((entry) {
-                          final i = entry.key;
-                          final cv = entry.value;
-
-                          final isSelected = _selectedCvIndex == i;
-
-                          return _buildCvItem(context,
-                              index: i,
-                              cv: cv,
-                              isSelected: isSelected, onTap: () {
-                            setState(() {
-                              _selectedCvIndex = i;
-                            });
-
-                            _selectCvData(cv);
-                          });
-                        }),
-                      ],
-                      if (hasFile && _selectedCvIndex == -1)
-                        Card(
-                          elevation: 0,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withValues(alpha: 0.2),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary),
-                              borderRadius: BorderRadius.circular(AppSizes.sm)),
-                          child: ListTile(
-                            leading: Icon(Iconsax.document,
-                                color: Theme.of(context).colorScheme.primary),
-                            title: Text(analyzerProvider.fileName ?? 'Unknown'),
-                            subtitle: Text(analyzerProvider.fileSize ?? ''),
-                            trailing: IconButton(
-                              icon: const Icon(Iconsax.close_circle,
-                                  color: Colors.grey),
-                              onPressed: () {
-                                analyzerProvider.clearFile();
-                                setState(() {
-                                  _selectedCvIndex = null;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          analyzerProvider.pickAndExtract().then((_) {
-                            if (analyzerProvider.hasFile) {
-                              setState(() {
-                                _selectedCvIndex = -1;
-                              });
-                            }
-                          });
-                        },
-                        icon: const Icon(Iconsax.document_upload),
-                        label: Text(l10n.uploadNewCv),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(52),
-                          padding:
-                              const EdgeInsets.symmetric(vertical: AppSizes.md),
-                          side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppSizes.sm),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            TextField(
-              controller: _jobPositionController,
-              decoration: InputDecoration(
-                labelText: l10n.appliedPositionLabel,
-                hintText: l10n.targetRoleHint,
-                prefixIcon: const Icon(Iconsax.briefcase),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.sm),
-                ),
-              ),
-              onChanged: provider.setJobPosition,
-            ),
-            Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Iconsax.document_text_1),
-                    title: Text('${l10n.jobDescription} ${l10n.optionalField}'),
-                    subtitle: Text(l10n.jobDescSubtitle),
-                    trailing: Icon(
-                      _isJobDescExpanded
-                          ? Iconsax.arrow_up_2
-                          : Iconsax.arrow_down_1,
-                    ),
-                    onTap: () {
-                      setState(() => _isJobDescExpanded = !_isJobDescExpanded);
-                    },
-                  ),
-                  if (_isJobDescExpanded)
-                    Padding(
-                      padding: const EdgeInsets.all(AppSizes.md),
-                      child: TextField(
-                        controller: _jobDescController,
-                        maxLines: 5,
-                        decoration: InputDecoration(
-                          hintText: l10n.jobDescPasteHint,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSizes.sm),
-                          ),
-                        ),
-                        onChanged: provider.setJobDescription,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSizes.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSizes.sm,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(Iconsax.language_square, size: 20),
-                        const SizedBox(width: AppSizes.sm),
                         Text(
-                          l10n.languageLabel,
-                          style: Theme.of(context).textTheme.titleSmall,
+                          l10n.selectCvToAnalyze,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
+                        if (allCvs.length > 2)
+                          TextButton(
+                            onPressed: () => _showBrowseSheet(context, allCvs),
+                            child: Text(l10n.viewAll),
+                          ),
                       ],
                     ),
-                    SegmentedButton<String>(
-                      segments: [
-                        ButtonSegment(
-                          value: 'id',
-                          label: Text(l10n.indonesian),
-                          icon: const Icon(Icons.flag, size: 16),
+                    if (recentCvs.isEmpty && !hasFile)
+                      Container(
+                        padding: const EdgeInsets.all(AppSizes.md),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(AppSizes.sm),
                         ),
-                        ButtonSegment(
-                          value: 'en',
-                          label: Text(l10n.english),
-                          icon: const Icon(Icons.flag, size: 16),
+                        child: Row(
+                          children: [
+                            Icon(Iconsax.info_circle,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                size: 20),
+                            const SizedBox(width: AppSizes.sm),
+                            Expanded(
+                              child: Text(
+                                l10n.noCvFound,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                      selected: {_selectedLanguage},
-                      onSelectionChanged: (Set<String> newSelection) {
-                        setState(() => _selectedLanguage = newSelection.first);
+                      )
+                    else ...[
+                      ...recentCvs.asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final cv = entry.value;
+                        final isSelected = _selectedCvIndex == i;
+
+                        return _buildCvItem(context,
+                            index: i,
+                            cv: cv,
+                            isSelected: isSelected, onTap: () {
+                          setState(() {
+                            _selectedCvIndex = i;
+                          });
+                          _selectCvData(cv);
+                        });
+                      }),
+                    ],
+                    if (hasFile && _selectedCvIndex == -1)
+                      Card(
+                        elevation: 0,
+                        margin: EdgeInsets.zero,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primaryContainer
+                            .withValues(alpha: 0.2),
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                            borderRadius: BorderRadius.circular(AppSizes.sm)),
+                        child: ListTile(
+                          leading: Icon(Iconsax.document,
+                              color: Theme.of(context).colorScheme.primary),
+                          title:
+                              Text(analyzerProvider.fileName ?? l10n.unknown),
+                          subtitle: Text(analyzerProvider.fileSize ?? ''),
+                          trailing: IconButton(
+                            icon: const Icon(Iconsax.close_circle,
+                                color: Colors.grey),
+                            onPressed: () {
+                              analyzerProvider.clearFile();
+                              setState(() {
+                                _selectedCvIndex = null;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        analyzerProvider.pickAndExtract().then((_) {
+                          if (analyzerProvider.hasFile) {
+                            setState(() {
+                              _selectedCvIndex = -1;
+                            });
+                          }
+                        });
                       },
+                      icon: const Icon(Iconsax.document_upload),
+                      label: Text(l10n.uploadNewCv),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(52),
+                        padding:
+                            const EdgeInsets.symmetric(vertical: AppSizes.md),
+                        side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.sm),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: AppSizes.sm),
+          AppSection(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSizes.md,
+              children: [
+                Text(
+                  l10n.appliedPositionLabel,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                TextField(
+                  controller: _jobPositionController,
+                  decoration: InputDecoration(
+                    labelText: l10n.appliedPositionLabel,
+                    hintText: l10n.targetRoleHint,
+                    prefixIcon: const Icon(Iconsax.briefcase),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.sm),
+                    ),
+                  ),
+                  onChanged: provider.setJobPosition,
+                ),
+                _buildExpandableJobDesc(),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSizes.sm),
+          AppSection(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSizes.sm,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Iconsax.language_square, size: 20),
+                    const SizedBox(width: AppSizes.sm),
+                    Text(
+                      l10n.languageLabel,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 4),
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<String>(
+                    segments: [
+                      ButtonSegment(
+                        value: 'id',
+                        label: Text(l10n.indonesian),
+                        icon: const Icon(Icons.flag, size: 16),
+                      ),
+                      ButtonSegment(
+                        value: 'en',
+                        label: Text(l10n.english),
+                        icon: const Icon(Icons.flag, size: 16),
+                      ),
+                    ],
+                    selected: {_selectedLanguage},
+                    onSelectionChanged: (Set<String> newSelection) {
+                      setState(() => _selectedLanguage = newSelection.first);
+                    },
+                  ),
+                ),
+              ],
             ),
-            if (provider.errorMessage != null)
-              Container(
+          ),
+          if (provider.errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.all(AppSizes.md),
+              child: Container(
                 padding: const EdgeInsets.all(AppSizes.sm),
                 decoration: BoxDecoration(
                   color: Colors.red.shade50,
@@ -378,58 +384,93 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                   ],
                 ),
               ),
-            FilledButton.icon(
+            ),
+          Padding(
+            padding: const EdgeInsets.all(AppSizes.md),
+            child: FilledButton.icon(
               onPressed: (provider.hasFile ||
                           (_selectedCvIndex != null &&
                               _selectedCvIndex! >= 0)) &&
                       provider.jobPosition.isNotEmpty
                   ? () async {
-                      if (_selectedCvIndex != null && _selectedCvIndex! >= 0) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(
-                                  'Analyzing saved CV not fully wired yet')),
-                        );
-                      } else {
-                        provider.analyze(_selectedLanguage);
-                      }
+                      provider.analyze(_selectedLanguage);
                     }
                   : null,
               icon: const Icon(Iconsax.scan_barcode),
               label: Text(l10n.startAnalysis),
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                minimumSize: const Size.fromHeight(52),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.sm),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppSizes.xl),
+        ],
       ),
+    );
+  }
+
+  Widget _buildExpandableJobDesc() {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Iconsax.document_text_1),
+          title: Text('${l10n.jobDescription} ${l10n.optionalField}'),
+          subtitle: Text(l10n.jobDescSubtitle),
+          trailing: Icon(
+            _isJobDescExpanded ? Iconsax.arrow_up_2 : Iconsax.arrow_down_1,
+          ),
+          onTap: () {
+            setState(() => _isJobDescExpanded = !_isJobDescExpanded);
+          },
+        ),
+        if (_isJobDescExpanded)
+          Padding(
+            padding: const EdgeInsets.only(top: AppSizes.sm),
+            child: TextField(
+              controller: _jobDescController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                hintText: l10n.jobDescPasteHint,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.sm),
+                ),
+              ),
+              onChanged: context.read<CvAnalyzerProvider>().setJobDescription,
+            ),
+          ),
+      ],
     );
   }
 
   Widget _buildLoadingState(CvAnalyzerProvider provider) {
     final isConverting = provider.isConverting;
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 24),
-          Text(
-            isConverting ? l10n.applyingSuggestions : l10n.analyzingCv,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            isConverting ? l10n.applyingSuggestions : l10n.estimateTime,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 24),
+            Text(
+              isConverting ? l10n.applyingSuggestions : l10n.analyzingCv,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              isConverting ? l10n.applyingSuggestions : l10n.estimateTime,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -442,14 +483,67 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
         Column(
           children: [
             Container(
-              color: Theme.of(context).colorScheme.surface,
+              margin: const EdgeInsets.all(AppSizes.sm),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                ),
+              ),
               child: TabBar(
                 controller: _tabController,
+                indicator: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                labelColor: Theme.of(context).colorScheme.onPrimary,
+                unselectedLabelColor:
+                    Theme.of(context).colorScheme.onSurfaceVariant,
+                labelStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
+                dividerColor: Colors.transparent,
                 tabs: [
-                  Tab(text: l10n.report, icon: const Icon(Iconsax.chart_1)),
                   Tab(
-                      text: l10n.suggestion,
-                      icon: const Icon(Iconsax.message_edit)),
+                    height: 36,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Iconsax.chart_1, size: 16),
+                        const SizedBox(width: 8),
+                        Text(l10n.report),
+                      ],
+                    ),
+                  ),
+                  Tab(
+                    height: 36,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Iconsax.message_edit, size: 16),
+                        const SizedBox(width: 8),
+                        Text(l10n.suggestion),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -471,24 +565,30 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
   Widget _buildReportTab(CvAnalysisResult result) {
     return SingleChildScrollView(
-      child: AppSection(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildScoreCircle(result),
-            const SizedBox(height: AppSizes.xl),
-            _buildMetricsSection(result.metrics),
-            const SizedBox(height: AppSizes.xl),
-            if (result.summaryFeedback.isNotEmpty) ...[
-              _buildSectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppSection(
+            child: _buildScoreCircle(result),
+          ),
+          const SizedBox(height: AppSizes.sm),
+          AppSection(
+            child: _buildMetricsSection(result.metrics),
+          ),
+          const SizedBox(height: AppSizes.sm),
+          if (result.summaryFeedback.isNotEmpty) ...[
+            AppSection(
+              child: _buildSectionCard(
                 title: l10n.summary,
                 icon: Iconsax.message_text,
                 child: Text(result.summaryFeedback),
               ),
-              const SizedBox(height: AppSizes.md),
-            ],
-            if (result.highlights.isNotEmpty) ...[
-              _buildSectionCard(
+            ),
+            const SizedBox(height: AppSizes.sm),
+          ],
+          if (result.highlights.isNotEmpty) ...[
+            AppSection(
+              child: _buildSectionCard(
                 title: l10n.strengths,
                 icon: Iconsax.like_1,
                 color: Colors.green,
@@ -498,10 +598,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                       .toList(),
                 ),
               ),
-              const SizedBox(height: AppSizes.md),
-            ],
-            if (result.improvements.isNotEmpty) ...[
-              _buildSectionCard(
+            ),
+            const SizedBox(height: AppSizes.sm),
+          ],
+          if (result.improvements.isNotEmpty) ...[
+            AppSection(
+              child: _buildSectionCard(
                 title: l10n.improvements,
                 icon: Iconsax.warning_2,
                 color: Colors.orange,
@@ -511,10 +613,12 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                       .toList(),
                 ),
               ),
-              const SizedBox(height: AppSizes.md),
-            ],
-            if (result.missingKeywords.isNotEmpty) ...[
-              _buildSectionCard(
+            ),
+            const SizedBox(height: AppSizes.sm),
+          ],
+          if (result.missingKeywords.isNotEmpty) ...[
+            AppSection(
+              child: _buildSectionCard(
                 title: l10n.missingKeywords,
                 icon: Iconsax.search_normal,
                 color: Colors.red,
@@ -530,9 +634,10 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                       .toList(),
                 ),
               ),
-            ],
+            ),
+            const SizedBox(height: AppSizes.xl),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -546,85 +651,78 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ? Colors.orange
                 : Colors.red;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: CircularProgressIndicator(
-                    value: result.overallScore / 100,
-                    strokeWidth: 12,
-                    backgroundColor: Colors.grey.shade200,
-                    valueColor: AlwaysStoppedAnimation<Color>(color),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 150,
+                height: 150,
+                child: CircularProgressIndicator(
+                  value: result.overallScore / 100,
+                  strokeWidth: 12,
+                  backgroundColor: Colors.grey.shade200,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
                 ),
-                Column(
-                  children: [
-                    Text(
-                      '${result.overallScore}',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
-                    ),
-                    Text(
-                      result.grade,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.overallAtsScore,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${result.overallScore}',
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                        ),
                   ),
-            ),
-          ],
-        ),
+                  Text(
+                    result.grade,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: color,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            l10n.overallAtsScore,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildMetricsSection(CvScoreMetrics metrics) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.detailScore,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 16),
-            _buildMetricBar(
-                l10n.keywordMatch, metrics.keywordMatch, Colors.blue),
-            const SizedBox(height: 12),
-            _buildMetricBar(l10n.quantifiableAchievements,
-                metrics.quantifiableAchievements, Colors.green),
-            const SizedBox(height: 12),
-            _buildMetricBar(l10n.structureCompleteness,
-                metrics.structureCompleteness, Colors.purple),
-            const SizedBox(height: 12),
-            _buildMetricBar(l10n.languageProfessionalism,
-                metrics.languageProfessionalism, Colors.orange),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.detailScore,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
-      ),
+        const SizedBox(height: 16),
+        _buildMetricBar(l10n.keywordMatch, metrics.keywordMatch, Colors.blue),
+        const SizedBox(height: 12),
+        _buildMetricBar(l10n.quantifiableAchievements,
+            metrics.quantifiableAchievements, Colors.green),
+        const SizedBox(height: 12),
+        _buildMetricBar(l10n.structureCompleteness,
+            metrics.structureCompleteness, Colors.purple),
+        const SizedBox(height: 12),
+        _buildMetricBar(l10n.languageProfessionalism,
+            metrics.languageProfessionalism, Colors.orange),
+      ],
     );
   }
 
@@ -660,29 +758,24 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     required Widget child,
     Color? color,
   }) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Icon(icon, color: color, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
+            Icon(icon, color: color, size: 24),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-            const SizedBox(height: 12),
-            child,
           ],
         ),
-      ),
+        const SizedBox(height: 12),
+        child,
+      ],
     );
   }
 
@@ -711,86 +804,96 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             .where((s) => s.priority == _filterPriority)
             .toList();
 
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          color: Theme.of(context).colorScheme.surface,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildStatChip(
-                      l10n.pendingStatus, result.pendingCount, Colors.blue),
-                  _buildStatChip(
-                      l10n.appliedStatus, result.appliedCount, Colors.green),
-                  _buildStatChip(
-                      l10n.dismissedStatus, result.dismissedCount, Colors.grey),
-                ],
-              ),
-              const SizedBox(height: 12),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    FilterChip(
-                      label: Text(l10n.filterAll),
-                      selected: _filterPriority == null,
-                      onSelected: (_) => setState(() => _filterPriority = null),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: Text(l10n.filterHigh),
-                      selected: _filterPriority == SuggestionPriority.high,
-                      onSelected: (_) => setState(
-                          () => _filterPriority = SuggestionPriority.high),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: Text(l10n.filterMedium),
-                      selected: _filterPriority == SuggestionPriority.medium,
-                      onSelected: (_) => setState(
-                          () => _filterPriority = SuggestionPriority.medium),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: Text(l10n.filterLow),
-                      selected: _filterPriority == SuggestionPriority.low,
-                      onSelected: (_) => setState(
-                          () => _filterPriority = SuggestionPriority.low),
-                    ),
-                  ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppSection(
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildStatChip(
+                          l10n.pendingStatus, result.pendingCount, Colors.blue),
+                      const SizedBox(width: 8),
+                      _buildStatChip(l10n.appliedStatus, result.appliedCount,
+                          Colors.green),
+                      const SizedBox(width: 8),
+                      _buildStatChip(l10n.dismissedStatus, result.dismissedCount,
+                          Colors.grey),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      FilterChip(
+                        label: Text(l10n.filterAll),
+                        selected: _filterPriority == null,
+                        onSelected: (_) =>
+                            setState(() => _filterPriority = null),
+                      ),
+                      const SizedBox(width: 8),
+                      FilterChip(
+                        label: Text(l10n.filterHigh),
+                        selected: _filterPriority == SuggestionPriority.high,
+                        onSelected: (_) => setState(
+                            () => _filterPriority = SuggestionPriority.high),
+                      ),
+                      const SizedBox(width: 8),
+                      FilterChip(
+                        label: Text(l10n.filterMedium),
+                        selected: _filterPriority == SuggestionPriority.medium,
+                        onSelected: (_) => setState(
+                            () => _filterPriority = SuggestionPriority.medium),
+                      ),
+                      const SizedBox(width: 8),
+                      FilterChip(
+                        label: Text(l10n.filterLow),
+                        selected: _filterPriority == SuggestionPriority.low,
+                        onSelected: (_) => setState(
+                            () => _filterPriority = SuggestionPriority.low),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: filteredSuggestions.isEmpty
-              ? Center(
+          const SizedBox(height: AppSizes.sm),
+          if (filteredSuggestions.isEmpty)
+            AppSection(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: Center(
                   child: Text(
                     l10n.noSuggestionsForFilter,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filteredSuggestions.length,
-                  itemBuilder: (context, index) {
-                    final suggestion = filteredSuggestions[index];
-
-                    if (index == filteredSuggestions.length - 1) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 80),
-                        child: _buildSuggestionCard(suggestion, provider),
-                      );
-                    }
-                    return _buildSuggestionCard(suggestion, provider);
-                  },
                 ),
-        ),
-      ],
+              ),
+            )
+          else
+            ...filteredSuggestions.map((suggestion) => Column(
+                  children: [
+                    AppSection(
+                      backgroundColor: suggestion.isApplied
+                          ? Colors.green.shade50
+                          : suggestion.isDismissed
+                              ? Colors.grey.shade100
+                              : null,
+                      child: _buildSuggestionCard(suggestion, provider),
+                    ),
+                    const SizedBox(height: AppSizes.sm),
+                  ],
+                )),
+          const SizedBox(height: 80),
+        ],
+      ),
     );
   }
 
@@ -815,20 +918,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
             ? Colors.orange
             : Colors.blue;
 
-    final cardColor = suggestion.isApplied
-        ? Colors.green.shade50
-        : suggestion.isDismissed
-            ? Colors.grey.shade100
-            : null;
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      color: cardColor,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
             Row(
               children: [
                 Container(
@@ -986,9 +1078,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                 ),
               ),
           ],
-        ),
-      ),
-    );
+        );
   }
 
   Widget _buildCvFab(CvAnalysisResult result, CvAnalyzerProvider provider) {
@@ -1045,7 +1135,11 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     }
   }
 
-  Future<void> _selectCvData(dynamic cv) async {}
+  Future<void> _selectCvData(dynamic cv) async {
+    if (cv is CVData) {
+      context.read<CvAnalyzerProvider>().setExtractedText(cv.toPlainText());
+    }
+  }
 
   void _showBrowseSheet(BuildContext context, List<dynamic> allCvs) {
     final l10n = AppLocalizations.of(context)!;

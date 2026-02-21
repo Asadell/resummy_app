@@ -2,20 +2,20 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:resummy_app/core/di/injection.dart';
 import 'package:resummy_app/core/utils/pdf_utils.dart';
-import 'package:resummy_app/features/cv_tools/data/data_sources/cv_analysis_remote_data_source.dart';
-import 'package:resummy_app/features/cv_tools/data/services/cv_ats_converter_service.dart';
+import 'package:resummy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
+import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
 
 class CvAnalyzerProvider extends ChangeNotifier {
-  final CVAnalysisRemoteDataSource _dataSource;
-  final CvAtsConverterService _converterService;
+  final CVAnalysisRepository _repository;
+  final AuthProvider _authProvider;
 
   CvAnalyzerProvider({
-    CVAnalysisRemoteDataSource? dataSource,
-    CvAtsConverterService? converterService,
-  })  : _dataSource = dataSource ?? getIt<CVAnalysisRemoteDataSource>(),
-        _converterService = converterService ?? getIt<CvAtsConverterService>();
+    CVAnalysisRepository? repository,
+    AuthProvider? authProvider,
+  })  : _repository = repository ?? getIt<CVAnalysisRepository>(),
+        _authProvider = authProvider ?? getIt<AuthProvider>();
 
   PlatformFile? _selectedFile;
   String _extractedText = '';
@@ -26,20 +26,26 @@ class CvAnalyzerProvider extends ChangeNotifier {
   String _jobDescription = '';
 
   bool _isAnalyzing = false;
+  bool _isLoadingHistory = false;
   CvAnalysisResult? _result;
   String? _errorMessage;
+
+  List<CvAnalysisResult> _savedAnalyses = [];
 
   PlatformFile? get selectedFile => _selectedFile;
   String get extractedText => _extractedText;
   bool get isPickingFile => _isPickingFile;
   bool get isConverting => _isConverting;
   bool get isAnalyzing => _isAnalyzing;
+  bool get isLoadingHistory => _isLoadingHistory;
   CvAnalysisResult? get result => _result;
   String? get errorMessage => _errorMessage;
   String get jobPosition => _jobPosition;
   String get jobDescription => _jobDescription;
 
-  bool get hasFile => _selectedFile != null && _extractedText.isNotEmpty;
+  List<CvAnalysisResult> get savedAnalyses => _savedAnalyses;
+
+  bool get hasFile => _extractedText.isNotEmpty;
   bool get hasResult => _result != null;
 
   String? get fileName => _selectedFile?.name;
@@ -56,6 +62,53 @@ class CvAnalyzerProvider extends ChangeNotifier {
 
   void setJobDescription(String v) {
     _jobDescription = v;
+    notifyListeners();
+  }
+
+  void loadResult(CvAnalysisResult result) {
+    _result = result;
+    _jobPosition = result.jobPosition;
+    _jobDescription = result.jobDescription ?? '';
+    _extractedText = 'Analysis history item';
+    notifyListeners();
+  }
+
+  Future<void> loadAnalysisHistory() async {
+    _isLoadingHistory = true;
+    notifyListeners();
+
+    try {
+      final userId = _authProvider.isAuthenticated
+          ? _authProvider.currentUser!.id
+          : 'anonymous';
+      _savedAnalyses = await _repository.getAnalysisHistory(userId);
+    } catch (e) {
+      _savedAnalyses = [];
+    }
+
+    _isLoadingHistory = false;
+    notifyListeners();
+  }
+
+  void prepareForNewAnalysis() {
+    _selectedFile = null;
+    _extractedText = '';
+    _result = null;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  Future<void> deleteResult(String id) async {
+    await _repository.deleteAnalysis(id);
+    if (_result?.id == id) {
+      clearAll();
+    }
+    await loadAnalysisHistory();
+  }
+
+  void setExtractedText(String text) {
+    _extractedText = text;
+    _selectedFile = null;
     notifyListeners();
   }
 
@@ -120,13 +173,25 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _result = await _dataSource.analyzeCV(
+      final result = await _repository.analyzeCV(
         cvText: _extractedText,
         jobPosition:
             _jobPosition.isNotEmpty ? _jobPosition : 'General Position',
         jobDescription: _jobDescription,
         language: languageCode,
       );
+
+      _result = result;
+
+      final userId = _authProvider.isAuthenticated
+          ? _authProvider.currentUser!.id
+          : 'anonymous';
+      await _repository.saveAnalysisResult(
+        _result!,
+        userId,
+      );
+
+      await loadAnalysisHistory();
     } catch (e) {
       _errorMessage =
           'Analisis gagal: ${e.toString().replaceAll('Exception: ', '')}';
@@ -149,13 +214,11 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final json = await _dataSource.convertAppliedSuggestionsToCvJson(
+      final cvData = await _repository.applyAnalysisSuggestions(
         originalCvText: _extractedText,
         appliedSuggestions: applied,
         jobPosition: _jobPosition,
       );
-
-      final cvData = _converterService.parseCvJson(json, source: 'analyzer');
 
       _isConverting = false;
       notifyListeners();

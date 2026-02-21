@@ -184,7 +184,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                                 horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: theme.cardColor,
-                              border: Border.all(color: theme.primaryColor),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -285,20 +284,14 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
     final theme = Theme.of(context);
     final isEditing = _editingIndex != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerColor),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _showValidation
+    return Form(
+      key: _formKey,
+      autovalidateMode: _showValidation
             ? AutovalidateMode.onUserInteraction
             : AutovalidateMode.disabled,
-        child: Column(
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: AppSizes.md,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -322,7 +315,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.organizationName} *',
                 hintText: l10n.organizationPlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) =>
@@ -334,7 +327,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: '${l10n.organizationRole} *',
                 hintText: l10n.rolePlaceholder,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               validator: (v) =>
@@ -350,7 +343,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: '${l10n.startYear} *',
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         errorText:
                             _showValidation ? _validateStartDate(l10n) : null,
@@ -367,7 +360,7 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: l10n.endYear,
-                        border: const OutlineInputBorder(),
+                        border: InputBorder.none,
                         suffixIcon: const Icon(Icons.calendar_today, size: 16),
                         enabled: !_isCurrentlyActive,
                         errorText:
@@ -408,12 +401,11 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
               decoration: InputDecoration(
                 labelText: l10n.responsibilities,
                 alignLabelWithHint: true,
-                border: const OutlineInputBorder(),
+                border: InputBorder.none,
                 counterText: '',
               ),
               maxLength: 500,
             ),
-            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => _saveForm(provider),
               style: ElevatedButton.styleFrom(
@@ -428,7 +420,6 @@ class _CvBuilderStep5ScreenState extends State<CvBuilderStep5Screen> {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -542,7 +533,6 @@ class _OrganizationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final dateFormat = DateFormat('MMM yyyy');
 
     String dateRange;
@@ -560,68 +550,51 @@ class _OrganizationCard extends StatelessWidget {
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: const Icon(Icons.drag_indicator),
+        title: Text(
+          entry.role,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.drag_indicator, size: 20, color: Colors.grey),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    entry.role,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Iconsax.edit, size: 20),
-                  onPressed: onEdit,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
-                  onPressed: onDelete,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-              ],
-            ),
+            const SizedBox(height: 4),
+            Text(entry.organizationName),
             const SizedBox(height: 4),
             Text(
-              entry.organizationName,
-              style: TextStyle(
-                fontSize: 14,
-                color: theme.primaryColor,
-                fontWeight: FontWeight.w500,
+              dateRange,
+              style: const TextStyle(
+                color: Color(0xFF6B7280),
+                fontSize: 12,
               ),
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Iconsax.calendar_1, size: 16, color: theme.disabledColor),
-                const SizedBox(width: 8),
-                Text(
-                  dateRange,
-                  style: TextStyle(fontSize: 12, color: theme.disabledColor),
-                ),
-              ],
-            ),
             if (entry.description.isNotEmpty) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 4),
               Text(
                 entry.description,
-                style: const TextStyle(fontSize: 13),
+                style: const TextStyle(
+                  color: Color(0xFF6B7280),
+                  fontSize: 12,
+                ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Iconsax.edit, size: 20),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              icon: const Icon(Iconsax.trash, size: 20, color: Colors.red),
+              onPressed: onDelete,
+            ),
           ],
         ),
       ),

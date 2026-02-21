@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
@@ -16,8 +17,7 @@ class CVCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final date =
-        '${cv.updatedAt.day}/${cv.updatedAt.month}/${cv.updatedAt.year}';
+    final date = DateFormat('dd/MM/yyyy HH:mm').format(cv.updatedAt);
     final provider = context.read<CVBuilderProvider>();
 
     return Dismissible(
@@ -153,18 +153,49 @@ class CVCard extends StatelessWidget {
             cv.name.isNotEmpty ? cv.name : l10n.cvNumber(index + 1),
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-          subtitle: Text(
-            '${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}',
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: _getSourceColor(context, cv.source)
+                        .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    _getSourceLabel(l10n, cv.source).toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: _getSourceColor(context, cv.source),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  Iconsax.calendar_1,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    date,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-          trailing: IconButton(
-            icon: const Icon(Iconsax.edit),
-            onPressed: () async {
-              await provider.loadCV(cv.id);
-              if (context.mounted) {
-                context.router.push(const CvBuilderStep1Route());
-              }
-            },
-          ),
+          trailing: const Icon(Iconsax.edit, size: 16),
           onTap: () async {
             await provider.loadCV(cv.id);
             if (context.mounted) {
@@ -196,7 +227,7 @@ class CVCard extends StatelessWidget {
       case 'ats_converter':
         return Colors.purple;
       case 'analyzer':
-        return Colors.green;
+        return Theme.of(context).colorScheme.secondary;
       default:
         return Theme.of(context).colorScheme.primary;
     }

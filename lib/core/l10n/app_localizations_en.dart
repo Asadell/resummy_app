@@ -1544,6 +1544,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get briefProfile => 'Brief Profile';
 
   @override
+  String get organizationSection => 'Organization Experience';
+
+  @override
+  String get certificationsSection => 'Certifications & Licenses';
+
+  @override
+  String get projectsSection => 'Projects';
+
+  @override
+  String get exampleProjectName => 'e.g., E-commerce App';
+
+  @override
+  String get exampleTechStack => 'e.g., Flutter, Firebase, REST API';
+
+  @override
+  String get exampleProjectLink => 'e.g., github.com/user/project';
+
+  @override
+  String get exampleOrgName => 'e.g., Student Council';
+
+  @override
+  String get exampleOrgRole => 'e.g., Head of Division';
+
+  @override
+  String get exampleCertName => 'e.g., Google Cloud Associate';
+
+  @override
+  String get exampleIssuer => 'e.g., Google';
+
+  @override
+  String get exampleIssueDate => 'e.g., Jan 2023';
+
+  @override
+  String get exampleCredentialId => 'e.g., ABC-1234567';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get techStack => 'Tech Stack / Role';
+
+  @override
+  String get projectLink => 'Project Link (Optional)';
+
+  @override
+  String get issuerLabel => 'Issuing Organization';
+
+  @override
+  String get issueDateLabel => 'Issue Date';
+
+  @override
+  String get credentialIdOptional => 'Credential ID (Optional)';
+
+  @override
   String get selectSectionFormat => 'Select Section Format';
 
   @override
@@ -1583,6 +1637,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get templateParagraphDesc =>
       'Suitable for: Long narratives, Profile, Statement';
+
+  @override
+  String get templateOrganizationName => 'Organization Format';
+
+  @override
+  String get templateOrganizationDesc =>
+      'Suitable for: Volunteer, Clubs, Community organizations with roles & dates';
+
+  @override
+  String get templateCertificationsName => 'Certifications Format';
+
+  @override
+  String get templateCertificationsDesc =>
+      'Suitable for: Certificates, licenses with issuer & issue date';
+
+  @override
+  String get templateProjectsName => 'Projects Format';
+
+  @override
+  String get templateProjectsDesc =>
+      'Suitable for: Personal, academic, or freelance projects with tech stack';
 
   @override
   String get reorderSectionsDesc =>
@@ -1697,6 +1772,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get formatParagraph => 'Format: Paragraph';
+
+  @override
+  String get formatOrganization => 'Format: Organization';
+
+  @override
+  String get formatCertifications => 'Format: Certifications';
+
+  @override
+  String get formatProjects => 'Format: Projects';
 
   @override
   String get saveAsDraft => 'Save as Draft';
@@ -2232,7 +2316,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activityHistory => 'Activity History';
 
   @override
-  String get historySubtitle => 'Monitor your career progress here';
+  String get historySubtitle => 'Track your career progress here';
 
   @override
   String get weeklyInsight => 'Weekly Insight';
@@ -2276,4 +2360,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteEducationContent =>
       'Are you sure you want to delete this education? This action cannot be undone.';
+
+  @override
+  String get chooseYourLanguage => 'Choose Your Language';
+
+  @override
+  String get pleaseSelectLanguage => 'Please select your preferred language';
+
+  @override
+  String get noFeedbackData => 'No feedback data available.';
+
+  @override
+  String get situationLabel => 'Situation';
+
+  @override
+  String get taskLabel => 'Task';
+
+  @override
+  String get actionLabel => 'Action';
+
+  @override
+  String get resultLabel => 'Result';
+
+  @override
+  String get presentLabel => 'Present';
+
+  @override
+  String get missingLabel => 'Missing';
+
+  @override
+  String get noStrengthsIdentified => 'No specific strengths identified.';
+
+  @override
+  String get noImprovementsIdentified => 'No specific improvements identified.';
+
+  @override
+  String get unknown => 'Unknown';
 }

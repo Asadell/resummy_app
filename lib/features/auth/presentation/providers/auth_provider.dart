@@ -14,6 +14,7 @@ class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   StreamSubscription<UserEntity?>? _userSubscription;
+  Future<void>? _authStateReady;
 
   AuthProvider({
     required GetUserStreamUseCase getUserStreamUseCase,
@@ -31,11 +32,16 @@ class AuthProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   void _init() {
+    final completer = Completer<void>();
     _userSubscription = _getUserStreamUseCase().listen((user) {
       _currentUser = user;
+      if (!completer.isCompleted) completer.complete();
       notifyListeners();
     });
+    _authStateReady = completer.future;
   }
+
+  Future<void> waitForAuthState() => _authStateReady ?? Future.value();
 
   Future<void> signInWithGoogle() async {
     _isLoading = true;

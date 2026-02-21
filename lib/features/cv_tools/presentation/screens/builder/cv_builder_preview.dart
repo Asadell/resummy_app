@@ -43,6 +43,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
         final bytes = await service.generatePDFBytes(cv);
         if (mounted) setState(() => _pdfBytes = bytes);
       } catch (e) {
+        debugPrint('Error generating PDF preview: $e');
       } finally {
         if (mounted) setState(() => _isGenerating = false);
       }
@@ -124,7 +125,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
             ),
             const SizedBox(height: AppSizes.lg),
             Text(
-              'Export CV',
+              l10n.exportCv,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -146,7 +147,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                 ),
               ),
               title: Text(l10n.downloadPdf),
-              subtitle: const Text('Save to Downloads folder'),
+              subtitle: Text(l10n.saveToDownloads),
               onTap: () {
                 Navigator.pop(context);
                 _downloadPdf(cv);
@@ -165,8 +166,8 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                   color: Colors.green,
                 ),
               ),
-              title: const Text('Share'),
-              subtitle: const Text('Share via WhatsApp, Email, etc.'),
+              title: Text(l10n.share),
+              subtitle: Text(l10n.shareDesc),
               onTap: () {
                 Navigator.pop(context);
                 _sharePdf(cv);
@@ -222,7 +223,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _isGenerating ? null : () => _showPdfOptions(cv),
             icon: const Icon(Iconsax.export_1),
-            label: const Text('Export'),
+            label: Text(l10n.exportCv),
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );

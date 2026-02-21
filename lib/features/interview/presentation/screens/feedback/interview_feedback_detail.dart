@@ -43,7 +43,7 @@ class _InterviewFeedbackDetailScreenState
         if (report == null || report.questionFeedbacks.isEmpty) {
           return Scaffold(
             appBar: AppBar(),
-            body: const Center(child: Text('No feedback data available.')),
+            body: Center(child: Text(l10n.noFeedbackData)),
           );
         }
 
@@ -238,13 +238,13 @@ class _InterviewFeedbackDetailScreenState
                           Column(
                             spacing: AppSizes.sm,
                             children: [
-                              _buildPresenceRow(context, 'Situation',
+                              _buildPresenceRow(context, l10n, l10n.situationLabel,
                                   feedback.starAnalysis.situation.present),
-                              _buildPresenceRow(context, 'Task',
+                              _buildPresenceRow(context, l10n, l10n.taskLabel,
                                   feedback.starAnalysis.task.present),
-                              _buildPresenceRow(context, 'Action',
+                              _buildPresenceRow(context, l10n, l10n.actionLabel,
                                   feedback.starAnalysis.action.present),
-                              _buildPresenceRow(context, 'Result',
+                              _buildPresenceRow(context, l10n, l10n.resultLabel,
                                   feedback.starAnalysis.result.present),
                             ],
                           ),
@@ -357,7 +357,7 @@ class _InterviewFeedbackDetailScreenState
                                     Text(
                                       userTranscript.isNotEmpty
                                           ? userTranscript
-                                          : 'No answer recorded.',
+                                          : l10n.noAnswerRecorded,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -500,7 +500,8 @@ class _InterviewFeedbackDetailScreenState
     return Theme.of(context).colorScheme.error;
   }
 
-  Widget _buildPresenceRow(BuildContext context, String label, bool isPresent) {
+  Widget _buildPresenceRow(
+      BuildContext context, AppLocalizations l10n, String label, bool isPresent) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -514,7 +515,7 @@ class _InterviewFeedbackDetailScreenState
             ),
             const SizedBox(width: 8),
             Text(
-              isPresent ? 'Present' : 'Missing',
+              isPresent ? l10n.presentLabel : l10n.missingLabel,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isPresent ? AppColors.secondary : AppColors.error,
                     fontWeight: FontWeight.bold,

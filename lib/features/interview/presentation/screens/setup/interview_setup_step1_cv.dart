@@ -41,8 +41,9 @@ class _InterviewSetupStep1ScreenState extends State<InterviewSetupStep1Screen> {
     buf.writeln('Name: ${cv.header.name}');
     if (cv.header.email != null) buf.writeln('Email: ${cv.header.email}');
     if (cv.header.phone != null) buf.writeln('Phone: ${cv.header.phone}');
-    if (cv.header.location != null)
+    if (cv.header.location != null) {
       buf.writeln('Location: ${cv.header.location}');
+    }
 
     final summary = cv.summarySection?.content ?? '';
     if (summary.isNotEmpty) {

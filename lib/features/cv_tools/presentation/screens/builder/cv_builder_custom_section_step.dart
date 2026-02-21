@@ -95,6 +95,15 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
 
   final _bulletItemCtrl = TextEditingController();
 
+  final _certNameCtrl = TextEditingController();
+  final _certIssuerCtrl = TextEditingController();
+  final _certDateCtrl = TextEditingController();
+  final _certCredentialIdCtrl = TextEditingController();
+
+  final _projectNameCtrl = TextEditingController();
+  final _projectTechStackCtrl = TextEditingController();
+  final _projectLinkCtrl = TextEditingController();
+
   int? _editingIndex;
   String? _editingCategoryName;
   bool _showValidation = false;
@@ -117,6 +126,13 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     _categoryNameCtrl.dispose();
     _categorySkillsCtrl.dispose();
     _bulletItemCtrl.dispose();
+    _certNameCtrl.dispose();
+    _certIssuerCtrl.dispose();
+    _certDateCtrl.dispose();
+    _certCredentialIdCtrl.dispose();
+    _projectNameCtrl.dispose();
+    _projectTechStackCtrl.dispose();
+    _projectLinkCtrl.dispose();
     super.dispose();
   }
 
@@ -171,6 +187,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           if (widget.section.template == CustomSectionTemplate.experienceLike ||
               widget.section.template == CustomSectionTemplate.educationLike)
             _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.organizationLike)
+            _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.projectsLike)
+            _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.certificationsLike)
+            _buildCertificationsLikeTemplate(context, provider, theme)
           else if (widget.section.template == CustomSectionTemplate.skillsLike)
             _buildSkillsLikeTemplate(context, provider, theme)
           else if (widget.section.template == CustomSectionTemplate.bulletList)
@@ -322,7 +344,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveSkillForm(CVBuilderProvider provider, CustomSection section) {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
     if (_categoryNameCtrl.text.trim().isEmpty ||
@@ -365,73 +386,64 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingCategoryName != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(AppSizes.md),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      padding: const EdgeInsets.all(AppSizes.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: AppSizes.md,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isEditing
-                    ? '${l10n.edit} ${l10n.categoryName}'
-                    : '${l10n.addItem} ${l10n.categoryName}',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: AppSizes.md,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing ? l10n.editItem : l10n.addItem,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetSkillForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
               ),
-              if (isEditing)
-                TextButton.icon(
-                  onPressed: _resetSkillForm,
-                  icon: const Icon(Icons.close),
-                  label: Text(l10n.cancel),
-                ),
-            ],
+          ],
+        ),
+        TextFormField(
+          controller: _categoryNameCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.categoryName,
+            hintText: l10n.categoryNamePlaceholder,
+            border: InputBorder.none,
           ),
-          TextFormField(
-            controller: _categoryNameCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.categoryName,
-              hintText: l10n.categoryNamePlaceholder,
-              border: const OutlineInputBorder(),
-            ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        TextFormField(
+          controller: _categorySkillsCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.skills,
+            hintText: l10n.skillsPlaceholder,
+            border: InputBorder.none,
           ),
-          TextFormField(
-            controller: _categorySkillsCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.skills,
-              hintText: l10n.skillsPlaceholder,
-              border: const OutlineInputBorder(),
-            ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        const SizedBox(height: AppSizes.md),
+        ElevatedButton(
+          onPressed: () => _saveSkillForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
-          ElevatedButton(
-            onPressed: () => _saveSkillForm(provider, section),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            ),
-            child: Text(isEditing ? l10n.save : l10n.add),
-          ),
-        ],
-      ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
     );
   }
 
@@ -522,48 +534,41 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   ) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.addItem,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _bulletItemCtrl,
-                  decoration: InputDecoration(
-                    hintText: l10n.typeAndAddHint,
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Iconsax.add_circle),
-                  ),
-                  onSubmitted: (_) => _saveBulletItem(provider, section),
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.addItem,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              ElevatedButton(
-                onPressed: () => _saveBulletItem(provider, section),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(0, 56),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _bulletItemCtrl,
+                decoration: InputDecoration(
+                  hintText: l10n.typeAndAddHint,
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Iconsax.add_circle),
                 ),
-                child: Text(l10n.add),
+                onSubmitted: (_) => _saveBulletItem(provider, section),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            const SizedBox(width: AppSizes.md),
+            ElevatedButton(
+              onPressed: () => _saveBulletItem(provider, section),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(0, 56),
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
+              child: Text(l10n.add),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -587,7 +592,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           maxLines: 10,
           decoration: InputDecoration(
             hintText: l10n.contentHint,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            border: InputBorder.none,
             alignLabelWithHint: true,
           ),
           onChanged: (value) {
@@ -639,7 +644,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
   }
 
   void _saveEntryForm(CVBuilderProvider provider, CustomSection section) {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => _showValidation = true);
 
     if (_titleCtrl.text.trim().isEmpty) {
@@ -692,136 +696,116 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     final isExperienceLike =
         section.template == CustomSectionTemplate.experienceLike;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isEditing
-                    ? '${l10n.edit} ${section.titleLabel}'
-                    : '${l10n.addItem} ${section.titleLabel}',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing ? l10n.editItem : l10n.addItem,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              if (isEditing)
-                TextButton.icon(
-                  onPressed: _resetEntryForm,
-                  icon: const Icon(Icons.close),
-                  label: Text(l10n.cancel),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.md),
-          TextFormField(
-            controller: _titleCtrl,
-            decoration: InputDecoration(
-              labelText: '${section.titleLabel} *',
-              hintText: isExperienceLike
-                  ? l10n.exampleSoftwareEngineer
-                  : l10n.exampleBachelor,
-              border: const OutlineInputBorder(),
             ),
-            autovalidateMode: _showValidation
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            validator: (v) =>
-                v?.trim().isEmpty == true ? l10n.requiredField : null,
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetEntryForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _titleCtrl,
+          decoration: InputDecoration(
+            labelText: '${section.titleLabel} *',
+            hintText: isExperienceLike
+                ? l10n.exampleSoftwareEngineer
+                : l10n.exampleBachelor,
+            border: InputBorder.none,
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _subtitleCtrl,
-            decoration: InputDecoration(
-              labelText: section.subtitleLabel,
-              hintText: isExperienceLike
-                  ? l10n.exampleGoogle
-                  : l10n.exampleUniversity,
-              border: const OutlineInputBorder(),
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _subtitleCtrl,
+          decoration: InputDecoration(
+            labelText: section.subtitleLabel,
+            hintText: isExperienceLike
+                ? l10n.exampleGoogle
+                : l10n.exampleUniversity,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _metaCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.location,
+            hintText: l10n.exampleLocation,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _startDateCtrl,
+                decoration: InputDecoration(
+                  labelText: l10n.startDate,
+                  hintText: l10n.exampleYear,
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _metaCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.location,
-              hintText: l10n.exampleLocation,
-              border: const OutlineInputBorder(),
+            const SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                controller: _endDateCtrl,
+                enabled: !_isPresent,
+                decoration: InputDecoration(
+                  labelText: _isPresent ? l10n.present : l10n.endDate,
+                  hintText: l10n.exampleYearEnd,
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _startDateCtrl,
-                  decoration: InputDecoration(
-                    labelText: l10n.startDate,
-                    hintText: l10n.exampleYear,
-                    border: const OutlineInputBorder(),
-                  ),
+          ],
+        ),
+        CheckboxListTile(
+          value: _isPresent,
+          onChanged: (val) {
+            setState(() {
+              _isPresent = val ?? false;
+              if (_isPresent) _endDateCtrl.clear();
+            });
+          },
+          title: Text(l10n.present),
+          contentPadding: EdgeInsets.zero,
+          controlAffinity: ListTileControlAffinity.leading,
+        ),
+        const SizedBox(height: 16),
+        Text(l10n.bulletPoints,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _bulletCtrl,
+                decoration: InputDecoration(
+                  hintText: l10n.addBulletPointHint,
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Iconsax.add_circle),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: TextFormField(
-                  controller: _endDateCtrl,
-                  enabled: !_isPresent,
-                  decoration: InputDecoration(
-                    labelText: _isPresent ? l10n.present : l10n.endDate,
-                    hintText: l10n.exampleYearEnd,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          CheckboxListTile(
-            value: _isPresent,
-            onChanged: (val) {
-              setState(() {
-                _isPresent = val ?? false;
-                if (_isPresent) _endDateCtrl.clear();
-              });
-            },
-            title: Text(l10n.present),
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.bulletPoints,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _bulletCtrl,
-                  decoration: InputDecoration(
-                    hintText: l10n.addBulletPoint,
-                    border: const OutlineInputBorder(),
-                  ),
-                  onSubmitted: (value) {
-                    if (value.trim().isNotEmpty) {
-                      setState(() {
-                        _bullets.add(value.trim());
-                        _bulletCtrl.clear();
-                      });
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton.filled(
-                onPressed: () {
+                onSubmitted: (_) {
                   if (_bulletCtrl.text.trim().isNotEmpty) {
                     setState(() {
                       _bullets.add(_bulletCtrl.text.trim());
@@ -829,51 +813,62 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                     });
                   }
                 },
-                icon: const Icon(Icons.add),
               ),
-            ],
-          ),
-          if (_bullets.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            ReorderableListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (int i = 0; i < _bullets.length; i++)
-                  ListTile(
-                    key: ValueKey('bullet_$i'),
-                    dense: true,
-                    leading: const Icon(Icons.drag_handle,
-                        size: 20, color: Colors.grey),
-                    title: Text(_bullets[i]),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.close, size: 18),
-                      onPressed: () => setState(() => _bullets.removeAt(i)),
-                    ),
-                  ),
-              ],
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (oldIndex < newIndex) {
-                    newIndex -= 1;
-                  }
-                  final item = _bullets.removeAt(oldIndex);
-                  _bullets.insert(newIndex, item);
-                });
+            ),
+            IconButton(
+              onPressed: () {
+                if (_bulletCtrl.text.trim().isNotEmpty) {
+                  setState(() {
+                    _bullets.add(_bulletCtrl.text.trim());
+                    _bulletCtrl.clear();
+                  });
+                }
               },
+              icon: const Icon(Icons.add),
             ),
           ],
-          ElevatedButton(
-            onPressed: () => _saveEntryForm(provider, section),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: theme.primaryColor,
-              foregroundColor: theme.colorScheme.onPrimary,
-            ),
-            child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+        if (_bullets.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          ReorderableListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              for (int i = 0; i < _bullets.length; i++)
+                ListTile(
+                  key: ValueKey('bullet_$i'),
+                  dense: true,
+                  leading: const Icon(Icons.drag_handle,
+                      size: 20, color: Colors.grey),
+                  title: Text(_bullets[i]),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _bullets.removeAt(i)),
+                  ),
+                ),
+            ],
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = _bullets.removeAt(oldIndex);
+                _bullets.insert(newIndex, item);
+              });
+            },
           ),
         ],
-      ),
+        const SizedBox(height: AppSizes.md),
+        ElevatedButton(
+          onPressed: () => _saveEntryForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: theme.primaryColor,
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
     );
   }
 
@@ -896,7 +891,206 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         return l10n.formatBulletList;
       case CustomSectionTemplate.paragraph:
         return l10n.formatParagraph;
+      case CustomSectionTemplate.organizationLike:
+        return l10n.formatOrganization;
+      case CustomSectionTemplate.certificationsLike:
+        return l10n.formatCertifications;
+      case CustomSectionTemplate.projectsLike:
+        return l10n.formatProjects;
     }
+  }
+
+  Widget _buildCertificationsLikeTemplate(
+    BuildContext context,
+    CVBuilderProvider provider,
+    ThemeData theme,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final section = _getCurrentSection(provider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (section.entries.isEmpty)
+          AppSection(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xxl),
+              child: Column(
+                spacing: AppSizes.md,
+                children: [
+                  Icon(Iconsax.award, size: 56, color: Colors.grey[300]),
+                  Text(
+                    l10n.noItems,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          AppSection(
+            child: Column(
+              children: section.entries.asMap().entries.map((e) {
+                final index = e.key;
+                final entry = e.value;
+                return _CertEntryCard(
+                  entry: entry,
+                  onEdit: () => _editCertEntry(index, entry),
+                  onDelete: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    () => provider.removeCustomEntry(
+                        sectionId: section.id, entryIndex: index),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        const SizedBox(height: AppSizes.sm),
+        AppSection(
+          child: _buildInlineCertForm(context, provider, section),
+        ),
+      ],
+    );
+  }
+
+  void _editCertEntry(int index, CustomEntry entry) {
+    setState(() {
+      _editingIndex = index;
+      _certNameCtrl.text = entry.title;
+      _certIssuerCtrl.text = entry.subtitle ?? '';
+      _certDateCtrl.text = entry.startDate ?? '';
+      _certCredentialIdCtrl.text = entry.meta ?? '';
+      _showValidation = false;
+    });
+  }
+
+  void _resetCertForm() {
+    setState(() {
+      _editingIndex = null;
+      _certNameCtrl.clear();
+      _certIssuerCtrl.clear();
+      _certDateCtrl.clear();
+      _certCredentialIdCtrl.clear();
+      _showValidation = false;
+    });
+  }
+
+  void _saveCertForm(CVBuilderProvider provider, CustomSection section) {
+    setState(() => _showValidation = true);
+    if (_certNameCtrl.text.trim().isEmpty) return;
+
+    final newEntry = CustomEntry(
+      id: _editingIndex != null
+          ? section.entries[_editingIndex!].id
+          : const Uuid().v4(),
+      title: _certNameCtrl.text.trim(),
+      subtitle: _certIssuerCtrl.text.trim().isEmpty
+          ? null
+          : _certIssuerCtrl.text.trim(),
+      startDate: _certDateCtrl.text.trim().isEmpty
+          ? null
+          : _certDateCtrl.text.trim(),
+      meta: _certCredentialIdCtrl.text.trim().isEmpty
+          ? null
+          : _certCredentialIdCtrl.text.trim(),
+    );
+
+    if (_editingIndex != null) {
+      provider.updateCustomEntry(
+        sectionId: section.id,
+        entryIndex: _editingIndex!,
+        entry: newEntry,
+      );
+    } else {
+      provider.addCustomEntry(sectionId: section.id, entry: newEntry);
+    }
+    _resetCertForm();
+  }
+
+  Widget _buildInlineCertForm(
+    BuildContext context,
+    CVBuilderProvider provider,
+    CustomSection section,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isEditing = _editingIndex != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing ? l10n.editItem : l10n.addItem,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetCertForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certNameCtrl,
+          decoration: InputDecoration(
+            labelText: '${l10n.certificationName} *',
+            hintText: l10n.exampleCertName,
+            border: InputBorder.none,
+          ),
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certIssuerCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.issuerLabel,
+            hintText: l10n.exampleIssuer,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certDateCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.issueDateLabel,
+            hintText: l10n.exampleIssueDate,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certCredentialIdCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.credentialIdOptional,
+            hintText: l10n.exampleCredentialId,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        ElevatedButton(
+          onPressed: () => _saveCertForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: theme.primaryColor,
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
+    );
   }
 }
 
@@ -1145,6 +1339,90 @@ class _EntryCard extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CertEntryCard extends StatelessWidget {
+  final CustomEntry entry;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _CertEntryCard({
+    required this.entry,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        entry.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      if (entry.subtitle?.isNotEmpty == true) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          entry.subtitle!,
+                          style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 13,
+                            color: Color(0xFF374151),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Iconsax.edit_2, size: 18),
+                  onPressed: onEdit,
+                ),
+                IconButton(
+                  icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
+                  onPressed: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    onDelete,
+                  ),
+                ),
+              ],
+            ),
+            if (entry.startDate?.isNotEmpty == true) ...[
+              const SizedBox(height: 4),
+              Text(
+                entry.startDate!,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+              ),
+            ],
+            if (entry.meta?.isNotEmpty == true) ...[
+              const SizedBox(height: 2),
+              Text(
+                'ID: ${entry.meta}',
+                style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
               ),
             ],
           ],

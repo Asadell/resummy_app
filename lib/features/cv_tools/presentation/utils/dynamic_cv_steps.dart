@@ -118,6 +118,29 @@ class DynamicCvSteps {
     }
   }
 
+  static void navigateToStep(BuildContext context, int step) {
+    final provider = context.read<CVBuilderProvider>();
+    final cv = provider.currentCV;
+    if (cv == null) return;
+
+    final totalSteps = getTotalSteps(cv);
+
+    if (step <= 1) {
+      context.router.push(const CvBuilderStep1Route());
+      return;
+    }
+
+    if (step >= totalSteps) {
+      context.router.push(const CvBuilderStep8Route());
+      return;
+    }
+
+    final sectionIndex = step - 2;
+    if (sectionIndex >= 0 && sectionIndex < cv.sections.length) {
+      _navigateToSection(context, cv.sections[sectionIndex]);
+    }
+  }
+
   static void _navigateToSection(BuildContext context, SectionData section) {
     if (section is CustomSection) {
       context.router

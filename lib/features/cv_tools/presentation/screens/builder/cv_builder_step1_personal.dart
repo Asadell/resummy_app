@@ -199,6 +199,14 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                                 ?.copyWith(
                                   fontWeight: FontWeight.w600,
                                 ),
+                            children: [
+                              TextSpan(
+                                text: ' ${l10n.optionalField}',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                         IntlPhoneField(
@@ -229,7 +237,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                           onCountryChanged: (country) {},
                           validator: (value) {
                             if (value == null || value.number.isEmpty) {
-                              return l10n.requiredField;
+                              return null;
                             }
 
                             if (value.number.startsWith('0')) {
@@ -271,7 +279,8 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                     _buildTextField(
                       controller: _locationController,
                       label: l10n.location,
-                      isRequired: true,
+                      isRequired: false,
+                      isOptional: true,
                       hint: l10n.locationPlaceholder,
                       prefixIcon: Iconsax.location,
                       context: context,

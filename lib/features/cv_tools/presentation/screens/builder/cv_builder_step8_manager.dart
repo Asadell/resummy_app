@@ -369,155 +369,198 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 24,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        snap: true,
+        builder: (context, scrollController) => StatefulBuilder(
+          builder: (context, setState) => Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(24)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                l10n.selectSectionFormat,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              ...CustomSectionTemplate.values.map((template) {
-                final isSelected = selectedTemplate == template;
-                return GestureDetector(
-                  onTap: () => setState(() => selectedTemplate = template),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: AppSizes.sm),
-                    padding: const EdgeInsets.all(AppSizes.md),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Theme.of(context)
-                              .primaryColor
-                              .withValues(alpha: 0.08)
-                          : Theme.of(context).cardColor,
-                      border: Border.all(
-                        color: isSelected
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).dividerColor,
-                        width: isSelected ? 2 : 1,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.selectSectionFormat,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      borderRadius: BorderRadius.circular(AppSizes.sm),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          _getTemplateIcon(template),
-                          color: isSelected
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).colorScheme.onSurfaceVariant,
-                          size: 20,
-                        ),
-                        const SizedBox(width: AppSizes.md),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close_rounded),
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: ListView.builder(
+                    controller: scrollController,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    itemCount: CustomSectionTemplate.values.length,
+                    itemBuilder: (context, index) {
+                      final template = CustomSectionTemplate.values[index];
+                      final isSelected = selectedTemplate == template;
+                      return GestureDetector(
+                        onTap: () =>
+                            setState(() => selectedTemplate = template),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: AppSizes.sm),
+                          padding: const EdgeInsets.all(AppSizes.md),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withValues(alpha: 0.08)
+                                : Theme.of(context).cardColor,
+                            border: Border.all(
+                              color: isSelected
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).dividerColor,
+                              width: isSelected ? 2 : 1,
+                            ),
+                            borderRadius: BorderRadius.circular(AppSizes.sm),
+                          ),
+                          child: Row(
                             children: [
-                              Text(
-                                _getTemplateName(template),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColor
-                                      : Theme.of(context)
+                              Icon(
+                                _getTemplateIcon(template),
+                                color: isSelected
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                size: 20,
+                              ),
+                              const SizedBox(width: AppSizes.md),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _getTemplateName(template),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                        color: isSelected
+                                            ? Theme.of(context).primaryColor
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      _getTemplateDesc(template),
+                                      style: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge
-                                          ?.color,
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                _getTemplateDesc(template),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
-                              ),
+                              if (isSelected)
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 18,
+                                ),
                             ],
                           ),
                         ),
-                        if (isSelected)
-                          Icon(
-                            Icons.check_circle,
-                            color: Theme.of(context).primaryColor,
-                            size: 18,
-                          ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              }),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    String defaultTitle;
-                    switch (selectedTemplate) {
-                      case CustomSectionTemplate.experienceLike:
-                        defaultTitle = l10n.projectExperience;
-                        break;
-                      case CustomSectionTemplate.educationLike:
-                        defaultTitle = l10n.courseCertification;
-                        break;
-                      case CustomSectionTemplate.skillsLike:
-                        defaultTitle = l10n.otherSkills;
-                        break;
-                      case CustomSectionTemplate.bulletList:
-                        defaultTitle = l10n.additionalInfo;
-                        break;
-                      case CustomSectionTemplate.paragraph:
-                        defaultTitle = l10n.briefProfile;
-                        break;
-                    }
-
-                    provider.addCustomSection(
-                      defaultTitle,
-                      template: selectedTemplate,
-                    );
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(l10n.createSection,
-                      style: const TextStyle(fontSize: 16)),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        String defaultTitle;
+                        switch (selectedTemplate) {
+                          case CustomSectionTemplate.experienceLike:
+                            defaultTitle = l10n.projectExperience;
+                            break;
+                          case CustomSectionTemplate.educationLike:
+                            defaultTitle = l10n.courseCertification;
+                            break;
+                          case CustomSectionTemplate.skillsLike:
+                            defaultTitle = l10n.otherSkills;
+                            break;
+                          case CustomSectionTemplate.bulletList:
+                            defaultTitle = l10n.additionalInfo;
+                            break;
+                          case CustomSectionTemplate.paragraph:
+                            defaultTitle = l10n.briefProfile;
+                            break;
+                          case CustomSectionTemplate.organizationLike:
+                            defaultTitle = l10n.organizationSection;
+                            break;
+                          case CustomSectionTemplate.certificationsLike:
+                            defaultTitle = l10n.certificationsSection;
+                            break;
+                          case CustomSectionTemplate.projectsLike:
+                            defaultTitle = l10n.projectsSection;
+                            break;
+                        }
+
+                        provider.addCustomSection(
+                          defaultTitle,
+                          template: selectedTemplate,
+                        );
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(l10n.createSection,
+                          style: const TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -536,6 +579,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
         return Iconsax.menu;
       case CustomSectionTemplate.paragraph:
         return Iconsax.document_text;
+      case CustomSectionTemplate.organizationLike:
+        return Iconsax.people;
+      case CustomSectionTemplate.certificationsLike:
+        return Iconsax.award;
+      case CustomSectionTemplate.projectsLike:
+        return Iconsax.monitor_mobbile;
     }
   }
 
@@ -659,6 +708,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
         return l10n.templateBulletName;
       case CustomSectionTemplate.paragraph:
         return l10n.templateParagraphName;
+      case CustomSectionTemplate.organizationLike:
+        return l10n.templateOrganizationName;
+      case CustomSectionTemplate.certificationsLike:
+        return l10n.templateCertificationsName;
+      case CustomSectionTemplate.projectsLike:
+        return l10n.templateProjectsName;
     }
   }
 
@@ -675,6 +730,12 @@ class _CvBuilderStep8ScreenState extends State<CvBuilderStep8Screen> {
         return l10n.templateBulletDesc;
       case CustomSectionTemplate.paragraph:
         return l10n.templateParagraphDesc;
+      case CustomSectionTemplate.organizationLike:
+        return l10n.templateOrganizationDesc;
+      case CustomSectionTemplate.certificationsLike:
+        return l10n.templateCertificationsDesc;
+      case CustomSectionTemplate.projectsLike:
+        return l10n.templateProjectsDesc;
     }
   }
 }
