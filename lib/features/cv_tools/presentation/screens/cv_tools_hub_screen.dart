@@ -4,8 +4,10 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:resummy_app/core/routes/app_router.gr.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_card.dart';
+import 'package:resummy_app/features/history/presentation/widgets/analysis_history_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 import 'package:resummy_app/core/theme/app_sizes.dart';
 
@@ -24,6 +26,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CVBuilderProvider>().loadAllCVs();
+      context.read<CvAnalyzerProvider>().loadAnalysisHistory();
     });
   }
 
@@ -60,8 +63,10 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                       title: l10n.cvAnalyzer,
                       description: l10n.cvAnalyzerDesc,
                       color: Theme.of(context).colorScheme.secondary,
-                      onTap: () =>
-                          context.router.push(const CvAnalyzerUploadRoute()),
+                      onTap: () {
+                        context.read<CvAnalyzerProvider>().prepareForNewAnalysis();
+                        context.router.push(const CvAnalyzerUploadRoute());
+                      },
                     ),
                     _FeatureCard(
                       icon: Iconsax.magic_star,
@@ -75,6 +80,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
+              // ── CV Builder / ATS Converter saved CVs ──────────────────
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,30 +111,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                         }
 
                         if (provider.savedCVs.isEmpty) {
-                          return Container(
-                            padding: const EdgeInsets.all(AppSizes.xl),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                  color: Colors.grey.withValues(alpha: 0.2)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                  padding: const EdgeInsets.all(AppSizes.md),
-                                  child: Text(
-                                    l10n.noSavedCvs,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
-                                  )),
-                            ),
-                          );
+                          return _buildEmptyBox(context, l10n.noSavedCvs);
                         }
 
                         final recentCVs = provider.savedCVs.take(3).toList();
@@ -143,7 +126,6 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                                   const SizedBox(height: AppSizes.md),
                               itemBuilder: (context, index) {
                                 final cv = recentCVs[index];
-
                                 return CVCard(
                                   cv: cv,
                                   index: index,
@@ -166,9 +148,87 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: AppSizes.sm),
+              // ── CV Analyzer saved analyses ─────────────────────────────
+              Consumer<CvAnalyzerProvider>(
+                builder: (context, analyzerProvider, child) {
+                  final analyses = analyzerProvider.savedAnalyses;
+
+                  if (analyzerProvider.isLoadingHistory && analyses.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(AppSizes.md),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
+                  if (analyses.isEmpty) return const SizedBox.shrink();
+
+                  final recentAnalyses = analyses.take(3).toList();
+
+                  return AppSection(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: AppSizes.md,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.cvAnalyzer,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              onPressed: () => context.router
+                                  .navigate(const HistoryRoute()),
+                              child: Text(l10n.viewAll),
+                            ),
+                          ],
+                        ),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: recentAnalyses.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: AppSizes.md),
+                          itemBuilder: (context, index) {
+                            return AnalysisHistoryCard(
+                              result: recentAnalyses[index],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: AppSizes.xl),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyBox(BuildContext context, String message) {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.xl),
+      decoration: BoxDecoration(
+        color: Colors.grey.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+      ),
+      child: Center(
+        child: Padding(
+            padding: const EdgeInsets.all(AppSizes.md),
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            )),
       ),
     );
   }

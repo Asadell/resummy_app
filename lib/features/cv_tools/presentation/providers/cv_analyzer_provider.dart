@@ -26,18 +26,24 @@ class CvAnalyzerProvider extends ChangeNotifier {
   String _jobDescription = '';
 
   bool _isAnalyzing = false;
+  bool _isLoadingHistory = false;
   CvAnalysisResult? _result;
   String? _errorMessage;
+
+  List<CvAnalysisResult> _savedAnalyses = [];
 
   PlatformFile? get selectedFile => _selectedFile;
   String get extractedText => _extractedText;
   bool get isPickingFile => _isPickingFile;
   bool get isConverting => _isConverting;
   bool get isAnalyzing => _isAnalyzing;
+  bool get isLoadingHistory => _isLoadingHistory;
   CvAnalysisResult? get result => _result;
   String? get errorMessage => _errorMessage;
   String get jobPosition => _jobPosition;
   String get jobDescription => _jobDescription;
+
+  List<CvAnalysisResult> get savedAnalyses => _savedAnalyses;
 
   bool get hasFile => _extractedText.isNotEmpty;
   bool get hasResult => _result != null;
@@ -67,11 +73,37 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadAnalysisHistory() async {
+    _isLoadingHistory = true;
+    notifyListeners();
+
+    try {
+      final userId = _authProvider.isAuthenticated
+          ? _authProvider.currentUser!.id
+          : 'anonymous';
+      _savedAnalyses = await _repository.getAnalysisHistory(userId);
+    } catch (e) {
+      _savedAnalyses = [];
+    }
+
+    _isLoadingHistory = false;
+    notifyListeners();
+  }
+
+  void prepareForNewAnalysis() {
+    _selectedFile = null;
+    _extractedText = '';
+    _result = null;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
   Future<void> deleteResult(String id) async {
     await _repository.deleteAnalysis(id);
     if (_result?.id == id) {
       clearAll();
     }
+    await loadAnalysisHistory();
   }
 
   void setExtractedText(String text) {
@@ -151,11 +183,15 @@ class CvAnalyzerProvider extends ChangeNotifier {
       
       _result = result;
 
-      final userId = _authProvider.isAuthenticated ? _authProvider.currentUser!.id : 'anonymous';
+      final userId = _authProvider.isAuthenticated
+          ? _authProvider.currentUser!.id
+          : 'anonymous';
       await _repository.saveAnalysisResult(
         _result!,
         userId,
       );
+      // Refresh the saved list so hub screen auto-updates
+      await loadAnalysisHistory();
     } catch (e) {
       _errorMessage =
           'Analisis gagal: ${e.toString().replaceAll('Exception: ', '')}';

@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static Database? _database;
   static const String _databaseName = 'resummy_offline.db';
-  static const int _databaseVersion = 2;
+  static const int _databaseVersion = 3;
 
   static const String tableCVs = 'cvs';
   static const String tableAnalysisHistory = 'analysis_history';
@@ -49,9 +49,9 @@ class DatabaseHelper {
       CREATE TABLE $tableAnalysisHistory (
         id TEXT PRIMARY KEY,
         userId TEXT NOT NULL,
-        cvId TEXT,
-        analysisData TEXT NOT NULL,
-        score INTEGER,
+        jobPosition TEXT NOT NULL,
+        overallScore INTEGER,
+        data TEXT NOT NULL,
         createdAt INTEGER NOT NULL,
         syncStatus TEXT DEFAULT 'synced'
       )
@@ -124,6 +124,23 @@ class DatabaseHelper {
       ''');
       await db.execute(
           'CREATE INDEX IF NOT EXISTS idx_interviews_userId ON $tableInterviews(userId)');
+    }
+    if (oldVersion < 3) {
+      // Recreate analysis_history with the new schema
+      await db.execute('DROP TABLE IF EXISTS $tableAnalysisHistory');
+      await db.execute('''
+        CREATE TABLE $tableAnalysisHistory (
+          id TEXT PRIMARY KEY,
+          userId TEXT NOT NULL,
+          jobPosition TEXT NOT NULL,
+          overallScore INTEGER,
+          data TEXT NOT NULL,
+          createdAt INTEGER NOT NULL,
+          syncStatus TEXT DEFAULT 'synced'
+        )
+      ''');
+      await db.execute(
+          'CREATE INDEX IF NOT EXISTS idx_analysis_userId ON $tableAnalysisHistory(userId)');
     }
   }
 

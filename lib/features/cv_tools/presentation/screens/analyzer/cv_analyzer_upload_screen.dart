@@ -7,6 +7,7 @@ import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_analysis.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/core/l10n/app_localizations.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
@@ -27,6 +28,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   late TextEditingController _jobDescController;
   String _selectedLanguage = 'id';
   bool _isJobDescExpanded = false;
+  bool _wasAnalyzing = false;
   SuggestionPriority? _filterPriority;
 
   int? _selectedCvIndex;
@@ -42,7 +44,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     final profile = context.read<ProfileProvider>().profile;
     
     // Ensure saved CVs are loaded when accessing from Quick Actions
-    context.read<CVBuilderProvider>().loadAllCVs();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CVBuilderProvider>().loadAllCVs();
+    });
 
     _jobPositionController = TextEditingController(
         text: provider.jobPosition.isNotEmpty
@@ -57,6 +61,17 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     }
 
     context.read<ProfileProvider>().addListener(_onProfileChanged);
+    context.read<CvAnalyzerProvider>().addListener(_onAnalyzerChanged);
+  }
+
+  void _onAnalyzerChanged() {
+    if (!mounted) return;
+    final provider = context.read<CvAnalyzerProvider>();
+    // When analysis transitions from loading → done (hasResult becomes true)
+    if (_wasAnalyzing && !provider.isAnalyzing && provider.hasResult) {
+      context.read<HistoryProvider>().loadActivities();
+    }
+    _wasAnalyzing = provider.isAnalyzing;
   }
 
   void _onProfileChanged() {
@@ -79,6 +94,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     _jobPositionController.dispose();
     _jobDescController.dispose();
     context.read<ProfileProvider>().removeListener(_onProfileChanged);
+    context.read<CvAnalyzerProvider>().removeListener(_onAnalyzerChanged);
     super.dispose();
   }
 

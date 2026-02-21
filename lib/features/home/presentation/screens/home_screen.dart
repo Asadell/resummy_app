@@ -11,6 +11,8 @@ import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_ca
 import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
 import 'package:resummy_app/features/profile/presentation/providers/profile_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/providers/cv_builder_provider.dart';
+import 'package:resummy_app/features/cv_tools/presentation/providers/cv_analyzer_provider.dart';
+import 'package:resummy_app/features/history/presentation/widgets/analysis_history_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
@@ -60,8 +62,13 @@ class HomeScreen extends StatelessWidget {
                                 icon: Iconsax.chart_2,
                                 title: l10n.analyzeCv,
                                 color: Theme.of(context).colorScheme.secondary,
-                                onTap: () => context.router
-                                    .push(const CvAnalyzerUploadRoute()),
+                                onTap: () {
+                                  context
+                                      .read<CvAnalyzerProvider>()
+                                      .prepareForNewAnalysis();
+                                  context.router
+                                      .push(const CvAnalyzerUploadRoute());
+                                },
                               ),
                             ),
                           ],
@@ -153,6 +160,10 @@ class HomeScreen extends StatelessWidget {
                               } else if (activity is InterviewActivityItem) {
                                 return InterviewHistoryCard(
                                   interview: activity.interview,
+                                );
+                              } else if (activity is AnalysisActivityItem) {
+                                return AnalysisHistoryCard(
+                                  result: activity.result,
                                 );
                               }
                               return const SizedBox.shrink();
