@@ -39,17 +39,18 @@ class HistoryLocalDataSource {
       );
 
       for (final analysis in analyses) {
-        final score = analysis['score'] as int? ?? 0;
+        final score = analysis['overallScore'] as int? ?? 0;
+        final jobPosition = analysis['jobPosition'] as String? ?? 'CV Analysis';
         activities.add(ActivityEntity(
           id: analysis['id'] as String,
           userId: userId,
           type: ActivityType.cvAnalyzed,
-          title: 'CV Analysis',
+          title: jobPosition,
           subtitle: 'Score: $score/100',
           timestamp:
               DateTime.fromMillisecondsSinceEpoch(analysis['createdAt'] as int),
-          relatedId: analysis['cvId'] as String?,
-          metadata: {'score': score},
+          relatedId: analysis['id'] as String,
+          metadata: {'score': score, 'jobPosition': jobPosition},
         ));
       }
 
@@ -67,7 +68,7 @@ class HistoryLocalDataSource {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
         } catch (e) {
-          // sessionData might be malformed or missing
+          
         }
 
         activities.add(ActivityEntity(

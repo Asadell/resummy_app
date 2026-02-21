@@ -237,7 +237,7 @@ class _CvBuilderStep1ScreenState extends State<CvBuilderStep1Screen> {
                           onCountryChanged: (country) {},
                           validator: (value) {
                             if (value == null || value.number.isEmpty) {
-                              return null; // Phone number is optional
+                              return null; 
                             }
 
                             if (value.number.startsWith('0')) {

@@ -69,7 +69,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
     _result = result;
     _jobPosition = result.jobPosition;
     _jobDescription = result.jobDescription ?? '';
-    _extractedText = 'Analysis history item'; // Placeholder since we don't save full text yet
+    _extractedText = 'Analysis history item'; 
     notifyListeners();
   }
 
@@ -190,7 +190,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
         _result!,
         userId,
       );
-      // Refresh the saved list so hub screen auto-updates
+      
       await loadAnalysisHistory();
     } catch (e) {
       _errorMessage =

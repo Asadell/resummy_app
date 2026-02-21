@@ -67,7 +67,7 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         try {
           await _remoteDataSource.deleteCV(id);
         } catch (e) {
-          // Ignore remote deletion errors as local is already deleted
+          
         }
       }
     } catch (e) {
@@ -87,7 +87,7 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         await _localDataSource.saveCV(cv, _currentUserId);
       }
     } catch (e) {
-      // Failed to sync from remote, will try again next time
+      
     }
   }
 }

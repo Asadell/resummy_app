@@ -37,7 +37,7 @@ class _CvAtsConverterScreenState extends State<CvAtsConverterScreen> {
   @override
   void initState() {
     super.initState();
-    // Load CVs to ensure history is updated if accessed from Quick Actions
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CVBuilderProvider>().loadAllCVs();
     });

@@ -80,7 +80,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
-              // ── CV Builder / ATS Converter saved CVs ──────────────────
+              
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,7 +149,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
-              // ── CV Analyzer saved analyses ─────────────────────────────
+              
               Consumer<CvAnalyzerProvider>(
                 builder: (context, analyzerProvider, child) {
                   final analyses = analyzerProvider.savedAnalyses;

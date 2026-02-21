@@ -154,7 +154,7 @@ class CVCard extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
-            '${_getSourceLabel(l10n, cv.source)} • ${l10n.updatedOnDate(date)}',
+            '${_getSourceLabel(l10n, cv.source)} • $date',
           ),
           trailing: IconButton(
             icon: const Icon(Iconsax.edit),

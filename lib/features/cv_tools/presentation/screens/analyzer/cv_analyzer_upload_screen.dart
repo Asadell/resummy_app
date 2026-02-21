@@ -43,7 +43,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
     final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
     
-    // Ensure saved CVs are loaded when accessing from Quick Actions
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CVBuilderProvider>().loadAllCVs();
     });
@@ -67,9 +67,14 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   void _onAnalyzerChanged() {
     if (!mounted) return;
     final provider = context.read<CvAnalyzerProvider>();
-    // When analysis transitions from loading → done (hasResult becomes true)
+    
     if (_wasAnalyzing && !provider.isAnalyzing && provider.hasResult) {
-      context.read<HistoryProvider>().loadActivities();
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<HistoryProvider>().loadActivities();
+        }
+      });
     }
     _wasAnalyzing = provider.isAnalyzing;
   }
@@ -887,7 +892,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     const SizedBox(height: AppSizes.sm),
                   ],
                 )),
-          const SizedBox(height: 80), // Space for FAB
+          const SizedBox(height: 80), 
         ],
       ),
     );
