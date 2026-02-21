@@ -380,7 +380,7 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
                               )
                             : const Icon(Iconsax.export_1, size: 20),
                         label: Text(_isExporting
-                            ? l10n.exportPdf 
+                            ? l10n.exportPdf
                             : l10n.exportPdf),
                       ),
                     ],
@@ -394,4 +394,3 @@ class _CvBuilderPreviewScreenState extends State<CvBuilderPreviewScreen> {
     );
   }
 }
-

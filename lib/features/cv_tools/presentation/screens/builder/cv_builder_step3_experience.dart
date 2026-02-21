@@ -647,7 +647,6 @@ class _CvBuilderStep3ScreenState extends State<CvBuilderStep3Screen> {
     );
   }
 
-
   String _getEmploymentTypeLabel(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
     switch (type) {

@@ -69,7 +69,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
     _result = result;
     _jobPosition = result.jobPosition;
     _jobDescription = result.jobDescription ?? '';
-    _extractedText = 'Analysis history item'; 
+    _extractedText = 'Analysis history item';
     notifyListeners();
   }
 
@@ -180,7 +180,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
         jobDescription: _jobDescription,
         language: languageCode,
       );
-      
+
       _result = result;
 
       final userId = _authProvider.isAuthenticated
@@ -190,7 +190,7 @@ class CvAnalyzerProvider extends ChangeNotifier {
         _result!,
         userId,
       );
-      
+
       await loadAnalysisHistory();
     } catch (e) {
       _errorMessage =

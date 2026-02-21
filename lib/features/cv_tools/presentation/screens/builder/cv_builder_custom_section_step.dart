@@ -95,13 +95,11 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
 
   final _bulletItemCtrl = TextEditingController();
 
-  // For certificationsLike
   final _certNameCtrl = TextEditingController();
   final _certIssuerCtrl = TextEditingController();
   final _certDateCtrl = TextEditingController();
   final _certCredentialIdCtrl = TextEditingController();
 
-  // For projectsLike
   final _projectNameCtrl = TextEditingController();
   final _projectTechStackCtrl = TextEditingController();
   final _projectLinkCtrl = TextEditingController();
@@ -901,8 +899,6 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         return l10n.formatProjects;
     }
   }
-
-  // --- CertificationsLike Template ---
 
   Widget _buildCertificationsLikeTemplate(
     BuildContext context,

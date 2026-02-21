@@ -42,8 +42,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
     final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
-    
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CVBuilderProvider>().loadAllCVs();
     });
@@ -67,9 +66,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
   void _onAnalyzerChanged() {
     if (!mounted) return;
     final provider = context.read<CvAnalyzerProvider>();
-    
+
     if (_wasAnalyzing && !provider.isAnalyzing && provider.hasResult) {
-      
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           context.read<HistoryProvider>().loadActivities();
@@ -892,7 +891,7 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
                     const SizedBox(height: AppSizes.sm),
                   ],
                 )),
-          const SizedBox(height: 80), 
+          const SizedBox(height: 80),
         ],
       ),
     );

@@ -41,9 +41,7 @@ class AuthProvider extends ChangeNotifier {
     _authStateReady = completer.future;
   }
 
-
   Future<void> waitForAuthState() => _authStateReady ?? Future.value();
-
 
   Future<void> signInWithGoogle() async {
     _isLoading = true;

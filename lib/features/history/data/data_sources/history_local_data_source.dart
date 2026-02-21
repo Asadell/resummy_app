@@ -69,7 +69,7 @@ class HistoryLocalDataSource {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
         } catch (e) {
-          // If JSON is malformed, use default title
+
           debugPrint('Malformed session data: $e');
         }
 

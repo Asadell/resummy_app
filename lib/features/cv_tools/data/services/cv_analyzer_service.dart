@@ -231,9 +231,7 @@ Return JSON ini:
       "title": "string",
       "isVisible": true,
 
-
       "content": "string",
-
 
       "entries": [
         {
@@ -248,7 +246,6 @@ Return JSON ini:
         }
       ],
 
-
       "entries": [
         {
           "institution": "string",
@@ -262,7 +259,6 @@ Return JSON ini:
         }
       ],
 
-
       "entries": [
         {
           "organizationName": "string",
@@ -275,11 +271,9 @@ Return JSON ini:
         }
       ],
 
-
       "skillCategories": {
         "Category Name": ["skill1", "skill2"]
       },
-
 
       "entries": [
         {
@@ -291,10 +285,8 @@ Return JSON ini:
         }
       ],
 
-
       "template": "skillsLike",
       "skillCategories": { "Category": ["item1"] },
-
 
       "template": "experienceLike",
       "titleLabel": "string",
@@ -312,10 +304,8 @@ Return JSON ini:
         }
       ],
 
-
       "template": "bulletList",
       "content": "item1\\nitem2\\nitem3",
-
 
       "template": "paragraph",
       "content": "free text"

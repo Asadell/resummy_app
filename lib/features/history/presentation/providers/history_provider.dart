@@ -21,7 +21,7 @@ class HistoryProvider extends ChangeNotifier {
   })  : _repository = repository,
         _authProvider = authProvider {
     _authProvider.addListener(_onAuthChanged);
-    
+
     _currentUserId = _authProvider.isAuthenticated ? _authProvider.currentUser!.id : 'anonymous';
     loadActivities();
   }
@@ -39,7 +39,7 @@ class HistoryProvider extends ChangeNotifier {
   void _onAuthChanged() {
     final user = _authProvider.currentUser;
     final newUserId = user?.id ?? 'anonymous';
-    
+
     if (_currentUserId != newUserId) {
       _currentUserId = newUserId;
       loadActivities();

@@ -80,7 +80,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
-              
+
               AppSection(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,7 +149,7 @@ class _CvToolsHubScreenState extends State<CvToolsHubScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
-              
+
               Consumer<CvAnalyzerProvider>(
                 builder: (context, analyzerProvider, child) {
                   final analyses = analyzerProvider.savedAnalyses;

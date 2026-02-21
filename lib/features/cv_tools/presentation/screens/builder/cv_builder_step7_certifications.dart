@@ -487,7 +487,6 @@ class _CvBuilderStep7ScreenState extends State<CvBuilderStep7Screen> {
     );
   }
 
-
   Future<void> _showDeleteConfirmation(
       BuildContext context, CVBuilderProvider provider, int index) async {
     final l10n = AppLocalizations.of(context)!;
