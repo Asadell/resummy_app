@@ -40,6 +40,9 @@ class _CvAnalyzerUploadScreenState extends State<CvAnalyzerUploadScreen>
 
     final provider = context.read<CvAnalyzerProvider>();
     final profile = context.read<ProfileProvider>().profile;
+    
+    // Ensure saved CVs are loaded when accessing from Quick Actions
+    context.read<CVBuilderProvider>().loadAllCVs();
 
     _jobPositionController = TextEditingController(
         text: provider.jobPosition.isNotEmpty

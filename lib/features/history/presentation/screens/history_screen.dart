@@ -8,6 +8,7 @@ import 'package:resummy_app/features/history/domain/entities/activity_item.dart'
 import 'package:resummy_app/features/history/presentation/providers/history_provider.dart';
 import 'package:resummy_app/features/cv_tools/presentation/widgets/cv_history_card.dart';
 import 'package:resummy_app/features/interview/presentation/widgets/interview_history_card.dart';
+import 'package:resummy_app/features/history/presentation/widgets/analysis_history_card.dart';
 import 'package:resummy_app/shared/widgets/app_section.dart';
 
 @RoutePage()
@@ -111,11 +112,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget _buildActivityItem(ActivityItem item, int index) {
-    return item is CvActivityItem
-        ? CvHistoryCard(cv: item.cvData, index: index)
-        : item is InterviewActivityItem
-            ? InterviewHistoryCard(interview: item.interview)
-            : const SizedBox();
+    if (item is CvActivityItem) {
+      return CvHistoryCard(cv: item.cvData, index: index);
+    } else if (item is InterviewActivityItem) {
+      return InterviewHistoryCard(interview: item.interview);
+    } else if (item is AnalysisActivityItem) {
+      return AnalysisHistoryCard(result: item.result);
+    }
+    return const SizedBox();
   }
 }
 

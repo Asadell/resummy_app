@@ -59,6 +59,21 @@ class CvAnalyzerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void loadResult(CvAnalysisResult result) {
+    _result = result;
+    _jobPosition = result.jobPosition;
+    _jobDescription = result.jobDescription ?? '';
+    _extractedText = 'Analysis history item'; // Placeholder since we don't save full text yet
+    notifyListeners();
+  }
+
+  Future<void> deleteResult(String id) async {
+    await _repository.deleteAnalysis(id);
+    if (_result?.id == id) {
+      clearAll();
+    }
+  }
+
   void setExtractedText(String text) {
     _extractedText = text;
     _selectedFile = null;
@@ -136,12 +151,11 @@ class CvAnalyzerProvider extends ChangeNotifier {
       
       _result = result;
 
-      if (_authProvider.isAuthenticated) {
-        await _repository.saveAnalysisResult(
-          _result!,
-          _authProvider.currentUser!.id,
-        );
-      }
+      final userId = _authProvider.isAuthenticated ? _authProvider.currentUser!.id : 'anonymous';
+      await _repository.saveAnalysisResult(
+        _result!,
+        userId,
+      );
     } catch (e) {
       _errorMessage =
           'Analisis gagal: ${e.toString().replaceAll('Exception: ', '')}';

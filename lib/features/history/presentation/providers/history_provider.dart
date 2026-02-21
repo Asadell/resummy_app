@@ -22,10 +22,8 @@ class HistoryProvider extends ChangeNotifier {
         _authProvider = authProvider {
     _authProvider.addListener(_onAuthChanged);
     
-    if (_authProvider.isAuthenticated) {
-      _currentUserId = _authProvider.currentUser!.id;
-      loadActivities();
-    }
+    _currentUserId = _authProvider.isAuthenticated ? _authProvider.currentUser!.id : 'anonymous';
+    loadActivities();
   }
 
   List<ActivityItem> get activities => _filteredActivities;
@@ -40,19 +38,15 @@ class HistoryProvider extends ChangeNotifier {
 
   void _onAuthChanged() {
     final user = _authProvider.currentUser;
-    if (user != null) {
-      if (_currentUserId != user.id) {
-        _currentUserId = user.id;
-        loadActivities();
-      }
-    } else {
-      clear();
+    final newUserId = user?.id ?? 'anonymous';
+    
+    if (_currentUserId != newUserId) {
+      _currentUserId = newUserId;
+      loadActivities();
     }
   }
 
   Future<void> loadActivities() async {
-    if (_currentUserId == null) return;
-
     _isLoading = true;
     notifyListeners();
 
@@ -80,8 +74,9 @@ class HistoryProvider extends ChangeNotifier {
         _filteredActivities = List.from(_allActivities);
         break;
       case HistoryFilter.cv:
-        _filteredActivities =
-            _allActivities.whereType<CvActivityItem>().toList();
+        _filteredActivities = _allActivities
+            .where((a) => a is CvActivityItem || a is AnalysisActivityItem)
+            .toList();
         break;
       case HistoryFilter.interview:
         _filteredActivities =

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:resummy_app/features/cv_tools/domain/repositories/cv_analysis_repository.dart';
 import 'package:resummy_app/features/cv_tools/domain/repositories/cv_builder_repository.dart';
 import 'package:resummy_app/features/history/data/repositories/history_repository_impl.dart';
 import 'package:resummy_app/features/history/domain/repositories/history_repository.dart';
@@ -11,6 +12,7 @@ Future<void> setupHistoryDI(GetIt getIt) async {
     () => HistoryRepositoryImpl(
       getIt<CVBuilderRepository>(),
       getIt<InterviewRepository>(),
+      getIt<CVAnalysisRepository>(),
     ),
   );
 
