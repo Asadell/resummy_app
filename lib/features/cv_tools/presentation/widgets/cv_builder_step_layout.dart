@@ -67,7 +67,27 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
               icon: const Icon(Iconsax.arrow_left),
               onPressed: () => _showExitConfirmation(context, l10n),
             ),
-            title: Text(stepTitle),
+            title: InkWell(
+              onTap: () => _showStepSelector(context, provider, l10n),
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        stepTitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.keyboard_arrow_down, size: 20),
+                  ],
+                ),
+              ),
+            ),
             centerTitle: true,
             actions: [
               Padding(
@@ -240,6 +260,113 @@ class _CVBuilderStepLayoutState extends State<CVBuilderStepLayout>
           ),
         );
       },
+    );
+  }
+
+  void _showStepSelector(
+      BuildContext context, CVBuilderProvider provider, AppLocalizations l10n) {
+    final cv = provider.currentCV;
+    if (cv == null) return;
+
+    final totalSteps = DynamicCvSteps.getTotalSteps(cv);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.8,
+        builder: (context, scrollController) => Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  l10n.selectSectionFormat, // Reusing existing key if appropriate or just 'Select Step'
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: totalSteps,
+                  itemBuilder: (context, index) {
+                    final step = index + 1;
+                    final stepTitle = DynamicCvSteps.getStepTitle(step, cv);
+                    final isCurrent = step == widget.currentStep;
+
+                    return ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        if (!isCurrent) {
+                          DynamicCvSteps.navigateToStep(context, step);
+                        }
+                      },
+                      leading: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: isCurrent
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context)
+                                  .primaryColor
+                                  .withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$step',
+                            style: TextStyle(
+                              color: isCurrent
+                                  ? Colors.white
+                                  : Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        stepTitle,
+                        style: TextStyle(
+                          fontWeight:
+                              isCurrent ? FontWeight.bold : FontWeight.normal,
+                          color: isCurrent
+                              ? Theme.of(context).primaryColor
+                              : null,
+                        ),
+                      ),
+                      trailing: isCurrent
+                          ? Icon(Icons.check_circle,
+                              color: Theme.of(context).primaryColor)
+                          : null,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
