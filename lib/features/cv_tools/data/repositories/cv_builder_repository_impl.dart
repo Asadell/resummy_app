@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_local_data_source.dart';
 import 'package:resummy_app/features/cv_tools/data/data_sources/cv_remote_data_source.dart';
 import 'package:resummy_app/features/cv_tools/domain/entities/cv_data.dart';
@@ -67,7 +68,7 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         try {
           await _remoteDataSource.deleteCV(id);
         } catch (e) {
-          
+          debugPrint('Remote delete failed: $e');
         }
       }
     } catch (e) {
@@ -87,7 +88,7 @@ class CVBuilderRepositoryImpl implements CVBuilderRepository {
         await _localDataSource.saveCV(cv, _currentUserId);
       }
     } catch (e) {
-      
+      debugPrint('Sync failed: $e');
     }
   }
 }

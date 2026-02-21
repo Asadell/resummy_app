@@ -689,6 +689,55 @@ class CvPdfService {
         y += 16;
       }
       return (page: page, y: y);
+    } else if (section.template == CustomSectionTemplate.certificationsLike) {
+      for (final entry in section.entries) {
+        if (y + 45 > pageSize.height) {
+          page = document.pages.add();
+          y = 0;
+        }
+
+        page.graphics.drawString(
+          entry.title,
+          _entryTitleFont,
+          bounds: ui.Rect.fromLTWH(0, y, pageSize.width - 80, 14),
+          brush: PdfBrushes.black,
+        );
+
+        if (entry.startDate?.isNotEmpty == true) {
+          final dateSize = _smallFont.measureString(entry.startDate!);
+          page.graphics.drawString(
+            entry.startDate!,
+            _smallFont,
+            bounds: ui.Rect.fromLTWH(
+                pageSize.width - dateSize.width, y, dateSize.width, 12),
+            brush: PdfSolidBrush(_lightTextColor),
+          );
+        }
+        y += 15;
+
+        if (entry.subtitle?.isNotEmpty == true) {
+          page.graphics.drawString(
+            entry.subtitle!,
+            _smallFont,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
+            brush: PdfSolidBrush(_lightTextColor),
+          );
+          y += 13;
+        }
+
+        if (entry.meta?.isNotEmpty == true) {
+          page.graphics.drawString(
+            'ID: ${entry.meta}',
+            _smallFont,
+            bounds: ui.Rect.fromLTWH(0, y, pageSize.width, 11),
+            brush: PdfSolidBrush(_lightTextColor),
+          );
+          y += 13;
+        }
+
+        y += 8;
+      }
+      return (page: page, y: y);
     } else {
       for (final entry in section.entries) {
         if (y + 60 > pageSize.height) {

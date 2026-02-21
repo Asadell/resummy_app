@@ -3002,6 +3002,114 @@ abstract class AppLocalizations {
   /// **'Brief Profile'**
   String get briefProfile;
 
+  /// No description provided for @organizationSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Experience'**
+  String get organizationSection;
+
+  /// No description provided for @certificationsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications & Licenses'**
+  String get certificationsSection;
+
+  /// No description provided for @projectsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsSection;
+
+  /// No description provided for @exampleProjectName.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., E-commerce App'**
+  String get exampleProjectName;
+
+  /// No description provided for @exampleTechStack.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Flutter, Firebase, REST API'**
+  String get exampleTechStack;
+
+  /// No description provided for @exampleProjectLink.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., github.com/user/project'**
+  String get exampleProjectLink;
+
+  /// No description provided for @exampleOrgName.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Student Council'**
+  String get exampleOrgName;
+
+  /// No description provided for @exampleOrgRole.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Head of Division'**
+  String get exampleOrgRole;
+
+  /// No description provided for @exampleCertName.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Google Cloud Associate'**
+  String get exampleCertName;
+
+  /// No description provided for @exampleIssuer.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Google'**
+  String get exampleIssuer;
+
+  /// No description provided for @exampleIssueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Jan 2023'**
+  String get exampleIssueDate;
+
+  /// No description provided for @exampleCredentialId.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., ABC-1234567'**
+  String get exampleCredentialId;
+
+  /// No description provided for @projectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name'**
+  String get projectName;
+
+  /// No description provided for @techStack.
+  ///
+  /// In en, this message translates to:
+  /// **'Tech Stack / Role'**
+  String get techStack;
+
+  /// No description provided for @projectLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Link (Optional)'**
+  String get projectLink;
+
+  /// No description provided for @issuerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuing Organization'**
+  String get issuerLabel;
+
+  /// No description provided for @issueDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue Date'**
+  String get issueDateLabel;
+
+  /// No description provided for @credentialIdOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Credential ID (Optional)'**
+  String get credentialIdOptional;
+
   /// No description provided for @selectSectionFormat.
   ///
   /// In en, this message translates to:
@@ -3073,6 +3181,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Suitable for: Long narratives, Profile, Statement'**
   String get templateParagraphDesc;
+
+  /// No description provided for @templateOrganizationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Format'**
+  String get templateOrganizationName;
+
+  /// No description provided for @templateOrganizationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Volunteer, Clubs, Community organizations with roles & dates'**
+  String get templateOrganizationDesc;
+
+  /// No description provided for @templateCertificationsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications Format'**
+  String get templateCertificationsName;
+
+  /// No description provided for @templateCertificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Certificates, licenses with issuer & issue date'**
+  String get templateCertificationsDesc;
+
+  /// No description provided for @templateProjectsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects Format'**
+  String get templateProjectsName;
+
+  /// No description provided for @templateProjectsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for: Personal, academic, or freelance projects with tech stack'**
+  String get templateProjectsDesc;
 
   /// No description provided for @reorderSectionsDesc.
   ///
@@ -3289,6 +3433,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Format: Paragraph'**
   String get formatParagraph;
+
+  /// No description provided for @formatOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Organization'**
+  String get formatOrganization;
+
+  /// No description provided for @formatCertifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Certifications'**
+  String get formatCertifications;
+
+  /// No description provided for @formatProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: Projects'**
+  String get formatProjects;
 
   /// No description provided for @saveAsDraft.
   ///

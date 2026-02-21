@@ -520,6 +520,12 @@ class _SectionOrderManagerState extends State<SectionOrderManager> {
         return l10n.templateBulletNameLabel;
       case CustomSectionTemplate.paragraph:
         return l10n.templateParagraphNameLabel;
+      case CustomSectionTemplate.organizationLike:
+        return l10n.templateOrganizationName;
+      case CustomSectionTemplate.certificationsLike:
+        return l10n.templateCertificationsName;
+      case CustomSectionTemplate.projectsLike:
+        return l10n.templateProjectsName;
     }
   }
 }

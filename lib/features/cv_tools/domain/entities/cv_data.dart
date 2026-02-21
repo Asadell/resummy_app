@@ -17,6 +17,9 @@ enum CustomSectionTemplate {
   skillsLike,
   bulletList,
   paragraph,
+  organizationLike,
+  certificationsLike,
+  projectsLike,
 }
 
 typedef SectionTemplate = CustomSectionTemplate;
@@ -126,6 +129,9 @@ class CustomSection extends SectionData {
     switch (template) {
       case CustomSectionTemplate.experienceLike:
       case CustomSectionTemplate.educationLike:
+      case CustomSectionTemplate.organizationLike:
+      case CustomSectionTemplate.certificationsLike:
+      case CustomSectionTemplate.projectsLike:
         return entries.isEmpty;
       case CustomSectionTemplate.skillsLike:
         return skillCategories.isEmpty ||

@@ -95,6 +95,17 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
 
   final _bulletItemCtrl = TextEditingController();
 
+  // For certificationsLike
+  final _certNameCtrl = TextEditingController();
+  final _certIssuerCtrl = TextEditingController();
+  final _certDateCtrl = TextEditingController();
+  final _certCredentialIdCtrl = TextEditingController();
+
+  // For projectsLike
+  final _projectNameCtrl = TextEditingController();
+  final _projectTechStackCtrl = TextEditingController();
+  final _projectLinkCtrl = TextEditingController();
+
   int? _editingIndex;
   String? _editingCategoryName;
   bool _showValidation = false;
@@ -117,6 +128,13 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
     _categoryNameCtrl.dispose();
     _categorySkillsCtrl.dispose();
     _bulletItemCtrl.dispose();
+    _certNameCtrl.dispose();
+    _certIssuerCtrl.dispose();
+    _certDateCtrl.dispose();
+    _certCredentialIdCtrl.dispose();
+    _projectNameCtrl.dispose();
+    _projectTechStackCtrl.dispose();
+    _projectLinkCtrl.dispose();
     super.dispose();
   }
 
@@ -171,6 +189,12 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           if (widget.section.template == CustomSectionTemplate.experienceLike ||
               widget.section.template == CustomSectionTemplate.educationLike)
             _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.organizationLike)
+            _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.projectsLike)
+            _buildEntryListTemplate(context, provider, theme)
+          else if (widget.section.template == CustomSectionTemplate.certificationsLike)
+            _buildCertificationsLikeTemplate(context, provider, theme)
           else if (widget.section.template == CustomSectionTemplate.skillsLike)
             _buildSkillsLikeTemplate(context, provider, theme)
           else if (widget.section.template == CustomSectionTemplate.bulletList)
@@ -372,9 +396,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isEditing
-                  ? '${l10n.edit} ${l10n.categoryName}'
-                  : '${l10n.addItem} ${l10n.categoryName}',
+              isEditing ? l10n.editItem : l10n.addItem,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -413,6 +435,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           validator: (v) =>
               v?.trim().isEmpty == true ? l10n.requiredField : null,
         ),
+        const SizedBox(height: AppSizes.md),
         ElevatedButton(
           onPressed: () => _saveSkillForm(provider, section),
           style: ElevatedButton.styleFrom(
@@ -535,6 +558,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
                 onSubmitted: (_) => _saveBulletItem(provider, section),
               ),
             ),
+            const SizedBox(width: AppSizes.md),
             ElevatedButton(
               onPressed: () => _saveBulletItem(provider, section),
               style: ElevatedButton.styleFrom(
@@ -681,9 +705,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isEditing
-                  ? '${l10n.edit} ${section.titleLabel}'
-                  : '${l10n.addItem} ${section.titleLabel}',
+              isEditing ? l10n.editItem : l10n.addItem,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -838,6 +860,7 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
             },
           ),
         ],
+        const SizedBox(height: AppSizes.md),
         ElevatedButton(
           onPressed: () => _saveEntryForm(provider, section),
           style: ElevatedButton.styleFrom(
@@ -870,7 +893,208 @@ class _CustomSectionFormState extends State<_CustomSectionForm> {
         return l10n.formatBulletList;
       case CustomSectionTemplate.paragraph:
         return l10n.formatParagraph;
+      case CustomSectionTemplate.organizationLike:
+        return l10n.formatOrganization;
+      case CustomSectionTemplate.certificationsLike:
+        return l10n.formatCertifications;
+      case CustomSectionTemplate.projectsLike:
+        return l10n.formatProjects;
     }
+  }
+
+  // --- CertificationsLike Template ---
+
+  Widget _buildCertificationsLikeTemplate(
+    BuildContext context,
+    CVBuilderProvider provider,
+    ThemeData theme,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final section = _getCurrentSection(provider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (section.entries.isEmpty)
+          AppSection(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xxl),
+              child: Column(
+                spacing: AppSizes.md,
+                children: [
+                  Icon(Iconsax.award, size: 56, color: Colors.grey[300]),
+                  Text(
+                    l10n.noItems,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          AppSection(
+            child: Column(
+              children: section.entries.asMap().entries.map((e) {
+                final index = e.key;
+                final entry = e.value;
+                return _CertEntryCard(
+                  entry: entry,
+                  onEdit: () => _editCertEntry(index, entry),
+                  onDelete: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    () => provider.removeCustomEntry(
+                        sectionId: section.id, entryIndex: index),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        const SizedBox(height: AppSizes.sm),
+        AppSection(
+          child: _buildInlineCertForm(context, provider, section),
+        ),
+      ],
+    );
+  }
+
+  void _editCertEntry(int index, CustomEntry entry) {
+    setState(() {
+      _editingIndex = index;
+      _certNameCtrl.text = entry.title;
+      _certIssuerCtrl.text = entry.subtitle ?? '';
+      _certDateCtrl.text = entry.startDate ?? '';
+      _certCredentialIdCtrl.text = entry.meta ?? '';
+      _showValidation = false;
+    });
+  }
+
+  void _resetCertForm() {
+    setState(() {
+      _editingIndex = null;
+      _certNameCtrl.clear();
+      _certIssuerCtrl.clear();
+      _certDateCtrl.clear();
+      _certCredentialIdCtrl.clear();
+      _showValidation = false;
+    });
+  }
+
+  void _saveCertForm(CVBuilderProvider provider, CustomSection section) {
+    setState(() => _showValidation = true);
+    if (_certNameCtrl.text.trim().isEmpty) return;
+
+    final newEntry = CustomEntry(
+      id: _editingIndex != null
+          ? section.entries[_editingIndex!].id
+          : const Uuid().v4(),
+      title: _certNameCtrl.text.trim(),
+      subtitle: _certIssuerCtrl.text.trim().isEmpty
+          ? null
+          : _certIssuerCtrl.text.trim(),
+      startDate: _certDateCtrl.text.trim().isEmpty
+          ? null
+          : _certDateCtrl.text.trim(),
+      meta: _certCredentialIdCtrl.text.trim().isEmpty
+          ? null
+          : _certCredentialIdCtrl.text.trim(),
+    );
+
+    if (_editingIndex != null) {
+      provider.updateCustomEntry(
+        sectionId: section.id,
+        entryIndex: _editingIndex!,
+        entry: newEntry,
+      );
+    } else {
+      provider.addCustomEntry(sectionId: section.id, entry: newEntry);
+    }
+    _resetCertForm();
+  }
+
+  Widget _buildInlineCertForm(
+    BuildContext context,
+    CVBuilderProvider provider,
+    CustomSection section,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isEditing = _editingIndex != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isEditing ? l10n.editItem : l10n.addItem,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (isEditing)
+              TextButton.icon(
+                onPressed: _resetCertForm,
+                icon: const Icon(Icons.close),
+                label: Text(l10n.cancel),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certNameCtrl,
+          decoration: InputDecoration(
+            labelText: '${l10n.certificationName} *',
+            hintText: l10n.exampleCertName,
+            border: InputBorder.none,
+          ),
+          autovalidateMode: _showValidation
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled,
+          validator: (v) =>
+              v?.trim().isEmpty == true ? l10n.requiredField : null,
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certIssuerCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.issuerLabel,
+            hintText: l10n.exampleIssuer,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certDateCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.issueDateLabel,
+            hintText: l10n.exampleIssueDate,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        TextFormField(
+          controller: _certCredentialIdCtrl,
+          decoration: InputDecoration(
+            labelText: l10n.credentialIdOptional,
+            hintText: l10n.exampleCredentialId,
+            border: InputBorder.none,
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        ElevatedButton(
+          onPressed: () => _saveCertForm(provider, section),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: theme.primaryColor,
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
+          child: Text(isEditing ? l10n.save : l10n.add),
+        ),
+      ],
+    );
   }
 }
 
@@ -1119,6 +1343,90 @@ class _EntryCard extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CertEntryCard extends StatelessWidget {
+  final CustomEntry entry;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _CertEntryCard({
+    required this.entry,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        entry.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      if (entry.subtitle?.isNotEmpty == true) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          entry.subtitle!,
+                          style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 13,
+                            color: Color(0xFF374151),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Iconsax.edit_2, size: 18),
+                  onPressed: onEdit,
+                ),
+                IconButton(
+                  icon: const Icon(Iconsax.trash, size: 18, color: Colors.red),
+                  onPressed: () => _showDeleteItemConfirmation(
+                    context,
+                    l10n.deleteItem,
+                    l10n.deleteItemConfirmation(entry.title),
+                    onDelete,
+                  ),
+                ),
+              ],
+            ),
+            if (entry.startDate?.isNotEmpty == true) ...[
+              const SizedBox(height: 4),
+              Text(
+                entry.startDate!,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+              ),
+            ],
+            if (entry.meta?.isNotEmpty == true) ...[
+              const SizedBox(height: 2),
+              Text(
+                'ID: ${entry.meta}',
+                style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
               ),
             ],
           ],

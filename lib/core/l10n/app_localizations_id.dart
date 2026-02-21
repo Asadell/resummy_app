@@ -1553,6 +1553,60 @@ class AppLocalizationsId extends AppLocalizations {
   String get briefProfile => 'Profil Singkat';
 
   @override
+  String get organizationSection => 'Pengalaman Organisasi';
+
+  @override
+  String get certificationsSection => 'Sertifikasi & Lisensi';
+
+  @override
+  String get projectsSection => 'Proyek';
+
+  @override
+  String get exampleProjectName => 'Misal: Aplikasi E-commerce';
+
+  @override
+  String get exampleTechStack => 'Misal: Flutter, Firebase, REST API';
+
+  @override
+  String get exampleProjectLink => 'Misal: github.com/user/project';
+
+  @override
+  String get exampleOrgName => 'Misal: BEM Universitas';
+
+  @override
+  String get exampleOrgRole => 'Misal: Ketua Divisi';
+
+  @override
+  String get exampleCertName => 'Misal: Google Cloud Associate';
+
+  @override
+  String get exampleIssuer => 'Misal: Google';
+
+  @override
+  String get exampleIssueDate => 'Misal: Jan 2023';
+
+  @override
+  String get exampleCredentialId => 'Misal: ABC-1234567';
+
+  @override
+  String get projectName => 'Nama Proyek';
+
+  @override
+  String get techStack => 'Tech Stack / Peran';
+
+  @override
+  String get projectLink => 'Link Proyek (Opsional)';
+
+  @override
+  String get issuerLabel => 'Organisasi Penerbit';
+
+  @override
+  String get issueDateLabel => 'Tanggal Terbit';
+
+  @override
+  String get credentialIdOptional => 'ID Kredensial (Opsional)';
+
+  @override
   String get selectSectionFormat => 'Pilih Format Bagian';
 
   @override
@@ -1592,6 +1646,27 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get templateParagraphDesc =>
       'Cocok untuk: Narasi panjang, Profil, Pernyataan';
+
+  @override
+  String get templateOrganizationName => 'Format Organisasi';
+
+  @override
+  String get templateOrganizationDesc =>
+      'Cocok untuk: Volunteer, Komunitas, Organisasi dengan peran & tanggal';
+
+  @override
+  String get templateCertificationsName => 'Format Sertifikasi';
+
+  @override
+  String get templateCertificationsDesc =>
+      'Cocok untuk: Sertifikat, lisensi dengan penerbit & tanggal terbit';
+
+  @override
+  String get templateProjectsName => 'Format Proyek';
+
+  @override
+  String get templateProjectsDesc =>
+      'Cocok untuk: Proyek pribadi, akademik, atau freelance dengan tech stack';
 
   @override
   String get reorderSectionsDesc =>
@@ -1706,6 +1781,15 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get formatParagraph => 'Format: Paragraf';
+
+  @override
+  String get formatOrganization => 'Format: Organisasi';
+
+  @override
+  String get formatCertifications => 'Format: Sertifikasi';
+
+  @override
+  String get formatProjects => 'Format: Proyek';
 
   @override
   String get saveAsDraft => 'Simpan sebagai Draft';

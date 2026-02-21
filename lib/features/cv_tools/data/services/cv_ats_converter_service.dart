@@ -431,10 +431,13 @@ Rules:
 Section template selection rules:
 - Work Experience / Pengalaman Kerja → type: "experience"
 - Education / Pendidikan → type: "education"
-- Organization / Organisasi → type: "organization"
+- Organization / Organisasi (built-in) → type: "organization"
 - Skills / Kemampuan → type: "skills"
-- Certifications / Sertifikasi → type: "certifications"
+- Certifications / Sertifikasi (built-in) → type: "certifications"
 - Professional Summary / Ringkasan → type: "summary"
+- Projects / Proyek (personal, academic, freelance) → type: "custom", template: "projectsLike"
+- Volunteer / Community Organization / Club with roles & dates → type: "custom", template: "organizationLike"
+- Extra Certifications / Awards with issuer & date (not fitting built-in certifications) → type: "custom", template: "certificationsLike"
 - Mixed awards + skills + competitions in bullet format → type: "custom", template: "skillsLike"
 - Volunteer / Projects / Awards with dates → type: "custom", template: "experienceLike"
 - Courses / Training with dates → type: "custom", template: "educationLike"
@@ -527,6 +530,66 @@ Return this JSON structure:
           "issueDate": "MMM yyyy",
           "credentialId": "string|null",
           "credentialUrl": "string|null"
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "template": "organizationLike",
+      "title": "Community Involvement",
+      "isVisible": true,
+      "titleLabel": "Organization",
+      "subtitleLabel": "Role",
+      "metaLabel": "Location",
+      "entries": [
+        {
+          "title": "string (organization name)",
+          "subtitle": "string|null (role)",
+          "meta": "string|null (location)",
+          "startDate": "MMM yyyy|null",
+          "endDate": "MMM yyyy|null",
+          "isPresent": false,
+          "bullets": ["description"]
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "template": "certificationsLike",
+      "title": "Achievements & Awards",
+      "isVisible": true,
+      "titleLabel": "Certificate/Award",
+      "subtitleLabel": "Issuing Organization",
+      "metaLabel": "Credential ID",
+      "entries": [
+        {
+          "title": "string (cert or award name)",
+          "subtitle": "string|null (issuing org)",
+          "startDate": "MMM yyyy|null (issue date)",
+          "endDate": null,
+          "isPresent": false,
+          "meta": "string|null (credential ID)",
+          "bullets": []
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "template": "projectsLike",
+      "title": "Projects",
+      "isVisible": true,
+      "titleLabel": "Project Name",
+      "subtitleLabel": "Tech Stack",
+      "metaLabel": "Project Link",
+      "entries": [
+        {
+          "title": "string (project name)",
+          "subtitle": "string|null (tech stack / role)",
+          "meta": "string|null (project link)",
+          "startDate": "MMM yyyy|null",
+          "endDate": "MMM yyyy|null",
+          "isPresent": false,
+          "bullets": ["description bullet"]
         }
       ]
     },

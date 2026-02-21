@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import 'dart:convert';
 import 'package:resummy_app/core/services/database_helper.dart';
 import 'package:resummy_app/features/history/domain/entities/activity_entity.dart';
@@ -68,7 +69,8 @@ class HistoryLocalDataSource {
           final sessionData = jsonDecode(interview['sessionData'] as String);
           title = sessionData['jobPosition'] ?? 'Interview Prep';
         } catch (e) {
-          
+          // If JSON is malformed, use default title
+          debugPrint('Malformed session data: $e');
         }
 
         activities.add(ActivityEntity(
